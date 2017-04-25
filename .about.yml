@@ -14,7 +14,7 @@ full_name: HUD Disaster Data Pilot
 # What is the problem your project solves? What is the solution? Use the
 # format shown below. The #dashboard team will gladly help you put this
 # together for your project. (required)
-description: @TODO
+description: FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.
 
 # What is the measurable impact of your project? Use the format shown below.
 # The #dashboard team will gladly help you put this together for your project.
@@ -56,8 +56,8 @@ partners:
 # - url: URL for the link
 #   text: Anchor text for the link
 contact:
-- text: @TODO
-  url: mailto:@TODO
+- text: GitHub Issues
+  url: https://github.com/18F/hud-disaster-data/issues
 
 # Who are the team members on your project? You can specify GitHub usernames,
 # email addresses, or other organizational usernames. (required)
@@ -66,7 +66,16 @@ contact:
 #   id: Internal team identifier/user name
 #   role: Team member's role; leads should be designated as 'lead'
 team:
--
+- github: oghaffari
+  id: omid
+  role: Project Lead
+- github: waldoj
+  id: waldo
+  role: Tech Leader
+- github: MichelleMcNellis
+  id: michelle.mcnellis
+  role: Contracting Lead
+
 
 # What kind of content is contained in the project repository?
 # values: app, docs, policy
@@ -78,7 +87,7 @@ milestones:
 
 # Name of the main project repo if this is a sub-repo; name of the grouplet
 # repo if this is a working group/guild subproject
-parent: @TODO
+parent:
 
 # What are the links to key artifacts associated with your project? e.g. the
 # production site, documentation.
@@ -87,7 +96,9 @@ parent: @TODO
 #   text: Anchor text for the link
 #   category: Type of the link
 links:
--
+- url: https://trello.com/b/hsLn76oA/scrum-development
+  text: Trello
+  catgory: project management
 
 # What tags does your organization's blog associate with your project? You can
 # find a list of 18F blog tags here: https://18f.gsa.gov/tags/
@@ -116,4 +127,9 @@ users:
 
 # Tags that describe the project or aspects of the project
 tags:
--
+- disaster
+- FEMA
+- HUD
+- grant
+- disaster
+
