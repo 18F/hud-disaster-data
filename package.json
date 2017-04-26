@@ -4,7 +4,8 @@
   "description": "FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.",
   "main": "app.js",
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha -R spec",
+    "build": "echo \"Nothing to run\""
   },
   "repository": {
     "type": "git",
