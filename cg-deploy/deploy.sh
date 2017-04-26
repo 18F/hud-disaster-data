@@ -19,12 +19,12 @@ if [ $SPACE = 'prod' ]; then
 echo "YOU SHOULD NOT RUN THIS!!!"
 exit 3
   ## NAME="hud-disaster-data"
-  ## MANIFEST="./ci-deploy/manifests/manifest.yml"
+  ## MANIFEST="./cg-deploy/manifests/manifest-prod.yml"
   ## CF_USERNAME=$CF_USERNAME_PROD
   ## CF_PASSWORD=$CF_PASSWORD_PROD
 elif [ $SPACE = 'staging' ]; then
   NAME="hud-disaster-data-staging"
-  MANIFEST="./ci-deploy/manifests/manifest-staging.yml"
+  MANIFEST="./cg-deploy/manifests/manifest-staging.yml"
   CF_USERNAME=$CF_USERNAME_DEV
   CF_PASSWORD=$CF_PASSWORD_DEV
 else
