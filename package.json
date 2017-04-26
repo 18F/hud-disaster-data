@@ -2,8 +2,9 @@
   "name": "hud-disaster-data",
   "version": "1.0.0",
   "description": "FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
+    "start": "node index",
     "test": "mocha -R spec",
     "build": "echo \"Nothing to run\""
   },
@@ -22,5 +23,12 @@
   "bugs": {
     "url": "https://github.com/flexion/hud-disaster-data/issues"
   },
-  "homepage": "https://github.com/flexion/hud-disaster-data#readme"
+  "homepage": "https://github.com/flexion/hud-disaster-data#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "mocha": "^3.3.0",
+    "supertest": "^3.0.0"
+  }
 }

@@ -5,4 +5,4 @@ before_script:
 - pwd
 - npm install
 script:
-- npm run build
+- npm test
