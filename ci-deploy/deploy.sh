@@ -15,14 +15,14 @@ echo "Usage: deploy <space>"
 exit
 fi
 
-if [ $SPACE = 'hud-disaster-data-prod' ]; then
+if [ $SPACE = 'prod' ]; then
 echo "YOU SHOULD NOT RUN THIS!!!"
 exit 3
   ## NAME="hud-disaster-data"
   ## MANIFEST="./ci-deploy/manifests/manifest.yml"
   ## CF_USERNAME=$CF_USERNAME_PROD
   ## CF_PASSWORD=$CF_PASSWORD_PROD
-elif [ $SPACE = 'hud-disaster-data-staging' ]; then
+elif [ $SPACE = 'staging' ]; then
   NAME="hud-disaster-data-staging"
   MANIFEST="./ci-deploy/manifests/manifest-staging.yml"
   CF_USERNAME=$CF_USERNAME_DEV
