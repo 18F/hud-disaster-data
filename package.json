@@ -1,0 +1,37 @@
+{
+  "name": "hud-disaster-data",
+  "version": "1.0.0",
+  "description": "FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "mocha -R spec",
+    "build": "echo \"Nothing to run\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flexion/hud-disaster-data.git"
+  },
+  "keywords": [
+    "disaster",
+    "FEMA",
+    "HUD",
+    "grant"
+  ],
+  "author": "18f/Flexion",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/flexion/hud-disaster-data/issues"
+  },
+  "homepage": "https://github.com/flexion/hud-disaster-data#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^4.3.1",
+    "mocha": "^3.3.0",
+    "should": "^11.2.1",
+    "supertest": "^3.0.0"
+  }
+}
