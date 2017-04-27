@@ -2,8 +2,10 @@ set -e
 if [ "$TRAVIS_BRANCH" = 'master' ]
 then
     export SPACE='staging'
+    echo 'Setting space to staging'
 else
     export SPACE='dev'
+    echo 'Setting space to dev'
 fi
 
 export PATH=$HOME:$PATH
@@ -30,5 +32,6 @@ echo "Unknown space: $SPACE"
 exit
 fi
 
+echo "cf login -a $API -u $CF_USERNAME -p $CF_PASSWORD -o $ORG -s $SPACE"
 cf login -a $API -u $CF_USERNAME -p $CF_PASSWORD -o $ORG -s $SPACE
 cf zero-downtime-push $NAME -f $MANIFEST
