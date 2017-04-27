@@ -4,5 +4,6 @@ node_js:
 before_script:
 - pwd
 - npm install
+- npm install -g gulp-cli
 script:
-- npm test
+- gulp
