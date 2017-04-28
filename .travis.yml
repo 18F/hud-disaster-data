@@ -7,3 +7,15 @@ before_script:
 - npm install
 script:
 - npm run build
+deploy:
+  edge: true
+  provider: cloudfoundry
+  api: https://api.fr.cloud.gov
+  username: 40b6e18f-6956-43d4-936e-8f998f89e48a
+  password:
+    secure: sKXF2CTSJut5JFisKAYI+gexFnXoHZD7DUplPoaczf7T0+zEhKHjOIfNB1AX0bdtvSjl8OUOKG6XLKSkVsNoFeiMCEMR5XHDJP/A/K/u/PPvPuCybIxFMVSvHOowGTGpLiacIa28sQqEVaaVnRV6LIFvER3NbpMwyDCDecOMv7yuDsYKIQTQ3TUEbTcLZ8XVxcFC8jxVPpB0POtWEwqzFKyr9z4PzEPAbGUPj0+5tIyaTB9+fbOEMg3jkC4KZWexLlnQZvcuyPM5GaqBxhGzBcvPkA6qhJvyGupYjYyW8fxxhoH4o6P40fAogXB/pByRFTeetLb1t1e5w6/S9p9Zp9ndCqf1ff8ZKaOSoWpf1n0gm11BdFMB6mf3tA7ZpPjIYxYtGtPmmoGKpbvJkehBC0ZnUGq/bZJU78L9rmwcgzQh7msevapyOn0kjxLJ2wRKlhefl9+lLp76rYqzjaWG3t04umZy+CPbuuMljF6TdFXRkWUIZKwyWoUQgd/WkENwIN0gpv/shp17nt+JDsLxx2GKgSbI+hLx55gwQWISdTmf83Sna3dz1ShrCk8YrHsqrXlDrY0ADe98vKmYWDIGbbb27BBdYlcUDAWavAJIWE64bniaFxmfjiGki5LwNkMcdeOGrEYm060HbQab6cDMOlU3WIEq68lE8Nhk3ghIGwg=
+  organization: hud-disaster-data
+  space: dev
+  on:
+    repo: flexion/hud-disaster-data
+    condition: "$TRAVIS_BRANCH" != 'master'
