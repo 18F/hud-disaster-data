@@ -19,3 +19,14 @@ deploy:
   space: dev
   on:
     branch: sprint-*
+- manifest: ./cg-deploy/manifests/manifest-staging.yml
+  edge: true
+  provider: cloudfoundry
+  api: https://api.fr.cloud.gov
+  username: c2a5e549-386e-49ac-8363-3de756e3da77
+  password:
+    secure: A+H5TbJBZ2WPhuF9Tqhu2r/4etg53DRq4COpb1PooeVZiNEqnPWJn/ebU+PxSHeAaSUjaycVJf/BUj2xYWI3cMdGrvqpAo3r9pSege78q6FZx83XnT+PS5e/Ae0Dc66YEqlitkrtgvzc4GwV39h9kqGhKNyuh6P0MiOOsuUFEHgreRmTEIurkROcuHC6EHxHj8BzF39eQGpYxhFZNuH4HCFNgioFFlu71pB8yfosxIPXwdUPXOMCVBbpD5edJEDG2+ES8fA0uUSxy7nTmOuW3qpeJ2r1rVeLf0WGvv5AP3zhqNcwT+PFgAdcXqEslHO5cKPm8k7blU8RRxO6vqxOoWG9Q40iC9mb08ycbYaafeZbz3D6KNT1NSBXIxjJehSWB3h3aGFcNokZ79CfRV2POBlPj3yJ7+YrblRjCMa3HVPUB7mgAhb4WzCaa9teGdzI+P3tfRx1C/axKjlYBF6G7BD2Zw2n6HCb6DRwJ/xy+JL1UVFKeosgPyepzj4gzrKBt+KhXxIY2qjwxi9Su6uEB7y7Vke7uioFQXrzBvlUovHydxWOWwhgkADSf6IAeXBsN/fpiVIVxJE70B0O2Oosknn9Mt7r0Djly2WQsWAieK+agIsgRVPf8a/idlMnRkh5jZ8Hv8usrYJxTHZlnxvJyyhlfufzW5G61bjLye9wm7w=
+  organization: hud-disaster-data
+  space: staging
+  on:
+    branch: master
