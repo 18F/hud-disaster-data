@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<!-- include 18F assets ------------------------------------------------ -->
+	<link rel="stylesheet" type="text/css" href="assets/css/google-fonts.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/18f.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
+	<!-- concept modeler styles -------------------------------------------- -->
+	<link rel="stylesheet" type="text/css" href="assets/css/cm.css">
+	<title>HUD Disaster Data - Dashboard</title>
+	<script data-main="assets/js/common" src="assets/js/lib/requireJS.2.1.22.min.js"></script>
+</head>
+<body>
+	<!-- MODAL DIALOG ------------------------------------ -->
+	<div id="modal_dialog" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title"></h4>
+				</div>
+				<div class="modal-body"><p></p></div>
+				<div class="modal-footer">
+					<button type="button" class="btn usa-button-primary">OK</button>
+					<button type="button" class="btn usa-button-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<header>
+		<div class="container">
+			<div class="align-left hidden-lg">
+				<button id="show_menu" class="btn btn-default usa-button" type="button" >
+						<span class="fa fa-bars"><span>
+				</button>
+			</div>
+			<div class="align-right">
+				<div class="dropdown user-role">
+					<button class="btn btn-default dropdown-toggle usa-button" type="button"
+					id="drpUserRole" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						Administrator
+						<span class="caret"><span>
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="drpUserRole">
+						<li><a href="#" data-toggle="modal" data-target="#modal_dialog"><i class="fa fa-lg fa-gear"></i>Settings</a></li>
+						<li><a href="#" data-toggle="modal" data-target="#modal_dialog" data-modal-type="logout"><i class="fa fa-lg fa-sign-out"></i>Logout</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- GLOBAL SEARCH ----------------------------------- -->
+	<div class="global-search">
+		<form class="usa-search usa-search-big">
+			<div role="search">
+			  <label class="usa-sr-only" for="search-field-big">Search big</label>
+			  <input id="search-field-big" name="search" type="search" placeholder="I'm looking for...">
+			  <button type="submit">
+				<span class="usa-search-submit-text">Search</span>
+			  </button>
+			</div>
+	  </form>
+	</div>
+	<div class="row">
+		<!-- NAVIGATION ---------------------------------- -->
+		<div class="sidenav col-xs-12 col-lg-2">
+			<div class="user-info-wrapper">
+				<div class="user-info">
+					<div class="user-details">
+						<div id="user-photo">
+							<image id="user_avatar" alt="Avatar for Bryan McFadden" title="Avatar for Bryan McFadden" src="assets/img/bryan_mcfadden.jpg" />
+						</div>
+						<!-- DYNAMIC USER NAME GOES HERE /////////////////////////  -->
+						<div id="user-name" class="txt-left">
+							Bryan<br>McFadden
+						</div>
+					</div>
+					<div class="user-notifications txt-right">
+						<div class="hide txt-center invitations">
+							<span>10</span>
+						</div>
+						<i title="View my invitations" class="fa fa-lg fa-envelope-o" onclick="alert('View my mail!');"></i>
+						<i id="user_settings" title="View my settings" class="fa fa-lg fa-gear" onclick="window.location.href='my_settings.html'"></i>
+					</div>
+				</div>
+			</div>
+			<div class="main-menu hidden-xs hidden-sm hidden-md">
+				<!-- Home ------------------------------------>
+				<h1 class="usa-current" title="Home">Home<i class="fa fa-home"></i></h1>
+				<div style="display:block;">
+					<h3><a href="#" title="Child Menu Item 1">Child Menu Item 1</a></h3>
+					<h3><a href="#" title="Child Menu Item 2">Child Menu Item 2</a></h3>
+					<h3><a href="#" title="Child Menu Item 3">Child Menu Item 3</a></h3>
+					<h3><a href="#" title="Child Menu Item 4">Child Menu Item 4</a></h3>
+					<h3><a href="#" title="Child Menu Item 5">Child Menu Item 5</a></h3>
+				</div>
+				<!-- Communities - --------------------------->
+				<h1>Communities<i class="fa fa-group"></i></h1>
+				<div>
+					<h2>Sub Menu Item #1</h2>
+					<div>
+						<h3><a href="#">Child Menu Item 1</a></h3>
+						<h3><a href="#">Child Menu Item 2</a></h3>
+						<h3><a href="#">Child Menu Item 3</a></h3>
+						<h3><a href="#">Child Menu Item 4</a></h3>
+						<h3><a href="#">Child Menu Item 5</a></h3>
+					</div>
+					<h2>Sub Menu Item #2</h2>
+					<div>
+						<h3><a href="#">Child Menu Item #4</a></h3>
+						<h3><a href="#">Child Menu Item #5</a></h3>
+						<h3><a href="#">Child Menu Item #6</a></h3>
+						<h3><a href="#">Child Menu Item #7</a></h3>
+						<h3><a href="#">Child Menu Item #8</a></h3>
+					</div>
+				</div>
+				<!-- Domains - ------------------------------->
+				<h1>Domains<i class="fa fa-globe"></i></h1>
+				<div>
+					<h2>Sub Menu Item #1</h2>
+					<div>
+						<h3><a href="#">Child Menu Item 1</a></h3>
+						<h3><a href="#">Child Menu Item 2</a></h3>
+						<h3><a href="#">Child Menu Item 3</a></h3>
+						<h3><a href="#">Child Menu Item 4</a></h3>
+						<h3><a href="#">Child Menu Item 5</a></h3>
+					</div>
+					<h2>Sub Menu Item #2</h2>
+					<div>
+						<h3><a href="#">Child Menu Item 1</a></h3>
+						<h3><a href="#">Child Menu Item 2</a></h3>
+						<h3><a href="#">Child Menu Item 3</a></h3>
+						<h3><a href="#">Child Menu Item 4</a></h3>
+						<h3><a href="#">Child Menu Item 5</a></h3>
+					</div>
+					<h2>Sub Menu Item #3</h2>
+					<div>
+						<h3>
+							<a href="#">Test Link 1</a>
+						</h3>
+					</div>
+				</div>
+				<!-- Models - -------------------------------->
+				<h1>Models<i class="fa fa-puzzle-piece"></i></h1>
+				<div>
+					<h2>Sub Menu Item #1</h2>
+					<div>
+						<h3><a href="#">Child Menu Item 1</a></h3>
+						<h3><a href="#">Child Menu Item 2</a></h3>
+						<h3><a href="#">Child Menu Item 3</a></h3>
+						<h3><a href="#">Child Menu Item 4</a></h3>
+						<h3><a href="#">Child Menu Item 5</a></h3>
+					</div>
+					<h2>Sub Menu Item #2</h2>
+					<div>
+						<h3><a href="#">Child Menu Item 1</a></h3>
+						<h3><a href="#">Child Menu Item 2</a></h3>
+						<h3><a href="#">Child Menu Item 3</a></h3>
+						<h3><a href="#">Child Menu Item 4</a></h3>
+						<h3><a href="#">Child Menu Item 5</a></h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-lg-10">
+			<div class="content-wrapper">
+				<div class="page-title-container">
+					<!-- PAGE TITLE ------------------------------- -->
+					<div class="page-title">
+						<div id="name">Home</div>
+						<div id="description">Here is a page description that would be for the user to read</div>
+					</div>
+				</div>
+				<div class="breadcrumbs">
+					<div>
+						<a href="javascript:alert('return home');" title="Return to Home" class="active">Home</a>
+						<span>|</span>
+						<!--
+						<a href="javascript:alert('return to page 1');" title="Return to Page 1">Page 01</a>
+						<span>|</span>
+						<a href="#" title="Return to Page 2">Page 2</a><span>|</span>
+						<a href="#" title="Return to Page 3">Page 3</a>
+						-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- FOOTER ------------------------------------------------- -->
+		 <footer class="usa-footer usa-footer-slim usa-sans" role="contentinfo" style="display:none;">
+			<div class="usa-grid usa-footer-return-to-top">
+			  <a href="#">Return to top</a>
+			</div>
+			<div class="usa-footer-primary-section">
+			  <div class="usa-grid-full">
+				<nav class="usa-footer-nav usa-width-two-thirds">
+				  <ul class="usa-unstyled-list">
+					<li class="usa-width-one-fourth usa-footer-primary-content">
+					  <a class="usa-footer-primary-link" href="#">Primary link</a>
+					</li>
+					<li class="usa-width-one-fourth usa-footer-primary-content">
+					  <a class="usa-footer-primary-link" href="#">Primary link</a>
+					</li>
+					<li class="usa-width-one-fourth usa-footer-primary-content">
+					  <a class="usa-footer-primary-link" href="#">Primary link</a>
+					</li>
+					<li class="usa-width-one-fourth usa-footer-primary-content">
+					  <a class="usa-footer-primary-link" href="#">Primary link</a>
+					</li>
+				  </ul>
+				</nav>
+				<div class="usa-width-one-sixth usa-footer-primary-content">
+				  <p>(800) CALL-GOVT</p>
+				</div>
+				<div class="usa-width-one-sixth usa-footer-primary-content">
+				  <a href="mailto:info@agency.gov">info@agency.gov</a>
+				</div>
+			  </div>
+			</div>
+			<div class="usa-footer-secondary_section">
+			  <div class="usa-grid">
+				<div class="usa-footer-logo">
+				  <img class="usa-footer-slim-logo-img" src="/designstandards/assets/img/logo-img.png" alt="Logo image">
+				  <h3 class="usa-footer-slim-logo-heading">Name of Agency</h3>
+				</div>
+			  </div>
+			</div>
+		</footer>
+	</div>
+	<script language="javascript">
+		//load require.js config file
+		require(['common'],function(){
+			//load content-modeler specific js
+			require(['modules/cm']);
+		});
+	</script>
+</body>
+</html>

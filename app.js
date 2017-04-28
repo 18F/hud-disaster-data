@@ -1,8 +1,7 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
-app.get('/', function (req, res) {
-  res.send('hello world')
-});
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
 module.exports = app;
