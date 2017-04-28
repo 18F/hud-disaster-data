@@ -1,6 +1,6 @@
 # HUD Disaster Data Pilot
 
-A pilot of a website that collects and displays Community Development Block Grant-Disaster Recovery (CDBG-DR) data.
+A pilot of a website that collects and displays disaster data for use by Community Development Block Grant-Disaster Recovery (CDBG-DR) grantees.
 
 ## Contributing
 
