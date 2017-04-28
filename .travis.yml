@@ -17,4 +17,4 @@ deploy:
   organization: hud-disaster-data
   space: dev
   on:
-    condition: "$TRAVIS_BRANCH != master"
+    condition: "$TRAVIS_BRANCH -ne 'master'"
