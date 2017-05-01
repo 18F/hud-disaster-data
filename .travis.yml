@@ -30,3 +30,16 @@ deploy:
   space: staging
   on:
     branch: master
+    condition: "$TRAVIS_REPO_SLUG = 'flexion/hud-disaster-data'"
+- manifest: ./cg-deploy/manifests/manifest-prod.yml
+  edge: true
+  provider: cloudfoundry
+  api: https://api.fr.cloud.gov
+  username: someusername
+  password:
+    secure: somethingencrypted
+  organization: hud-disaster-data
+  space: prod
+  on:
+    branch: master
+    condition: "$TRAVIS_REPO_SLUG = '18F/hud-disaster-data'"

@@ -72,5 +72,5 @@ deploy:
 ```
 
 ## Adding a space user for manual deploy (using staging space as example)
-  - at a command prompt, issue this command: cf set-space-role somename@somedomain.com hud-disaster-data staging SpaceDeveloper
+  - at a command prompt, issue this command: `cf set-space-role somename@somedomain.com hud-disaster-data staging SpaceDeveloper`
   - **NOTE: we were told when new environments were setup, it might take a little while before you can run the above command, due to the cloud-gov-service-account service not being available yet.**
