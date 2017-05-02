@@ -1,0 +1,9 @@
+---
+applications:
+- name: hud-disaster-data-prod
+  path: ../..
+  memory: 64M
+  host: hud-disaster-data-prod
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack
+  env:
+    FORCE_HTTPS: true

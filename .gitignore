@@ -1,0 +1,9 @@
+node_modules
+.nyc_output
+*.log
+coverage
+*.swp
+.settings
+.project
+*.swo
+.idea
