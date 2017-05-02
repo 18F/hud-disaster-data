@@ -1,5 +1,6 @@
 
-Staging [![Build Status](https://travis-ci.org/flexion/hud-disaster-data.svg?branch=master)](https://travis-ci.org/flexion/hud-disaster-data)
+[![Build Status Staging](https://img.shields.io/travis/flexion/hud-disaster-data/master.svg?label=build-staging)](https://travis-ci.org/flexion/hud-disaster-data)
+[![Build Status Prod](https://img.shields.io/travis/18F/hud-disaster-data/master.svg?label=build-prod)](https://travis-ci.org/18F/hud-disaster-data)
 
 # HUD Disaster Data Pilot
 
