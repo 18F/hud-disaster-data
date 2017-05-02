@@ -29,7 +29,7 @@ This project includes a [.travis.yml](.travis.yml) file that will facilitate the
 
 #### Initiation of TravisCI
 To include a repo into TravisCI, you must be an admin of that repo.
-- Go to [TravisCI](http://travis-ci.com)
+- Go to [TravisCI](http://travis-ci.org)
 - Click **Sign in with GitHub** and sign in
  - *For additional information, see [these directions](https://docs.travis-ci.com/user/getting-started/)*
 - Once you’re signed in, and Travis has synchronized your repositories from GitHub, go to your profile page and enable Travis CI for the repository you want to build
