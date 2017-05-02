@@ -1,3 +1,4 @@
+dist: trusty
 language: node_js
 node_js:
 - '7'
@@ -7,6 +8,14 @@ before_script:
 - npm install
 script:
 - npm run build
+- sonar-scanner
+addons:
+  sonarqube:
+    organization: flexion
+    branches:
+    - master
+    - sprint-*
+    - sonar-*
 deploy:
 - manifest: ./cg-deploy/manifests/manifest-dev.yml
   edge: true
