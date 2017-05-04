@@ -24,6 +24,12 @@
     "url": "https://github.com/flexion/hud-disaster-data/issues"
   },
   "homepage": "https://github.com/flexion/hud-disaster-data#readme",
+  "nyc": {
+    "exclude": [
+      "test",
+      "coverage"
+    ]
+  },
   "dependencies": {
     "express": "^4.15.2"
   },
