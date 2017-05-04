@@ -1,5 +1,15 @@
 html
   head
-    title= title
+    title Login
   body
-    h1= message
+    form.login(method='POST')
+      input(type='hidden', name='_csrf', value=_csrf)
+      .form-group
+        label.control-label(for='username') Username
+        input.form-control(type='username', name='username', id='username', placeholder='Username', autofocus=true)
+      .form-group
+        label.control-label(for='password') Password
+        input.form-control(type='password', name='password', id='password', placeholder='Password')
+      .form-group.row
+        .col-sm-6.col-sm-offset-3
+          button.btn.btn-info.btn-lg.active.center-block.text-center(type='submit') Login

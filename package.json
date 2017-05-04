@@ -31,10 +31,15 @@
     ]
   },
   "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-session": "^2.0.0-beta.1",
     "express": "^4.15.2",
+    "lodash": "^4.17.4",
+    "lusca": "^1.4.1",
     "pug": "^2.0.0-rc.1"
   },
   "devDependencies": {
+    "cheerio": "^0.22.0",
     "mocha": "^3.3.0",
     "nyc": "^10.2.0",
     "should": "^11.2.1",
