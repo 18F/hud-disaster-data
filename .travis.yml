@@ -18,9 +18,8 @@ addons:
     - sonar-*
 deploy:
 - provider: azure_web_apps
-  username: \$hud-disaster-data-dev
-  password:
-    secure: PJmkjxJNR1E7ZdJFhQz32ZGXmSwfjXsTn5sCg85iGkaDgu5EakP6dbmqrhuM
+  username: dev-deploy-sa
+  password: hudD1sasterDataPortal
   site: hud-disaster-data-dev
   on:
     branch: sprint-*
