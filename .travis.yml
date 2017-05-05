@@ -18,10 +18,9 @@ addons:
     - sonar-*
 deploy:
 - provider: azure_web_apps
-  username: "hud-disaster-data-dev\\dev-deploy-sa"
-  password: "hudD1sasterDataPortal"
+  username: dev-deploy-sa
+  password: hudD1sasterDataPortal
   site: hud-disaster-data-dev
-  skip_cleanup: true
   on:
     branch: sprint-*
 - manifest: ./cg-deploy/manifests/manifest-dev.yml
