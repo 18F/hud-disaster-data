@@ -18,6 +18,7 @@ addons:
     - sonar-*
 deploy:
 - provider: azure_web_apps
+  verbose: true
   username: dev-deploy-sa
   password: hudD1sasterDataPortal
   site: hud-disaster-data-dev
