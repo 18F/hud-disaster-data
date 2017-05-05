@@ -17,7 +17,8 @@ app.use(cookieSession({
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(lusca({
-  csrf: true
+  csrf: true,
+  xssProtection: true
 }));
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: dayInMillis * 10 }));

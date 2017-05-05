@@ -32,6 +32,15 @@ describe('GET /login', () => {
         done();
       });
   });
+  it('should contain a X-XSS-Protection header', (done) => {
+    request(app)
+      .get('/login')
+      .end((err, res) => {
+        if (err) return done(err);
+        should.exist(res.headers['x-xss-protection']);
+        done();
+      });
+  });
 });
 
 describe('POST /login', () => {
@@ -41,7 +50,7 @@ describe('POST /login', () => {
     .send({username: 'test', password: 'test'})
     .expect(403, done);
   });
-  
+
   it('should return 401 Unauthorized if username is empty', (done) => {
     var agent = request.agent(app);
     agent.get('/login')
