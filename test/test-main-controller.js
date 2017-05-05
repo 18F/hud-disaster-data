@@ -12,6 +12,19 @@ describe('GET /', () => {
   });
 });
 
+describe('GET /start', () => {
+  it('should return 302 and redirect to /login', (done) => {
+    request(app)
+      .get('/start')
+      .end((err, res) => {
+        if (err) return done(err);
+        (res.status).should.be.equal(302);
+        (res.headers).should.have.property('location').which.is.a.String().and.is.equal('/login')
+        done();
+      });
+  });
+});
+
 describe('GET /login', () => {
   it('should return 200 ok', (done) => {
     request(app)
@@ -51,7 +64,7 @@ describe('POST /login', () => {
     .expect(403, done);
   });
 
-  it('should return 401 Unauthorized if username is empty', (done) => {
+  it('should return 302 and redirect to /login Unauthorized if username is empty', (done) => {
     var agent = request.agent(app);
     agent.get('/login')
     .end((err, res) => {
@@ -60,11 +73,16 @@ describe('POST /login', () => {
       agent.post('/login')
       .type('form')
       .send({_csrf: csrf, password: 'test'})
-      .expect(401, done);
+      .end((err, res) => {
+        if (err) return done(err);
+        (res.status).should.be.equal(302);
+        (res.headers).should.have.property('location').which.is.a.String().and.is.equal('/login')
+        done();
+      });
     });
   });
 
-  it('should return 401 Unauthorized if password is empty', (done) => {
+  it('should return 302 and redirect to /login if password is empty', (done) => {
     var agent = request.agent(app);
     agent.get('/login')
     .end((err, res) => {
@@ -73,11 +91,16 @@ describe('POST /login', () => {
       agent.post('/login')
       .type('form')
       .send({_csrf: csrf, username: 'test'})
-      .expect(401, done);
+      .end((err, res) => {
+        if (err) return done(err);
+        (res.status).should.be.equal(302);
+        (res.headers).should.have.property('location').which.is.a.String().and.is.equal('/login')
+        done();
+      });
     });
   });
 
-  it('should return 200 ok if username and password are valid', (done) => {
+  it('should return 302 and redirect to /start if username and password are valid', (done) => {
     var agent = request.agent(app);
     agent.get('/login')
     .end((err, res) => {
@@ -86,7 +109,12 @@ describe('POST /login', () => {
       agent.post('/login')
       .type('form')
       .send({_csrf: csrf, username: 'test', password: 'test'})
-      .expect(200, done);
+      .end((err, res) => {
+        if (err) return done(err);
+        (res.status).should.be.equal(302);
+        (res.headers).should.have.property('location').which.is.a.String().and.is.equal('/start')
+        agent.get('/start').expect(200,done);
+      });
     });
   });
 });

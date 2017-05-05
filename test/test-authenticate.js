@@ -42,4 +42,41 @@ describe('authenticate', () => {
       });
     });
   });
+
+  describe('authenticate', () => {
+    it('should redirect to /login if authentication is unsuccessful', (done) => {
+      var req = {
+        body: {
+          username: 'test',
+          password: 'jjhgasf'
+        }
+      };
+      var res = {
+        redirect: (page) => {
+          (page).should.equal('/login');
+          done();
+        }
+      };
+      authenticate.authenticate(req, res, done);
+    });
+
+    it('should redirect to /start if authentication is successful', (done) => {
+      var req = {
+        body: {
+          username: 'test',
+          password: 'test'
+        },
+        logIn: (user, cb) => {
+          cb();
+        }
+      };
+      var res = {
+        redirect: (page) => {
+          (page).should.equal('/start');
+          done();
+        }
+      };
+      authenticate.authenticate(req, res, done);
+    });
+  });
 });

@@ -26,6 +26,8 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: dayInMillis * 1
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
 
+require('./lib/services/authenticate').init(app);
+
 app.use('/', mainController);
 
 module.exports = app;

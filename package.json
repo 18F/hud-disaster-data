@@ -36,6 +36,8 @@
     "express": "^4.15.2",
     "lodash": "^4.17.4",
     "lusca": "^1.4.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.1"
   },
   "devDependencies": {
