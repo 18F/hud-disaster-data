@@ -17,8 +17,7 @@ addons:
     - sprint-*
     - sonar-*
 deploy:
-  deploy:
-  provider: azure_web_apps
+- provider: azure_web_apps
   username: dev-deploy-sa
   password: hudD1sasterDataPortal
   site: hud-disaster-data-dev
