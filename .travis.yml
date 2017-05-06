@@ -19,6 +19,7 @@ addons:
 deploy:
 - provider: azure_web_apps
   verbose: true
+  skip_cleanup: true
   username: dev-deploy-sa
   password: hudD1sasterDataPortal
   site: hud-disaster-data-dev
