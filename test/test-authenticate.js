@@ -2,8 +2,18 @@ const request = require('supertest');
 const app = require('../app.js');
 const should = require('should');
 const authenticate = require('../lib/services/authenticate');
+const sinon = require('sinon');
 
 describe('authenticate', () => {
+
+  describe('init', () => {
+    it('should only initialize once', () => {
+      var mockApp = {use: ()=>{}};
+      authenticate.init(mockApp);
+      (authenticate.init(mockApp)).should.be.false();
+    });
+  });
+
   describe('isAuthenticated' , () => {
     it('should call next() if req is authenticated', (done) => {
       var req = {
@@ -77,6 +87,55 @@ describe('authenticate', () => {
         }
       };
       authenticate.authenticate(req, res, done);
+    });
+
+    it('should call next(err) if an error ocurs durring logIn', (done) => {
+      var req = {
+        body: {
+          username: 'test',
+          password: 'test'
+        },
+        logIn: (user, cb) => {
+          cb(new Error('Kaboom'));
+        }
+      };
+      var res = {
+        redirect: (page) => {
+          (page).should.equal('/start');
+          done();
+        }
+      };
+
+      authenticate.authenticate(req, res, (err) => {
+        should.exist(err);
+        done();
+      });
+    });
+
+    it('should call next(err) if an error ocurs durring auth', (done) => {
+      var _localAuth = authenticate.localAuthenticate;
+      authenticate.localAuthenticate = (user, pass, cb) => { return cb(new Error('Kaboom'));};
+      var req = {
+        body: {
+          username: 'test',
+          password: 'test'
+        },
+        logIn: (user, cb) => {
+          cb(err);
+        }
+      };
+      var res = {
+        redirect: (page) => {
+          (page).should.equal('/start');
+          done();
+        }
+      };
+
+      authenticate.authenticate(req, res, (err) => {
+        should.exist(err);
+        authenticate.localAuthenticate = _localAuth;
+        done();
+      });
     });
   });
 });

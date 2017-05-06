@@ -100,6 +100,24 @@ describe('POST /login', () => {
     });
   });
 
+  it('should return 302 and redirect to /login if username and password are empty', (done) => {
+    var agent = request.agent(app);
+    agent.get('/login')
+    .end((err, res) => {
+      const $ = cheerio.load(res.text);
+      const csrf = $('form input[name=_csrf]').val();
+      agent.post('/login')
+      .type('form')
+      .send({_csrf: csrf})
+      .end((err, res) => {
+        if (err) return done(err);
+        (res.status).should.be.equal(302);
+        (res.headers).should.have.property('location').which.is.a.String().and.is.equal('/login')
+        done();
+      });
+    });
+  });
+
   it('should return 302 and redirect to /start if username and password are valid', (done) => {
     var agent = request.agent(app);
     agent.get('/login')
@@ -113,8 +131,12 @@ describe('POST /login', () => {
         if (err) return done(err);
         (res.status).should.be.equal(302);
         (res.headers).should.have.property('location').which.is.a.String().and.is.equal('/start')
-        agent.get('/start').expect(200,done);
+        agent.get('/start').end((err, res) => {
+          (res.status).should.be.equal(200);
+          (res.req).should.have.property('path').which.is.a.String().and.is.equal('/start')
+          done();
+        });
       });
     });
-  });
+  }).timeout(4000);
 });
