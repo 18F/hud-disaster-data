@@ -20,8 +20,7 @@ deploy:
 - provider: azure_web_apps
   verbose: true
   username: dev-deploy-sa
-  password:
-    secure: bxl5IKml1ajda/VoNfhEYYsjIZV4Laq23CXQ3y4J1QMxjdHN/JiajUqwK2WhGXLHBM62dMnTPjL/Yhw0iWV1E5kZst4s7M5CJbnxEiwHR0D39/egoSN6TWUB1A8jNAAuNVjVIk5at+ON9J7vqSp46oiPuQ4vo49zDD0thyVKIHrQGoWSgry5VVqQmM1F5nap3/aCEs9fEKGYP3RVmg0IxaiqUthzC7pSF0mRss8MOJLtERiYESrPDHXiyc5qJ+Qzpwd5LdNupqZf5iiOc0yj3fQrmBj38L5E3qM1M/fbAefYyfNNQvybu/1MZ2j1CQrNJTtJKKAlecQFWxIvNG0CK6c5khuehzdXenNBzppGTLXJpirl59H7UMujrIxDhHw0EaTuXRFuiZXfT2rwVSFCS1j2APsUiCSbHz0anEYlKVv7F6R0fPo6kG48hYQIV5TbOPNQm967tRVDEHYX9fOR0rMTYH/lqx0Bj8R58h2A1S1M6CXwpLYr4lFfousOMiLYj7GDhVXe9KD8exqO6lo5OK5XogNydLABervRwmEjTV3wq4hJa7RwZX1/5ZfDG+6luKhxabzJK4POgiJb6sQDLIsjf845w2somiwWkNz09LHavDgCrQ420nPEfcWJMVFKK+PYKk+4ykh7HQqceBvyW/GUWPHu6XsmJ2JFgESmc1o=
+  password: hudD1sasterDataPortal
   site: hud-disaster-data-dev
   on:
     branch: sprint-*
