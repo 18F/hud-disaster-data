@@ -20,7 +20,7 @@ before_deploy: "git config --global http.postBuffer 157286400"
 deploy:
 - provider: azure_web_apps
   verbose: true
-  skip_cleanup: true
+  skip_cleanup: false
   username: dev-deploy-sa
   password: hudD1sasterDataPortal
   site: hud-disaster-data-dev
