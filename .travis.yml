@@ -16,10 +16,11 @@ addons:
     - master
     - sprint-*
     - sonar-*
+before_deploy: "git config --global http.postBuffer 157286400"
 deploy:
 - provider: azure_web_apps
   verbose: true
-  skip_cleanup: false
+  skip_cleanup: true
   username: dev-deploy-sa
   password: hudD1sasterDataPortal
   site: hud-disaster-data-dev
