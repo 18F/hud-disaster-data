@@ -24,13 +24,28 @@
     "url": "https://github.com/flexion/hud-disaster-data/issues"
   },
   "homepage": "https://github.com/flexion/hud-disaster-data#readme",
+  "nyc": {
+    "exclude": [
+      "test",
+      "coverage"
+    ]
+  },
   "dependencies": {
-    "express": "^4.15.2"
+    "body-parser": "^1.17.1",
+    "cookie-session": "^2.0.0-beta.1",
+    "express": "^4.15.2",
+    "lodash": "^4.17.4",
+    "lusca": "^1.4.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-rc.1"
   },
   "devDependencies": {
+    "cheerio": "^0.22.0",
     "mocha": "^3.3.0",
     "nyc": "^10.2.0",
     "should": "^11.2.1",
+    "sinon": "^2.2.0",
     "supertest": "^3.0.0"
   }
 }
