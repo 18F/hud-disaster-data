@@ -15,7 +15,7 @@ form {
 }
 
 body#login {
-	background-image: url('../img/bg_login.jpg');
+	/*background-image: url('../img/bg_login.jpg');*/
 }
 a , a:hover, a:visited, a:active { text-decoration:none; }
 /* 18F grid exceptions ------------ */
@@ -24,29 +24,24 @@ a , a:hover, a:visited, a:active { text-decoration:none; }
 
 /* login page --------------------- */
 .login { }
-.login .wrapper {
-	/* margin-left:7%; /*auto */
-	/* margin-right:auto; */
-	max-width:360px;
-	/* overflow:auto; */
-	padding:20px;
-	text-align:left;
-	cursor:move;
-	/* width:30%; */
-}
+
+/*
 .login .container {
 	border:1px solid #eee;
 	background-color:#fff;
 	box-shadow: 5px 5px 12px #c1c1c1;
-	/* max-width:380px; */
+	/* max-width:380px;
 	padding:20px;
 }
+*/
+
 /* header ------------------------ */
-header {
+/*header {
 	background-color:#f1f1f1;
 	height:68px;
 	padding:20px;
 }
+*/
 header .container {
 	margin-left:0;
 	margin-right:0;
@@ -258,7 +253,7 @@ header .dropdown i { margin-right:10px;}
 	padding:0 10px;
 }
 .breadcrumbs a { font-size:1.3rem; }
-.breadcrumbs a.active { 
+.breadcrumbs a.active {
 	/* color:#b1b1b1;
 	cursor: default; */
 }

@@ -1,0 +1,13 @@
+.header{
+  &--pre{
+      background:$brand-primary;
+
+      p {
+        margin:0;
+        color:$color-white;
+      }
+  }
+  &--global{
+    background:$color-white;
+  }
+}

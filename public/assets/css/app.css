@@ -365,14 +365,19 @@ html {
 
 /* apply a natural box layout model to all elements, but allowing components to change */
 html {
+  height: 100%;
   box-sizing: border-box; }
 
 *, *:before, *:after {
   box-sizing: inherit; }
 
-body {
-  background-color: #ffffff;
-  background: red; }
+body#login {
+  height: 100%;
+  background-color: #96b0bf;
+  background-image: url("../img/bg-map.svg");
+  background-repeat: no-repeat;
+  background-position: 50% 110px;
+  background-size: 100% 110%; }
 
 .lt-ie9 * {
   filter: none !important; }
@@ -745,6 +750,15 @@ p a,
 .usa-text-small {
   font-size: rem(13px);
   margin-top: 0; }
+
+.header--pre {
+  background: #5a616b; }
+  .header--pre p {
+    margin: 0;
+    color: #ffffff; }
+
+.header--global {
+  background: #ffffff; }
 
 .usa-sidenav-list {
   display: block;
@@ -1819,6 +1833,8 @@ select {
   font-weight: 700;
   padding-bottom: 3px;
   padding-top: 3px; }
+  .usa-input-error-message.hide {
+    display: none; }
 
 label {
   display: block;
@@ -2217,6 +2233,18 @@ table {
 .usa-table-borderless th, .usa-table-borderless td {
   border-left: 0;
   border-right: 0; }
+
+.login .wrapper {
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: left;
+  cursor: move; }
+
+.login .container {
+  border: 1px solid #eee;
+  background-color: #ffffff;
+  padding: 40px 60px; }
 
 .usa-sr-only {
   position: absolute;
