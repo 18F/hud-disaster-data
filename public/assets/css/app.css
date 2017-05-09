@@ -629,7 +629,7 @@ html {
   font-size: 10px; }
 
 body {
-  font-size: rem(17px); }
+  font-size: 17px; }
 
 p {
   line-height: 1.5;
@@ -727,7 +727,7 @@ p a,
       font-weight: 700; } }
 
 .usa-font-lead {
-  font-size: rem(20px);
+  font-size: 20px;
   font-family: "Merriweather", "Georgia", "Times New Roman", serif;
   line-height: 1.7; }
 
@@ -764,23 +764,40 @@ p a,
   margin: 0 0 40px; }
 
 .header--pre {
-  padding: 10px 0;
+  padding: 10px 20px;
   background: #5a616b; }
   .header--pre p {
     margin: 0;
-    color: #ffffff; }
+    font-size: 1.4rem;
+    color: #ffffff;
+    display: block; }
+    .header--pre p::after {
+      clear: both;
+      content: "";
+      display: table; }
+    .header--pre p img {
+      margin-right: 10px; }
 
 .header--masthead {
   background: #ffffff; }
   .header--masthead p {
     margin: 0; }
 
-.logo--block img {
-  float: left; }
-
-.logo--block p {
-  padding: 40px 0 0;
-  color: #0a4b83; }
+.logo--block {
+  padding: 10px;
+  display: block; }
+  .logo--block::after {
+    clear: both;
+    content: "";
+    display: table; }
+  .logo--block img {
+    float: left;
+    margin-right: 10px; }
+  .logo--block p {
+    padding: 35px 0 0;
+    font-size: 2rem;
+    line-height: 1;
+    color: #0a4b83; }
 
 .nav-block--list {
   margin: 0;
@@ -1221,7 +1238,7 @@ button,
   cursor: pointer;
   display: inline-block;
   font-family: "Source Sans Pro", "Helvetica", "Arial", sans-serif;
-  font-size: rem(17px);
+  font-size: 17px;
   font-weight: 700;
   line-height: 1;
   margin-top: .5em;
@@ -1797,7 +1814,7 @@ select {
   box-sizing: border-box;
   color: #000;
   display: block;
-  font-size: rem(17px);
+  font-size: 17px;
   margin: .2em 0;
   max-width: 46rem;
   width: 100%;
@@ -1870,13 +1887,13 @@ select {
 
 .usa-input-error-label {
   display: block;
-  font-size: rem(17px);
+  font-size: 17px;
   font-weight: 700; }
 
 .usa-input-error-message {
   color: #cd2026;
   display: block;
-  font-size: rem(17px);
+  font-size: 17px;
   font-weight: 700;
   padding-bottom: 3px;
   padding-top: 3px; }
@@ -2100,7 +2117,7 @@ input[type=range]:focus::-ms-thumb {
     margin-right: 0; }
 
 .usa-label-big {
-  font-size: rem(17px);
+  font-size: 17px;
   padding-left: .9rem;
   padding-right: .9rem; }
 
