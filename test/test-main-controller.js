@@ -5,10 +5,15 @@ const should = require('should');
 
 
 describe('GET /', () => {
-  it('should return 200 OK', (done) => {
+  it('should return 302 and redirect to /login', (done) => {
     request(app)
       .get('/')
-      .expect(200, done);
+      .end((err, res) => {
+        if (err) return done(err);
+        (res.status).should.be.equal(302);
+        (res.headers).should.have.property('location').which.is.a.String().and.is.equal('/login')
+        done();
+      });
   });
 });
 
@@ -25,12 +30,12 @@ describe('GET /start', () => {
   });
 });
 
-describe('GET /login', () => {
+describe('GET /login', function () {
   it('should return 200 ok', (done) => {
     request(app)
       .get('/login')
       .expect(200, done);
-  });
+  }).timeout(4000)
   it('should contain a _csrf hidden input field', (done) => {
     request(app)
       .get('/login')
@@ -44,7 +49,7 @@ describe('GET /login', () => {
         should.exist(csrf);
         done();
       });
-  });
+  }).timeout(4000);
   it('should contain a X-XSS-Protection header', (done) => {
     request(app)
       .get('/login')
@@ -53,7 +58,7 @@ describe('GET /login', () => {
         should.exist(res.headers['x-xss-protection']);
         done();
       });
-  });
+  }).timeout(4000);
 });
 
 describe('POST /login', () => {

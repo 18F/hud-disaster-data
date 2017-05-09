@@ -44,62 +44,33 @@ require(['jquery', 'jquery-ui'], function($){
 		});
 
 		$('#frm_log_in').submit(function(event){
-			var userid = $('#user-id').val();
+			var userid = $('#username').val();
 			var pass = $('#password').val();
 			//check for blank entries
-			if((userid!='')&&(userid!=undefined)){
+			if(userid && userid !== ''){
 				$('.log-user-id').removeClass('usa-input-error');
 				$('.log-user-id label').text('User Id').css('font-weight', 'normal');
 				$('.log-user-id span').removeClass('show').addClass('hide');
 				//validate password
-				if((pass!='')&&(pass!=undefined)){
+				if(pass && pass !== ''){
 					//remove error styles
 					$('.log-password').removeClass('usa-input-error');
 					$('.log-password label').text('Password').css('font-weight', 'normal');
 					$('.log-password span').removeClass('show').addClass('hide');
-					/* -------------- Previous code for call to validate user login ----------------------------------
-					$.ajax
-					({
-						type: "GET",
-						crossDomain: true,
-						cache: false,
-						url: '#'+encodeURIComponent(userid)+'&key='+encodeURIComponent(pass), //+'&callback=?',
-						contentType: 'application/json',
-						dataType: 'jsonp',
-						async: false,
-						success: function (data, textStatus, xhr) {
-							//alert('data.httpStatusCode= ' + data.httpStatusCode);
-							if((data.httpStatus.code != 200)&&(data.class=="Failure")){
-								var fail_type, fail;
-									fail = '<div class="usa-alert usa-alert-error">';
-									fail+= '<div class="usa-alert-body">';
-									fail+= '<h3 class="usa-alert-heading">'+data.httpStatus.message+'</h3>';
-									fail+= '<div class="usa-checklist">' + data.message + '</div>';
-									fail+= '</div>';
-									fail+= '</div>';
-								$('#log-message').html(fail);
-								//error log = data.class/data.httpStatusCode/data.httpStatusText/data.code/data.message/data.source
-							}else{
-								$('#log-message').html('');
-								//alert(data.token);
-								SetCookieVal('token', data.token);
-							}
-						}
-					});*/
-					document.location.href = 'dashboard.html';
 				}else{
 					$('#log-message').html('');
 					$('.log-password').addClass('usa-input-error');
 					$('.log-password label').text('Invalid Password').css('font-weight', 'bold');
 					$('.log-password span').removeClass('hide').addClass('show');
+					event.preventDefault();
 				}
 			}else{
 				$('#log-message').html('');
 				$('.log-user-id').addClass('usa-input-error');
 				$('.log-user-id label').text('Invalid User Id').css('font-weight', 'bold');
 				$('.log-user-id span').removeClass('hide').addClass('show');
+				event.preventDefault();
 			}
-			event.preventDefault();
 		});
 
 		$('#frm_forgot_password').submit(function(event){
@@ -150,7 +121,7 @@ require(['jquery', 'jquery-ui'], function($){
 				my_cookie = key+'='+value+':';
 				my_cookie+='expires='+now.toUTCString()+';';
 			}
-			$('#user-id').val('');
+			$('#username').val('');
 			$('#password').val('');
 			//document.cookie = my_cookie.toString();
 			alert('cookie created'+'\n\n'+'expiration: '+now.toUTCString()+'\n'+'token: '+value);

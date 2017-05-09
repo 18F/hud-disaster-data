@@ -1,15 +1,102 @@
+doctype html
 html
   head
-    title Login
-  body
-    form.login(method='POST')
-      input(type='hidden', name='_csrf', value=_csrf)
-      .form-group
-        label.control-label(for='username') Username
-        input.form-control(type='username', name='username', id='username', placeholder='Username', autofocus=true)
-      .form-group
-        label.control-label(for='password') Password
-        input.form-control(type='password', name='password', id='password', placeholder='Password')
-      .form-group.row
-        .col-sm-6.col-sm-offset-3
-          button.btn.btn-info.btn-lg.active.center-block.text-center(type='submit') Login
+    meta(http-equiv='X-UA-Compatible', content='IE=EDGE')
+    meta(charset='utf-8')
+    meta(name='viewport', content='initial-scale=1.0, maximum-scale=2.0')
+    link(rel='stylesheet', type='text/css', href='assets/css/google-fonts.css')
+    link(rel='stylesheet', type='text/css', href='assets/css/font-awesome.min.css')
+    link(rel='stylesheet', type='text/css', href='assets/css/18f.css')
+    link(rel='stylesheet', type='text/css', href='assets/css/cm.css')
+    link(rel='stylesheet', type='text/css', href='assets/css/app.css')
+    title HUD Disaster Data - Login
+    script(data-main='assets/js/common', src='assets/js/lib/requireJS.2.1.22.min.js')
+  body#login
+    header.header.header--global
+      .header.header--pre
+        .container-block
+          p An official website of the United States government
+      .header.header--masthead
+        .container-block
+          .logo.--block
+            img(src='assets/img/logo.png')
+            | Disaster Portal
+    #login_dnd.login
+      .wrapper
+        .container
+          .log_in
+            form#frm_log_in.login(method="POST")
+              input(type='hidden', name='_csrf', value=_csrf)
+              fieldset
+                legend.usa-drop_text Sign in
+                |  
+                span
+                  | or 
+                  a.login-link.new-registration(href='#') new user registration
+                #log-message
+                .log-user-id
+                  label(for='username') User Id
+                  |  
+                  span#input-error-message.usa-input-error-message.hide(role='alert') Please enter a valid user id
+                  |  
+                  input#username(name='username', type='text', autocapitalize='off', autocorrect='off')
+                .log-password
+                  label(for='password') Password
+                  |  
+                  span#input-error-message.usa-input-error-message.hide(role='alert') Please enter a valid password
+                  |  
+                  input#password(name='password', type='password', autocapitalize='off', autocorrect='off')
+                p.usa-form-note
+                  a.usa-show_password(title='Show password', href='#', aria-controls='password') Show password
+                |  
+                input(type='submit', value='Sign in')
+                p
+                  a.login-link.forgot-password(href='#', title='Forgot your password') Forgot your password?
+          .forgot_password.hide
+            form#frm_forgot_password(action='#')
+              fieldset
+                legend.usa-drop_text Forgot Password
+                |  
+                span.usa-serif
+                  | Forgot your password?
+                  br
+                  br
+                  |  Enter the email address used to create your account and we&apos;ll send instructions on how to reset your password.
+                .log-reset-email
+                  label(for='reset-email') Email
+                  |  
+                  span#input-error-message.usa-input-error-message.hide(role='alert') Please enter a valid email address
+                  |  
+                  input#reset-email(name='reset-email', type='text', autocapitalize='off', autocorrect='off')
+                |  
+                input(type='submit', value='Reset')
+                p
+                  a.login-link.login-return(href='#', title='Return to login screen') Return to login screen
+    footer.footer.footer--global
+      .footer.footer--pre
+        nav.container-block.nav-block.nav-block--footer
+          ul.nav-block--list
+            li
+              a(href='#') USDA.gov
+            li
+              a(href='#') FOIA
+            li
+              a(href='#') Privacy Policy
+            li
+              a(href='#') No Fear Act Data
+            li
+              a(href='#') Office of Inspector General
+            li
+              a(href='#') Budget and Performance
+            li
+              a(href='#') About Us
+      .footer.footer--main
+        .container-block
+          .logo.--block
+            img(src='assets/img/logo.png')
+    script(language='javascript').
+      //load require.js config file
+      require(['common'],function(){
+      //load content-modeler specific js
+      require(['modules/cm']);
+      });
