@@ -15,12 +15,14 @@ html
     header.header.header--global
       .header.header--pre
         .container-block
-          p An official website of the United States government
+          p 
+            img(src="assets/img/icon_flag.png")
+            | An official website of the United States government
       .header.header--masthead
         .container-block
-          .logo.--block
-            img(src='assets/img/logo.png')
-            | Disaster Portal
+          .logo.logo--block
+            img(src='assets/img/logo_global.png')
+            p Disaster Data Portal
     #login_dnd.login
       .wrapper
         .container
@@ -93,7 +95,7 @@ html
       .footer.footer--main
         .container-block
           .logo.--block
-            img(src='assets/img/logo.png')
+            img(src='assets/img/logo_global.png')
     script(language='javascript').
       //load require.js config file
       require(['common'],function(){
