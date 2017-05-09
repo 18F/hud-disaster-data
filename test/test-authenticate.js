@@ -24,7 +24,8 @@ describe('authenticate', () => {
 
     it('should redirect to /login if req is not authenticated', (done) => {
       var req = {
-        isAuthenticated: () => { return false; }
+        isAuthenticated: () => { return false },
+        flash: () => {}
       };
       var res = {
         redirect: (page) => {
@@ -59,7 +60,8 @@ describe('authenticate', () => {
         body: {
           username: 'test',
           password: 'jjhgasf'
-        }
+        },
+        flash: () => {}
       };
       var res = {
         redirect: (page) => {

@@ -1,4 +1,5 @@
-const express = require('express');
+const express = require('express')
+const flash = require('express-flash')
 const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
@@ -22,7 +23,7 @@ app.use(lusca({
 }));
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: dayInMillis * 10 }));
-
+app.use(flash())
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
 

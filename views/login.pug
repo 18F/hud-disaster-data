@@ -36,6 +36,8 @@ html
                   | or 
                   a.login-link.new-registration(href='#') new user registration
                 #log-message
+                  if (messages.error)
+                    p= messages.error
                 .log-user-id
                   label(for='username') User Id
                   |  

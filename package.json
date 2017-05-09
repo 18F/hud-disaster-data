@@ -36,6 +36,7 @@
     "body-parser": "^1.17.1",
     "cookie-session": "^2.0.0-beta.1",
     "express": "^4.15.2",
+    "express-flash": "0.0.2",
     "lodash": "^4.17.4",
     "lusca": "^1.4.1",
     "passport": "^0.3.2",
