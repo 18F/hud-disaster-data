@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index",
     "test": "nyc --reporter=lcov --reporter=text --reporter=html mocha",
-    "build": "npm test"
+    "build": "npm test",
+    "build-css": "node-sass --include-path scss public/assets/_scss/app.scss     public/assets/css/app.css"
   },
   "repository": {
     "type": "git",
@@ -43,6 +44,8 @@
   "devDependencies": {
     "cheerio": "^0.22.0",
     "mocha": "^3.3.0",
+    "node-sass": "^4.5.2",
+    "nodemon": "^1.11.0",
     "nyc": "^10.2.0",
     "should": "^11.2.1",
     "sinon": "^2.2.0",
