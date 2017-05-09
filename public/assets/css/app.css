@@ -385,6 +385,15 @@ body#login {
 [aria-hidden=true] {
   display: none !important; }
 
+.container-block {
+  max-width: 1140px;
+  margin-left: auto;
+  margin-right: auto; }
+  .container-block::after {
+    clear: both;
+    content: "";
+    display: table; }
+
 .usa-grid,
 .usa-grid-full {
   max-width: 108.8em;
@@ -751,14 +760,33 @@ p a,
   font-size: rem(13px);
   margin-top: 0; }
 
+.header--global {
+  margin: 0 0 40px; }
+
 .header--pre {
+  padding: 10px 0;
   background: #5a616b; }
   .header--pre p {
     margin: 0;
     color: #ffffff; }
 
-.header--global {
+.header--masthead {
   background: #ffffff; }
+
+.nav-block--list {
+  margin: 0;
+  list-style: none; }
+  .nav-block--list li {
+    display: inline-block;
+    margin: 0 30px 0 0;
+    padding: 0;
+    color: #ffffff; }
+    .nav-block--list li:before, .nav-block--list li:after {
+      display: none; }
+    .nav-block--list li a {
+      display: block;
+      padding: .75em 0;
+      color: #ffffff; }
 
 .usa-sidenav-list {
   display: block;
@@ -818,6 +846,13 @@ p a,
     padding-left: 3.8rem; }
   .usa-sidenav-sub_list .usa-sidenav-sub_list a:hover {
     padding-left: 3.8rem; }
+
+.footer--pre {
+  background: #0a4b83;
+  color: #ffffff; }
+
+.footer--main {
+  background: #ffffff; }
 
 .usa-footer .usa-unstyled-list {
   display: block; }

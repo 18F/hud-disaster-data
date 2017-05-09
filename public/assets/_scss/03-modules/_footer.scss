@@ -1,3 +1,20 @@
+.footer{
+  &--global{
+
+  }
+
+  &--pre{
+    background:$brand-blue;
+    color:$color-white;
+  }
+
+  &--main{
+    background:$color-white;
+  }
+}
+
+
+//refactor footer styles
 .usa-footer {
   .usa-unstyled-list {
     display: block;
@@ -24,7 +41,7 @@
 
 .usa-footer-return-to-top {
   padding: {
-    bottom: 2rem;    
+    bottom: 2rem;
     top: 2rem;
   }
 }
@@ -50,7 +67,7 @@
         left: 0;
         right: 0;
       }
-    }  
+    }
   }
 
   .usa-grid-full {
@@ -66,13 +83,13 @@
 .width-one-sixth {
   @include media($medium) {
     @include span-columns(2);
-  }  
+  }
 }
 
 .usa-footer-medium {
   .usa-footer-primary-section {
     padding: 0;
-    
+
     @include media($medium-screen) {
       padding: {
         top: 1rem;
@@ -84,9 +101,9 @@
   .usa-footer-nav ul {
     @include media($medium-screen) {
       align-items: center;
-      display: flex;  
+      display: flex;
     }
-  }  
+  }
 }
 
 .usa-footer-slim {
@@ -97,7 +114,7 @@
 
   .usa-footer-primary-section {
     padding-bottom: 2rem;
-    
+
     @include media($medium-screen) {
       padding: {
         bottom: 1rem;
@@ -106,8 +123,8 @@
 
       .usa-grid-full {
         align-items: center;
-        display: flex;     
-      }      
+        display: flex;
+      }
     }
   }
 }
@@ -115,7 +132,7 @@
 ul.usa-footer-primary-content,
 li.usa-footer-primary-content,
 li.usa-footer-primary-content {
-  border-top: 1px solid $color-base;      
+  border-top: 1px solid $color-base;
 
   &:last-child {
     border-bottom: 1px solid $color-base;
@@ -155,7 +172,7 @@ li.usa-footer-primary-content {
   @include media($medium-screen) {
     float: right;
     padding: 0;
-  }  
+  }
 }
 
 .usa-footer-secondary_section {
@@ -173,7 +190,7 @@ li.usa-footer-primary-content {
 .usa-footer-big-secondary-section {
   @include media($medium-screen) {
     padding-top: 5rem;
-  }  
+  }
 }
 
 .usa-footer-contact-links {
@@ -188,7 +205,7 @@ li.usa-footer-primary-content {
       padding: {
         top: 3rem;
         bottom: 4rem;
-      }      
+      }
     }
   }
 
@@ -209,7 +226,7 @@ li.usa-footer-primary-content {
 
     @include media($medium-screen) {
       padding-bottom: 0;
-    }    
+    }
 
     .usa-footer-primary-link {
       background-image: url('../img/arrow-down.png');
@@ -229,7 +246,7 @@ li.usa-footer-primary-content {
     &.hidden {
       padding-bottom: 0;
 
-      .usa-footer-primary-link { 
+      .usa-footer-primary-link {
         background-image: url('../img/arrow-right.png');
         background-image: url('../img/arrow-right.svg');
         cursor: pointer;
@@ -238,9 +255,9 @@ li.usa-footer-primary-content {
         @include media($medium-screen) {
           background: none;
           padding-left: 0;
-        }        
+        }
       }
-        
+
       li { display: none; }
     }
   }
@@ -264,7 +281,7 @@ li.usa-footer-primary-content {
 
 .usa-footer-slim-logo-img {
   float: left;
-  max-width: 10rem; 
+  max-width: 10rem;
 }
 
 .usa-footer-logo-heading {
@@ -273,9 +290,9 @@ li.usa-footer-primary-content {
 
 .usa-footer-contact-heading {
   margin-top: 0;
-  
+
   @include media($medium-screen) {
-    margin-top: 1rem;  
+    margin-top: 1rem;
   }
 }
 

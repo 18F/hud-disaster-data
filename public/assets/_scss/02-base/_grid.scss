@@ -1,3 +1,6 @@
+.container-block{
+  @include outer-container($width-lg);
+}
 .usa-grid,
 .usa-grid-full {
   @include outer-container();
