@@ -376,8 +376,8 @@ body#login {
   background-color: #96b0bf;
   background-image: url("../img/bg-map.svg");
   background-repeat: no-repeat;
-  background-position: 50% 110px;
-  background-size: 100% 110%; }
+  background-position: 50% 190px;
+  background-size: 90% 110%; }
 
 .lt-ie9 * {
   filter: none !important; }
@@ -881,6 +881,7 @@ p a,
   color: #ffffff; }
 
 .footer--main {
+  padding: 10px 0;
   background: #ffffff; }
 
 .usa-footer .usa-unstyled-list {
