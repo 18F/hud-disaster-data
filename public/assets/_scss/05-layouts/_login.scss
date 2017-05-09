@@ -11,5 +11,17 @@
     border:1px solid #eee;
     background-color:$color-white;
     padding:40px 60px;
+
+    .log_in{
+      form{
+        max-width:100%;
+
+        a {
+          color:$brand-blue;
+        }
+
+      }
+
+    }
   }
 }

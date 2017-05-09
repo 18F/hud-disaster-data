@@ -772,6 +772,15 @@ p a,
 
 .header--masthead {
   background: #ffffff; }
+  .header--masthead p {
+    margin: 0; }
+
+.logo--block img {
+  float: left; }
+
+.logo--block p {
+  padding: 40px 0 0;
+  color: #0a4b83; }
 
 .nav-block--list {
   margin: 0;
@@ -846,6 +855,9 @@ p a,
     padding-left: 3.8rem; }
   .usa-sidenav-sub_list .usa-sidenav-sub_list a:hover {
     padding-left: 3.8rem; }
+
+.footer--global {
+  margin-top: 150px; }
 
 .footer--pre {
   background: #0a4b83;
@@ -2280,6 +2292,10 @@ table {
   border: 1px solid #eee;
   background-color: #ffffff;
   padding: 40px 60px; }
+  .login .container .log_in form {
+    max-width: 100%; }
+    .login .container .log_in form a {
+      color: #0a4b83; }
 
 .usa-sr-only {
   position: absolute;
