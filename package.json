@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node index",
     "test": "nyc --reporter=lcov --reporter=text --reporter=html mocha",
-    "build": "npm test",
-    "build-css": "node-sass --include-path scss public/assets/_scss/app.scss     public/assets/css/app.css",
+    "pack": "webpack ./lib/browser/index.js ./dist/js/bundle.js",
+    "build": "npm run pack && npm run build-css && npm test",
+    "build-css": "node-sass --include-path scss public/assets/_scss/app.scss public/assets/css/app.css",
     "watch-css": "nodemon -e scss -x \"npm run build-css\""
   },
   "repository": {
@@ -45,12 +46,14 @@
   },
   "devDependencies": {
     "cheerio": "^0.22.0",
+    "jquery": "^3.2.1",
     "mocha": "^3.3.0",
     "node-sass": "^4.5.2",
     "nodemon": "^1.11.0",
     "nyc": "^10.2.0",
     "should": "^11.2.1",
     "sinon": "^2.2.0",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "webpack": "^2.5.1"
   }
 }

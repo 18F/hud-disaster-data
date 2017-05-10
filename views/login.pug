@@ -10,7 +10,7 @@ html
     link(rel='stylesheet', type='text/css', href='assets/css/cm.css')
     link(rel='stylesheet', type='text/css', href='assets/css/app.css')
     title HUD Disaster Data - Login
-    script(data-main='assets/js/common', src='assets/js/lib/requireJS.2.1.22.min.js')
+    script(src='/js/bundle.js')
   body#login
     header.header.header--global
       .header.header--pre
@@ -98,9 +98,3 @@ html
         .container-block
           .logo.--block
             img(src='assets/img/logo_global.png')
-    script(language='javascript').
-      //load require.js config file
-      require(['common'],function(){
-      //load content-modeler specific js
-      require(['modules/cm']);
-      });

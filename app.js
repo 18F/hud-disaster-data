@@ -23,6 +23,7 @@ app.use(lusca({
 }));
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: dayInMillis * 10 }));
+app.use(express.static(path.join(__dirname, 'dist'), { maxAge: dayInMillis * 10 }));
 app.use(flash())
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
