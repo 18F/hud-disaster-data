@@ -40,7 +40,7 @@ describe('authenticate', () => {
   describe('localAuthenticate', () => {
     it('should call cb(null, false) if authentication is not successful', (done) => {
       authenticate.localAuthenticate('test', 'jkahsd', (err, user) => {
-        should.not.exist(err);
+        if (err) return done(err);
         (user).should.be.false();
         done();
       });
