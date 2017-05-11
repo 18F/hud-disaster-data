@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "fe-test": "webpack --module-bind istanbul-instrumenter-loader ./test/browser/test-index.js ./dist/js/test-bundle.js && mocha-phantomjs /test/browser/index.html",
-    "fe": "nyc --reporter=lcov --reporter=text --reporter=html mocha-phantomjs /test/browser/index.html --hooks mocha-phantomjs-istanbul",
-    "test-all": "mocha test && mocha-phantomjs /test/browser/index.html",
-    "test": "nyc --reporter=lcov --reporter=text --reporter=html npm run test-all",
-    "pack": "webpack ./lib/browser/index.js ./dist/js/bundle.js && webpack --module-bind istanbul-instrumenter-loader ./test/browser/test-index.js ./dist/js/test-bundle.js",
-    "build": "npm run pack && npm run build-css && npm test",
+    "fe-pack": "webpack --module-bind istanbul-instrumenter-loader ./test/browser/test-index.js ./dist/js/test-bundle.js",
+    "fe-test": "npm run fe-pack && mocha-phantomjs -k mocha-phantomjs-istanbul /test/browser/index.html",
+    "fe-report": "nyc report --reporter=lcov --reporter=text --reporter=html --temp-directory ./coverage",
+    "server-pack": "webpack ./lib/browser/index.js ./dist/js/bundle.js",
+    "test": "nyc --reporter=lcov --reporter=text --reporter=html mocha",
+    "build": "npm run server-pack && npm run build-css && npm run fe-test && npm test",
     "build-css": "node-sass --include-path scss public/assets/_scss/app.scss public/assets/css/app.css",
     "watch-css": "nodemon -e scss -x \"npm run build-css\""
   },
