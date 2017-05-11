@@ -1,3 +1,4 @@
+instrumented
 node_modules
 .nyc_output
 *.log
@@ -7,3 +8,5 @@ coverage
 .project
 *.swo
 .idea
+.imdone
+dist

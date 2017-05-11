@@ -21,11 +21,11 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 ## Setup
 This project includes a [.travis.yml](.travis.yml) file that will facilitate the building, testing, and deploying of the application, following this structure.
 
-|Repo                         | Branch updated     | Build deployed to                      |
-|-----------------------------|--------------------|----------------------------------------|
-|flexion/hud-disaster-data    | sprint-*           | cloud.gov hud-disaster-data dev        |
-|flexion/hud-disaster-data    | master             | cloud.gov hud-disaster-data staging    |
-|18F/hud-disaster-data        | master             | cloud.gov hud-disaster-data prod       |
+| Repo                      | Branch updated | Build deployed to                   |
+|:--------------------------|:---------------|:------------------------------------|
+| flexion/hud-disaster-data | sprint-*       | cloud.gov hud-disaster-data dev     |
+| flexion/hud-disaster-data | master         | cloud.gov hud-disaster-data staging |
+| 18F/hud-disaster-data     | master         | cloud.gov hud-disaster-data prod    |
 
 #### Initiation of TravisCI
 To include a repo into TravisCI, you must be an admin of that repo.

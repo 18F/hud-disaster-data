@@ -5,8 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
+    "fe-pack": "webpack --module-bind istanbul-instrumenter-loader ./test/browser/test-index.js ./dist/js/test-bundle.js",
+    "fe-test": "npm run fe-pack && mocha-phantomjs -k mocha-phantomjs-istanbul /test/browser/index.html",
+    "fe-report": "nyc report --reporter=lcov --reporter=text --reporter=html --temp-directory ./coverage",
+    "server-pack": "webpack ./lib/browser/index.js ./dist/js/bundle.js",
     "test": "nyc --reporter=lcov --reporter=text --reporter=html mocha",
-    "build": "npm test"
+    "build": "npm run server-pack && npm run build-css && npm run fe-test && npm test",
+    "build-css": "node-sass --include-path scss public/assets/_scss/app.scss public/assets/css/app.css",
+    "watch-css": "nodemon -e scss -x \"npm run build-css\""
   },
   "repository": {
     "type": "git",
@@ -24,13 +30,38 @@
     "url": "https://github.com/flexion/hud-disaster-data/issues"
   },
   "homepage": "https://github.com/flexion/hud-disaster-data#readme",
+  "nyc": {
+    "exclude": [
+      "test",
+      "coverage"
+    ]
+  },
   "dependencies": {
-    "express": "^4.15.2"
+    "body-parser": "^1.17.1",
+    "cookie-session": "^2.0.0-beta.1",
+    "express": "^4.15.2",
+    "express-flash": "0.0.2",
+    "lodash": "^4.17.4",
+    "lusca": "^1.4.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-rc.1"
   },
   "devDependencies": {
+    "cheerio": "^0.22.0",
+    "istanbul-instrumenter-loader": "^2.0.0",
+    "jquery": "^3.2.1",
     "mocha": "^3.3.0",
+    "mocha-loader": "^1.1.1",
+    "mocha-phantomjs": "^4.1.0",
+    "mocha-phantomjs-istanbul": "0.0.2",
+    "node-sass": "^4.5.2",
+    "nodemon": "^1.11.0",
     "nyc": "^10.2.0",
     "should": "^11.2.1",
-    "supertest": "^3.0.0"
+    "sinon": "^2.2.0",
+    "supertest": "^3.0.0",
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5"
   }
 }
