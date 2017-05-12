@@ -6,8 +6,8 @@ const bodyParser = require('body-parser');
 const lusca = require('lusca');
 const cookieSession = require('cookie-session');
 
-const controllers = require('./lib/controllers');
-const mainController = controllers.main;
+// const controllers = require('./lib/controllers');
+// const mainController = controllers.main;
 
 const dayInMillis = 24 * 60 * 60 * 1000;
 app.use(cookieSession({
@@ -17,19 +17,18 @@ app.use(cookieSession({
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(lusca({
-  csrf: true,
-  xssProtection: true
-}));
+// app.use(lusca({
+//   csrf: true,
+//   xssProtection: true
+// }));
 
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: dayInMillis * 10 }));
-app.use(express.static(path.join(__dirname, 'dist'), { maxAge: dayInMillis * 10 }));
-app.use(flash())
-app.set('view engine', 'pug');
-app.set('views', __dirname + '/views');
+app.use(express.static(path.join(__dirname, 'dist')));
+// app.use(flash())
+// app.set('view engine', 'pug');
+// app.set('views', __dirname + '/views');
 
-require('./lib/services/authenticate').init(app);
+// require('./lib/services/authenticate').init(app);
 
-app.use('/', mainController);
+// app.use('/', mainController);
 
 module.exports = app;
