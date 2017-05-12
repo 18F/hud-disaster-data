@@ -18,7 +18,8 @@
            @blur="reset"
            @input="update"/>
 
-    <ul v-show="hasItems">
+    <ul v-show="hasItems"
+        class="disaster-list">
       <li v-for="(item, $item) in items" :class="activeClass($item)" @mousedown="hit" @mousemove="setActive($item)">
         <span class="name" v-text="item.name"></span>
         <span class="screen-name" v-text="item.screen_name"></span>
@@ -30,7 +31,7 @@
 
 
 <script>
-import VueTypeahead from '../vueMain'
+import VueTypeahead from '../lib/TypeAhead'
 
 export default {
   extends: VueTypeahead,
