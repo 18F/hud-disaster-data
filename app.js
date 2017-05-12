@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const lusca = require('lusca');
 const cookieSession = require('cookie-session');
 
+const apiController = require('./lib/controllers/api')
 // const controllers = require('./lib/controllers');
 // const mainController = controllers.main;
 
@@ -29,6 +30,6 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // require('./lib/services/authenticate').init(app);
 
-// app.use('/', mainController);
+app.use('/api', apiController);
 
 module.exports = app;

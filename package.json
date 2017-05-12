@@ -42,9 +42,11 @@
     "express-flash": "0.0.2",
     "lodash": "^4.17.4",
     "lusca": "^1.4.1",
+    "moment": "^2.18.1",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.1",
+    "request": "^2.81.0",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
     "vue-typeahead": "^2.3.2"
