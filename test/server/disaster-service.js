@@ -1,6 +1,6 @@
-const request = require('supertest');
-const app = require('../../app.js');
-const should = require('should');
+const request = require('supertest')
+const app = require('../../app.js')
+const should = require('should')
 const moment = require('moment')
 
 describe('/api/disasters/:qry', () => {
@@ -39,7 +39,31 @@ describe('/api/disasters/:qry', () => {
       })
     })
     .expect(200)
-    .expect('Content-Type', /json/, done);
+    .expect('Content-Type', /json/, done)
   })
 
+  it('should only return the first 20 records', (done) => {
+    request(app).get('/api/disasters/DR')
+    .expect(function(res) {
+      const body = res.body
+      body.should.have.length(20)
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
+
+  const validCols = ['id', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType']
+
+  it('should only return the columns: id (mandatory), disasterNumber, state, declarationDate, disasterType, placeCode, and incidentType', (done) => {
+    request(app).get('/api/disasters/DR')
+    .expect(function (res) {
+      const body = res.body
+      const firstRecord = body[0]
+      for (var column in firstRecord) {
+        column.should.be.oneOf(validCols)
+      }
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
 })
