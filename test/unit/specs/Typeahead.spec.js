@@ -11,9 +11,10 @@ describe('Typeahead.vue', () => {
   it('should render correct contents', () => {
     const Constructor = Vue.extend(Typeahead)
     const vm = new Constructor().$mount()
-    vm.$el.querySelector('.Typeahead__input').value = 'davehannon'
+    vm.$el.children['Typeahead-input'].value = 'davehannon' // this seems to be setting value
+    debugger
     Vue.nextTick(() => {
-      expect(vm.$el.querySelector('.disaster-list').children).to.have.length.of.at.least(1)
+      expect(vm.$el.children['disaster-list']).to.have.length.of.at.least(1)
       done() // eslint-disable-line
     })
   })

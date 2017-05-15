@@ -7,6 +7,7 @@
     </template>
 
     <input type="text"
+           id="Typeahead-input"
            class="Typeahead__input"
            placeholder="Search twitter user - or disaster #"
            autocomplete="off"
@@ -20,7 +21,7 @@
 
     <ul v-show="hasItems"
         class="disaster-list">
-      <li v-for="(item, $item) in items" :class="activeClass($item)" @mousedown="hit" @mousemove="setActive($item)">
+      <li v-for="(item, $item) in items" :class="activeClass($item)" id="disaster-list" @mousedown="hit" @mousemove="setActive($item)">
         <span class="name" v-text="item.name"></span>
         <span class="screen-name" v-text="item.screen_name"></span>
       </li>
