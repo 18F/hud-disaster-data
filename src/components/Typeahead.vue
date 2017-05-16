@@ -20,9 +20,7 @@
     <ul v-show="hasItems"
         class="disaster-list">
       <li v-for="(item, $item) in items" :class="activeClass($item)" @mousedown="hit" @mousemove="setActive($item)">
-        <span class="name">
-          <span v-text="item.disasterType"/>-<span v-text="item.disasterNumber"/>-<span v-text="item.state"/>
-        </span>
+        <span class="name">{{ `${item.disasterType}-${item.disasterNumber}-${item.state}` }}</span>
         <span class="screen-name" v-text="item.incidentType"></span>
         <span v-text="item.declarationDate"/>
       </li>
