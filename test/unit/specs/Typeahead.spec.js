@@ -13,10 +13,9 @@ describe('Typeahead.vue', () => {
     const vm = new Constructor().$mount()
     const $el = vm.$el.querySelector('.Typeahead__input')
     $el.value = 'davehannon'
-    // var e = document.createEvent('HTMLEvents')
-    // e.initEvent('keyup', true, true)
-    // e.keyCode = 13
-    // $el.dispatchEvent(e)
+    var e = document.createEvent('HTMLEvents')
+    e.initEvent('change', false, true)
+    $el.dispatchEvent(e)
     Vue.nextTick(() => {
       // console.log(vm.$el.querySelector('.disaster-list').children[0].tagName)
       expect(vm.$el.querySelector('.disaster-list').children).to.have.length.of.at.least(1)
