@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <br/>
+    <p>Type your search into the box below and press the search button</p>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to The Flexion Vue.js App'
+      msg: 'Relax Finding things just got easier!'
     }
   }
 }
@@ -18,21 +18,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>

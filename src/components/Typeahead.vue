@@ -5,7 +5,6 @@
       <i class="fa fa-search" v-show="isEmpty"></i>
       <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
     </template>
-
     <input type="text"
            class="Typeahead__input"
            placeholder="Search disaster #"
@@ -17,8 +16,7 @@
            @keydown.esc="reset"
            @input="update"/>
 
-    <ul v-show="hasItems"
-        class="disaster-list">
+    <ul v-show="hasItems" class="disaster-list">
       <li v-for="(item, $item) in items" :class="activeClass($item)" @mousedown="hit" @mousemove="setActive($item)">
         <span class="name">{{ `${item.disasterType}-${item.disasterNumber}-${item.state}` }}</span>
         <span class="screen-name" v-text="item.incidentType"></span>
