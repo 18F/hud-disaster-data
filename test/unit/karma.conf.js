@@ -28,6 +28,13 @@ module.exports = function (config) {
         { type: 'lcov', subdir: '.' },
         { type: 'text-summary' }
       ]
+    },
+    // Allow remote debugging when using PhantomJS
+    customLaunchers: {
+      'PhantomJS_custom': {
+        base: 'PhantomJS',
+        debug: true
+      }
     }
   })
 }
