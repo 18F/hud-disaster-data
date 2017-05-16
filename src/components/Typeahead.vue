@@ -19,9 +19,9 @@
     <ul v-show="hasItems" class="disaster-list">
       <li v-for="(item, $item) in items" :class="activeClass($item)" @mousedown="hit" @mousemove="setActive($item)">
         <span class="name">{{ `${item.disasterType}-${item.disasterNumber}-${item.state}` }}</span>
-        <span class="screen-name" v-text="item.title"></span>
-        <span class="screen-name" v-text="item.incidentType"></span>
-        <span class="screen-name" v-text="item.declaredCountyArea"></span>
+        <span class="screen-name">{{`title:  ${item.title}`}}</span>
+        <span class="screen-name">{{`incidentType: ${item.incidentType}`}}</span>
+        <span class="screen-name">{{`declaredCountyArea: ${item.declaredCountyArea}`}}</span>
         <span v-text="item.declarationDate"/>
       </li>
     </ul>
@@ -47,6 +47,8 @@ export default {
 
   methods: {
     onHit (item) {
+      this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
+      this.update()
       window.location.href = '#'
     }
   }

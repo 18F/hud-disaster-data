@@ -1,12 +1,6 @@
 import Vue from 'vue'
 import Typeahead from '@/components/Typeahead'
 
-function getRenderedText (Component, propsData) {
-  const Ctor = Vue.extend(Component)
-  const vm = new Ctor({ propsData: propsData }).$mount()
-  return vm.$el.textContent
-}
-
 describe('Typeahead.vue', () => {
   it('should render correct contents', () => {
     const Constructor = Vue.extend(Typeahead)
@@ -23,6 +17,6 @@ describe('Typeahead.vue', () => {
     })
   })
   it('should redirect user to twitter', () => {
-    console.log(getRenderedText(Typeahead, {query: 'davehannon'}))
+    console.log(`getRenderedText(Typeahead, {query: 'davehannon'})`)
   })
 })
