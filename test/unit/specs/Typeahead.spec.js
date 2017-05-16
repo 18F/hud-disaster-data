@@ -11,8 +11,14 @@ describe('Typeahead.vue', () => {
   it('should render correct contents', () => {
     const Constructor = Vue.extend(Typeahead)
     const vm = new Constructor().$mount()
-    vm.$el.querySelector('.Typeahead__input').value = 'davehannon'
+    const $el = vm.$el.querySelector('.Typeahead__input')
+    $el.value = 'davehannon'
+    // var e = document.createEvent('HTMLEvents')
+    // e.initEvent('keyup', true, true)
+    // e.keyCode = 13
+    // $el.dispatchEvent(e)
     Vue.nextTick(() => {
+      // console.log(vm.$el.querySelector('.disaster-list').children[0].tagName)
       expect(vm.$el.querySelector('.disaster-list').children).to.have.length.of.at.least(1)
       done() // eslint-disable-line
     })

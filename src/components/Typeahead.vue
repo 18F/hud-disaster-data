@@ -8,21 +8,23 @@
 
     <input type="text"
            class="Typeahead__input"
-           placeholder="Search twitter user - or disaster #"
+           placeholder="Search disaster #"
            autocomplete="off"
            v-model="query"
            @keydown.down="down"
            @keydown.up="up"
            @keydown.enter="hit"
            @keydown.esc="reset"
-           @blur="reset"
            @input="update"/>
 
     <ul v-show="hasItems"
         class="disaster-list">
       <li v-for="(item, $item) in items" :class="activeClass($item)" @mousedown="hit" @mousemove="setActive($item)">
-        <span class="name" v-text="item.name"></span>
-        <span class="screen-name" v-text="item.screen_name"></span>
+        <span class="name">
+          <span v-text="item.disasterType"/>-<span v-text="item.disasterNumber"/>-<span v-text="item.state"/>
+        </span>
+        <span class="screen-name" v-text="item.incidentType"></span>
+        <span v-text="item.declarationDate"/>
       </li>
     </ul>
   </div>
@@ -38,15 +40,16 @@ export default {
 
   data () {
     return {
-      src: 'https://typeahead-js-twitter-api-proxy.herokuapp.com/demo/search',
+      src: '/api/disasters/',
       limit: 5,
-      minChars: 3
+      minChars: 2,
+      queryParamName: null
     }
   },
 
   methods: {
     onHit (item) {
-      window.location.href = 'http://twitter.com/' + item.screen_name
+      window.location.href = '#'
     }
   }
 }
