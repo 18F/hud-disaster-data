@@ -19,7 +19,9 @@
     <ul v-show="hasItems" class="disaster-list">
       <li v-for="(item, $item) in items" :class="activeClass($item)" @mousedown="hit" @mousemove="setActive($item)">
         <span class="name">{{ `${item.disasterType}-${item.disasterNumber}-${item.state}` }}</span>
+        <span class="screen-name" v-text="item.title"></span>
         <span class="screen-name" v-text="item.incidentType"></span>
+        <span class="screen-name" v-text="item.declaredCountyArea"></span>
         <span v-text="item.declarationDate"/>
       </li>
     </ul>
@@ -37,7 +39,7 @@ export default {
   data () {
     return {
       src: '/api/disasters/',
-      limit: 5,
+      limit: 10,
       minChars: 2,
       queryParamName: null
     }
