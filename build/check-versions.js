@@ -14,6 +14,7 @@ var versionRequirements = [
   },
 ]
 
+// commented this out to keep it from killing our deploy to cloud.gov (cloudfoundry)
 // if (shell.which('npm')) {
 //   versionRequirements.push({
 //     name: 'npm',
