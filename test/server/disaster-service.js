@@ -52,9 +52,9 @@ describe('/api/disasters/:qry', () => {
     .expect('Content-Type', /json/, done)
   })
 
-  const validCols = ['id', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType']
+  const validCols = ['id', 'declaredCountyArea', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType', 'title']
 
-  it('should only return the columns: id (mandatory), disasterNumber, state, declarationDate, disasterType, placeCode, and incidentType', (done) => {
+  it('should only return the columns: id (mandatory), declaredCountyArea, disasterNumber, state, declarationDate, disasterType, placeCode, incidentType, and title', (done) => {
     request(app).get('/api/disasters/DR')
     .expect(function (res) {
       const body = res.body
