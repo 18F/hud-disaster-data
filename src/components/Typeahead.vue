@@ -49,7 +49,6 @@ export default {
     onHit (item) {
       this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
       this.update()
-      window.location.href = '#'
     }
   }
 }

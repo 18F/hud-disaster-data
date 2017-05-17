@@ -23,8 +23,7 @@ deploy:
   skip_cleanup: false
   username: dev-deploy-sa
   password: hudD1sasterDataPortal
-  site: hud-disaster-data
-  slot: dev
+  site: hud-disaster-data-dev
   on:
     branch: sprint-*
 
