@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 const app = require('./app')
-const port = process.env.PORT ? process.env.PORT : process.env.PORT || 3000
+const port = process.env.PORT ? process.env.PORT : process.env.PORT || 3000 // Azure will set this, otherwise we will
 
 let server = app.listen(port, () => {
   let address = server.address().address
