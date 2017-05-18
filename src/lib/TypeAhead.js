@@ -56,7 +56,6 @@ export default {
     },
 
     fetch () {
-
       if (!this.$http) {
         return util.warn('You need to provide a HTTP client', this)
       }

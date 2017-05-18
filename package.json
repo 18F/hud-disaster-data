@@ -9,7 +9,7 @@
     "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "server-unit": "mocha test/server",
-    "test": "npm run unit && npm run server-unit",
+    "test": "npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "repository": {
@@ -53,7 +53,6 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
-    "axios-mock-adapter": "^1.8.1",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.10",
