@@ -8,7 +8,7 @@
     "start": "node index",
     "build": "npm test && node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "server-unit": "mocha test/server",
+    "server-unit": "mocha test/server && mocha test",
     "test": "npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
