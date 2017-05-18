@@ -1,8 +1,18 @@
 require('babel-polyfill')
 import Vue from 'vue'
 import Typeahead from '@/components/Typeahead'
+import _ from 'lodash'
 import axios from 'axios'
 import moxios from 'moxios'
+
+function dispatchEvent ($el, name, opts) {
+  var event = new Event(name, {
+    'bubbles': true,
+    'cancelable': true
+  })
+  if (opts && _.isObject(opts)) _.assign(event, opts)
+  $el.dispatchEvent(event)
+}
 
 describe('Typeahead.vue', () => {
   beforeEach(function () {
@@ -45,16 +55,37 @@ describe('Typeahead.vue', () => {
     const vm = new Constructor().$mount()
     let $input = vm.$el.querySelector('.Typeahead__input')
     $input.value = 'DR-4311'
-    var event = new Event('input', {
-      'bubbles': true,
-      'cancelable': true
-    })
 
-    $input.dispatchEvent(event)
+    dispatchEvent($input, 'input')
+
     moxios.wait(function () {
       console.log(vm.$el.querySelectorAll('.disaster-list li'))
-      expect(vm.$el.querySelectorAll('.disaster-list li')).to.have.length.of.at.least(1)
+      expect(vm.$el.querySelectorAll('.disaster-list li').length).to.be.equal(2)
       done()
+    })
+  })
+
+  it('should decrement this.current', done => {
+    const Constructor = Vue.extend(Typeahead)
+    const vm = new Constructor().$mount()
+    let $input = vm.$el.querySelector('.Typeahead__input')
+    $input.value = 'DR-4311'
+
+    dispatchEvent($input, 'input')
+
+    var current = vm.current
+    console.log(`current:${current}`)
+
+    moxios.wait(function () {
+      dispatchEvent($input, 'keydown', {keyCode: 38})
+
+      Vue.nextTick(() => {
+        expect(vm.items.length).to.be.equal(2)
+        expect(vm.current).to.be.equal(vm.items.length - 1)
+        console.log(`vm.current: ${vm.current}`)
+        // expect(vm.current).to.be.equal(current - 1)
+        done()
+      })
     })
   })
 })

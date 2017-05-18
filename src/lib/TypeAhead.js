@@ -105,6 +105,7 @@ export default {
     },
 
     up () {
+      debugger
       if (this.current > 0) {
         this.current--
       } else if (this.current === -1) {
