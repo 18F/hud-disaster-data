@@ -56,14 +56,6 @@ export default {
     },
 
     fetch () {
-      if (!this.$http) {
-        return util.warn('You need to provide a HTTP client', this)
-      }
-
-      if (!this.src) {
-        return util.warn('You need to set the `src` property', this)
-      }
-
       const src = this.queryParamName
         ? this.src
         : this.src + this.query

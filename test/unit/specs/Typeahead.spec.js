@@ -147,7 +147,6 @@ describe('Typeahead.vue', () => {
   })
 
   it('should not select an item in the array of items on down arrow keydown if the last item is selected', done => {
-    debugger
     const Constructor = Vue.extend(Typeahead)
     const vm = new Constructor().$mount()
     let $input = populateListForInput(vm, 'DR-4311')
@@ -164,4 +163,59 @@ describe('Typeahead.vue', () => {
       })
     })
   })
+
+  it('should not select an item in the array of items on down arrow keydown if the last item is selected', done => {
+    const Constructor = Vue.extend(Typeahead)
+    const vm = new Constructor().$mount()
+    let $input = populateListForInput(vm, 'DR-4311')
+    dispatchEvent($input, 'input')
+
+    moxios.wait(function () {
+      vm.current = 1
+      dispatchEvent($input, 'keydown', {keyCode: 40})
+
+      Vue.nextTick(() => {
+        expect(vm.items.length).to.be.equal(2)
+        expect(vm.current).to.be.equal(-1)
+        done()
+      })
+    })
+  })
+
+  describe('update', () => {
+    it('should force a reset if query is undefined', () => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor().$mount()
+      expect(vm.query).to.be.equal('')
+      vm.query = undefined
+      expect(vm.query).to.be.equal(undefined)
+      vm.update()
+      expect(vm.query).to.be.equal('')
+    })
+
+    it('should return before loading if query is shorter than minLength', () => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor().$mount()
+      expect(vm.query).to.be.equal('')
+      vm.query = 'A'
+      expect(vm.minChars).to.be.equal(2)
+      vm.update()
+      expect(vm.loading).to.be.equal(false)
+    })
+
+    it('should select the first item if selectFirst is true', (done) => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor().$mount()
+      let $input = populateListForInput(vm, 'DR-4311')
+      vm.selectFirst = true
+      dispatchEvent($input, 'input')
+
+      moxios.wait(function () {
+        expect(vm.items.length).to.be.equal(2)
+        expect(vm.current).to.be.equal(0)
+        done()
+      })
+    })
+  })
+
 })
