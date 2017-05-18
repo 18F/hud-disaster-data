@@ -48,8 +48,7 @@
     "pug": "^2.0.0-rc.1",
     "request": "^2.81.0",
     "vue": "^2.2.6",
-    "vue-router": "^2.3.1",
-    "vue-typeahead": "^2.3.2"
+    "vue-router": "^2.3.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

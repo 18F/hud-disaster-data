@@ -14,6 +14,12 @@ function dispatchEvent ($el, name, opts) {
   $el.dispatchEvent(event)
 }
 
+function populateListForInput (vm, input) {
+  let $input = vm.$el.querySelector('.Typeahead__input')
+  $input.value = input
+  return $input
+}
+
 describe('Typeahead.vue', () => {
   beforeEach(function () {
     // import and pass your custom axios instance to this method
@@ -53,9 +59,7 @@ describe('Typeahead.vue', () => {
   it('should render correct list item contents', done => {
     const Constructor = Vue.extend(Typeahead)
     const vm = new Constructor().$mount()
-    let $input = vm.$el.querySelector('.Typeahead__input')
-    $input.value = 'DR-4311'
-
+    let $input = populateListForInput(vm, 'DR-4311')
     dispatchEvent($input, 'input')
 
     moxios.wait(function () {
@@ -65,16 +69,11 @@ describe('Typeahead.vue', () => {
     })
   })
 
-  it('should decrement this.current', done => {
+  it('should select the last item in the array of items on up arrow', done => {
     const Constructor = Vue.extend(Typeahead)
     const vm = new Constructor().$mount()
-    let $input = vm.$el.querySelector('.Typeahead__input')
-    $input.value = 'DR-4311'
-
+    let $input = populateListForInput(vm, 'DR-4311')
     dispatchEvent($input, 'input')
-
-    var current = vm.current
-    console.log(`current:${current}`)
 
     moxios.wait(function () {
       dispatchEvent($input, 'keydown', {keyCode: 38})
@@ -84,6 +83,83 @@ describe('Typeahead.vue', () => {
         expect(vm.current).to.be.equal(vm.items.length - 1)
         console.log(`vm.current: ${vm.current}`)
         // expect(vm.current).to.be.equal(current - 1)
+        done()
+      })
+    })
+  })
+
+  it('should select the previous item in the array of items on up arrow when the second item is current', done => {
+    const Constructor = Vue.extend(Typeahead)
+    const vm = new Constructor().$mount()
+    let $input = populateListForInput(vm, 'DR-4311')
+    dispatchEvent($input, 'input')
+
+    moxios.wait(function () {
+      vm.current = 1
+      let current = vm.current
+
+      dispatchEvent($input, 'keydown', {keyCode: 38})
+
+      Vue.nextTick(() => {
+        expect(vm.items.length).to.be.equal(2)
+        expect(vm.current).to.be.equal(current - 1)
+        console.log(`vm.current: ${vm.current}`)
+        // expect(vm.current).to.be.equal(current - 1)
+        done()
+      })
+    })
+  })
+
+  it('should select no item in the array of items on up arrow when the current is less than -1', done => {
+    const Constructor = Vue.extend(Typeahead)
+    const vm = new Constructor().$mount()
+    let $input = populateListForInput(vm, 'DR-4311')
+    dispatchEvent($input, 'input')
+
+    moxios.wait(function () {
+      vm.current = -2
+
+      dispatchEvent($input, 'keydown', {keyCode: 38})
+
+      Vue.nextTick(() => {
+        expect(vm.items.length).to.be.equal(2)
+        expect(vm.current).to.be.equal(-1)
+        done()
+      })
+    })
+  })
+
+  it('should select the first item in the array of items on down arrow keydown', done => {
+    const Constructor = Vue.extend(Typeahead)
+    const vm = new Constructor().$mount()
+    let $input = populateListForInput(vm, 'DR-4311')
+    dispatchEvent($input, 'input')
+
+    moxios.wait(function () {
+      dispatchEvent($input, 'keydown', {keyCode: 40})
+
+      Vue.nextTick(() => {
+        expect(vm.items.length).to.be.equal(2)
+        expect(vm.current).to.be.equal(0)
+        done()
+      })
+    })
+  })
+
+  it('should not select an item in the array of items on down arrow keydown if the last item is selected', done => {
+    debugger
+    const Constructor = Vue.extend(Typeahead)
+    const vm = new Constructor().$mount()
+    let $input = populateListForInput(vm, 'DR-4311')
+    dispatchEvent($input, 'input')
+
+    moxios.wait(function () {
+      vm.current = 1
+      dispatchEvent($input, 'keydown', {keyCode: 40})
+
+      Vue.nextTick(() => {
+        expect(vm.items.length).to.be.equal(2)
+        expect(vm.current).to.be.equal(-1)
         done()
       })
     })

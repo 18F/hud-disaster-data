@@ -105,7 +105,6 @@ export default {
     },
 
     up () {
-      debugger
       if (this.current > 0) {
         this.current--
       } else if (this.current === -1) {
@@ -121,10 +120,6 @@ export default {
       } else {
         this.current = -1
       }
-    },
-
-    onHit () {
-      util.warn('You need to implement the `onHit` method', this)
     }
   }
 }
