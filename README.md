@@ -1,5 +1,6 @@
 
-Staging [![Build Status](https://travis-ci.org/flexion/hud-disaster-data.svg?branch=master)](https://travis-ci.org/flexion/hud-disaster-data)
+[![Build Status Staging](https://img.shields.io/travis/flexion/hud-disaster-data/master.svg?label=build-staging)](https://travis-ci.org/flexion/hud-disaster-data)
+[![Build Status Prod](https://img.shields.io/travis/18F/hud-disaster-data/master.svg?label=build-prod)](https://travis-ci.org/18F/hud-disaster-data)
 
 # HUD Disaster Data Pilot
 
@@ -20,15 +21,15 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 ## Setup
 This project includes a [.travis.yml](.travis.yml) file that will facilitate the building, testing, and deploying of the application, following this structure.
 
-|Repo                         | Branch updated     | Build deployed to                      |
-|-----------------------------|--------------------|----------------------------------------|
-|flexion/hud-disaster-data    | sprint-*           | cloud.gov hud-disaster-data dev        |
-|flexion/hud-disaster-data    | master             | cloud.gov hud-disaster-data staging    |
-|18F/hud-disaster-data        | master             | cloud.gov hud-disaster-data prod       |
+| Repo                      | Branch updated | Build deployed to                   |
+|:--------------------------|:---------------|:------------------------------------|
+| flexion/hud-disaster-data | sprint-*       | cloud.gov hud-disaster-data dev     |
+| flexion/hud-disaster-data | master         | cloud.gov hud-disaster-data staging |
+| 18F/hud-disaster-data     | master         | cloud.gov hud-disaster-data prod    |
 
 #### Initiation of TravisCI
 To include a repo into TravisCI, you must be an admin of that repo.
-- Go to [TravisCI](http://travis-ci.com)
+- Go to [TravisCI](http://travis-ci.org)
 - Click **Sign in with GitHub** and sign in
  - *For additional information, see [these directions](https://docs.travis-ci.com/user/getting-started/)*
 - Once you’re signed in, and Travis has synchronized your repositories from GitHub, go to your profile page and enable Travis CI for the repository you want to build

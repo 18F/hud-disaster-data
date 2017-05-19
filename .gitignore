@@ -1,3 +1,4 @@
+instrumented
 node_modules
 .nyc_output
 *.log
@@ -7,3 +8,10 @@ coverage
 .project
 *.swo
 .idea
+.imdone
+dist
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+test/unit/coverage
