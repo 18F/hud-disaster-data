@@ -68,4 +68,54 @@ describe('/api/disasters/:qry', function () {
     .expect(200)
     .expect('Content-Type', /json/, done)
   })
+
+  it('should return at least one record when passing in dr in lower case', (done) => {
+    request(app).get('/api/disasters/dr')
+    .expect(function (res) {
+      const body = res.body
+      body.length.should.be.aboveOrEqual(1)
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
+
+  it('should return at least one record when passing in CA', (done) => {
+    request(app).get('/api/disasters/CA')
+    .expect(function (res) {
+      const body = res.body
+      body.length.should.be.aboveOrEqual(1)
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
+
+  it('should return at least one record when passing in a valid number (ex: 4311)', (done) => {
+    request(app).get('/api/disasters/4311')
+    .expect(function (res) {
+      const body = res.body
+      body.length.should.be.aboveOrEqual(1)
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
+
+  it('should return at least one record when passing in a valid disaster number and type (ex: DR-4311)', (done) => {
+    request(app).get('/api/disasters/DR-4311')
+    .expect(function (res) {
+      const body = res.body
+      body.length.should.be.aboveOrEqual(1)
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
+
+  it('should return at least one record when passing in a valid disaster number and type and state (ex: DR-4311-UT)', (done) => {
+    request(app).get('/api/disasters/DR-4311-UT')
+    .expect(function (res) {
+      const body = res.body
+      body.length.should.be.aboveOrEqual(1)
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
 })
