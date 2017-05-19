@@ -10,7 +10,7 @@ export default {
   name: 'app'
 }
 </script>
-
+<style src="../assets/_scss/app.scss" lang="sass"></style>
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
