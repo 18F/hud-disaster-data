@@ -70,6 +70,22 @@ describe('Typeahead.vue', () => {
     })
   })
 
+  it('should not populate items if query is empty', done => {
+    const Constructor = Vue.extend(Typeahead)
+    const vm = new Constructor().$mount()
+    let $input = populateInput(vm, 'DR-4311')
+
+    vm.fetch = function () {
+      return Promise.resolve()
+    }
+
+    dispatchEvent($input, 'input')
+    moxios.wait(function () {
+      expect(vm.items.length).to.be.equal(0)
+      done()
+    })
+  })
+
   it('should select the last item in the array of items on up arrow', done => {
     const Constructor = Vue.extend(Typeahead)
     const vm = new Constructor().$mount()
@@ -102,8 +118,6 @@ describe('Typeahead.vue', () => {
       Vue.nextTick(() => {
         expect(vm.items.length).to.be.equal(2)
         expect(vm.current).to.be.equal(current - 1)
-        console.log(`vm.current: ${vm.current}`)
-        // expect(vm.current).to.be.equal(current - 1)
         done()
       })
     })

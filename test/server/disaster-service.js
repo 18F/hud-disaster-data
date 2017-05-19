@@ -1,5 +1,6 @@
 /* global describe, it, */
 const request = require('supertest')
+const should = require('should') // es-lin
 const app = require('../../app.js')
 const moment = require('moment')
 
@@ -35,8 +36,8 @@ describe('/api/disasters/:qry', function () {
       const body = res.body
       body.forEach(function (disaster, i) {
         let disasterDate = moment(disaster.declarationDate)
-        if (i == body.length-1) return
-        let nextDisasterDate = moment(body[i+1].declarationDate)
+        if (i === body.length - 1) return
+        let nextDisasterDate = moment(body[i + 1].declarationDate)
         disasterDate.isSameOrAfter(nextDisasterDate).should.be.true()
       })
     })
