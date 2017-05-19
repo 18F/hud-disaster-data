@@ -4,8 +4,8 @@ const should = require('should')
 const moment = require('moment')
 
 describe('/api/disasters/:qry', function () {
-  this.timeout(5000)
-  
+  this.timeout(10000)
+
   it('should return disasters with a disaster type matching the first two characters in the qry path parameter', (done) => {
     request(app).get('/api/disasters/FM')
     .expect(function(res) {
