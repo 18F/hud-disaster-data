@@ -1,5 +1,3 @@
-import { util } from 'vue'
-
 export default {
   data () {
     return {
@@ -7,8 +5,7 @@ export default {
       query: '',
       current: -1,
       loading: false,
-      selectFirst: false,
-      queryParamName: 'q'
+      selectFirst: false
     }
   },
 
@@ -43,8 +40,7 @@ export default {
       this.fetch().then((response) => {
         if (response && this.query) {
           let data = response.data
-          data = this.prepareResponseData ? this.prepareResponseData(data) : data
-          this.items = this.limit ? data.slice(0, this.limit) : data
+          this.items = data.slice(0, this.limit)
           this.current = -1
           this.loading = false
 
@@ -56,13 +52,9 @@ export default {
     },
 
     fetch () {
-      const src = this.queryParamName
-        ? this.src
-        : this.src + this.query
+      const src = this.src + this.query
 
-      const params = this.queryParamName
-        ? Object.assign({ [this.queryParamName]: this.query }, this.data)
-        : this.data
+      const params = this.data
 
       let cancel = new Promise((resolve) => { this.cancel = resolve })
       let request = this.$http.get(src, { params })

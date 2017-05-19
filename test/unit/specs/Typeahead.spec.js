@@ -4,6 +4,27 @@ import Typeahead from '@/components/Typeahead'
 import _ from 'lodash'
 import axios from 'axios'
 import moxios from 'moxios'
+const ITEMS = [
+  { declarationDate: '2017-04-21T15:17:00.000Z',
+    declaredCountyArea: 'Box Elder (County)',
+    disasterNumber: 4311,
+    disasterType: 'DR',
+    id: '58fa2e008a4f31363dac2c6a',
+    incidentType: 'Flood',
+    placeCode: 99003,
+    state: 'UT',
+    title: 'SEVERE WINTER STORMS AND FLOODING' },
+  { declarationDate: '2017-04-21T15:17:00.000Z',
+    declaredCountyArea: 'Cache (County)',
+    disasterNumber: 4311,
+    disasterType: 'DR',
+    id: '58fa2e008a4f31363dac2c70',
+    incidentType: 'Flood',
+    placeCode: 99005,
+    state: 'UT',
+    title: 'SEVERE WINTER STORMS AND FLOODING'
+  }
+]
 
 function dispatchEvent ($el, name, opts) {
   var event = new Event(name, {
@@ -27,27 +48,7 @@ describe('Typeahead.vue', () => {
     moxios.install()
     moxios.stubRequest(/.*DR-4311/, {
       status: 200,
-      response: [
-        { declarationDate: '2017-04-21T15:17:00.000Z',
-          declaredCountyArea: 'Box Elder (County)',
-          disasterNumber: 4311,
-          disasterType: 'DR',
-          id: '58fa2e008a4f31363dac2c6a',
-          incidentType: 'Flood',
-          placeCode: 99003,
-          state: 'UT',
-          title: 'SEVERE WINTER STORMS AND FLOODING' },
-        { declarationDate: '2017-04-21T15:17:00.000Z',
-          declaredCountyArea: 'Cache (County)',
-          disasterNumber: 4311,
-          disasterType: 'DR',
-          id: '58fa2e008a4f31363dac2c70',
-          incidentType: 'Flood',
-          placeCode: 99005,
-          state: 'UT',
-          title: 'SEVERE WINTER STORMS AND FLOODING'
-        }
-      ]
+      response: ITEMS
     })
   })
 
@@ -218,4 +219,36 @@ describe('Typeahead.vue', () => {
     })
   })
 
+  describe('hit', () => {
+    it('should call onHit if an item is selected', () => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor().$mount()
+      sinon.spy(vm, 'onHit')
+      vm.current = 1
+      vm.items = ITEMS
+      vm.hit()
+      expect(vm.onHit.calledOnce)
+      vm.onHit.restore()
+    })
+
+    it('should not call onHit if an item is not slected', () => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor().$mount()
+      sinon.spy(vm, 'onHit')
+      vm.current = -1
+      vm.items = ITEMS
+      vm.hit()
+      expect(!vm.onHit.calledOnce)
+      vm.onHit.restore()
+    })
+  })
+
+  describe('setActive', () => {
+    it('should set the current item', () => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor().$mount()
+      vm.setActive(1)
+      expect(vm.current).to.be.equal(1)
+    })
+  })
 })
