@@ -45,16 +45,6 @@ describe('/api/disasters/:qry', function () {
     .expect('Content-Type', /json/, done)
   })
 
-  it('should only return the first 20 records', (done) => {
-    request(app).get('/api/disasters/DR')
-    .expect(function (res) {
-      const body = res.body
-      body.should.have.length(20)
-    })
-    .expect(200)
-    .expect('Content-Type', /json/, done)
-  })
-
   const validCols = ['id', 'declaredCountyArea', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType', 'title']
 
   it('should only return the columns: id (mandatory), declaredCountyArea, disasterNumber, state, declarationDate, disasterType, placeCode, incidentType, and title', (done) => {
@@ -110,11 +100,12 @@ describe('/api/disasters/:qry', function () {
     .expect('Content-Type', /json/, done)
   })
 
-  it('should return at least one record when passing in a valid disaster number and type and state (ex: DR-4311-UT)', (done) => {
+  it('should return one record with concatenated counties when passing in a valid disaster number and type and state (ex: DR-4311-UT)', (done) => {
     request(app).get('/api/disasters/DR-4311-UT')
     .expect(function (res) {
       const body = res.body
-      body.length.should.be.aboveOrEqual(1)
+      body.length.should.be.equal(1)
+      body[0].declaredCountyArea.length.should.be.equal(2)
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
