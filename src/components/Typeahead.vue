@@ -22,7 +22,7 @@
         <span class="screen-name">{{`title:  ${item.title}`}}</span>
         <span class="screen-name">{{`incidentType: ${item.incidentType}`}}</span>
         <span class="screen-name">{{`declaredCountyArea: ${item.declaredCountyArea}`}}</span>
-        <span v-text="item.declarationDate"/>
+        <span class="screen-name">{{`declarationDate: ${item.declarationDate}`}}</span>
       </li>
     </ul>
   </div>
