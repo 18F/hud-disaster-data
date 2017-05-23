@@ -26,6 +26,11 @@
 </template>
 <script>
 export default {
-  props: ['item']
+  props: ['item'],
+  data () {
+    return {
+      show: false
+    }
+  }
 }
 </script>
