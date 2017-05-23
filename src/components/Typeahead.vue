@@ -1,5 +1,5 @@
 <template>
-  <div class="Typeahead">
+    <div class="Typeahead">
     <i class="fa fa-spinner fa-spin" v-if="loading"></i>
     <template v-else>
       <i class="fa fa-search" v-show="isEmpty"></i>
@@ -17,25 +17,20 @@
            @input="update"/>
 
     <ul v-show="hasItems" class="disaster-list">
-      <li v-for="(item, $item) in items" :class="activeClass($item)" @mousedown="hit" @mousemove="setActive($item)">
-        <span class="name">{{ `${item.disasterType}-${item.disasterNumber}-${item.state}` }}</span>
-        <span class="screen-name">{{`title:  ${item.title}`}}</span>
-        <span class="screen-name">{{`incidentType: ${item.incidentType}`}}</span>
-        <span class="screen-name">{{`declaredCountyArea: ${item.declaredCountyArea}`}}</span>
-        <span v-text="item.declarationDate"/>
+      <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
+        <disaster v-bind:item="item"></disaster>
       </li>
     </ul>
   </div>
 </template>
 
-
-
 <script>
 import VueTypeahead from '../lib/TypeAhead'
+import disaster from './Disaster'
 
 export default {
   extends: VueTypeahead,
-
+  components: {disaster},
   data () {
     return {
       src: '/api/disasters/',
@@ -44,7 +39,6 @@ export default {
       queryParamName: null
     }
   },
-
   methods: {
     onHit (item) {
       this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
@@ -55,6 +49,7 @@ export default {
 </script>
 
 
+<style src="../../public/assets/css/font-awesome.min.css"/>
 
 <style scoped>
 .Typeahead {
@@ -145,4 +140,38 @@ span {
 .screen-name {
   font-style: italic;
 }
+.disaster {
+     font-family:sans-serif;
+     padding:10px;
+ }
+ .disaster a, .disaster a:hover, .disaster a:active {
+   text-decoration:none;
+ }
+ .disaster .name {
+     font-weight:bold;
+     padding-bottom:20px;
+ }
+ .disaster .name div:first-child {
+   float:left;
+   padding-right:15px;
+ }
+ .disaster .declaration div { float:right; }
+ .disaster .declaration div:first-child {
+   float:left;
+ }
+ .disaster .declaration i { margin-left:5px; }
+ .disaster .counties {
+     clear:both;
+     display:block;
+     padding:10px 0;
+ }
+ .disaster .counties div {
+   background:#f7f7f7;
+   border:1px solid #eee;
+ }
+ .disaster .counties ul {
+     list-style-type:none;
+     margin:0;
+     padding:10px;
+ }
 </style>
