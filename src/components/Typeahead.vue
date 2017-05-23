@@ -1,36 +1,40 @@
 <template>
-    <div class="Typeahead">
-    <i class="fa fa-spinner fa-spin" v-if="loading"></i>
-    <template v-else>
-      <i class="fa fa-search" v-show="isEmpty"></i>
-      <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
-    </template>
-    <input type="text"
-           class="Typeahead__input"
-           placeholder="Search disaster #"
-           autocomplete="off"
-           v-model="query"
-           @keydown.down="down"
-           @keydown.up="up"
-           @keydown.enter="hit"
-           @keydown.esc="reset"
-           @input="update"/>
+  <div class="Typeahead">
+    <div id="search">
+      <i class="fa fa-spinner fa-spin" v-if="loading"></i>
+      <template v-else>
+        <i class="fa fa-search" v-show="isEmpty"></i>
+        <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
+      </template>
+      <input type="text"
+             class="Typeahead__input"
+             placeholder="Search disaster #"
+             autocomplete="off"
+             v-model="query"
+             @keydown.down="down"
+             @keydown.up="up"
+             @keydown.enter="hit"
+             @keydown.esc="reset"
+             @input="update"/>
 
-    <ul v-show="hasItems" class="disaster-list">
-      <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-        <disaster v-bind:item="item"></disaster>
-      </li>
-    </ul>
+      <ul v-show="hasItems" class="disaster-list">
+        <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
+          <disaster v-bind:item="item"></disaster>
+        </li>
+      </ul>
+    </div>
+    <savedExtracts></savedExtracts>
   </div>
 </template>
 
 <script>
 import VueTypeahead from '../lib/TypeAhead'
 import disaster from './Disaster'
+import savedExtracts from './SavedExtracts'
 
 export default {
   extends: VueTypeahead,
-  components: {disaster},
+  components: {disaster, savedExtracts},
   data () {
     return {
       src: '/api/disasters/',
