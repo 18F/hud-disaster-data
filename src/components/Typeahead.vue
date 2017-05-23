@@ -18,30 +18,7 @@
 
     <ul v-show="hasItems" class="disaster-list">
       <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-        <div class="disaster">
-          <div class="name">
-            <div>{{ `${item.disasterType}-${item.disasterNumber}-${item.state}` }}</div>
-            <div>{{ item.title }}</div>
-          </div>
-          <div>
-              Incident Type: {{ item.incidentType }}
-          </div>
-          <div class="declaration">
-            <div>Declaration Date: {{ item.declarationDate }}</div>
-            <div>
-              <a id="$item" @click="item.show=!item.show">Affected Areas</a>
-            </div>
-          </div>
-          <div class="counties" v-show="item.show">
-            <div>
-              <ul>
-                <li v-for="(area,index) in item.declaredCountyArea" :key="area.id">
-                  {{ area }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <disaster v-bind:item="item"></disaster>
       </li>
     </ul>
   </div>
@@ -49,10 +26,11 @@
 
 <script>
 import VueTypeahead from '../lib/TypeAhead'
+import disaster from './Disaster'
 
 export default {
   extends: VueTypeahead,
-
+  components: {disaster},
   data () {
     return {
       src: '/api/disasters/',
