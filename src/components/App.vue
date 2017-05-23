@@ -1,5 +1,10 @@
 <template>
   <div id="app">
+    <div class="header --global">
+      <div class="header header--pre">
+        <div class="container-block">pre header</div>
+      </div>
+    </div>
     <img src="../assets/logo_global.svg">
     <router-view></router-view>
   </div>
@@ -11,13 +16,4 @@ export default {
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style lang="scss" src="../../public/assets/_scss/app.scss"></style>
