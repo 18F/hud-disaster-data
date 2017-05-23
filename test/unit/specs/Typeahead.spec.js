@@ -65,7 +65,8 @@ describe('Typeahead.vue', () => {
     dispatchEvent($input, 'input')
 
     moxios.wait(function () {
-      expect(vm.$el.querySelectorAll('.disaster-list li').length).to.be.equal(2)
+      debugger
+      expect(vm.$el.querySelectorAll('.disaster-list>li').length).to.be.equal(2)
       done()
     })
   })
