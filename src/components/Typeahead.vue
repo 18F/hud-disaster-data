@@ -1,23 +1,23 @@
 <template>
   <div class="wrapper">
     <div>
-      <div class="Typeahead">
-        <div id="search">
-          <i class="fa fa-spinner fa-spin" v-if="loading"></i>
+    <div class="Typeahead">
+      <div id="search">
+        <i class="fa fa-spinner fa-spin" v-if="loading"></i>
           <template v-else>
             <i class="fa fa-search" v-show="isEmpty"></i>
             <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
           </template>
           <input type="text"
-                 class="Typeahead__input"
-                 placeholder="Search disaster #"
-                 autocomplete="off"
-                 v-model="query"
-                 @keydown.down="down"
-                 @keydown.up="up"
-                 @keydown.enter="hit"
-                 @keydown.esc="reset"
-                 @input="update"/>
+                   class="Typeahead__input"
+                   placeholder="Search disaster #"
+                   autocomplete="off"
+                   v-model="query"
+                   @keydown.down="down"
+                   @keydown.up="up"
+                   @keydown.enter="hit"
+                   @keydown.esc="reset"
+                   @input="update"/>
           <ul v-show="hasItems" class="disaster-list">
             <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
               <disaster :item="item" v-on:selected="onSelected"></disaster>
@@ -68,7 +68,12 @@ export default {
   width:50%;
   margin:0 auto; */
 }
-.Typeahead {  position: relative; padding:10px 0;}
+.Typeahead {
+  float:left;
+  position: relative;
+  width:50%;
+  padding:10px 0;
+}
 .Typeahead__input {
   margin:0 auto;
   font-size: 14px;

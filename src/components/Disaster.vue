@@ -54,7 +54,7 @@ export default {
 .select-button{
 
 }
-.disaster {   padding-bottom:10px; }
+.disaster {   padding-bottom:10px; background:#fff;}
 .disaster input[type="checkbox"] {
   position:relative;
   left:0;
