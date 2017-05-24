@@ -1,7 +1,7 @@
 <template>
   <ul id="extracts">
     <li v-for="(item, $item) in items">
-      <disaster :item="item" v-on:selected="onSelected"></disaster>
+      <disaster :item="item"  :inExtract="true" v-on:selected="onSelected"></disaster>
     </li>
   </ul>
 </template>
