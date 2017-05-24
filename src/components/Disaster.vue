@@ -5,11 +5,10 @@
       <div>{{ item.title }}</div>
     </div>
     <div style="clear:both; float:right; padding:10px 5px;">
-      <button class="select-button" @click="select(item)" v-bind:disabled="selected" style="background:transparent; outline:none;">
-        <i v-if="selected" class="fa fa-2x fa-check-square-o" style="color:#000; cursor:pointer;"></i>
-        <i v-else class="fa fa-2x fa-square-o" style="color:#000; cursor:pointer;"></i>
+      <button class="select-button" @click="select(item)" style="background:transparent; outline:none;">
+        <i v-if="!isSelected()" class="fa fa-2x fa-square-o" style="color:#000; cursor:pointer;"></i>
+        <i v-else class="fa fa-2x fa-check-square-o" style="color:#000; cursor:pointer;"></i>
       </button>
-  <!--   <input type="checkbox" :id=item.disasterNumber :value="item.disasterType+'-'+item.disasterNumber+'-'+item.state" @click="select(item)"  /> -->
     </div>
     <div style="clear:both;">
         Incident Type: {{ item.incidentType }}
@@ -35,7 +34,7 @@
 </template>
 <script>
 export default {
-  props: ['item'],
+  props: ['item', 'propselected'],
   data () {
     return {
       showAreas: false,
@@ -44,16 +43,22 @@ export default {
   },
   methods: {
     select (item) {
-      this.$emit('selected', item)
-      this.selected = true
+      if (this.isSelected()) {
+        this.selected = false
+        this.$emit('unselected', item)
+      } else {
+        this.selected = true
+        this.$emit('selected', item)
+      }
+    },
+    isSelected () {
+      return this.selected || this.propselected
     }
   }
 }
 </script>
 <style>
-.select-button{
-
-}
+.select-button{}
 .disaster {   padding-bottom:10px; background:#fff;}
 .disaster input[type="checkbox"] {
   position:relative;
