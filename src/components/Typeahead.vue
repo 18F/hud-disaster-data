@@ -1,27 +1,30 @@
 <template>
-  <div class="Typeahead">
-    <div id="search">
-      <i class="fa fa-spinner fa-spin" v-if="loading"></i>
-      <template v-else>
-        <i class="fa fa-search" v-show="isEmpty"></i>
-        <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
-      </template>
-      <input type="text"
-             class="Typeahead__input"
-             placeholder="Search disaster #"
-             autocomplete="off"
-             v-model="query"
-             @keydown.down="down"
-             @keydown.up="up"
-             @keydown.enter="hit"
-             @keydown.esc="reset"
-             @input="update"/>
-
-      <ul v-show="hasItems" class="disaster-list">
-        <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-          <disaster :item="item" v-on:selected="onSelected"></disaster>
-        </li>
-      </ul>
+  <div class="wrapper">
+    <div>
+      <div class="Typeahead">
+        <div id="search">
+          <i class="fa fa-spinner fa-spin" v-if="loading"></i>
+          <template v-else>
+            <i class="fa fa-search" v-show="isEmpty"></i>
+            <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
+          </template>
+          <input type="text"
+                 class="Typeahead__input"
+                 placeholder="Search disaster #"
+                 autocomplete="off"
+                 v-model="query"
+                 @keydown.down="down"
+                 @keydown.up="up"
+                 @keydown.enter="hit"
+                 @keydown.esc="reset"
+                 @input="update"/>
+          <ul v-show="hasItems" class="disaster-list">
+            <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
+              <disaster :item="item" v-on:selected="onSelected"></disaster>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
     <savedExtracts ref="extracts"></savedExtracts>
   </div>
@@ -57,14 +60,13 @@ export default {
 
 
 <style src="../../public/assets/css/font-awesome.min.css"/>
-<style scoped>
+<style>
+.wrapper { padding:20px; }
+.wrapper input[type="text"] { width:100%; max-width:100%; }
 .wrapper div:first-child {
+/*  float:left;
   width:50%;
-  margin:0 auto;
-}
-#search {
-  float: left;
-  width: 300px;
+  margin:0 auto; */
 }
 .Typeahead {  position: relative; padding:10px 0;}
 .Typeahead__input {
@@ -89,9 +91,10 @@ i {
   right: 29px;
   opacity: 0.4;
 }
-#disaster-list {
+
+.disaster-list {
   position: absolute;
-  top:35px;
+  top:40px;
   border-right:1px solid #ccc;
   border-left:1px solid #ccc;
   padding: 0;
@@ -100,8 +103,8 @@ i {
   list-style-type: none;
   z-index: 1000;
 }
-#disaster-list li:before { content: ''; }
-#disaster-list li {
+.disaster-list li:before { content: ''; }
+.disaster-list li {
   display:block;
   padding: 10px;
   border-bottom: 1px solid #ccc;
@@ -109,12 +112,14 @@ i {
   line-height:20px;
   cursor: pointer;
 }
-#disaster-list li:first-child {}
-#disaster-list li:last-child {}
+.disaster-list li:first-child {}
+.disaster-list li:last-child {}
+
 span {
   display: block;
   color: #2c3e50;
 }
+
 .active { background-color: #f1f1f1; }
 .active span {
   color: white;
