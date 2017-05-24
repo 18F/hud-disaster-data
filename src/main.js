@@ -18,7 +18,7 @@ new Vue({
 })
 
 new Vue({
-  el: '#demo',
+  el: '#search-extract',
   components: {
     Typeahead
   }

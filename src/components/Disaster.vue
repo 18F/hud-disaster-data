@@ -11,7 +11,7 @@
       <div>Declaration Date: {{ item.declarationDate }}</div>
       <div>
         <a @click="showAreas=!showAreas">Affected Areas</a>
-        <button class="select-button" @click="select(item)">{{ this.notSelected ? 'SELECT' : 'SELECTED' }}</button>
+        <button class="select-button" @click="select(item)" v-bind:disabled="selected">{{ this.selected ? 'SELECTED' : 'SELECT' }}</button>
       </div>
     </div>
     <div class="counties" v-show="showAreas">
@@ -31,13 +31,13 @@ export default {
   data () {
     return {
       showAreas: false,
-      notSelected: true
+      selected: false
     }
   },
   methods: {
     select (item) {
       this.$emit('selected', item)
-      this.notSelected = false
+      this.selected = true
     }
   }
 }
