@@ -6,6 +6,7 @@
   </ul>
 </template>
 <script>
+
 import disaster from './Disaster'
 export default {
   components: {disaster},
@@ -18,7 +19,11 @@ export default {
     add (item) {
       this.items.push(item)
     },
-    onSelected (item) {}
+    onSelected (item) {
+      let index = this.items.indexOf(item)
+      if (index < 0) return
+      this.items.splice(index, 1)
+    }
   }
 }
 </script>

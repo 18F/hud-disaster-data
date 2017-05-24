@@ -100,7 +100,7 @@ i {
 
 .disaster-list {
   position: absolute;
-  top:40px;
+  top:39px;
   border-right:1px solid #ccc;
   border-left:1px solid #ccc;
   padding: 0;
