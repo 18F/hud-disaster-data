@@ -68,12 +68,7 @@ export default {
   width:50%;
   margin:0 auto; */
 }
-.Typeahead {
-  float:left;
-  position: relative;
-  width:50%;
-  padding:10px 0;
-}
+.Typeahead {  position: relative; padding:10px 0;}
 .Typeahead__input {
   margin:0 auto;
   font-size: 14px;
@@ -88,9 +83,8 @@ export default {
 .Typeahead__input:focus {
   outline: 0;
 }
-
 .fa-times { cursor: pointer; }
-i {
+i.fa {
   float: right;
   position: relative;
   top: 30px;
@@ -130,7 +124,6 @@ span {
 .active span {
   color: white;
 }
-
 .name {
   font-weight: 700;
   font-size: 18px;

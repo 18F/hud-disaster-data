@@ -8,3 +8,10 @@
 @import "./05-layouts/__index";
 @import "./06-utils/__index";
 @import "./07-queries/__index";
+
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+

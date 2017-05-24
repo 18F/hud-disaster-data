@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './components/App'
 import router from './router'
 import Axios from 'axios'
-import Typeahead from './components/Typeahead.vue'
+import Typeahead from './components/Typeahead'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = Axios

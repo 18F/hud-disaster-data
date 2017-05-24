@@ -27,3 +27,6 @@ export default {
   }
 }
 </script>
+<style>
+#extracts { float: right; }
+</style>
