@@ -82,8 +82,8 @@
 }
 
 .width-one-sixth {
-  @include media($medium) {
-    @include span-columns(2);
+  @include media($medium-screen) {
+    //@include span-columns(2);
   }
 }
 

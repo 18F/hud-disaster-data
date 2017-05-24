@@ -10,7 +10,7 @@
       margin:0;
       font-size:rem($small-font-size);
       color:$color-white;
-      @include row();
+      @include make-row();
     }
   }
   &--masthead{
@@ -24,7 +24,7 @@
 .logo{
   &--block{
     padding:0px;
-    @include row();
+    @include make-row();
 
     img,.logo-img{
       float:left;

@@ -84,7 +84,7 @@ export default {
   outline: 0;
 }
 .fa-times { cursor: pointer; }
-i {
+i.fa {
   float: right;
   position: relative;
   top: 30px;
