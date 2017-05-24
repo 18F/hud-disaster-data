@@ -10,7 +10,8 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "server-unit": "mocha test/server && mocha test",
     "test": "npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
-    "lint": "eslint --ext .js,.vue src test/unit/specs"
+    "lint": "eslint --ext .js,.vue src test/unit/specs",
+    "standard": "standard 'src/**/*.js' 'lib/**/*.js' 'test/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -110,6 +111,7 @@
     "should": "^11.2.1",
     "sinon": "^2.2.0",
     "sinon-chai": "^2.8.0",
+    "standard": "^10.0.2",
     "supertest": "^3.0.0",
     "url-loader": "^0.5.8",
     "vue-loader": "^11.3.4",

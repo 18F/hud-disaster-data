@@ -1,10 +1,10 @@
-/* global Event, describe, it, beforeEach, afterEach, expect */
+/* global Event, describe, it, beforeEach, afterEach, expect, sinon */
 require('babel-polyfill')
-import Vue from 'vue'
-import Typeahead from '@/components/Typeahead'
-import _ from 'lodash'
-import axios from 'axios'
-import moxios from 'moxios'
+import Vue from 'vue' // eslint-disable-line 
+import Typeahead from '@/components/Typeahead' // eslint-disable-line
+import _ from 'lodash' // eslint-disable-line
+import axios from 'axios' // eslint-disable-line
+import moxios from 'moxios' // eslint-disable-line
 const ITEMS = [
   { declarationDate: '2017-04-21T15:17:00.000Z',
     declaredCountyArea: 'Box Elder (County)',
@@ -65,7 +65,6 @@ describe('Typeahead.vue', () => {
     dispatchEvent($input, 'input')
 
     moxios.wait(function () {
-      debugger
       expect(vm.$el.querySelectorAll('.disaster-list>li').length).to.be.equal(2)
       done()
     })
