@@ -11,7 +11,7 @@
       font-size:rem($small-font-size);
       color:$color-white;
       @include row();
-      img{
+      img,.icon-flag{
         margin-right:10px;
       }
     }
@@ -29,16 +29,19 @@
     padding:10px;
     @include row();
 
-    img{
+    img,.logo-img{
       float:left;
       margin-right:10px;
+    }
+    .logo-img{
+
     }
 
     p{
       padding:35px 0 0;
       font-size:rem($lead-font-size);
       line-height:1;
-      color:$brand-blue;
+      color:$color-white;
     }
   }
 
