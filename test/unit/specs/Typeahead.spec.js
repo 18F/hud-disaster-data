@@ -264,4 +264,22 @@ describe('Typeahead.vue', () => {
       expect(vm.current).to.be.equal(1)
     })
   })
+
+  describe('onSelected', () => {
+    it('should add a disaster component to the extracts component for the item selected', (done) => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor().$mount()
+      let $input = populateInput(vm, 'DR-4311')
+      dispatchEvent($input, 'input')
+
+      moxios.wait(function () {
+        let $button = vm.$el.querySelector('.disaster .select-button')
+        dispatchEvent($button, 'click')
+        Vue.nextTick(() => {
+          expect(vm.$el.querySelectorAll('#extracts>li').length).to.be.equal(1)
+          done()
+        })
+      })
+    })
+  })
 })

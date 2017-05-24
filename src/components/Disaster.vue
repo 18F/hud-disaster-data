@@ -11,6 +11,7 @@
       <div>Declaration Date: {{ item.declarationDate }}</div>
       <div>
         <a @click="show=!show">Affected Areas</a>
+        <button class="select-button" @click="$emit('selected', item)">SELECT</button>
       </div>
     </div>
     <div class="counties" v-show="show">

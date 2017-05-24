@@ -19,11 +19,11 @@
 
       <ul v-show="hasItems" class="disaster-list">
         <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-          <disaster v-bind:item="item"></disaster>
+          <disaster :item="item" v-on:selected="onSelected"></disaster>
         </li>
       </ul>
     </div>
-    <savedExtracts></savedExtracts>
+    <savedExtracts ref="extracts"></savedExtracts>
   </div>
 </template>
 
@@ -47,6 +47,9 @@ export default {
     onHit (item) {
       this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
       this.update()
+    },
+    onSelected (item) {
+      this.$refs.extracts.add(item)
     }
   }
 }
