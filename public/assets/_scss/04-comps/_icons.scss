@@ -1,5 +1,10 @@
 .icon{
   &--flag{
-    background:url('');
+    display:inline-block;
+    width:16px;
+    height:16px;
+    margin:0 10px 0 0;
+    vertical-align: middle;
+    background:url('../img/icon_flag.png') no-repeat;
   }
 }
