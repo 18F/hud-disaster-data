@@ -1,10 +1,10 @@
-/* global Event, describe, it, beforeEach, afterEach, expect */
+/* global Event, describe, it, beforeEach, afterEach, expect, sinon */
 require('babel-polyfill')
-import Vue from 'vue'
-import Typeahead from '@/components/Typeahead'
-import _ from 'lodash'
-import axios from 'axios'
-import moxios from 'moxios'
+import Vue from 'vue' // eslint-disable-line 
+import Typeahead from '@/components/Typeahead' // eslint-disable-line
+import _ from 'lodash' // eslint-disable-line
+import axios from 'axios' // eslint-disable-line
+import moxios from 'moxios' // eslint-disable-line
 const ITEMS = [
   { declarationDate: '2017-04-21T15:17:00.000Z',
     declaredCountyArea: 'Box Elder (County)',
@@ -65,7 +65,7 @@ describe('Typeahead.vue', () => {
     dispatchEvent($input, 'input')
 
     moxios.wait(function () {
-      expect(vm.$el.querySelectorAll('.disaster-list li').length).to.be.equal(2)
+      expect(vm.$el.querySelectorAll('.disaster-list>li').length).to.be.equal(2)
       done()
     })
   })
@@ -261,6 +261,24 @@ describe('Typeahead.vue', () => {
       const vm = new Constructor().$mount()
       vm.setActive(1)
       expect(vm.current).to.be.equal(1)
+    })
+  })
+
+  describe('onSelected', () => {
+    it('should add a disaster component to the extracts component for the item selected', (done) => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor().$mount()
+      let $input = populateInput(vm, 'DR-4311')
+      dispatchEvent($input, 'input')
+
+      moxios.wait(function () {
+        let $button = vm.$el.querySelector('.disaster .select-button')
+        dispatchEvent($button, 'click')
+        Vue.nextTick(() => {
+          expect(vm.$el.querySelectorAll('#extracts>li').length).to.be.equal(1)
+          done()
+        })
+      })
     })
   })
 })

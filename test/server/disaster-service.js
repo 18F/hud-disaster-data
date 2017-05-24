@@ -1,6 +1,6 @@
 /* global describe, it, */
 const request = require('supertest')
-const should = require('should') // es-lin
+const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
 const moment = require('moment')
 

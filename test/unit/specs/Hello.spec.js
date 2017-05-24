@@ -1,3 +1,4 @@
+/* global expect, describe, it */
 import Vue from 'vue'
 import Hello from '@/components/Hello'
 
