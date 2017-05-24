@@ -62,6 +62,10 @@ export default {
   width:50%;
   margin:0 auto;
 }
+#search {
+  float: left;
+  width: 300px;
+}
 .Typeahead {  position: relative; padding:10px 0;}
 .Typeahead__input {
   margin:0 auto;
@@ -77,7 +81,6 @@ export default {
 .Typeahead__input:focus {
   outline: 0;
 }
-
 .fa-times { cursor: pointer; }
 i {
   float: right;
@@ -86,7 +89,6 @@ i {
   right: 29px;
   opacity: 0.4;
 }
-
 #disaster-list {
   position: absolute;
   top:35px;
@@ -109,17 +111,14 @@ i {
 }
 #disaster-list li:first-child {}
 #disaster-list li:last-child {}
-
 span {
   display: block;
   color: #2c3e50;
 }
-
 .active { background-color: #f1f1f1; }
 .active span {
   color: white;
 }
-
 .name {
   font-weight: 700;
   font-size: 18px;
