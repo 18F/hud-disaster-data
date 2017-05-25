@@ -1,7 +1,7 @@
 <template>
   <ul id="extracts">
     <li v-for="(item, $item) in items">
-      <disaster :item="item" v-on:unselected="onUnSelected" v-bind:propselected="true"></disaster>
+      <disaster :item="item"  :inExtract="true" v-on:selected="onSelected"></disaster>
     </li>
   </ul>
 </template>
@@ -19,11 +19,10 @@ export default {
     add (item) {
       this.items.push(item)
     },
-    onUnSelected (item) {
+    onSelected (item) {
       let index = this.items.indexOf(item)
       if (index < 0) return
       this.items.splice(index, 1)
-      this.$emit('unselected', item)
     }
   }
 }

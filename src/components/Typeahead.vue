@@ -20,13 +20,13 @@
                    @input="update"/>
           <ul v-show="hasItems" class="disaster-list">
             <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-              <disaster :item="item" v-on:selected="onSelected" ref="disaster"></disaster>
+              <disaster :item="item" :inExtract="false" v-on:selected="onSelected"></disaster>
             </li>
           </ul>
         </div>
       </div>
     </div>
-    <savedExtracts ref="extracts" v-on:unselected="onUnSelected"></savedExtracts>
+    <savedExtracts ref="extracts"></savedExtracts>
   </div>
 </template>
 
@@ -34,7 +34,6 @@
 import VueTypeahead from '../lib/TypeAhead'
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
-import _ from 'lodash'
 
 export default {
   extends: VueTypeahead,
@@ -54,12 +53,6 @@ export default {
     },
     onSelected (item) {
       this.$refs.extracts.add(item)
-    },
-    onUnSelected (item) {
-      var disaster = _.find(this.$refs.disaster, function (disaster) {
-        return disaster.item.disasterType === item.disasterType && disaster.item.disasterNumber === item.disasterNumber && disaster.item.state === item.state
-      })
-      if (disaster) disaster.selected = false
     }
   }
 }
