@@ -5,8 +5,8 @@
       <div>{{ item.title }}</div>
     </div>
     <div style="clear:both; float:right; padding:10px 5px;">
-      <button class="select-button" @click="select(item)" v-bind:disabled="disabled()" style="background:transparent; outline:none;">
-        <i v-if="selected || inExtract" class="fa fa-2x fa-check-square-o" style="color:#000; cursor:pointer;"></i>
+      <button class="select-button" @click="select(item)" v-bind:disabled="item.currentExtract" style="background:transparent; outline:none;">
+        <i v-if="item.currentExtract" class="fa fa-2x fa-check-square-o" style="color:#000; cursor:pointer;"></i>
         <i v-else class="fa fa-2x fa-square-o" style="color:#000; cursor:pointer;"></i>
       </button>
     </div>
@@ -33,8 +33,10 @@
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
-  props: ['item', 'inExtract'],
+  props: ['item'],
   data () {
     return {
       showAreas: false,
@@ -42,14 +44,9 @@ export default {
     }
   },
   methods: {
-    select (item) {
-      this.$emit('selected', item)
-      this.selected = true
-    },
-    disabled () {
-      if (this.inExtract) return false
-      return this.selected
-    }
+    ...mapMutations({
+      select: 'addToCurrentExtract'
+    })
   }
 }
 </script>

@@ -38,14 +38,6 @@ import savedExtracts from './SavedExtracts'
 export default {
   extends: VueTypeahead,
   components: {disaster, savedExtracts},
-  data () {
-    return {
-      src: '/api/disasters/',
-      limit: 10,
-      minChars: 2,
-      queryParamName: null
-    }
-  },
   computed: {
     items () {
       return this.$store.getters.currentSearchResult
@@ -55,15 +47,10 @@ export default {
     update () {
       this.cancel()
 
-      if (!this.query) {
-        return this.reset()
-      }
+      if (!this.query) return this.reset()
+      if (this.query.length < 2) return
 
-      if (this.minChars && this.query.length < this.minChars) {
-        return
-      }
-
-      this.$store.dispatch('LOAD_DISASTERS_LIST', this.query)
+      this.$store.dispatch('loadDisasterList', this.query)
     },
     onHit (item) {
       this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`

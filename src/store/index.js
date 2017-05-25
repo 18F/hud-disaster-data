@@ -1,26 +1,32 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     disasters: []
   },
   actions: {
-    LOAD_DISASTERS_LIST: function ({ commit }, qry) {
+    loadDisasterList: function ({ commit }, qry) {
       axios.get(`/api/disasters/${qry}`).then((response) => {
-        commit('UPDATE_DISASTERS_LIST', { list: response.data })
+        commit('updateDisasterList', { list: response.data })
       }, (err) => {
         console.log(err)
       })
     }
   },
   mutations: {
-    UPDATE_DISASTERS_LIST: function (state, { list }) {
+    updateDisasterList: function (state, { list }) {
       // First let's just set the disasters, later we'll merge in the new ones
       state.disasters = list
       state.disasters.forEach(disaster => {
         disaster.currentSearchResult = true
+      })
+    },
+    addToCurrentExtract: function (state, disasterToAdd) {
+      state.disasters.forEach(disaster => {
+        if (disaster.disasterNumber === disasterToAdd.disasterNumber) disaster.currentExtract = true
       })
     }
   },
@@ -33,4 +39,5 @@ const store = new Vuex.Store({
     }
   }
 })
+
 export default store
