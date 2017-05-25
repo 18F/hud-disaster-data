@@ -19,6 +19,39 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 > All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
 
 ## Setup
+### Local environment
+#### Dependencies
+Install [node](https://nodejs.org/en/) (the stable version)
+
+Install [git](https://git-scm.com/)
+
+#### Clone this repository
+
+- Using the Flexion repository
+  - Run `git clone https://github.com/flexion/hud-disaster-data`
+- Using the 18F repository
+  - Run `git clone https://github.com/18F/hud-disaster-data`
+
+#### Navigate to cloned directory
+
+`cd hud-disaster-data`
+
+#### Install dependencies
+Run `npm install`
+
+#### Development server
+
+Run `npm run dev` for a dev server. It should automatically bring up a browser pointing to `http://localhost:8080/`. The app will automatically reload if you change any of the source files.
+
+#### Ad Hoc Testing
+
+Run `npm test` to run the full test suite.
+
+#### Build
+
+Run `npm build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+### Build, Test, and Deploy
 This project includes a [.travis.yml](.travis.yml) file that will facilitate the building, testing, and deploying of the application, following this structure.
 
 | Repo                      | Branch updated | Build deployed to                   |
