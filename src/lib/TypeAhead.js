@@ -1,7 +1,6 @@
 export default {
   data () {
     return {
-      items: [],
       query: '',
       current: -1,
       loading: false,

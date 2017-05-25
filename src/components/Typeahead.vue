@@ -46,7 +46,25 @@ export default {
       queryParamName: null
     }
   },
+  computed: {
+    items () {
+      return this.$store.getters.currentSearchResult
+    }
+  },
   methods: {
+    update () {
+      this.cancel()
+
+      if (!this.query) {
+        return this.reset()
+      }
+
+      if (this.minChars && this.query.length < this.minChars) {
+        return
+      }
+
+      this.$store.dispatch('LOAD_DISASTERS_LIST', this.query)
+    },
     onHit (item) {
       this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
       this.update()

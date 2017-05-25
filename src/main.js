@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './components/App'
 import router from './router'
 import Axios from 'axios'
+import store from './store'
 import Typeahead from './components/Typeahead'
 
 Vue.config.productionTip = false
@@ -19,6 +20,7 @@ new Vue({
 
 new Vue({
   el: '#search-extract',
+  store,
   components: {
     Typeahead
   }
