@@ -20,7 +20,7 @@
                    @input="update"/>
           <ul v-show="hasItems" class="disaster-list">
             <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-              <disaster :item="item" :inExtract="false" v-on:selected="onSelected"></disaster>
+              <disaster :item="item" v-bind:inExtract="false" v-on:selected="onSelected"></disaster>
             </li>
           </ul>
         </div>

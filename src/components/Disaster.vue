@@ -45,6 +45,10 @@ export default {
     select (item) {
       this.$emit('selected', item)
       this.selected = true
+    },
+    disabled () {
+      if (this.inExtract) return false
+      return this.selected
     }
   }
 }
