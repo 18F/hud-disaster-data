@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import App from './components/App'
 import router from './router'
 import Axios from 'axios'
+import store from './store'
 import Typeahead from './components/Typeahead'
 
 Vue.use(Vuex)
@@ -21,6 +22,7 @@ new Vue({
 
 new Vue({
   el: '#search-extract',
+  store,
   components: {
     Typeahead
   }

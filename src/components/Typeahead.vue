@@ -4,7 +4,7 @@
       <div class="col-xs-12 col-md-6 search-container">
         <div id="opaque-bg" class="row">
               <div class="col" id="message">
-                <h3>{{ msg }}</h3>
+                <h3>Relax, Finding things just got easier!</h3>
               </div>
               <div class="col Typeahead">
                 <div id="search">
@@ -26,15 +26,15 @@
                                  </template>
                       <div v-show="hasItems" class="disaster-list">
                         <ul>
-                           <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-                             <disaster :item="item" v-on:selected="onSelected" ref="disaster"></disaster>
-                           </li>
+                          <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
+                            <disaster :item="item"></disaster>
+                          </li>
                         </ul>
                       </div>
                     </div>
                 </div>
                 <div class="link-advanced-search">
-                  <a href="#">Advanced Search</a>
+                  <!-- <a href="#">Advanced Search</a> -->
                 </div>
             </div>
         </div>
@@ -50,33 +50,27 @@
 import VueTypeahead from '../lib/TypeAhead'
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
-import _ from 'lodash'
 
 export default {
   extends: VueTypeahead,
   components: {disaster, savedExtracts},
-  data () {
-    return {
-      msg: 'Relax, Finding things just got easier!',
-      src: '/api/disasters/',
-      limit: 10,
-      minChars: 2,
-      queryParamName: null
+  computed: {
+    items () {
+      return this.$store.getters.currentSearchResult
     }
   },
   methods: {
+    update () {
+      this.cancel()
+
+      if (!this.query) return this.reset()
+      if (this.query.length < 2) return
+
+      this.$store.dispatch('loadDisasterList', this.query)
+    },
     onHit (item) {
       this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
       this.update()
-    },
-    onSelected (item) {
-      this.$refs.extracts.add(item)
-    },
-    onUnSelected (item) {
-      var disaster = _.find(this.$refs.disaster, function (disaster) {
-        return disaster.item.disasterType === item.disasterType && disaster.item.disasterNumber === item.disasterNumber && disaster.item.state === item.state
-      })
-      if (disaster) disaster.selected = false
     }
   }
 }

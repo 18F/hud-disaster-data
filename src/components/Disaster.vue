@@ -10,9 +10,9 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <button @click="select(item)">
-          <i v-if="!isSelected()" class="fa fa-3x fa-square-o"></i>
-          <i v-else class="fa fa-3x fa-check-square-o"></i>
+        <button @click="toggleSelected(item)">
+          <i v-if="item.currentExtract" class="fa fa-3x fa-check-square-o"></i>
+          <i v-else class="fa fa-3x fa-square-o"></i>
         </button>
       </div>
     </div>
@@ -45,8 +45,10 @@
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
-  props: ['item', 'propselected'],
+  props: ['item'],
   data () {
     return {
       showAreas: false,
@@ -54,18 +56,9 @@ export default {
     }
   },
   methods: {
-    select (item) {
-      if (this.isSelected()) {
-        this.selected = false
-        this.$emit('unselected', item)
-      } else {
-        this.selected = true
-        this.$emit('selected', item)
-      }
-    },
-    isSelected () {
-      return this.selected || this.propselected
-    }
+    ...mapMutations({
+      toggleSelected: 'toggleCurrentExtract'
+    })
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <ul id="extracts">
     <li v-for="(item, $item) in items">
-      <disaster :item="item" v-on:unselected="onUnSelected" v-bind:propselected="true"></disaster>
+      <disaster :item="item"></disaster>
     </li>
   </ul>
 </template>
@@ -10,24 +10,13 @@
 import disaster from './Disaster'
 export default {
   components: {disaster},
-  data () {
-    return {
-      items: []
-    }
-  },
-  methods: {
-    add (item) {
-      this.items.push(item)
-    },
-    onUnSelected (item) {
-      let index = this.items.indexOf(item)
-      if (index < 0) return
-      this.items.splice(index, 1)
-      this.$emit('unselected', item)
+  computed: {
+    items () {
+      return this.$store.getters.currentExtract
     }
   }
 }
 </script>
 <style>
-/* #extracts { float: right; } */
+ #extracts { background: white;} 
 </style>

@@ -1,7 +1,6 @@
 export default {
   data () {
     return {
-      items: [],
       query: '',
       current: -1,
       loading: false,
@@ -24,44 +23,6 @@ export default {
   },
 
   methods: {
-    update () {
-      this.cancel()
-
-      if (!this.query) {
-        return this.reset()
-      }
-
-      if (this.minChars && this.query.length < this.minChars) {
-        return
-      }
-
-      this.loading = true
-
-      this.fetch().then((response) => {
-        if (response && this.query) {
-          let data = response.data
-          this.items = data.slice(0, this.limit)
-          this.current = -1
-          this.loading = false
-
-          if (this.selectFirst) {
-            this.down()
-          }
-        }
-      })
-    },
-
-    fetch () {
-      const src = this.src + this.query
-
-      const params = this.data
-
-      let cancel = new Promise((resolve) => { this.cancel = resolve })
-      let request = this.$http.get(src, { params })
-
-      return Promise.race([cancel, request])
-    },
-
     cancel () {
       // used to 'cancel' previous searches
     },
