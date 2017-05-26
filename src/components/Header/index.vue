@@ -27,3 +27,13 @@ export default {
     </div>
   </div>
 </template>
+
+<style>
+/* -- global 18F overrides to allow more room on left gutter -- */
+.header--pre p {
+  margin-left: 2px;
+}
+.logo--block .logo-img {
+  margin-left: 30px;
+}
+</style>

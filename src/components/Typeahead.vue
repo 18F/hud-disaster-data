@@ -1,32 +1,48 @@
 <template>
-  <div class="wrapper">
-    <div>
-    <div class="Typeahead">
-      <div id="search">
-        <i class="fa fa-spinner fa-spin" v-if="loading"></i>
-          <template v-else>
-            <i class="fa fa-search" v-show="isEmpty"></i>
-            <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
-          </template>
-          <input type="text"
-                   class="Typeahead__input"
-                   placeholder="Search disaster #"
-                   autocomplete="off"
-                   v-model="query"
-                   @keydown.down="down"
-                   @keydown.up="up"
-                   @keydown.enter="hit"
-                   @keydown.esc="reset"
-                   @input="update"/>
-          <ul v-show="hasItems" class="disaster-list">
-            <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-              <disaster :item="item" v-on:selected="onSelected" ref="disaster"></disaster>
-            </li>
-          </ul>
+  <div class="wrapper container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-md-6 search-container">
+        <div id="opaque-bg" class="row" >
+              <div class="col" id="message">
+                <h3>{{ msg }}</h3>
+              </div>
+              <div class="col Typeahead">
+                <div id="search">
+                    <div class="offset-bg">
+                      <input type="text"
+                               class="Typeahead__input"
+                               placeholder="Search disaster #"
+                               autocomplete="off"
+                               v-model="query"
+                               @keydown.down="down"
+                               @keydown.up="up"
+                               @keydown.enter="hit"
+                               @keydown.esc="reset"
+                               @input="update"/>
+                               <i class="fa fa-spinner fa-spin" v-if="loading"></i>
+                                 <template v-else>
+                                   <i class="fa fa-search" v-show="isEmpty"></i>
+                                   <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
+                                 </template>
+                      <div v-show="hasItems" class="disaster-list">
+                        <ul>
+                           <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
+                             <disaster :item="item" v-on:selected="onSelected" ref="disaster"></disaster>
+                           </li>
+                        </ul>
+                      </div>
+                    </div>
+                </div>
+                <div class="link-advanced-search">
+                  <a href="#">Advanced Search</a>
+                </div>
+            </div>
         </div>
       </div>
+      <div class="col-xs-12 col-md-6" style="border:1px solid #00ff00; background:#000; overflow:auto; border-radius:20px;">
+        <savedExtracts ref="extracts" v-on:unselected="onUnSelected"></savedExtracts>
+      </div>
     </div>
-    <savedExtracts ref="extracts" v-on:unselected="onUnSelected"></savedExtracts>
   </div>
 </template>
 
@@ -41,6 +57,7 @@ export default {
   components: {disaster, savedExtracts},
   data () {
     return {
+      msg: 'Relax, Finding things just got easier!',
       src: '/api/disasters/',
       limit: 10,
       minChars: 2,
@@ -68,26 +85,46 @@ export default {
 
 <style src="../../public/assets/css/font-awesome.min.css"/>
 <style>
-.wrapper { padding:20px; }
+/* global overrides ----------------------------------- */
 .wrapper input[type="text"] { width:100%; max-width:100%; }
-.wrapper div:first-child {
-/*  float:left;
-  width:50%;
-  margin:0 auto; */
+.r-align { text-align: right;}
+
+#opaque-bg {
+  background: url('/static/img/bg_80_opacity.png');
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  margin:0 auto;
+  overflow: hidden;
 }
-.Typeahead {
-  float:left;
+.offset-bg {
+  padding:0 50%;
+}
+#message {
+  color: #fff;
+  text-align: center;
+  height:50px;
+}
+.search-container {
+  margin:75px 0;
+  padding:0;
+}
+#search .fa-times { cursor:pointer; opacity:0.4;}
+#search .fa-search, #search .fa-times, #search .fa-spinner {
+  float: right;
   position: relative;
-  width:50%;
-  padding:10px 0;
+  top: -35px;
+  right: 20px;
+}
+
+/* Typeahead styles ----------------------------------- */
+.Typeahead {
+  padding-bottom:20px;
 }
 .Typeahead__input {
-  margin:0 auto;
   font-size: 14px;
   color: #2c3e50;
   line-height: 1.42857143;
   font-weight: 300;
-  max-width:100%;
   border: 1px solid #ccc;
   letter-spacing: 1px;
   box-sizing: border-box;
@@ -95,37 +132,37 @@ export default {
 .Typeahead__input:focus {
   outline: 0;
 }
-.fa-times { cursor: pointer; }
-i.fa {
-  float: right;
-  position: relative;
-  top: 30px;
-  right: 29px;
-  opacity: 0.4;
+.link-advanced-search {
+  padding:20px 40px;
+  text-align:right;
 }
 
+/* Disaster list styles --------------------------------- */
 .disaster-list {
-  position: absolute;
-  top:39px;
-  border-right:1px solid #ccc;
-  border-left:1px solid #ccc;
-  padding: 0;
-  min-width: 100%;
   background-color: #fff;
-  list-style-type: none;
+  height:450px;
+  left:41px;
+  overflow-x:hidden;
+  overflow-y:scroll;
+  padding:0;
+  position: absolute;
+  right:41px;
+  top:135px;
   z-index: 1000;
+}
+.disaster-list ul {
+  display:block;
+  margin:0;
+  list-style-type: none;
 }
 .disaster-list li:before { content: ''; }
 .disaster-list li {
   display:block;
-  padding: 10px;
   border-bottom: 1px solid #ccc;
   margin:0;
   line-height:20px;
   cursor: pointer;
 }
-.disaster-list li:first-child {}
-.disaster-list li:last-child {}
 
 span {
   display: block;
@@ -135,10 +172,6 @@ span {
 .active { background-color: #f1f1f1; }
 .active span {
   color: white;
-}
-.name {
-  font-weight: 700;
-  font-size: 18px;
 }
 .screen-name { font-style: italic; }
 </style>

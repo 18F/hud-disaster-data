@@ -1,33 +1,45 @@
 <template>
-  <div class="disaster">
-    <div class="name">
-      <div>{{ `${item.disasterType}-${item.disasterNumber}-${item.state}` }}</div>
-      <div>{{ item.title }}</div>
+  <div class="disaster container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 col-md-3">
+          <h5>{{ `${item.disasterType}-${item.disasterNumber}-${item.state}` }}</h5>
+      </div>
+      <div class="col-xs-12 col-sm-8 col-md-9">
+        <h5>{{ item.title }}</h5>
+      </div>
     </div>
-    <div style="clear:both; float:right; padding:10px 5px;">
-      <button class="select-button" @click="select(item)" style="background:transparent; outline:none;">
-        <i v-if="!isSelected()" class="fa fa-2x fa-square-o" style="color:#000; cursor:pointer;"></i>
-        <i v-else class="fa fa-2x fa-check-square-o" style="color:#000; cursor:pointer;"></i>
-      </button>
+    <div class="row">
+      <div class="col-md-12">
+        <button @click="select(item)">
+          <i v-if="!isSelected()" class="fa fa-3x fa-square-o"></i>
+          <i v-else class="fa fa-3x fa-check-square-o"></i>
+        </button>
+      </div>
     </div>
-    <div style="clear:both;">
+    <div class="row">
+      <div class="col-md-12">
         Incident Type: {{ item.incidentType }}
-    </div>
-    <div>
-      <div style="width:50%; float:left;">
-        Declaration Date: {{ item.declarationDate }}
-      </div>
-      <div style="width:50%; float:left; text-align:right;">
-        <a @click="showAreas=!showAreas">Affected Areas<i class="fa fa-caret-down"></i></a>
       </div>
     </div>
-    <div class="counties" v-show="showAreas">
-      <div>
-        <ul>
-          <li v-for="(area,index) in item.declaredCountyArea" :key="area.id">
-            {{ area }}
-          </li>
-        </ul>
+    <div class="row">
+      <div class="col-xs-12 col-sm-9 col-md-8">
+          Declared Date: {{ item.declarationDate }}
+      </div>
+      <div class="ccol-xs-12 col-sm-3 col-md-4 r-align">
+          <a @click="showAreas=!showAreas">Affected Areas (00)</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="counties" v-show="showAreas">
+          <div>
+            <ul>
+              <li v-for="(area,index) in item.declaredCountyArea" :key="area.id">
+                {{ area }}
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -58,27 +70,35 @@ export default {
 }
 </script>
 <style>
-.select-button{}
-.disaster {   padding-bottom:10px; background:#fff;}
+.disaster {
+  padding-bottom:10px;
+  font-size:15px;
+}
+.disaster button {
+  background:transparent;
+  color:#000;
+  outline:none;
+}
+.disaster button:focus {
+  box-shadow:none;
+}
 .disaster input[type="checkbox"] {
   position:relative;
   left:0;
   width:24px;
   height:24px;
 }
-.disaster .name {
-  font-weight:bold;
+.disaster h5 {
+  font-family: "Source Sans Pro", "Roboto", sans-serif;
 }
-.disaster .name div:first-child {
-  float:left;
-  height:40px;
-  padding-right:15px;
+.counties {
+  background-color:#fff;
+  border:1px solid #ccc;
+  padding:10px;
+  margin-top:20px;
 }
-.disaster i {
-  position:relative;
-  top:0;
-  right:0;
-  margin-left:10px;
-  opacity:1.0;
-}
+.counties ul li {
+  border:none;
+  display: block;
+  }
 </style>
