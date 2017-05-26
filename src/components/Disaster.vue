@@ -5,7 +5,7 @@
       <div>{{ item.title }}</div>
     </div>
     <div style="clear:both; float:right; padding:10px 5px;">
-      <button class="select-button" @click="select(item)" v-bind:disabled="item.currentExtract" style="background:transparent; outline:none;">
+      <button class="select-button" @click="toggleSelected(item)" style="background:transparent; outline:none;">
         <i v-if="item.currentExtract" class="fa fa-2x fa-check-square-o" style="color:#000; cursor:pointer;"></i>
         <i v-else class="fa fa-2x fa-square-o" style="color:#000; cursor:pointer;"></i>
       </button>
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      select: 'addToCurrentExtract'
+      toggleSelected: 'toggleCurrentExtract'
     })
   }
 }

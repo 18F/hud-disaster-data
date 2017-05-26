@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
@@ -24,10 +25,11 @@ const store = new Vuex.Store({
         disaster.currentSearchResult = true
       })
     },
-    addToCurrentExtract: function (state, disasterToAdd) {
-      state.disasters.forEach(disaster => {
-        if (disaster.disasterNumber === disasterToAdd.disasterNumber) disaster.currentExtract = true
-      })
+    toggleCurrentExtract: function (state, disasterToToggle) {
+      let index = state.disasters.indexOf(disasterToToggle)
+      disasterToToggle = _.clone(disasterToToggle)
+      disasterToToggle.currentExtract = !disasterToToggle.currentExtract
+      state.disasters.splice(index, 1, disasterToToggle)
     }
   },
   getters: {
