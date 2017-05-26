@@ -105,7 +105,7 @@ export default {
   height:50px;
 }
 .search-container {
-  margin:75px 0;
+  margin:150px 0;
   padding:0;
 }
 #search .fa-times { cursor:pointer; opacity:0.4;}
