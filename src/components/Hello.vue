@@ -1,21 +1,13 @@
-<template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>Type your search into the box below and press the search button</p>
-  </div>
-</template>
-
 <script>
+import Header from './Header/'
 export default {
   name: 'hello',
-  data () {
-    return {
-      msg: 'Relax, Finding things just got easier!'
-    }
-  }
+  components: { Header }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
+<template>
+  <div class="content content--block">
+    <Header></Header>
+  </div>
+</template>

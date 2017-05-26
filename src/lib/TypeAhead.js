@@ -1,14 +1,10 @@
-import { util } from 'vue'
-
 export default {
   data () {
     return {
-      items: [],
       query: '',
       current: -1,
       loading: false,
-      selectFirst: false,
-      queryParamName: 'q'
+      selectFirst: false
     }
   },
 
@@ -27,57 +23,6 @@ export default {
   },
 
   methods: {
-    update () {
-      this.cancel()
-
-      if (!this.query) {
-        return this.reset()
-      }
-
-      if (this.minChars && this.query.length < this.minChars) {
-        return
-      }
-
-      this.loading = true
-
-      this.fetch().then((response) => {
-        if (response && this.query) {
-          let data = response.data
-          data = this.prepareResponseData ? this.prepareResponseData(data) : data
-          this.items = this.limit ? data.slice(0, this.limit) : data
-          this.current = -1
-          this.loading = false
-
-          if (this.selectFirst) {
-            this.down()
-          }
-        }
-      })
-    },
-
-    fetch () {
-      if (!this.$http) {
-        return util.warn('You need to provide a HTTP client', this)
-      }
-
-      if (!this.src) {
-        return util.warn('You need to set the `src` property', this)
-      }
-
-      const src = this.queryParamName
-        ? this.src
-        : this.src + this.query
-
-      const params = this.queryParamName
-        ? Object.assign({ [this.queryParamName]: this.query }, this.data)
-        : this.data
-
-      let cancel = new Promise((resolve) => { this.cancel = resolve })
-      let request = this.$http.get(src, { params })
-
-      return Promise.race([cancel, request])
-    },
-
     cancel () {
       // used to 'cancel' previous searches
     },

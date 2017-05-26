@@ -10,14 +10,11 @@
       margin:0;
       font-size:rem($small-font-size);
       color:$color-white;
-      @include row();
-      img{
-        margin-right:10px;
-      }
+      @include make-row();
     }
   }
   &--masthead{
-    background:$color-white;
+    padding:20px 0;
 
     p {
       margin:0;
@@ -26,19 +23,28 @@
 }
 .logo{
   &--block{
-    padding:10px;
-    @include row();
+    padding:0px;
+    @include make-row();
 
-    img{
+    img,.logo-img{
       float:left;
       margin-right:10px;
+    }
+    .logo-img{
+      display:block;
+      width:100px;
+      height:100px;
+      margin:0 20px 0 0;
+      padding:0;
+      background:url("../img/logo_global.svg") no-repeat;
+      background-size:contain;
     }
 
     p{
       padding:35px 0 0;
       font-size:rem($lead-font-size);
       line-height:1;
-      color:$brand-blue;
+      color:$color-white;
     }
   }
 

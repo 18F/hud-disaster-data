@@ -1,3 +1,5 @@
+//PATHS
+$imgPath      : '../img/';
 // ------------------------------------ Mobile First Breakpoints
 $small-screen:      481px;
 $medium-screen:     600px;
@@ -62,6 +64,9 @@ $color-visited:              #4c2c92;
 $brand-primary      :   #5a616b;
 $brand-blue         :   #0a4b83;
 $brand-blue-light  :   #96b0bf;
+
+//BACKROUND COLORS
+$bg-body          :   $color-gray-dark;
 
 // ------------------------------------ Typography
 $em-base:             10px;
