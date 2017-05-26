@@ -25,7 +25,7 @@
       <div class="col-xs-12 col-sm-9 col-md-8">
           Declared Date: {{ item.declarationDate }}
       </div>
-      <div class="ccol-xs-12 col-sm-3 col-md-4 r-align">
+      <div class="col-xs-12 col-sm-3 col-md-4 r-align">
           <a @click="showAreas=!showAreas">Affected Areas (00)</a>
       </div>
     </div>

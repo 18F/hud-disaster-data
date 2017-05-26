@@ -2,7 +2,7 @@
   <div class="wrapper container-fluid">
     <div class="row">
       <div class="col-xs-12 col-md-6 search-container">
-        <div id="opaque-bg" class="row" >
+        <div id="opaque-bg" class="row">
               <div class="col" id="message">
                 <h3>{{ msg }}</h3>
               </div>
@@ -97,7 +97,7 @@ export default {
   overflow: hidden;
 }
 .offset-bg {
-  padding:0 50%;
+  padding:0 40px;
 }
 #message {
   color: #fff;
