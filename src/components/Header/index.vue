@@ -1,6 +1,5 @@
 <script>
 export default {
-  name: 'header',
   data () {
     return {
       title: 'Disaster Data Portal',

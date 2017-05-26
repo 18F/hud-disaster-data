@@ -78,6 +78,7 @@ export default {
 
 
 <style src="../../public/assets/css/font-awesome.min.css"/>
+<style src="../../public/assets/_scss/app.scss" lang="scss"/>
 <style>
 /* global overrides ----------------------------------- */
 .wrapper input[type="text"] { width:100%; max-width:100%; }
