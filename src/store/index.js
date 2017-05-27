@@ -54,6 +54,9 @@ const store = new Vuex.Store({
     clearCurrentExtract: function (state) {
       state.currentExtract = []
       state.disasters = _.map(state.disasters, disaster => _.omit(disaster, 'currentExtract'))
+    },
+    clearSearch: function (state) {
+      state.disasters = []
     }
   },
   getters: {

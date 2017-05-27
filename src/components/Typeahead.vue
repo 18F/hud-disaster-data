@@ -50,6 +50,7 @@
 import VueTypeahead from '../lib/TypeAhead'
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
+import store from '../store'
 
 export default {
   extends: VueTypeahead,
@@ -71,6 +72,10 @@ export default {
     onHit (item) {
       this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
       this.update()
+    },
+    reset () {
+      this.query = ''
+      store.commit({type: 'clearSearch'})
     }
   }
 }
