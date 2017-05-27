@@ -4,9 +4,14 @@ import axios from 'axios'
 import _ from 'lodash'
 
 Vue.use(Vuex)
+function findIn (list, disaster) {
+  return _.find(list, {disasterType: disaster.disasterType, disasterNumber: disaster.disasterNumber, state: disaster.state})
+}
+
 const store = new Vuex.Store({
   state: {
-    disasters: []
+    disasters: [],
+    currentExtract: []
   },
   actions: {
     loadDisasterList: function ({ commit }, qry) {
@@ -19,25 +24,42 @@ const store = new Vuex.Store({
   },
   mutations: {
     updateDisasterList: function (state, { list }) {
-      // First let's just set the disasters, later we'll merge in the new ones
-      state.disasters = list
-      state.disasters.forEach(disaster => {
-        disaster.currentSearchResult = true
+      list.forEach(disaster => {
+        var disasterInExtract = findIn(state.currentExtract, disaster)
+        if (disasterInExtract) disaster.currentExtract = true
       })
+      state.disasters = list
     },
-    toggleCurrentExtract: function (state, disasterToToggle) {
-      let index = state.disasters.indexOf(disasterToToggle)
-      disasterToToggle = _.clone(disasterToToggle)
-      disasterToToggle.currentExtract = !disasterToToggle.currentExtract
-      state.disasters.splice(index, 1, disasterToToggle)
+    toggleCurrentExtract: function (state, disaster) {
+      disaster = _.clone(disaster)
+      disaster.currentExtract = !disaster.currentExtract
+
+      // Find the disaster in both lists and udate them accordingly
+      let disasterInCurrentExtract = findIn(state.currentExtract, disaster)
+      let disasterInResult = findIn(state.disasters, disaster)
+
+      if (disaster.currentExtract) {
+        if (!disasterInCurrentExtract) state.currentExtract.push(disaster)
+      } else {
+        // it's being toggled off
+        if (disasterInCurrentExtract) {
+          let index = state.currentExtract.indexOf(disasterInCurrentExtract)
+          state.currentExtract.splice(index, 1)
+        }
+      }
+      if (disasterInResult) {
+        // splice it in
+        let index = state.disasters.indexOf(disasterInResult)
+        state.disasters.splice(index, 1, disaster)
+      }
     }
   },
   getters: {
     currentSearchResult: state => {
-      return state.disasters.filter(disaster => disaster.currentSearchResult)
+      return state.disasters
     },
     currentExtract: state => {
-      return state.disasters.filter(disaster => disaster.currentExtract)
+      return state.currentExtract
     }
   }
 })
