@@ -10,7 +10,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <button @click="toggleSelected(item)">
+        <button @click="toggleSelected(item)" class="select-button">
           <i v-if="item.currentExtract" class="fa fa-3x fa-check-square-o"></i>
           <i v-else class="fa fa-3x fa-square-o"></i>
         </button>
@@ -26,7 +26,7 @@
           Declared Date: {{ item.declarationDate }}
       </div>
       <div class="col-xs-12 col-sm-3 col-md-4 r-align">
-          <a @click="showAreas=!showAreas">Affected Areas (00)</a>
+          <a @click="showAreas=!showAreas">Affected Areas ({{ item.declaredCountyArea.length }})</a>
       </div>
     </div>
     <div class="row">

@@ -25,7 +25,7 @@
                                    <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
                                  </template>
                       <div v-show="hasItems" class="disaster-list">
-                        <ul>
+                        <ul class="disaster-search-recs">
                           <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
                             <disaster :item="item"></disaster>
                           </li>
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="col-xs-12 col-md-6" style="border:1px solid #00ff00; background:#000; overflow:auto; border-radius:20px;">
-        <savedExtracts ref="extracts" v-on:unselected="onUnSelected"></savedExtracts>
+        <savedExtracts></savedExtracts>
       </div>
     </div>
   </div>
