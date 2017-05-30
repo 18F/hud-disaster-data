@@ -1,8 +1,8 @@
 <template>
   <div class="extracts">
     <div id="saved_searches">
-        <select v-show="!newExtract">
-          <option v-for="extract in savedExtracts" value="extract.name">{{extract.name}}</option>
+        <select v-show="!newExtract" @change="loadExtract" v-model="savedExtract">
+          <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
         <input v-show="newExtract" v-model="extractName" name="extract-name" type="text"></input>
         <button @click="saveExtract" class="usa-button">
@@ -33,6 +33,7 @@ export default {
   components: {disaster},
   data: function () {
     return {
+      savedExtract: null,
       extractName: ''
     }
   },
@@ -52,7 +53,15 @@ export default {
       clear: 'clearCurrentExtract'
     }),
     saveExtract: function () {
-      this.$store.commit('saveExtract', this.extractName)
+      try {
+        this.$store.commit('saveExtract', this.extractName)
+      } catch (e) {
+        console.log(e)
+      }
+      this.extractName = ''
+    },
+    loadExtract: function () {
+      this.$store.commit('loadExtract', this.savedExtract)
     }
   }
 }

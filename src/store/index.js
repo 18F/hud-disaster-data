@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import _ from 'lodash'
+import localStore from 'store'
 
 Vue.use(Vuex)
 
@@ -11,10 +12,18 @@ function findDisaster (list, disaster) {
 
 export const mutations = {
   saveExtract: function (state, name) {
+    if (_.find(state.savedExtracts, { name })) throw new Error('Extract already exists')
     state.savedExtracts.push({
       name,
       disasters: _.clone(state.currentExtract)
     })
+    localStore.set('saved-extracts', state.savedExtracts)
+    state.newExtract = false
+  },
+  loadExtract: function (state, name) {
+    mutations.clearCurrentExtract(state)
+    let savedExtracts = localStore.get('saved-extracts')
+    state.currentExtract = _.find(savedExtracts, { name }).disasters
     state.newExtract = false
   },
   updateDisasterList: function (state, { list }) {
@@ -48,7 +57,6 @@ export const mutations = {
   clearCurrentExtract: function (state) {
     state.currentExtract = []
     state.disasters = _.map(state.disasters, disaster => _.omit(disaster, 'currentExtract'))
-    delete state.loadedExtract
   },
   clearSearch: function (state) {
     state.disasters = []
@@ -77,14 +85,23 @@ export const getters = {
   },
   newExtract: state => {
     return state.newExtract
+  },
+  uniqueExtractName: state => {
+
   }
+}
+
+function getDefaultExtract () {
+  let extracts = localStore.get('saved-extracts')
+  if (extracts && extracts.length > 0) return extracts[0].disasters
+  return []
 }
 
 const store = new Vuex.Store({
   state: {
     disasters: [],
-    currentExtract: [],
-    savedExtracts: [],
+    currentExtract: getDefaultExtract(),
+    savedExtracts: localStore.get('saved-extracts') || [],
     newExtract: false
   },
   actions,
