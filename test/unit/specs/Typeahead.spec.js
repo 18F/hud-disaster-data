@@ -253,7 +253,7 @@ describe('Typeahead.vue', () => {
         let $button = vm.$el.querySelector('.disaster .select-button')
         dispatchEvent($button, 'click')
         Vue.nextTick(() => {
-          expect(vm.$el.querySelectorAll('#extract>ul>li').length).to.be.equal(1)
+          expect(vm.items[0].currentExtract).to.be.true
           done()
         })
       })

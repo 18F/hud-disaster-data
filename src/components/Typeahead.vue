@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="col-xs-12 col-md-6 no-padding">
-        <savedExtracts ref="extracts" v-on:unselected="onUnSelected"></savedExtracts>
+        <savedExtracts ref="extracts"></savedExtracts>
       </div>
     </div>
   </div>
