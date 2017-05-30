@@ -46,29 +46,33 @@ export const mutations = {
   }
 }
 
+export const actions = {
+  loadDisasterList: function ({ commit }, qry) {
+    axios.get(`/api/disasters/${qry}`).then((response) => {
+      commit('updateDisasterList', { list: response.data })
+    }, (err) => {
+      console.log(err)
+    })
+  }
+}
+
+export const getters = {
+  currentSearchResult: state => {
+    return state.disasters
+  },
+  currentExtract: state => {
+    return state.currentExtract
+  }
+}
+
 const store = new Vuex.Store({
   state: {
     disasters: [],
     currentExtract: []
   },
-  actions: {
-    loadDisasterList: function ({ commit }, qry) {
-      axios.get(`/api/disasters/${qry}`).then((response) => {
-        commit('updateDisasterList', { list: response.data })
-      }, (err) => {
-        console.log(err)
-      })
-    }
-  },
+  actions,
   mutations,
-  getters: {
-    currentSearchResult: state => {
-      return state.disasters
-    },
-    currentExtract: state => {
-      return state.currentExtract
-    }
-  }
+  getters
 })
 
 export default store

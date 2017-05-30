@@ -1,10 +1,11 @@
 /* global Event, describe, it, expect, sinon */
 import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
-import { mutations } from '../../../src/store' // eslint-disable-line
-const { toggleCurrentExtract } = mutations
-const { clearCurrentExtract } = mutations
-const { updateDisasterList } = mutations
+import axios from 'axios' // eslint-disable-line
+import moxios from 'moxios' // eslint-disable-line
+import { mutations, actions } from '../../../src/store' // eslint-disable-line
+const { toggleCurrentExtract, clearCurrentExtract, updateDisasterList } = mutations
+const { loadDisasterList } = actions
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -38,6 +39,19 @@ describe('store', function () {
     })
   })
 
+  describe('toggleCurrentExtract', function () {
+    it('should add a disaster to the currentExtract list', function () {
+      let disasters = _.map(TWO_RECORDS, (disaster) => {
+        delete disaster.currentExtract
+        return disaster
+      })
+      let state = { disasters, currentExtract: [] }
+
+      toggleCurrentExtract(state, state.disasters[0])
+      expect(state.currentExtract.length).to.be.equal(1)
+    })
+  })
+
   describe('clearCurrentExtract', function () {
     it('should clear the currentExtract list if clear button is pushed', function () {
       let currentExtract = _.clone(TWO_RECORDS)
@@ -59,6 +73,22 @@ describe('store', function () {
       state.currentExtract[1].currentExtract = true
       updateDisasterList(state, { list: TWO_RECORDS })
       expect(_.map(state.disasters, disaster => _.pick(disaster, 'currentExtract')).length).to.be.equal(2)
+    })
+  })
+
+  describe('loadDisasterList', function () {
+    it('should call commit when the data is loaded', function (done) {
+      moxios.install()
+      moxios.stubRequest(/DR/, {
+        status: 200,
+        response: _.clone(TWO_RECORDS)
+      })
+      let commit = function (name, data) {
+        expect(name).to.be.equal('updateDisasterList')
+        expect(data).to.have.property('list').that.is.an('array')
+        done()
+      }
+      loadDisasterList({ commit }, 'DR')
     })
   })
 })
