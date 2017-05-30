@@ -8,5 +8,5 @@ describe('index', function () {
       should(server.address().port).equal(3000)
       done()
     })
-  })
+  }).timeout(4000)
 })
