@@ -1,11 +1,11 @@
 <template>
   <div class="extracts">
     <div id="saved_searches">
-        <select>
-          <option value="">My Saved Searches</option>
-          <option value="">Saved Search 1</option>
+        <select v-show="!newExtract">
+          <option v-for="extract in savedExtracts" value="extract.name">{{extract.name}}</option>
         </select>
-        <button class="usa-button">
+        <input v-show="newExtract" v-model="extractName" name="extract-name" type="text"></input>
+        <button @click="saveExtract" class="usa-button">
           <i class="fa fa-2x fa-save"></i>
         </button>
         <button class="usa-button">
@@ -31,19 +31,33 @@ import { mapMutations } from 'vuex'
 
 export default {
   components: {disaster},
+  data: function () {
+    return {
+      extractName: ''
+    }
+  },
   computed: {
     items () {
       return this.$store.getters.currentExtract
+    },
+    savedExtracts () {
+      return this.$store.getters.savedExtracts
+    },
+    newExtract () {
+      return this.$store.getters.newExtract
     }
   },
   methods: {
     ...mapMutations({
       clear: 'clearCurrentExtract'
-    })
+    }),
+    saveExtract: function () {
+      this.$store.commit('saveExtract', this.extractName)
+    }
   }
 }
 </script>
-<style>
+<style lang="scss">
 /* Extract list styles --------------------------------- */
 .extracts {
   background: url('/static/img/bg_80_opacity.png');
@@ -54,10 +68,12 @@ export default {
 .extracts div#saved_searches {
   height:70px;
 }
-.extracts div#saved_searches select{
-  float:left;
-  margin-right:20px;
-  width:75%;
+.extracts div#saved_searches {
+  select, input {
+    float:left;
+    margin-right:20px;
+    width:75%;
+  }
 }
 .extracts div#saved_searches button{
   background:transparent;

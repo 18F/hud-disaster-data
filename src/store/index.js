@@ -10,6 +10,13 @@ function findDisaster (list, disaster) {
 }
 
 export const mutations = {
+  saveExtract: function (state, name) {
+    state.savedExtracts.push({
+      name,
+      disasters: _.clone(state.currentExtract)
+    })
+    state.newExtract = false
+  },
   updateDisasterList: function (state, { list }) {
     list.forEach(disaster => {
       var disasterInExtract = findDisaster(state.currentExtract, disaster)
@@ -36,10 +43,12 @@ export const mutations = {
       let index = state.disasters.indexOf(disasterInResult)
       state.disasters.splice(index, 1, disaster)
     }
+    state.newExtract = true
   },
   clearCurrentExtract: function (state) {
     state.currentExtract = []
     state.disasters = _.map(state.disasters, disaster => _.omit(disaster, 'currentExtract'))
+    delete state.loadedExtract
   },
   clearSearch: function (state) {
     state.disasters = []
@@ -51,7 +60,7 @@ export const actions = {
     axios.get(`/api/disasters/${qry}`).then((response) => {
       commit('updateDisasterList', { list: response.data })
     }, (err) => {
-      console.log(err)
+      console.log(err) // TODO: Do something with this error other than displaying it to the console :)
     })
   }
 }
@@ -62,13 +71,21 @@ export const getters = {
   },
   currentExtract: state => {
     return state.currentExtract
+  },
+  savedExtracts: state => {
+    return state.savedExtracts
+  },
+  newExtract: state => {
+    return state.newExtract
   }
 }
 
 const store = new Vuex.Store({
   state: {
     disasters: [],
-    currentExtract: []
+    currentExtract: [],
+    savedExtracts: [],
+    newExtract: false
   },
   actions,
   mutations,
