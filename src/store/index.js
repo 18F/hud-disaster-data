@@ -86,8 +86,10 @@ export const getters = {
   newExtract: state => {
     return state.newExtract
   },
-  uniqueExtractName: state => {
-
+  defaultExtractName: state => {
+    let extracts = localStore.get('saved-extracts')
+    if (extracts && extracts.length > 0) return extracts[0].name
+    return ''
   }
 }
 
