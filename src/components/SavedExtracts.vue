@@ -8,7 +8,7 @@
         <button @click="saveExtract" class="usa-button">
           <i class="fa fa-2x fa-save"></i>
         </button>
-        <button class="usa-button">
+        <button @click="deleteExtract" class="usa-button">
           <i class="fa fa-2x fa-trash-o"></i>
         </button>
     </div>
@@ -55,6 +55,17 @@ export default {
     saveExtract: function () {
       try {
         this.$store.commit('saveExtract', this.extractName)
+      } catch (e) {
+        console.log(e)
+      }
+      this.selectedExtractName = this.extractName
+      this.extractName = ''
+    },
+    deleteExtract: function () {
+      if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return
+      try {
+        this.$store.commit('deleteExtract', this.selectedExtractName)
+        this.selectedExtractName = this.$store.getters.defaultExtractName
       } catch (e) {
         console.log(e)
       }

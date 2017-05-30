@@ -2,12 +2,20 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import _ from 'lodash'
-import localStore from 'store'
-
 Vue.use(Vuex)
 
 function findDisaster (list, disaster) {
   return _.find(list, {disasterType: disaster.disasterType, disasterNumber: disaster.disasterNumber, state: disaster.state})
+}
+
+function getSavedExtracts () {
+  let item = localStorage.getItem('saved-extracts')
+  if (!item) return []
+  return JSON.parse(item)
+}
+
+function setSavedExtracts (extracts) {
+  localStorage.setItem('saved-extracts', JSON.stringify(extracts))
 }
 
 export const mutations = {
@@ -17,12 +25,21 @@ export const mutations = {
       name,
       disasters: _.clone(state.currentExtract)
     })
-    localStore.set('saved-extracts', state.savedExtracts)
+    setSavedExtracts(state.savedExtracts)
     state.newExtract = false
+  },
+  deleteExtract: function (state, name) {
+    let extracts = getSavedExtracts()
+    _.remove(extracts, {name: name})
+    setSavedExtracts(extracts)
+    state.savedExtracts = extracts
+    mutations.clearCurrentExtract(state)
+    state.newExtract = (extracts.length < 1)
+    state.currentExtract = getDefaultExtract()
   },
   loadExtract: function (state, name) {
     mutations.clearCurrentExtract(state)
-    let savedExtracts = localStore.get('saved-extracts')
+    let savedExtracts = getSavedExtracts()
     state.currentExtract = _.find(savedExtracts, { name }).disasters
     state.newExtract = false
   },
@@ -87,14 +104,14 @@ export const getters = {
     return state.newExtract
   },
   defaultExtractName: state => {
-    let extracts = localStore.get('saved-extracts')
+    let extracts = getSavedExtracts()
     if (extracts && extracts.length > 0) return extracts[0].name
     return ''
   }
 }
 
 function getDefaultExtract () {
-  let extracts = localStore.get('saved-extracts')
+  let extracts = getSavedExtracts()
   if (extracts && extracts.length > 0) return extracts[0].disasters
   return []
 }
@@ -103,7 +120,7 @@ const store = new Vuex.Store({
   state: {
     disasters: [],
     currentExtract: getDefaultExtract(),
-    savedExtracts: localStore.get('saved-extracts') || [],
+    savedExtracts: getSavedExtracts(),
     newExtract: false
   },
   actions,
