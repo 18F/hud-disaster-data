@@ -3,6 +3,8 @@ import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
 import { mutations } from '../../../src/store' // eslint-disable-line
 const { toggleCurrentExtract } = mutations
+const { clearCurrentExtract } = mutations
+const { updateDisasterList } = mutations
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -33,6 +35,26 @@ describe('store', function () {
       state.currentExtract[0].currentExtract = true
       toggleCurrentExtract(state, state.currentExtract[0])
       expect(state.currentExtract.length).to.be.equal(1)
+    })
+  })
+
+  describe('clearCurrentExtract', function () {
+    it('should clear the currentExtract list if clear button is pushed', function () {
+      let state = { currentExtract: _.clone(TWO_RECORDS) }
+      state.currentExtract[0].currentExtract = true
+      state.currentExtract[1].currentExtract = true
+      clearCurrentExtract(state)
+      expect(state.currentExtract.length).to.be.equal(0)
+    })
+  })
+
+  describe('updateDisasterList', function () {
+    it('should set currentExtract to true for disasters already in currentExtract', function () {
+      let state = { currentExtract: _.clone(TWO_RECORDS) }
+      state.currentExtract[0].currentExtract = true
+      state.currentExtract[1].currentExtract = true
+      updateDisasterList(state, { list: TWO_RECORDS })
+      expect(_.map(state.disasters, disaster => _.pick(disaster, 'currentExtract')).length).to.be.equal(2)
     })
   })
 })
