@@ -1,3 +1,4 @@
+/* global describe, it */
 const should = require('should')
 
 describe('index', function () {
