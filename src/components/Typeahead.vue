@@ -39,8 +39,8 @@
             </div>
         </div>
       </div>
-      <div class="col-xs-12 col-md-6" style="border:1px solid #00ff00; background:#000; overflow:auto; border-radius:20px;">
-        <savedExtracts></savedExtracts>
+      <div class="col-xs-12 col-md-6 no-padding">
+        <savedExtracts ref="extracts" v-on:unselected="onUnSelected"></savedExtracts>
       </div>
     </div>
   </div>
@@ -105,7 +105,7 @@ export default {
   height:50px;
 }
 .search-container {
-  margin:150px 0;
+  margin:200px 0;
   padding:0;
 }
 #search .fa-times { cursor:pointer; opacity:0.4;}
@@ -150,13 +150,13 @@ export default {
   top:135px;
   z-index: 1000;
 }
-.disaster-list ul {
+.disaster-list ul, #extracts {
   display:block;
   margin:0;
   list-style-type: none;
 }
-.disaster-list li:before { content: ''; }
-.disaster-list li {
+.disaster-list li:before, #extracts li:before { content: ''; }
+.disaster-list li, #extracts li {
   display:block;
   border-bottom: 1px solid #ccc;
   margin:0;
@@ -174,4 +174,8 @@ span {
   color: white;
 }
 .screen-name { font-style: italic; }
+
+.no-padding {
+  padding: 0;
+}
 </style>
