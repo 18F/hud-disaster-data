@@ -40,10 +40,14 @@ describe('store', function () {
 
   describe('clearCurrentExtract', function () {
     it('should clear the currentExtract list if clear button is pushed', function () {
-      let state = { currentExtract: _.clone(TWO_RECORDS) }
+      let currentExtract = _.clone(TWO_RECORDS)
+      let disasters = _.clone(TWO_RECORDS)
+      let state = {currentExtract, disasters}
       state.currentExtract[0].currentExtract = true
       state.currentExtract[1].currentExtract = true
+      expect(_.find(state.disasters, 'currentExtract')).to.be.equal(disasters[0])
       clearCurrentExtract(state)
+      expect(_.find(state.disasters, 'currentExtract')).to.be.undefined
       expect(state.currentExtract.length).to.be.equal(0)
     })
   })
