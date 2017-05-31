@@ -90,14 +90,14 @@ export default {
 .r-align { text-align: right;}
 
 #opaque-bg {
-  background: url('/static/img/bg_80_opacity.png');
+  background: url('/static/img/bg_50_opacity.png');
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   margin:0 auto;
   overflow: hidden;
 }
 .offset-bg {
-  padding:0 40px;
+  padding:0 10px 0 30px;
 }
 #message {
   color: #fff;
@@ -111,9 +111,10 @@ export default {
 #search .fa-times { cursor:pointer; opacity:0.4;}
 #search .fa-search, #search .fa-times, #search .fa-spinner {
   float: right;
+  font-size:24px;
   position: relative;
-  top: -35px;
-  right: 20px;
+  top: -40px;
+  right: 18px;
 }
 
 /* Typeahead styles ----------------------------------- */
@@ -140,14 +141,14 @@ export default {
 /* Disaster list styles --------------------------------- */
 .disaster-list {
   background-color: #fff;
-  height:450px;
-  left:41px;
+  height:325px;
+  left:31px;
   overflow-x:hidden;
   overflow-y:scroll;
   padding:0;
   position: absolute;
-  right:41px;
-  top:135px;
+  right:11px;
+  top:137px;
   z-index: 1000;
 }
 .disaster-list ul, #extracts {

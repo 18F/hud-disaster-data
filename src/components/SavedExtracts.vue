@@ -1,26 +1,30 @@
 <template>
   <div class="extracts">
     <div id="saved_searches">
+      <div id="search">
         <select v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName">
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
         <input v-show="newExtract" v-model="extractName" name="extract-name" type="text"></input>
+      </div>
+      <div id="cta">
         <button @click="saveExtract" class="usa-button">
           <i class="fa fa-2x fa-save"></i>
         </button>
         <button @click="deleteExtract" class="usa-button">
           <i class="fa fa-2x fa-trash-o"></i>
         </button>
+      </div>
     </div>
-      <div id="message-wrapper">
-        <div id="messages" v-show="displayMessage">
-          <div :class="status.type">
-            <i class="fa fa-lg"></i>
-            {{status.message}}
-          </div>
+    <div id="message-wrapper">
+      <div id="messages" v-show="displayMessage">
+        <div :class="status.type">
+          <i class="m-icon fa fa-lg"></i>
+          {{status.message}}
           <i class="close-message fa fa-times" @click="hideMessage"></i>
         </div>
       </div>
+    </div>
     <div id="list">
       <ul>
         <li v-for="(item, $item) in items">
@@ -103,45 +107,67 @@ export default {
 #messages {
     div {
       padding:1em;
-      position:relative;
-      top:20px;
+      margin-top:20px;
     }
     i {
       color:#000;
       margin-right:10px;
     }
+    .close-message:before { content:"\f00d"; }
     .close-message {
       cursor:pointer;
       position:relative;
-      top:-20px;
-      right:5px;
+      top:5px;
+      left:5px;
       float:right;
       opacity:.4;
     }
     .success { background:#e7f4e4; }
-    .success i:before { content: "\f058"; }
+    .success .m-icon:before { content: "\f058"; }
     .error { background:#f9dede; }
-    .error i:before { content: "\f057"; }
+    .error .m-icon:before { content: "\f057"; }
     .warning { background: #fff1d2; }
-    .warning i:before { content:"\f071"; }
+    .warning .m-icon:before { content:"\f071"; }
     .info { background:#e1f3f8; }
-    .info i:before { content: "\f05a"; }
+    .info .m-icon:before { content: "\f05a"; }
 }
 /* Extract list styles --------------------------------- */
 .extracts {
-  background: url('/static/img/bg_80_opacity.png');
+  background: url('/static/img/bg_50_opacity.png');
   overflow:hidden;
   border-radius:20px;
   padding:20px;
-}
-.extracts div#saved_searches {
-  height:50px;
+
+  div#saved_searches { height:50px; }
+  div#search{
+    float:left;
+    width:75%;
+  }
+  div#cta {
+    float:right;
+    text-align:right;
+    width:25%;
+  }
+  ul {
+    display:block;
+    margin:0;
+    list-style-type: none;
+  }
+  li:before { content: ''; }
+  li {
+    background: white;
+    display:block;
+    border-bottom: 1px solid #ccc;
+    margin:0;
+    line-height:20px;
+    cursor: pointer;
+  }
 }
 .extracts div#saved_searches {
   select, input {
     float:left;
-    margin-right:20px;
-    width:75%;
+    display:block;
+    max-height:44px;
   }
 }
 .extracts div#saved_searches button{
@@ -158,29 +184,13 @@ export default {
   float:left;
 }
 .extracts div#list {
-  background: url('/static/img/bg_35_opacity.png');
+  background: url('/static/img/bg_25_opacity.png');
   border:1px solid #353434;
   clear:both;
   overflow-y:scroll;
   overflow:auto;
   height:410px;
 }
-
-.extracts ul {
-  display:block;
-  margin:0;
-  list-style-type: none;
-}
-.extracts li:before { content: ''; }
-.extracts li {
-  background: white;
-  display:block;
-  border-bottom: 1px solid #ccc;
-  margin:0;
-  line-height:20px;
-  cursor: pointer;
-}
-
 .extracts div#action-buttons {
   height:50px;
   margin-top:20px;

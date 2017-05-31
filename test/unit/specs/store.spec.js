@@ -1,4 +1,4 @@
-/* global describe, it, expect */
+/* global describe, it, expect, beforeEach */
 import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
 import axios from 'axios' // eslint-disable-line
@@ -98,20 +98,21 @@ describe('store', function () {
       disaster.currentExtract = true
       return disaster
     })
-    let state = { savedExtracts: [], currentExtract: disasters }
-    saveExtract(state, 'TESTSavedExtract')
+    let state = {}
 
-    it('should save currentExtract to localStorage', function (done) {
+    beforeEach(function () {
+      state = { savedExtracts: [], currentExtract: disasters }
+      localStorage.clear('saved-extracts')
+    })
+
+    it('should save currentExtract to localStorage and to savedExtracts', function (done) {
+      saveExtract(state, 'TESTSavedExtract')
       const localSavedExtracts = JSON.parse(localStorage.getItem('saved-extracts'))
       expect(localSavedExtracts.length).to.be.above(0)
       const mySavedExtract = _.map(localSavedExtracts, (extract) => {
         if (extract.name === 'TESTSavedExtract') return extract.disasters
       })
       expect(mySavedExtract[0].length).to.be.equal(2)
-      done()
-    })
-
-    it('should save currentExtract to savedExtracts', function (done) {
       expect(state.savedExtracts.length).to.be.equal(1)
       done()
     })
@@ -124,6 +125,7 @@ describe('store', function () {
     })
 
     it('should get failure code when saving if search by that name already exists, and not add it to savedExtracts', function (done) {
+      saveExtract(state, 'TESTSavedExtract')
       state.status = 'normal'
       saveExtract(state, 'TESTSavedExtract')
       expect(state.savedExtracts.length).to.be.equal(1)
@@ -132,6 +134,7 @@ describe('store', function () {
     })
 
     it('should load saved extract to currentExtract from localStorage', function (done) {
+      saveExtract(state, 'TESTSavedExtract')
       loadExtract(state, 'TESTSavedExtract')
       expect(state.savedExtracts.length).to.be.above(0)
       expect(state.currentExtract.length).to.be.equal(2)
@@ -139,6 +142,7 @@ describe('store', function () {
     })
 
     it('should delete saved extract from savedExtracts', function (done) {
+      saveExtract(state, 'TESTSavedExtract')
       expect(state.savedExtracts.length).to.be.above(0)
       deleteExtract(state, 'TESTSavedExtract')
       expect(state.savedExtracts.length).to.be.equal(0)
@@ -146,31 +150,15 @@ describe('store', function () {
     })
 
     it('should have also deleted saved extract from localStorage', function (done) {
+      saveExtract(state, 'TESTSavedExtract')
+      expect(state.savedExtracts.length).to.be.above(0)
+      deleteExtract(state, 'TESTSavedExtract')
       const localSavedExtracts = JSON.parse(localStorage.getItem('saved-extracts'))
 
       const mySavedExtract = _.map(localSavedExtracts, (extract) => {
         if (extract.name === 'TESTSavedExtract') return extract.disasters
       })
       expect(mySavedExtract.length).to.be.equal(0)
-      done()
-    })
-  })
-
-  describe('Saving Retrieving and Deleting Extracts', function () {
-    let disasters = _.map(TWO_RECORDS, (disaster) => {
-      disaster.currentExtract = true
-      return disaster
-    })
-    let state = { savedExtracts: [], currentExtract: disasters }
-    saveExtract(state, 'TESTSavedExtract')
-
-    it('should save currentExtract to localStorage', function (done) {
-      const localSavedExtracts = JSON.parse(localStorage.getItem('saved-extracts'))
-      expect(localSavedExtracts.length).to.be.above(0)
-      const mySavedExtract = _.map(localSavedExtracts, (extract) => {
-        if (extract.name === 'TESTSavedExtract') return extract.disasters
-      })
-      expect(mySavedExtract[0].length).to.be.equal(2)
       done()
     })
   })
