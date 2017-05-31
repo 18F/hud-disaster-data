@@ -93,7 +93,7 @@ describe('store', function () {
   })
 
   describe('saveExtract', function () {
-    it.only('should save currentExtract to localStorage', function (done) {
+    it('should save currentExtract to localStorage', function (done) {
       let disasters = _.map(TWO_RECORDS, (disaster) => {
         disaster.currentExtract = true
         return disaster
