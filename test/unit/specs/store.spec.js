@@ -1,10 +1,10 @@
-/* global Event, describe, it, expect, sinon */
+/* global describe, it, expect */
 import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
 import axios from 'axios' // eslint-disable-line
 import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions } from '../../../src/store' // eslint-disable-line
-const { toggleCurrentExtract, clearCurrentExtract, updateDisasterList } = mutations
+const { toggleCurrentExtract, clearCurrentExtract, updateDisasterList, saveExtract } = mutations
 const { loadDisasterList } = actions
 
 const TWO_RECORDS = [
@@ -89,6 +89,24 @@ describe('store', function () {
         done()
       }
       loadDisasterList({ commit }, 'DR')
+    })
+  })
+
+  describe('saveExtract', function () {
+    it.only('should save currentExtract to localStorage', function (done) {
+      let disasters = _.map(TWO_RECORDS, (disaster) => {
+        disaster.currentExtract = true
+        return disaster
+      })
+      let state = { savedExtracts: [], currentExtract: disasters }
+      saveExtract(state, 'TESTSavedExtract')
+      const localSavedExtracts = JSON.parse(localStorage.getItem('saved-extracts'))
+      expect(localSavedExtracts.length).to.be.equal(1) // TODO make >=
+      const mySavedExtract = _.map(localSavedExtracts, (extract) => {
+        if (extract.name === 'TESTSavedExtract') return extract.disasters
+      })
+      expect(mySavedExtract[0].length).to.be.equal(2)
+      done()
     })
   })
 })
