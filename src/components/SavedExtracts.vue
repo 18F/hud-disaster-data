@@ -12,15 +12,15 @@
           <i class="fa fa-2x fa-trash-o"></i>
         </button>
     </div>
-    <div id="message-wrapper">
-      <div id="messages" v-show="displayMessage">
-        <div :class="status.type">
-          <i class="fa fa-lg"></i>
-          {{status.message}}
+      <div id="message-wrapper">
+        <div id="messages" v-show="displayMessage">
+          <div :class="status.type">
+            <i class="fa fa-lg"></i>
+            {{status.message}}
+          </div>
+          <i class="close-message fa fa-times" @click="hideMessage"></i>
         </div>
-        <i class="close-message fa fa-times" @click="hideMessage"></i>
       </div>
-    </div>
     <div id="list">
       <ul>
         <li v-for="(item, $item) in items">
@@ -98,10 +98,10 @@ export default {
 </script>
 <style lang="scss">
 /* Messages styles ------------------------------------ */
-#message-wrapper { min-height:20px; }
+.normal { display:none; }
+#message-wrapper { min-height:20px;  }
 #messages {
     div {
-      border:1px solid #000;
       padding:1em;
       position:relative;
       top:20px;
@@ -132,7 +132,7 @@ export default {
   background: url('/static/img/bg_80_opacity.png');
   overflow:hidden;
   border-radius:20px;
-  padding:30px 20px;
+  padding:20px;
 }
 .extracts div#saved_searches {
   height:50px;
