@@ -8,10 +8,10 @@
         <input v-show="newExtract" v-model="extractName" name="extract-name" type="text"></input>
       </div>
       <div id="cta">
-        <button @click="saveExtract" class="usa-button">
+        <button @click="saveExtract" class="usa-button" id="save-button">
           <i class="fa fa-2x fa-save"></i>
         </button>
-        <button @click="deleteExtract" class="usa-button">
+        <button @click="deleteExtract" class="usa-button" id="delete-button">
           <i class="fa fa-2x fa-trash-o"></i>
         </button>
       </div>
@@ -69,22 +69,14 @@ export default {
       clear: 'clearCurrentExtract'
     }),
     saveExtract: function () {
-      try {
-        this.$store.commit('saveExtract', this.extractName)
-      } catch (e) {
-        console.log(e)
-      }
+      this.$store.commit('saveExtract', this.extractName)
       this.selectedExtractName = this.extractName
       this.extractName = ''
     },
     deleteExtract: function () {
       if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return
-      try {
-        this.$store.commit('deleteExtract', this.selectedExtractName)
-        this.selectedExtractName = this.$store.getters.defaultExtractName
-      } catch (e) {
-        console.log(e)
-      }
+      this.$store.commit('deleteExtract', this.selectedExtractName)
+      this.selectedExtractName = this.$store.getters.defaultExtractName
       this.extractName = ''
     },
     loadExtract: function () {
