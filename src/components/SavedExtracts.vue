@@ -12,6 +12,15 @@
           <i class="fa fa-2x fa-trash-o"></i>
         </button>
     </div>
+    <div id="message-wrapper">
+      <div id="messages">
+        <div class="success">
+          <i class="fa fa-lg"></i>
+          Successfully saved! <!-- DYNAMIC MESSAGE HERE -------------------- -->
+        </div>
+        <i class="close-message fa fa-times"></i>
+      </div>
+    </div>
     <div id="list">
       <ul>
         <li v-for="(item, $item) in items">
@@ -78,6 +87,37 @@ export default {
 }
 </script>
 <style lang="scss">
+/* Messages styles ------------------------------------ */
+#message-wrapper { min-height:20px; }
+#messages {
+    div {
+      display:none;
+      border:1px solid #000;
+      padding:1em;
+      position:relative;
+      top:20px;
+    }
+    i {
+      color:#000;
+      margin-right:10px;
+    }
+    .close-message {
+      cursor:pointer;
+      position:relative;
+      top:-20px;
+      right:5px;
+      float:right;
+      opacity:.4;
+    }
+    .success { background:#e7f4e4; }
+    .success i:before { content: "\f058"; }
+    .fail { background:#f9dede; }
+    .fail i:before { content: "\f057"; }
+    .warning { background: #fff1d2; }
+    .warning i:before { content:"\f071"; }
+    .info { background:#e1f3f8; }
+    .info i:before { content: "\f05a"; }
+}
 /* Extract list styles --------------------------------- */
 .extracts {
   background: url('/static/img/bg_80_opacity.png');
@@ -86,7 +126,7 @@ export default {
   padding:30px 20px;
 }
 .extracts div#saved_searches {
-  height:70px;
+  height:50px;
 }
 .extracts div#saved_searches {
   select, input {
@@ -109,8 +149,8 @@ export default {
   float:left;
 }
 .extracts div#list {
-  background: url('/static/img/bg_80_opacity.png');
-  border:1px solid #000;
+  background: url('/static/img/bg_35_opacity.png');
+  border:1px solid #353434;
   clear:both;
   overflow-y:scroll;
   overflow:auto;

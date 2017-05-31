@@ -29,9 +29,13 @@ export default {
 
 <style>
 /* -- global 18F overrides to allow more room on left gutter -- */
+.header .header--pre {
+  background:#000;
+}
 .header--pre p {
   margin-left: 2px;
 }
+.container-block i { margin:2px 10px 0 0; }
 .logo--block .logo-img {
   margin-left: 30px;
 }
