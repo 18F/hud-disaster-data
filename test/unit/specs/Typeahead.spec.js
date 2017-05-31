@@ -240,23 +240,4 @@ describe('Typeahead.vue', () => {
       expect(vm.current).to.be.equal(1)
     })
   })
-
-  describe('onSelected', () => {
-    it('should add a disaster component to the extracts component for the item selected', (done) => {
-      const Constructor = Vue.extend(Typeahead)
-      const vm = new Constructor({store}).$mount()
-      vm.$store.commit('updateDisasterList', { list: TWO_RECORDS })
-      let $input = populateInput(vm, 'X')
-      dispatchEvent($input, 'input')
-
-      Vue.nextTick(function () {
-        let $button = vm.$el.querySelector('.disaster .select-button')
-        dispatchEvent($button, 'click')
-        Vue.nextTick(() => {
-          expect(vm.items[0].currentExtract).to.be.true
-          done()
-        })
-      })
-    })
-  })
 })
