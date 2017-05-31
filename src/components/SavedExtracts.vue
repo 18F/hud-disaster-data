@@ -18,7 +18,7 @@
           <i class="fa fa-lg"></i>
           {{status.message}}
         </div>
-        <i class="close-message fa fa-times"></i>
+        <i class="close-message fa fa-times" @click="hideMessage"></i>
       </div>
     </div>
     <div id="list">
@@ -89,6 +89,9 @@ export default {
     displayMessage: function () {
       if (this.$store.getters.status.type === 'normal') return false
       return true
+    },
+    hideMessage: function () {
+      this.$store.commit('resetStatus')
     }
   }
 }

@@ -24,6 +24,10 @@ export const mutations = {
       state.status = { type: 'error', message: 'Extract already exists' }
       return
     }
+    if (!name || name === '') {
+      state.status = { type: 'error', message: 'Name can not be empty' }
+      return
+    }
     state.savedExtracts.push({
       name,
       disasters: _.clone(state.currentExtract)
@@ -40,6 +44,7 @@ export const mutations = {
     mutations.clearCurrentExtract(state)
     state.newExtract = (extracts.length < 1)
     state.currentExtract = getDefaultExtract()
+    state.status = { type: 'success', message: 'Successfully deleted saved extract' }
   },
   loadExtract: function (state, name) {
     mutations.clearCurrentExtract(state)
@@ -81,6 +86,9 @@ export const mutations = {
   },
   clearSearch: function (state) {
     state.disasters = []
+  },
+  resetStatus: function (state) {
+    state.status = { type: 'normal', message: '' }
   }
 }
 
