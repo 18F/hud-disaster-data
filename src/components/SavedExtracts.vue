@@ -13,10 +13,10 @@
         </button>
     </div>
     <div id="message-wrapper">
-      <div id="messages">
-        <div class="success">
+      <div id="messages" v-show="displayMessage">
+        <div :class="status.type">
           <i class="fa fa-lg"></i>
-          Successfully saved! <!-- DYNAMIC MESSAGE HERE -------------------- -->
+          {{status.message}}
         </div>
         <i class="close-message fa fa-times"></i>
       </div>
@@ -55,6 +55,9 @@ export default {
     },
     newExtract () {
       return this.$store.getters.newExtract
+    },
+    status () {
+      return this.$store.getters.status
     }
   },
   methods: {
@@ -82,6 +85,10 @@ export default {
     },
     loadExtract: function () {
       this.$store.commit('loadExtract', this.selectedExtractName)
+    },
+    displayMessage: function () {
+      if (this.$store.getters.status.type === 'normal') return false
+      return true
     }
   }
 }
@@ -91,7 +98,6 @@ export default {
 #message-wrapper { min-height:20px; }
 #messages {
     div {
-      display:none;
       border:1px solid #000;
       padding:1em;
       position:relative;
@@ -111,8 +117,8 @@ export default {
     }
     .success { background:#e7f4e4; }
     .success i:before { content: "\f058"; }
-    .fail { background:#f9dede; }
-    .fail i:before { content: "\f057"; }
+    .error { background:#f9dede; }
+    .error i:before { content: "\f057"; }
     .warning { background: #fff1d2; }
     .warning i:before { content:"\f071"; }
     .info { background:#e1f3f8; }

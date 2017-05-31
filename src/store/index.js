@@ -20,13 +20,17 @@ function setSavedExtracts (extracts) {
 
 export const mutations = {
   saveExtract: function (state, name) {
-    if (_.find(state.savedExtracts, { name })) throw new Error('Extract already exists')
+    if (_.find(state.savedExtracts, { name })) {
+      state.status = { type: 'error', message: 'Extract already exists' }
+      return
+    }
     state.savedExtracts.push({
       name,
       disasters: _.clone(state.currentExtract)
     })
     setSavedExtracts(state.savedExtracts)
     state.newExtract = false
+    state.status = { type: 'success', message: 'Extract successfully saved' }
   },
   deleteExtract: function (state, name) {
     let extracts = getSavedExtracts()
@@ -107,6 +111,9 @@ export const getters = {
     let extracts = getSavedExtracts()
     if (extracts && extracts.length > 0) return extracts[0].name
     return ''
+  },
+  status: state => {
+    return state.status
   }
 }
 
@@ -121,7 +128,8 @@ const store = new Vuex.Store({
     disasters: [],
     currentExtract: getDefaultExtract(),
     savedExtracts: getSavedExtracts(),
-    newExtract: false
+    newExtract: false,
+    status: { type: 'normal', message: '' }
   },
   actions,
   mutations,
