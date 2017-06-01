@@ -6,7 +6,7 @@
           <option value="" disabled selected>Saved searches......</option>
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
-        <input v-show="newExtract" v-model="extractName" name="extract-name" type="text"></input>
+        <input v-show="newExtract" v-model="extractName" name="extract-name" type="text" placeholder="Enter a name for your search"></input>
       </div>
       <div id="cta">
         <button @click="saveExtract" class="usa-button" id="save-button">
