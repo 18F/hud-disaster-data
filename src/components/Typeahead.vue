@@ -11,7 +11,7 @@
                     <div class="offset-bg">
                       <input type="text"
                                class="Typeahead__input"
-                               placeholder="Search disaster #"
+                               placeholder="search by disaster # or state"
                                autocomplete="off"
                                v-model="query"
                                @keydown.down="down"
@@ -25,7 +25,7 @@
                                    <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
                                  </template>
                       <div v-show="hasItems" class="disaster-list">
-                        <ul>
+                        <ul class="disaster-search-recs">
                           <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
                             <disaster :item="item"></disaster>
                           </li>
@@ -39,27 +39,9 @@
             </div>
         </div>
       </div>
-      <div class="col-xs-12 col-md-6 extracts">
-          <div id="saved_searches">
-              <select>
-                <option value="">My Saved Searches</option>
-                <option value="">Saved Search 1</option>
-              </select>
-              <button class="usa-button">
-                <i class="fa fa-2x fa-save"></i>
-              </button>
-              <button class="usa-button">
-                <i class="fa fa-2x fa-trash-o"></i>
-              </button>
-          </div>
-          <div id="list">
-            <savedExtracts ref="extracts" v-on:unselected="onUnSelected"></savedExtracts>
-          </div>
-          <div id="action-buttons">
-            <button disabled="true" class="usa-button usa-button-disabled">Export</button>
-            <button disabled="true" class="usa-button usa-button-disabled">Clear</button>
-          </div>
-        </div>
+      <div class="col-xs-12 col-md-6 no-padding">
+        <savedExtracts ref="extracts"></savedExtracts>
+      </div>
     </div>
   </div>
 </template>
@@ -68,6 +50,7 @@
 import VueTypeahead from '../lib/TypeAhead'
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
+import store from '../store'
 
 export default {
   extends: VueTypeahead,
@@ -89,6 +72,10 @@ export default {
     onHit (item) {
       this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
       this.update()
+    },
+    reset () {
+      this.query = ''
+      store.commit({type: 'clearSearch'})
     }
   }
 }
@@ -103,14 +90,14 @@ export default {
 .r-align { text-align: right;}
 
 #opaque-bg {
-  background: url('/static/img/bg_80_opacity.png');
+  background: url('/static/img/bg_50_opacity.png');
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   margin:0 auto;
   overflow: hidden;
 }
 .offset-bg {
-  padding:0 40px;
+  padding:0 10px 0 30px;
 }
 #message {
   color: #fff;
@@ -124,9 +111,10 @@ export default {
 #search .fa-times { cursor:pointer; opacity:0.4;}
 #search .fa-search, #search .fa-times, #search .fa-spinner {
   float: right;
+  font-size:24px;
   position: relative;
-  top: -35px;
-  right: 20px;
+  top: -40px;
+  right: 18px;
 }
 
 /* Typeahead styles ----------------------------------- */
@@ -153,14 +141,14 @@ export default {
 /* Disaster list styles --------------------------------- */
 .disaster-list {
   background-color: #fff;
-  height:450px;
-  left:41px;
+  height:325px;
+  left:31px;
   overflow-x:hidden;
   overflow-y:scroll;
   padding:0;
   position: absolute;
-  right:41px;
-  top:135px;
+  right:11px;
+  top:137px;
   z-index: 1000;
 }
 .disaster-list ul, #extracts {
@@ -177,50 +165,6 @@ export default {
   cursor: pointer;
 }
 
-/* Extract list styles --------------------------------- */
-.extracts {
-  background: url('/static/img/bg_80_opacity.png');
-  overflow:hidden;
-  border-radius:20px;
-  padding:30px 20px;
-}
-.extracts div#saved_searches {
-  height:70px;
-}
-.extracts div#saved_searches select{
-  float:left;
-  margin-right:20px;
-  width:77%;
-}
-.extracts div#saved_searches button{
-  background:transparent;
-  border-radius:4px;
-  margin:0;
-  padding:10px;
-}
-.extracts div#saved_searches button:focus {
-  box-shadow:none;
-}
-.extracts div#saved_searches i {
-  cursor:pointer;
-  float:left;
-}
-.extracts div#list {
-  background: url('/static/img/bg_80_opacity.png');
-  border:1px solid #000;
-  clear:both;
-  overflow-y:scroll;
-  overflow:auto;
-  height:410px;
-}
-.extracts div#action-buttons {
-  height:50px;
-  margin-top:20px;
-}
-.extracts div#action-buttons button {
-  margin-left:20px;
-  float:right;
-}
 span {
   display: block;
   color: #2c3e50;
@@ -231,4 +175,8 @@ span {
   color: white;
 }
 .screen-name { font-style: italic; }
+
+.no-padding {
+  padding: 0;
+}
 </style>

@@ -27,12 +27,6 @@ export default {
       // used to 'cancel' previous searches
     },
 
-    reset () {
-      this.items = []
-      this.query = ''
-      this.loading = false
-    },
-
     setActive (index) {
       this.current = index
     },
