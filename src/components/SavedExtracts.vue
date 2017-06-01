@@ -34,7 +34,7 @@
       </ul>
     </div>
     <div id="action-buttons">
-      <button @click="clear" class="usa-button alt-button">Clear</button>
+      <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
       <button class="usa-button green">Export</button> <!-- disabled="true"  usa-button-disabled -->
     </div>
   </div>
@@ -48,7 +48,7 @@ export default {
   data: function () {
     return {
       extractName: '',
-      selectedExtractName: this.$store.getters.defaultExtractName || ''
+      selectedExtractName: ''
     }
   },
   computed: {
@@ -83,7 +83,7 @@ export default {
     deleteExtract: function () {
       if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return
       this.$store.commit('deleteExtract', this.selectedExtractName)
-      this.selectedExtractName = this.$store.getters.defaultExtractName
+      this.selectedExtractName = ''
       this.extractName = ''
     },
     loadExtract: function () {
