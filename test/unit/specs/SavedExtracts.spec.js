@@ -61,12 +61,9 @@ describe('SavedExtracts component', function () {
       deleteExtract: sinon.stub()
     }
 
-    store = new Vuex.Store({
-      state: {},
-      mutations,
-      getters
-    })
+    store = new Vuex.Store({state: {}, mutations, getters})
   })
+
   it('should display the saved extracts dropdown if there are saved extracts and no disasters are selected', function () {
     const Constructor = Vue.extend(SavedExtracts)
     const vm = new Constructor({store}).$mount()
@@ -120,6 +117,28 @@ describe('SavedExtracts component', function () {
     dispatchEvent($select, 'change')
     Vue.nextTick(() => {
       expect(mutations.loadExtract.called).to.equal(true)
+      done()
+    })
+  })
+
+  it('should not display the error message if there is none to display', function () {
+    getters.status = function () { return { type: 'normal', message: '' } }
+    store = new Vuex.Store({state: {}, mutations, getters})
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $messages = vm.$el.querySelector('#messages')
+    expect($messages.style.display).to.be.equal('none')
+  })
+
+  it('should call resetStatus when the x is clicked', function (done) {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $messages = vm.$el.querySelector('#messages')
+    expect($messages.style.display).to.be.equal('')
+    let $x = vm.$el.querySelector('#messages .close-message')
+    dispatchEvent($x, 'click')
+    Vue.nextTick(() => {
+      expect(mutations.resetStatus.called).to.equal(true)
       done()
     })
   })

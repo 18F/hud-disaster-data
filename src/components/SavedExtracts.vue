@@ -62,6 +62,10 @@ export default {
     },
     status () {
       return this.$store.getters.status
+    },
+    displayMessage () {
+      if (this.status.type === 'normal') return false
+      return true
     }
   },
   methods: {
@@ -81,10 +85,6 @@ export default {
     },
     loadExtract: function () {
       this.$store.commit('loadExtract', this.selectedExtractName)
-    },
-    displayMessage: function () {
-      if (this.$store.getters.status.type === 'normal') return false
-      return true
     },
     hideMessage: function () {
       this.$store.commit('resetStatus')
