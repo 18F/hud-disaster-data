@@ -114,6 +114,7 @@ export const getters = {
     return state.savedExtracts
   },
   newExtract: state => {
+    if (state.currentExtract.length === 0) state.newExtract = false
     return state.newExtract
   },
   defaultExtractName: state => {

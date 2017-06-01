@@ -6,13 +6,13 @@
           <option value="" disabled selected>Saved searches......</option>
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
-        <input v-show="newExtract" v-model="extractName" name="extract-name" type="text"></input>
+        <input v-show="newExtract" v-model="extractName" name="extract-name" type="text" placeholder="Enter a name for your search"></input>
       </div>
       <div id="cta">
-        <button @click="saveExtract" class="usa-button" id="save-button">
+        <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract">
           <i class="fa fa-2x fa-save"></i>
         </button>
-        <button @click="deleteExtract" class="usa-button" id="delete-button">
+        <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
           <i class="fa fa-2x fa-trash-o"></i>
         </button>
       </div>
@@ -59,10 +59,16 @@ export default {
       return this.$store.getters.savedExtracts
     },
     newExtract () {
-      return this.$store.getters.newExtract
+      let newExtract = this.$store.getters.newExtract
+      if (newExtract) this.selectedExtractName = ''
+      return newExtract
     },
     status () {
       return this.$store.getters.status
+    },
+    displayMessage () {
+      if (this.status.type === 'normal') return false
+      return true
     }
   },
   methods: {
@@ -82,10 +88,6 @@ export default {
     },
     loadExtract: function () {
       this.$store.commit('loadExtract', this.selectedExtractName)
-    },
-    displayMessage: function () {
-      if (this.$store.getters.status.type === 'normal') return false
-      return true
     },
     hideMessage: function () {
       this.$store.commit('resetStatus')
@@ -144,6 +146,10 @@ export default {
     float:right;
     text-align:right;
     width:25%;
+
+    button[disabled=disabled] {
+      color: gray;
+    }
   }
   ul {
     display:block;
@@ -165,6 +171,15 @@ export default {
     float:left;
     display:block;
     max-height:44px;
+  }
+  select {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    background: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'><path fill='#000' d='M7.406 7.828l4.594 4.594 4.594-4.594 1.406 1.406-6 6-6-6z'></path></svg>");
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+    background-color: white;
+    height: 44px;
   }
 }
 .extracts div#saved_searches button{
