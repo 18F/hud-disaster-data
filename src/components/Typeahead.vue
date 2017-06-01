@@ -70,12 +70,28 @@ export default {
       this.$store.dispatch('loadDisasterList', this.query)
     },
     onHit (item) {
-      this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
+      this.$store.commit('toggleCurrentExtract', item)
       this.update()
     },
     reset () {
       this.query = ''
       store.commit({type: 'clearSearch'})
+    },
+    up () {
+      if (this.current > 0) {
+        this.current--
+      } else if (this.current === -1) {
+        this.current = this.items.length - 1
+      } else {
+        this.current = -1
+      }
+    },
+    down () {
+      if (this.current < this.items.length - 1) {
+        this.current++
+      } else {
+        this.current = -1
+      }
     }
   }
 }
