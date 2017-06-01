@@ -11,7 +11,7 @@
                     <div class="offset-bg">
                       <input type="text"
                                class="Typeahead__input"
-                               placeholder="search by disaster # or state"
+                               placeholder="search by disaster number, type or state"
                                autocomplete="off"
                                v-model="query"
                                @keydown.down="down"

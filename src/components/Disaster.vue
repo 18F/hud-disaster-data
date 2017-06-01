@@ -2,8 +2,9 @@
   <div class="disaster container-fluid">
     <div class="row">
       <div class="col-xs-12 col-sm-4 col-md-3">
-          <h5>{{ `${item.disasterType}-${item.disasterNumber}-${item.state}` }}</h5>
-          <button @click="toggleSelected(item)" class="select-button">
+          <h5>{{disasterId}}</h5>
+          <label :for="disasterId" class="sr-only">{{ `${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
+          <button @click="toggleSelected(item)" class="select-button" :id="disasterId" :name="disasterId">
             <i v-if="item.currentExtract" class="fa fa-3x fa-check-square-o"></i>
             <i v-else class="fa fa-3x fa-square-o"></i>
           </button>
@@ -17,8 +18,10 @@
     <div class="row">
       <div class="col-xs-12 col-sm-4 col-md-3"></div>
       <div class="col-xs-12 col-sm-8 col-md-9">
-        <button v-if="!showAreas" @click="showAreas=!showAreas" class="usa-button">View Affected Areas ({{ item.declaredCountyArea.length }})</button>
-        <button v-else="!showAreas" @click="showAreas=!showAreas" class="usa-button">Hide Affected Areas ({{ item.declaredCountyArea.length }})</button>
+        <label :for="`show-areas-${disasterId}`" class="sr-only">View affected areas for {{ disasterId }}</label>
+        <label :for="`hide-areas-${disasterId}`" class="sr-only">Hide affected areas for {{ disasterId }}</label>
+        <button v-if="!showAreas" @click="showAreas=!showAreas" class="usa-button" :id="`show-areas-${disasterId}`">View Affected Areas ({{ item.declaredCountyArea.length }})</button>
+        <button v-else="!showAreas" @click="showAreas=!showAreas" class="usa-button" :id="`hide-areas-${disasterId}`">Hide Affected Areas ({{ item.declaredCountyArea.length }})</button>
       </div>
     </div>
     <div class="row">
@@ -45,6 +48,11 @@ export default {
     return {
       showAreas: false,
       selected: false
+    }
+  },
+  computed: {
+    disasterId () {
+      return `${this.item.disasterType}-${this.item.disasterNumber}-${this.item.state}`
     }
   },
   methods: {
