@@ -34,21 +34,20 @@
       </ul>
     </div>
     <div id="action-buttons">
-      <button @click="clear" class="usa-button alt-button">Clear</button>
+      <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
       <button class="usa-button green">Export</button> <!-- disabled="true"  usa-button-disabled -->
     </div>
   </div>
 </template>
 <script>
 import disaster from './Disaster'
-import { mapMutations } from 'vuex'
 
 export default {
   components: {disaster},
   data: function () {
     return {
       extractName: '',
-      selectedExtractName: this.$store.getters.defaultExtractName || ''
+      selectedExtractName: ''
     }
   },
   computed: {
@@ -66,9 +65,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      clear: 'clearCurrentExtract'
-    }),
+    clear: function () {
+      this.$store.commit('clearCurrentExtract')
+      this.selectedExtractName = ''
+    },
     saveExtract: function () {
       this.$store.commit('saveExtract', this.extractName)
       this.selectedExtractName = this.extractName
@@ -77,7 +77,7 @@ export default {
     deleteExtract: function () {
       if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return
       this.$store.commit('deleteExtract', this.selectedExtractName)
-      this.selectedExtractName = this.$store.getters.defaultExtractName
+      this.selectedExtractName = ''
       this.extractName = ''
     },
     loadExtract: function () {

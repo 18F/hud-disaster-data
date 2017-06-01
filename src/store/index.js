@@ -43,7 +43,7 @@ export const mutations = {
     state.savedExtracts = extracts
     mutations.clearCurrentExtract(state)
     state.newExtract = (extracts.length < 1)
-    state.currentExtract = getDefaultExtract()
+    state.currentExtract = []
     state.status = { type: 'success', message: 'Successfully deleted saved extract' }
   },
   loadExtract: function (state, name) {
@@ -82,6 +82,7 @@ export const mutations = {
   },
   clearCurrentExtract: function (state) {
     state.currentExtract = []
+    state.newExtract = false
     state.disasters = _.map(state.disasters, disaster => _.omit(disaster, 'currentExtract'))
   },
   clearSearch: function (state) {
@@ -125,16 +126,10 @@ export const getters = {
   }
 }
 
-function getDefaultExtract () {
-  let extracts = getSavedExtracts()
-  if (extracts && extracts.length > 0) return extracts[0].disasters
-  return []
-}
-
 const store = new Vuex.Store({
   state: {
     disasters: [],
-    currentExtract: getDefaultExtract(),
+    currentExtract: [],
     savedExtracts: getSavedExtracts(),
     newExtract: false,
     status: { type: 'normal', message: '' }
