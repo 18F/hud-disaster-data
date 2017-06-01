@@ -141,7 +141,7 @@ export default {
 /* Disaster list styles --------------------------------- */
 .disaster-list {
   background-color: #fff;
-  height:325px;
+  height:350px;
   left:31px;
   overflow-x:hidden;
   overflow-y:scroll;
