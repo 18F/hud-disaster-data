@@ -62,10 +62,6 @@ export default {
     },
     status () {
       return this.$store.getters.status
-    },
-    displayMessage () {
-      if (this.status.type === 'normal') return false
-      return true
     }
   },
   methods: {
@@ -86,6 +82,10 @@ export default {
     },
     loadExtract: function () {
       this.$store.commit('loadExtract', this.selectedExtractName)
+    },
+    displayMessage: function () {
+      if (this.$store.getters.status.type === 'normal') return false
+      return true
     },
     hideMessage: function () {
       this.$store.commit('resetStatus')
@@ -196,21 +196,6 @@ export default {
   button {
   margin-left:20px;
   margin-right:0;
-  }
-  .green {  background-color:#2e8540; }
-  .green:hover, .green:focus, .green:active { box-shadow:none; }
-  .green:hover {
-    background-color:#429b55;
-  }
-  .alt-button {
-    background:transparent;
-    color:#fff;
-    border:1px solid #fff;
-  }
-  .alt-button:hover, .alt-button:focus, .alt-button:active { box-shadow:none; }
-  .alt-button:hover {
-    color:#ccc;
-    border:1px solid #ccc;
   }
 }
 </style>
