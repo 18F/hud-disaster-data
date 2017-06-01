@@ -62,7 +62,7 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
 .disaster { font-size:15px; }
 .disaster .select-button {
   background:transparent;
@@ -84,14 +84,18 @@ export default {
 .disaster h5 {
   font-family: "Source Sans Pro", "Roboto", sans-serif;
 }
+.disaster i.fa-check-square-o {
+  color:#2e8540;
+}
 .counties {
   background-color:#fff;
   border:1px solid #ccc;
   padding:10px;
   margin-top:10px;
-}
-.counties ul li {
-  border:none;
-  display: block;
+
+  ul li {
+    border:none;
+    display: block;
   }
+}
 </style>

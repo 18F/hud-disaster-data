@@ -6,6 +6,7 @@ import Axios from 'axios'
 import store from './store'
 import Typeahead from './components/Typeahead'
 import AppHeader from './components/Header'
+import AppFooter from './components/Footer'
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
@@ -17,6 +18,7 @@ new Vue({
   store,
   components: {
     AppHeader,
-    Typeahead
+    Typeahead,
+    AppFooter
   }
 })
