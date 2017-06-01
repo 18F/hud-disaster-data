@@ -2,7 +2,8 @@
   <div class="extracts">
     <div id="saved_searches">
       <div id="search">
-        <select v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName">
+        <select required v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName">
+          <option value="" disabled selected>Saved searches......</option>
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
         <input v-show="newExtract" v-model="extractName" name="extract-name" type="text"></input>
@@ -33,8 +34,8 @@
       </ul>
     </div>
     <div id="action-buttons">
-      <button disabled="true" class="usa-button usa-button-disabled">Export</button>
-      <button @click="clear" class="usa-button">Clear</button>
+      <button @click="clear" class="usa-button alt-button">Clear</button>
+      <button class="usa-button green">Export</button> <!-- disabled="true"  usa-button-disabled -->
     </div>
   </div>
 </template>
@@ -135,6 +136,10 @@ export default {
     float:left;
     width:75%;
   }
+  div#search select:required:invalid { color:gray; }
+  div#search option {
+    color:#000;
+  }
   div#cta {
     float:right;
     text-align:right;
@@ -186,9 +191,26 @@ export default {
 .extracts div#action-buttons {
   height:50px;
   margin-top:20px;
-}
-.extracts div#action-buttons button {
+  text-align: right;
+
+  button {
   margin-left:20px;
-  float:right;
+  margin-right:0;
+  }
+  .green {  background-color:#2e8540; }
+  .green:hover, .green:focus, .green:active { box-shadow:none; }
+  .green:hover {
+    background-color:#429b55;
+  }
+  .alt-button {
+    background:transparent;
+    color:#fff;
+    border:1px solid #fff;
+  }
+  .alt-button:hover, .alt-button:focus, .alt-button:active { box-shadow:none; }
+  .alt-button:hover {
+    color:#ccc;
+    border:1px solid #ccc;
+  }
 }
 </style>
