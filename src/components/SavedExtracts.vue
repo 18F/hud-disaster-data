@@ -9,10 +9,10 @@
         <input v-show="newExtract" v-model="extractName" name="extract-name" type="text" placeholder="Enter a name for your search"></input>
       </div>
       <div id="cta">
-        <button @click="saveExtract" class="usa-button" id="save-button">
+        <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract">
           <i class="fa fa-2x fa-save"></i>
         </button>
-        <button @click="deleteExtract" class="usa-button" id="delete-button">
+        <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
           <i class="fa fa-2x fa-trash-o"></i>
         </button>
       </div>
@@ -58,10 +58,16 @@ export default {
       return this.$store.getters.savedExtracts
     },
     newExtract () {
-      return this.$store.getters.newExtract
+      let newExtract = this.$store.getters.newExtract
+      if (newExtract) this.selectedExtractName = ''
+      return newExtract
     },
     status () {
       return this.$store.getters.status
+    },
+    displayMessage () {
+      if (this.status.type === 'normal') return false
+      return true
     }
   },
   methods: {
@@ -82,10 +88,6 @@ export default {
     },
     loadExtract: function () {
       this.$store.commit('loadExtract', this.selectedExtractName)
-    },
-    displayMessage: function () {
-      if (this.$store.getters.status.type === 'normal') return false
-      return true
     },
     hideMessage: function () {
       this.$store.commit('resetStatus')
@@ -144,6 +146,10 @@ export default {
     float:right;
     text-align:right;
     width:25%;
+
+    button[disabled=disabled] {
+      color: gray;
+    }
   }
   ul {
     display:block;

@@ -162,4 +162,20 @@ describe('SavedExtracts component', function () {
       done()
     })
   })
+
+  it('should disable the delete-button when there is no selected extract', function () {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $button = vm.$el.querySelector('#delete-button')
+    expect(vm.selectedExtractName).to.be.equal('')
+    expect($button.disabled)
+  })
+
+  it('should disable the save-button when newExtract is false', function () {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $button = vm.$el.querySelector('#save-button')
+    expect(vm.selectedExtractName).to.be.equal('')
+    expect($button.disabled)
+  })
 })
