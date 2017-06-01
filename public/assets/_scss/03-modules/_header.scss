@@ -24,7 +24,7 @@
 .logo{
   &--block{
     padding:0px;
-    @include make-row();
+    @include make-row(0);
 
     img,.logo-img{
       float:left;

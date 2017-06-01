@@ -43,7 +43,10 @@
     }
   }
 }
-
+// MAX OBJECT SIZES
+@mixin objectLarge{
+  max-width:1280px;
+}
 // Content size helpers
 @mixin allow-layout-classes {
 

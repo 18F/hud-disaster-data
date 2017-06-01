@@ -33,6 +33,6 @@ export default {
   margin-left: 2px;
 }
 .logo--block .logo-img {
-  margin-left: 30px;
+
 }
 </style>
