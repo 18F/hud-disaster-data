@@ -166,6 +166,11 @@ export default {
     display:block;
     max-height:44px;
   }
+  select {
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+    appearance: menulist;
+  }
 }
 .extracts div#saved_searches button{
   background:transparent;
