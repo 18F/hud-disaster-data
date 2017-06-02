@@ -3,7 +3,8 @@
     <div class="row">
       <div class="col-xs-12 col-sm-4 col-md-3">
           <h5>{{disasterId}}</h5>
-          <label :for="disasterId" class="sr-only">{{ `${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
+          <label v-if="item.currentExtract" :for="disasterId" class="sr-only">{{ `Unselect ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
+          <label v-else :for="disasterId" class="sr-only">{{ `Select ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
           <button @click="toggleSelected(item)" class="select-button" :id="disasterId" :name="disasterId">
             <i v-if="item.currentExtract" class="fa fa-3x fa-check-square-o"></i>
             <i v-else class="fa fa-3x fa-square-o"></i>
@@ -26,7 +27,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div class="counties" v-show="showAreas">
+        <div class="counties" v-show="showAreas" tabindex="0">
           <div>
             <ul>
               <li v-for="(area,index) in item.declaredCountyArea" :key="area.id">

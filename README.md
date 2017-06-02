@@ -20,7 +20,7 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 ## Setup
 ### Local environment
 #### Dependencies
-Install [node](https://nodejs.org/en/) (the stable version)
+Install [node](https://nodejs.org/en/) (you probably want the stable version)
 
 Install [git](https://git-scm.com/)
 
@@ -51,7 +51,7 @@ Run `npm test` to run the full test suite.
 Run `npm build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ### Build, Test, and Deploy
-This project includes a [.travis.yml](.travis.yml) file that will facilitate the building, testing, and deploying of the application, following this structure.
+This project includes a [.travis.yml](.travis.yml) file that will facilitate the building, testing, and deploying of the application, following this structure:
 
 | Repo                      | Branch updated | Build deployed to                   | URL
 |:--------------------------|:---------------|:------------------------------------|:------------------------------|
@@ -67,3 +67,4 @@ To include a repo into TravisCI, you must be an admin of that repo.
 - Once you’re signed in, and Travis has synchronized your repositories from GitHub, go to your profile page and enable Travis CI for the repository you want to build
   - We already have the [.travis.yml](.travis.yml) in your project, so the first update to the branch will trigger the build and deploy.
 - Check the build status page to see if your build passes or fails
+- Try the URL for cloud.gov to see the site
