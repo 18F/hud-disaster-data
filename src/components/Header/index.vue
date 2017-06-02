@@ -43,7 +43,7 @@
       <div class="container-block">
         <div class="logo logo--block">
           <p class="logo-img"></p>
-          <p>{{title}}</p>
+          <p ref="title">{{title}}</p>
         </div>
       </div>
     </div>

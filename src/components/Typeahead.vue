@@ -28,7 +28,7 @@
                       <div v-show="hasItems" class="disaster-list">
                         <ul class="disaster-search-recs">
                           <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-                            <disaster :item="item"></disaster>
+                            <disaster :prefix="'search'" :item="item"></disaster>
                           </li>
                         </ul>
                       </div>

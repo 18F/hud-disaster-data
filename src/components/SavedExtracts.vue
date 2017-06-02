@@ -6,7 +6,8 @@
           <option value="" disabled selected>Saved searches......</option>
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
-        <input v-show="newExtract" v-model="extractName" name="extract-name" type="text" placeholder="Enter a name for your search"></input>
+        <label for="extract-name" class="sr-only">Search Name</label>
+        <input v-show="newExtract" v-model="extractName" name="extract-name" id="extract-name" type="text" placeholder="Enter a name for your search"></input>
       </div>
       <div id="cta">
         <label for="save-button" class="sr-only">Save selected disaster search</label>
@@ -20,7 +21,7 @@
       </div>
     </div>
     <div id="message-wrapper">
-      <div id="messages" v-show="displayMessage">
+      <div id="messages" v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
           <i class="m-icon fa fa-lg"></i>
           {{status.message}}
@@ -31,7 +32,7 @@
     <div id="list">
       <ul>
         <li v-for="(item, $item) in items">
-          <disaster :item="item"></disaster>
+          <disaster :prefix="'saved'" :item="item"></disaster>
         </li>
       </ul>
     </div>
@@ -70,6 +71,7 @@ export default {
     },
     displayMessage () {
       if (this.status.type === 'normal') return false
+      this.$nextTick(() => this.$refs.messages.focus())
       return true
     }
   },
