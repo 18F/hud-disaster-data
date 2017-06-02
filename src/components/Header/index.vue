@@ -1,28 +1,16 @@
-<script>
-export default {
-  data () {
-    return {
-      title: 'Disaster Data Portal',
-      premsg: 'An official website of the United States Government',
-      showGovBanner: false
-    }
-  }
-}
-</script>
-
 <template>
   <div class="header --global" id="appHeader">
     <div class="header header--pre">
       <div class="container-block">
         <p>
           <i class="icon icon--flag" alt="U.S. flag"></i>{{premsg}}
-          <button v-bind:class="[showGovBanner ? 'usa-banner-button-alt expanded' : 'usa-banner-button-alt']" @click="showGovBanner=!showGovBanner">
+          <button :class="[showGovBanner ? 'usa-banner-button-alt expanded' : 'usa-banner-button-alt']" @click="showGovBanner=!showGovBanner">
               Here's how you know <i class="fa"></i>
           </button>
         </p>
       </div>
     </div>
-    <div id="gov-banner" v-show="showGovBanner">
+    <div id="gov-banner" v-show="showGovBanner" tabindex="0">
       <div class="gov-banner-outer">
         <div class="container-fluid">
           <div class="row gov-banner-inner">
@@ -61,6 +49,18 @@ export default {
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      title: 'Disaster Data Portal',
+      premsg: 'An official website of the United States Government',
+      showGovBanner: false
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 /* -- Custom styles ------------------- -- */

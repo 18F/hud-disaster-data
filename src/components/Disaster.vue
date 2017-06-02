@@ -19,8 +19,8 @@
     <div class="row">
       <div class="col-xs-12 col-sm-4 col-md-3"></div>
       <div class="col-xs-12 col-sm-8 col-md-9">
-        <label :for="`show-areas-${disasterId}`" class="sr-only">View affected areas for {{ disasterId }}</label>
-        <label :for="`hide-areas-${disasterId}`" class="sr-only">Hide affected areas for {{ disasterId }}</label>
+        <label :for="`show-areas-${disasterId}`" class="sr-only">Show {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}</label>
+        <label :for="`hide-areas-${disasterId}`" class="sr-only">Hide {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}</label>
         <button v-if="!showAreas" @click="showAreas=!showAreas" class="usa-button" :id="`show-areas-${disasterId}`">({{ item.declaredCountyArea.length }}) Affected Areas <i class="fa fa-caret-down"></i></button>
         <button v-else="!showAreas" @click="showAreas=!showAreas" class="usa-button-secondary" :id="`hide-areas-${disasterId}`"> ({{ item.declaredCountyArea.length }}) Affected Areas <i class="fa fa-caret-up"></i></button>
       </div>
