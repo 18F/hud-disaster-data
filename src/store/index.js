@@ -90,6 +90,9 @@ export const mutations = {
   },
   resetStatus: function (state) {
     state.status = { type: 'normal', message: '' }
+  },
+  error: function (state, err) {
+    state.status = { type: 'error', message: `${err.response.status}: ${err.response.data.message}` }
   }
 }
 
@@ -98,7 +101,7 @@ export const actions = {
     axios.get(`/api/disasters/${qry}`).then((response) => {
       commit('updateDisasterList', { list: response.data })
     }, (err) => {
-      console.log(err) // TODO: Do something with this error other than displaying it to the console :)
+      commit('error', err)
     })
   }
 }
