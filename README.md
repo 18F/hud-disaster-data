@@ -51,7 +51,7 @@ Run `npm test` to run the full test suite.
 Run `npm build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ### Build, Test, and Deploy
-This project includes a [.travis.yml](.travis.yml) file that will facilitate the building, testing, and deploying of the application, following this structure.
+This project includes a [.travis.yml](.travis.yml) file that will facilitate the building, testing, and deploying of the application, following this structure:
 
 | Repo                      | Branch updated | Build deployed to                   | URL
 |:--------------------------|:---------------|:------------------------------------|:------------------------------|
