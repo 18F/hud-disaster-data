@@ -3,10 +3,10 @@
     <div class="wrapper">
         <div class="links">
           <div>
-            <a href="#">Disaster Assistance</a>
-            <a href="#">DBG-DR Program Resources</a>
-            <a href="#">HUD.gov</a>
-            <a href="#">HUDUser.gov</a>
+            <a href="https://www.disasterassistance.gov/">Disaster Assistance</a>
+            <a href="https://www.hudexchange.info/programs/cdbg-dr/">DBG-DR Program Resources</a>
+            <a href="https://portal.hud.gov/hudportal/HUD">HUD.gov</a>
+            <a href="https://www.huduser.gov/portal/home.html">HUDUser.gov</a>
             <a href="#">Web Policies</a>
             <a href="#">Feedback</a>
           </div>

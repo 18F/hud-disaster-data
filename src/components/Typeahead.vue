@@ -174,7 +174,7 @@ span {
   padding:0;
   position: absolute;
   right:11px;
-  top:137px;
+  top:136px;
   z-index: 1000;
 }
 .disaster-list ul, #extracts {
