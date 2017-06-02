@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <title>HUD Disaster Data Portal</title>
 </head>
 
 <body>
-  <div id="app"></div>
-  <!-- built files will be auto injected -->
-  <div id="search-extract" class="container">
-    <typeahead></typeahead>
+  <div id="page">
+    <div id="app">
+      <div class="content content--block">
+        <app-header></app-header>
+      </div>
+    </div>
+    <!-- built files will be auto injected -->
+    <div id="search-extract" class="container">
+      <typeahead></typeahead>
+    </div>
   </div>
 </body>
 
@@ -28,4 +33,12 @@
   }(document, 'script', 'twitter-wjs');
 </script>
 
+<style>
+  /* -- Style Overrides ---------------------- */
+  body{
+    background:url('static/img/map-background.svg') #323a45 center bottom no-repeat;
+    background-size:80% 80%;
+  }
+  button { border-radius:4px; }
+</style>
 </html>

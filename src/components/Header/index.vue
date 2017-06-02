@@ -1,6 +1,5 @@
 <script>
 export default {
-  name: 'header',
   data () {
     return {
       title: 'Disaster Data Portal',
@@ -28,11 +27,19 @@ export default {
   </div>
 </template>
 
-<style>
-/* -- global 18F overrides to allow more room on left gutter -- */
-.header--pre p {
-  margin-left: 2px;
+<style lang="scss">
+/* -- Custom styles ------------------- -- */
+.header .header--pre {
+  background:#5A616B;
+
+  p { font-size:12px; }
 }
+.container-block {
+  padding:0 5%;
+
+  i { margin:2px 10px 0 0; }
+}
+.logo--block p { font-size:24px; }
 .logo--block .logo-img {
   margin-left: 30px;
 }
