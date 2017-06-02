@@ -34,13 +34,5 @@ export default {
 
   p { font-size:12px; }
 }
-.container-block {
-  padding:0 5%;
 
-  i { margin:2px 10px 0 0; }
-}
-.logo--block p { font-size:24px; }
-.logo--block .logo-img {
-
-}
 </style>

@@ -6,13 +6,13 @@
           <option value="" disabled selected>Saved searches......</option>
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
-        <input v-show="newExtract" v-model="extractName" name="extract-name" type="text"></input>
+        <input v-show="newExtract" v-model="extractName" name="extract-name" type="text" placeholder="Enter a name for your search"></input>
       </div>
       <div id="cta">
-        <button @click="saveExtract" class="usa-button" id="save-button">
+        <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract">
           <i class="fa fa-2x fa-save"></i>
         </button>
-        <button @click="deleteExtract" class="usa-button" id="delete-button">
+        <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
           <i class="fa fa-2x fa-trash-o"></i>
         </button>
       </div>
@@ -34,8 +34,8 @@
       </ul>
     </div>
     <div id="action-buttons">
-      <button @click="clear" class="usa-button alt-button">Clear</button>
-      <button class="usa-button green">Export</button> <!-- disabled="true"  usa-button-disabled -->
+      <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
+      <button class="usa-button green">Export <i class="fa fa-sign-out"></i></button> <!-- disabled="true"  usa-button-disabled -->
     </div>
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
   data: function () {
     return {
       extractName: '',
-      selectedExtractName: this.$store.getters.defaultExtractName || ''
+      selectedExtractName: ''
     }
   },
   computed: {
@@ -59,7 +59,9 @@ export default {
       return this.$store.getters.savedExtracts
     },
     newExtract () {
-      return this.$store.getters.newExtract
+      let newExtract = this.$store.getters.newExtract
+      if (newExtract) this.selectedExtractName = ''
+      return newExtract
     },
     status () {
       return this.$store.getters.status
@@ -81,7 +83,7 @@ export default {
     deleteExtract: function () {
       if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return
       this.$store.commit('deleteExtract', this.selectedExtractName)
-      this.selectedExtractName = this.$store.getters.defaultExtractName
+      this.selectedExtractName = ''
       this.extractName = ''
     },
     loadExtract: function () {
@@ -128,7 +130,7 @@ export default {
 .extracts {
   background: url('/static/img/bg_50_opacity.png');
   overflow:hidden;
-  border-radius:20px;
+  border-radius:10px;
   padding:20px;
 
   div#saved_searches { height:50px; }
@@ -144,6 +146,11 @@ export default {
     float:right;
     text-align:right;
     width:25%;
+
+    button[disabled=disabled] {
+      color: gray;
+      opacity: 0.3;
+    }
   }
   ul {
     display:block;
@@ -165,6 +172,15 @@ export default {
     float:left;
     display:block;
     max-height:44px;
+  }
+  select {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    background: url("data:image/svg+xml;utf8,%3Csvg%20version%3D%271.1%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20xmlns%3Axlink%3D%27http%3A//www.w3.org/1999/xlink%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20fill%3D%27%23000%27%20d%3D%27M7.406%207.828l4.594%204.594%204.594-4.594%201.406%201.406-6%206-6-6z%27%3E%3C/path%3E%3C/svg%3E");
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+    background-color: white;
+    height: 44px;
   }
 }
 .extracts div#saved_searches button{
@@ -196,21 +212,6 @@ export default {
   button {
   margin-left:20px;
   margin-right:0;
-  }
-  .green {  background-color:#2e8540; }
-  .green:hover, .green:focus, .green:active { box-shadow:none; }
-  .green:hover {
-    background-color:#429b55;
-  }
-  .alt-button {
-    background:transparent;
-    color:#fff;
-    border:1px solid #fff;
-  }
-  .alt-button:hover, .alt-button:focus, .alt-button:active { box-shadow:none; }
-  .alt-button:hover {
-    color:#ccc;
-    border:1px solid #ccc;
   }
 }
 </style>

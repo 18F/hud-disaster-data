@@ -11,7 +11,7 @@
                     <div class="offset-bg">
                       <input type="text"
                                class="Typeahead__input"
-                               placeholder="search by disaster # or state"
+                               placeholder="search by disaster number, type or state"
                                autocomplete="off"
                                v-model="query"
                                @keydown.down="down"
@@ -70,12 +70,28 @@ export default {
       this.$store.dispatch('loadDisasterList', this.query)
     },
     onHit (item) {
-      this.query = `${item.disasterType}-${item.disasterNumber}-${item.state}`
+      this.$store.commit('toggleCurrentExtract', item)
       this.update()
     },
     reset () {
       this.query = ''
       store.commit({type: 'clearSearch'})
+    },
+    up () {
+      if (this.current > 0) {
+        this.current--
+      } else if (this.current === -1) {
+        this.current = this.items.length - 1
+      } else {
+        this.current = -1
+      }
+    },
+    down () {
+      if (this.current < this.items.length - 1) {
+        this.current++
+      } else {
+        this.current = -1
+      }
     }
   }
 }
@@ -86,13 +102,22 @@ export default {
 <style src="../../public/assets/_scss/app.scss" lang="scss"/>
 <style>
 /* global overrides ----------------------------------- */
+span {
+  display: block;
+  color: #2c3e50;
+}
+.active { background-color: #f1f1f1; }
+.active span {
+  color: white;
+}
+.screen-name { font-style: italic; }
+.no-padding { padding: 0; }
 .wrapper input[type="text"] { width:100%; max-width:100%; }
-.r-align { text-align: right;}
 
 #opaque-bg {
   background: url('/static/img/bg_50_opacity.png');
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
   margin:0 auto;
   overflow: hidden;
 }
@@ -105,10 +130,10 @@ export default {
   height:50px;
 }
 .search-container {
-  margin:200px 0;
+  margin-top:125px;
   padding:0;
 }
-#search .fa-times { cursor:pointer; opacity:0.4;}
+#search .fa-times { cursor:pointer; }
 #search .fa-search, #search .fa-times, #search .fa-spinner {
   float: right;
   font-size:24px;
@@ -141,14 +166,15 @@ export default {
 /* Disaster list styles --------------------------------- */
 .disaster-list {
   background-color: #fff;
-  height:325px;
+  box-shadow:0 5px 10px #000;
+  height:355px;
   left:31px;
   overflow-x:hidden;
   overflow-y:scroll;
   padding:0;
   position: absolute;
   right:11px;
-  top:137px;
+  top:136px;
   z-index: 1000;
 }
 .disaster-list ul, #extracts {
@@ -163,20 +189,5 @@ export default {
   margin:0;
   line-height:20px;
   cursor: pointer;
-}
-
-span {
-  display: block;
-  color: #2c3e50;
-}
-
-.active { background-color: #f1f1f1; }
-.active span {
-  color: white;
-}
-.screen-name { font-style: italic; }
-
-.no-padding {
-  padding: 0;
 }
 </style>

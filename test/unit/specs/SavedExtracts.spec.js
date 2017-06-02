@@ -142,4 +142,40 @@ describe('SavedExtracts component', function () {
       done()
     })
   })
+
+  it('dropdown should default to "Saved searches" on page load even if there are saved searches', function () {
+    getters.savedExtracts = () => [{name: 'test', disasters: TWO_RECORDS}]
+    store = new Vuex.Store({state: {}, mutations, getters})
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    expect(vm.selectedExtractName).to.be.equal('')
+  })
+
+  it('should show "Saved searches..." and empty the current extract when clear is clicked', function (done) {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $button = vm.$el.querySelector('#clear-button')
+    dispatchEvent($button, 'click')
+    Vue.nextTick(() => {
+      expect(mutations.clearCurrentExtract.called).to.equal(true)
+      expect(vm.selectedExtractName).to.be.equal('')
+      done()
+    })
+  })
+
+  it('should disable the delete-button when there is no selected extract', function () {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $button = vm.$el.querySelector('#delete-button')
+    expect(vm.selectedExtractName).to.be.equal('')
+    expect($button.disabled)
+  })
+
+  it('should disable the save-button when newExtract is false', function () {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $button = vm.$el.querySelector('#save-button')
+    expect(vm.selectedExtractName).to.be.equal('')
+    expect($button.disabled)
+  })
 })
