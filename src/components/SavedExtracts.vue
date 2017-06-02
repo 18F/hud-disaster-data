@@ -9,9 +9,11 @@
         <input v-show="newExtract" v-model="extractName" name="extract-name" type="text" placeholder="Enter a name for your search"></input>
       </div>
       <div id="cta">
+        <label for="save-button" class="sr-only">Save selected disaster search</label>
         <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract">
           <i class="fa fa-2x fa-save"></i>
         </button>
+        <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
         <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
           <i class="fa fa-2x fa-trash-o"></i>
         </button>
