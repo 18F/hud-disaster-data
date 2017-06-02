@@ -16,7 +16,7 @@
           <div class="row gov-banner-inner">
               <div class="col-lg-6">
                 <div class="col-lg-2 gov-banner-img">
-                    <img src="/static/img/icon-dot-gov.svg" />
+                    <img src="/static/img/icon-dot-gov.svg" alt="Official U.S.gov website seal"/>
                 </div>
                 <div class="col-lg-10 gov-banner-text">
                   <span style="font-weight:bold;">The .gov means it’s official.</span>
@@ -27,7 +27,7 @@
               </div>
               <div class="col-lg-6">
                 <div class="col-lg-2 gov-banner-img">
-                    <img src="/static/img/icon-https.svg"  />
+                    <img src="/static/img/icon-https.svg" alt="Official secure sockets layer endorsement seal"/>
                 </div>
                 <div class="col-lg-10 gov-banner-text">
                 This site is also protected by an SSL (Secure Sockets Layer) certificate that’s been signed
@@ -42,8 +42,8 @@
     <div class="header header--masthead">
       <div class="container-block">
         <div class="logo logo--block">
-          <p class="logo-img"></p>
-          <p ref="title">{{title}}</p>
+          <p class="logo-img" alt="U.S. Department of Housing and Urban Development logo"></p>
+          <p>{{title}}</p>
         </div>
       </div>
     </div>

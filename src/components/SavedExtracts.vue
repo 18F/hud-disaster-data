@@ -25,7 +25,10 @@
         <div :class="status.type">
           <i class="m-icon fa fa-lg"></i>
           {{status.message}}
-          <i class="close-message fa fa-times" @click="hideMessage"></i>
+          <label for="message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+          <button @click="hideMessage" class="usa-button clear-message" id="message-clear-button">
+            <i class="close-message fa fa-times"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -238,5 +241,13 @@ export default {
   margin-left:20px;
   margin-right:0;
   }
+}
+
+.usa-button.clear-message {
+	background: transparent;
+	position: relative;
+	float: right;
+	top: -18px;
+	left: 20px;
 }
 </style>
