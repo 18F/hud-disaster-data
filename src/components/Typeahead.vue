@@ -9,7 +9,8 @@
               <div class="col Typeahead">
                 <div id="search">
                     <div class="offset-bg">
-                      <input type="text"
+                      <label for="search-text" class="sr-only">search FEMA disasters</label>
+                      <input type="text" id="search-text"
                                class="Typeahead__input"
                                placeholder="search by disaster number, type or state"
                                autocomplete="off"

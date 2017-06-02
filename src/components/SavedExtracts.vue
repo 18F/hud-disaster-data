@@ -1,7 +1,7 @@
 <template>
   <div class="extracts">
     <div id="saved_searches">
-      <div id="search">
+      <div>
         <select required v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName">
           <option value="" disabled selected>Saved searches......</option>
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
@@ -135,23 +135,27 @@ export default {
   border-radius:10px;
   padding:20px;
 
-  div#saved_searches { height:50px; }
-  div#search{
-    float:left;
-    width:75%;
-  }
-  div#search select:required:invalid { color:gray; }
-  div#search option {
-    color:#000;
-  }
-  div#cta {
-    float:right;
-    text-align:right;
-    width:25%;
+  div#saved_searches {
+    height:50px;
 
-    button[disabled=disabled] {
-      color: gray;
-      opacity: 0.3;
+    &>div {
+      float:left;
+      width:75%;
+
+      select:required:invalid { color:gray; }
+      option {
+        color:#000;
+      }
+    }
+    &>div#cta {
+      float:right;
+      text-align:right;
+      width:25%;
+
+      button[disabled=disabled] {
+        color: gray;
+        opacity: 0.3;
+      }
     }
   }
   ul {
