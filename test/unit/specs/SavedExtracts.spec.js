@@ -135,7 +135,8 @@ describe('SavedExtracts component', function () {
     const vm = new Constructor({store}).$mount()
     let $messages = vm.$el.querySelector('#messages')
     expect($messages.style.display).to.be.equal('')
-    let $x = vm.$el.querySelector('#messages .close-message')
+    let $x = vm.$el.querySelector('#message-clear-button')
+    debugger
     dispatchEvent($x, 'click')
     Vue.nextTick(() => {
       expect(mutations.resetStatus.called).to.equal(true)

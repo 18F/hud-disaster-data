@@ -43,7 +43,7 @@
       <div class="container-block">
         <div class="logo logo--block">
           <p class="logo-img" alt="U.S. Department of Housing and Urban Development logo"></p>
-          <p>{{title}}</p>
+          <p ref="title">{{title}}</p>
         </div>
       </div>
     </div>
