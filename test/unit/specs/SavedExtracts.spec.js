@@ -179,4 +179,15 @@ describe('SavedExtracts component', function () {
     expect(vm.selectedExtractName).to.be.equal('')
     expect($button.disabled)
   })
+
+  describe('setActive', () => {
+    it('should set the current item', () => {
+      getters.savedExtracts = () => [{name: 'test', disasters: TWO_RECORDS}]
+      store = new Vuex.Store({state: {}, mutations, getters})
+      const Constructor = Vue.extend(SavedExtracts)
+      const vm = new Constructor({store}).$mount()
+      vm.setActive(1)
+      expect(vm.current).to.be.equal(1)
+    })
+  })
 })
