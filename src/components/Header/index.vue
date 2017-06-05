@@ -29,10 +29,6 @@ export default {
 
 <style lang="scss">
 /* -- Custom styles ------------------- -- */
-.header .header--pre {
-  background:#5A616B;
 
-  p { font-size:12px; }
-}
 
 </style>
