@@ -1,6 +1,7 @@
 import 'es6-promise/auto' // eslint-disable-line
 import Vue from 'vue' // eslint-disable-line
 import Vuex from 'vuex' // eslint-disable-line
+import sinon from 'sinon'
 import store, {actions} from '../../../src/store' // eslint-disable-line
 
 import Typeahead from '@/components/Typeahead' // eslint-disable-line
@@ -63,6 +64,65 @@ describe('Typeahead.vue', () => {
       vm.query = 'A'
       vm.update()
       expect(stub.called).to.be.equal(false)
+    })
+  })
+
+  describe('displayMessage', function () {
+    let store
+    let mutations
+    let getters
+
+    beforeEach(function () {
+      getters = {
+        defaultExtractName: function () { return '' },
+        currentExtract: function () { return [] },
+        savedExtracts: function () { return [] },
+        newExtract: function () { return false },
+        status: function () { return { type: 'error', message: '' } }
+      }
+      mutations = {
+        clearCurrentExtract: sinon.stub(),
+        resetStatus: sinon.stub(),
+        loadExtract: sinon.stub(),
+        saveExtract: sinon.stub(),
+        deleteExtract: sinon.stub()
+      }
+
+      store = new Vuex.Store({state: {}, mutations, getters})
+    })
+
+    it('should return false if status.type is normal', function () {
+      getters.status = function () {
+        return { type: 'normal' }
+      }
+      store = new Vuex.Store({state: {}, mutations, getters})
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor({store}).$mount()
+      expect(vm.displayMessage).to.be.equal(false)
+    })
+    it('should return false if status.scope is not "app"', function () {
+      getters.status = function () {
+        return { type: 'error', scope: 'extract' }
+      }
+      store = new Vuex.Store({state: {}, mutations, getters})
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor({store}).$mount()
+      expect(vm.displayMessage).to.be.equal(false)
+    })
+    it('should return true if status.scope is "app"', function () {
+      getters.status = function () {
+        return { type: 'error', scope: 'app' }
+      }
+      store = new Vuex.Store({state: {}, mutations, getters})
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor({store}).$mount()
+      expect(vm.displayMessage).to.be.equal(true)
+    })
+    it('hideMessage should call resetStatus on the store', function () {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor({store}).$mount()
+      vm.hideMessage()
+      expect(mutations.resetStatus.called).to.be.equal(true)
     })
   })
 })

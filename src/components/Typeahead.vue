@@ -9,19 +9,33 @@
               <div class="col Typeahead">
                 <div id="search">
                     <div class="offset-bg">
-                      <label for="search-text" class="sr-only">search FEMA disasters</label>
-                      <input type="text" id="search-text"
-                               class="Typeahead__input"
-                               placeholder="Search by disaster number, type, or state"
-                               autocomplete="off"
-                               v-model="query"
-                               @keydown.esc="reset"
-                               @input="update"/>
-                               <i class="fa fa-spinner fa-spin" v-if="loading"></i>
-                                 <template v-else>
-                                   <i class="fa fa-search" v-show="isEmpty"></i>
-                                   <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
-                                 </template>
+                      <div class="search-wrapper">
+                        <label for="search-text" class="sr-only">search FEMA disasters</label>
+                        <input type="text" id="search-text"
+                                 class="Typeahead__input"
+                                 placeholder="Search by disaster number, type, or state"
+                                 autocomplete="off"
+                                 v-model="query"
+                                 @keydown.esc="reset"
+                                 @input="update"/>
+                        <i class="fa fa-spinner fa-spin" v-if="loading"></i>
+                        <template v-else>
+                          <i class="fa fa-search" v-show="isEmpty"></i>
+                          <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
+                        </template>
+                      </div>
+                      <div class="message-wrapper">
+                       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
+                         <div :class="status.type">
+                           <i class="m-icon fa fa-lg"></i>
+                           {{status.message}}
+                           <label for="app-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+                         </div>
+                         <button @click="hideMessage" class="usa-button clear-message" id="app-message-clear-button">
+                           <i class="close-message fa fa-times"></i>
+                         </button>
+                       </div>
+                      </div>
                       <div v-show="hasItems" class="disaster-list">
                         <ul class="disaster-search-recs">
                           <li v-for="(item, $item) in items">
@@ -52,7 +66,10 @@ import store from '../store'
 export default {
   components: {disaster, savedExtracts},
   data () {
-    return { query: '' }
+    return {
+      query: '',
+      loading: false
+    }
   },
   computed: {
     items () {
@@ -66,6 +83,13 @@ export default {
     },
     isDirty () {
       return !!this.query
+    },
+    status () {
+      return this.$store.getters.status
+    },
+    displayMessage () {
+      if (this.status.type === 'normal' || this.status.scope !== 'app') return false
+      return true
     }
   },
   methods: {
@@ -78,6 +102,9 @@ export default {
     reset () {
       this.query = ''
       store.commit({type: 'clearSearch'})
+    },
+    hideMessage () {
+      this.$store.commit('resetStatus')
     }
   }
 }
@@ -107,6 +134,45 @@ span {
 .offset-bg {
   padding:0 10px 0 30px;
 }
+.message-wrapper { min-height:20px;  }
+.messages {
+    position: relative;
+    div {
+      padding:1em;
+      padding-right: 3em;
+      margin-top:20px;
+      padding-left: 2.5em;
+    }
+    i {
+      color:#000;
+      margin-right:10px;
+      margin-left: -1.5em;
+    }
+    .close-message:before { content:"\f00d"; }
+    .close-message {
+      cursor:pointer;
+      position:absolute;
+      top:0;
+      right:0;
+      opacity:.4;
+    }
+    .success { background:#e7f4e4; }
+    .success .m-icon:before { content: "\f058"; }
+    .error { background:#f9dede; }
+    .error .m-icon:before { content: "\f057"; }
+    .warning { background: #fff1d2; }
+    .warning .m-icon:before { content:"\f071"; }
+    .info { background:#e1f3f8; }
+    .info .m-icon:before { content: "\f05a"; }
+    .usa-button.clear-message {
+    	background: transparent;
+      cursor:pointer;
+      position:absolute;
+      top:.8em;
+      right:0;
+      opacity:.4;
+    }
+}
 #message {
   color: #fff;
   text-align: center;
@@ -116,13 +182,15 @@ span {
   margin-top:125px;
   padding:0;
 }
-#search .fa-times { cursor:pointer; }
-#search .fa-search, #search .fa-times, #search .fa-spinner {
-  float: right;
-  font-size:24px;
-  position: relative;
-  top: -40px;
-  right: 18px;
+.search-wrapper {
+  .fa-times { cursor:pointer; }
+  .fa {
+    float: right;
+    font-size:24px;
+    position: relative;
+    top: -40px;
+    right: 18px;
+  }
 }
 
 /* Disaster list styles --------------------------------- */
@@ -178,5 +246,4 @@ span {
   padding:20px 40px;
   text-align:right;
 }
-
 </style>

@@ -21,11 +21,11 @@ function setSavedExtracts (extracts) {
 export const mutations = {
   saveExtract: function (state, name) {
     if (_.find(state.savedExtracts, { name })) {
-      state.status = { type: 'error', message: 'Extract already exists' }
+      state.status = { type: 'error', scope: 'extract', message: 'Extract already exists' }
       return
     }
     if (!name || name === '') {
-      state.status = { type: 'error', message: 'Name can not be empty' }
+      state.status = { type: 'error', scope: 'extract', message: 'Name can not be empty' }
       return
     }
     state.savedExtracts.push({
@@ -34,7 +34,7 @@ export const mutations = {
     })
     setSavedExtracts(state.savedExtracts)
     state.newExtract = false
-    state.status = { type: 'success', message: 'Extract successfully saved' }
+    state.status = { type: 'success', scope: 'extract', message: 'Extract successfully saved' }
   },
   deleteExtract: function (state, name) {
     let extracts = getSavedExtracts()
@@ -44,7 +44,7 @@ export const mutations = {
     mutations.clearCurrentExtract(state)
     state.newExtract = (extracts.length < 1)
     state.currentExtract = []
-    state.status = { type: 'success', message: 'Successfully deleted saved extract' }
+    state.status = { type: 'success', scope: 'extract', message: 'Successfully deleted saved extract' }
   },
   loadExtract: function (state, name) {
     mutations.clearCurrentExtract(state)
@@ -91,8 +91,8 @@ export const mutations = {
   resetStatus: function (state) {
     state.status = { type: 'normal', message: '' }
   },
-  error: function (state, err) {
-    state.status = { type: 'error', message: `${err.response.status}: ${err.response.data.message}` }
+  error: function (state, msg) {
+    state.status = { type: 'error', scope: 'app', message: msg }
   }
 }
 
@@ -100,8 +100,11 @@ export const actions = {
   loadDisasterList: function ({ commit }, qry) {
     axios.get(`/api/disasters/${qry}`).then((response) => {
       commit('updateDisasterList', { list: response.data })
+      if (response.data && response.data.length === 0) return commit('error', 'No results found!')
+      commit('resetStatus')
     }, (err) => {
-      commit('error', err)
+      console.log(err)
+      commit('error', 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.')
     })
   }
 }

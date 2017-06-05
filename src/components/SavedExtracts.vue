@@ -20,16 +20,16 @@
         </button>
       </div>
     </div>
-    <div id="message-wrapper">
-      <div id="messages" v-show="displayMessage" tabindex="0" ref="messages">
+    <div class="message-wrapper">
+      <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
           <i class="m-icon fa fa-lg"></i>
           {{status.message}}
-          <label for="message-clear-button" class="sr-only">Close {{ status.type }} message</label>
-          <button @click="hideMessage" class="usa-button clear-message" id="message-clear-button">
-            <i class="close-message fa fa-times"></i>
-          </button>
+          <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
         </div>
+        <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
+          <i class="close-message fa fa-times"></i>
+        </button>
       </div>
     </div>
     <div id="list">
@@ -72,7 +72,7 @@ export default {
       return this.$store.getters.status
     },
     displayMessage () {
-      if (this.status.type === 'normal') return false
+      if (this.status.type === 'normal' || this.status.scope !== 'extract') return false
       this.$nextTick(() => this.$refs.messages.focus())
       return true
     }
@@ -105,34 +105,6 @@ export default {
 <style lang="scss">
 /* Messages styles ------------------------------------ */
 .normal { display:none; }
-#message-wrapper { min-height:20px;  }
-#messages {
-    div {
-      padding:1em;
-      margin-top:20px;
-    }
-    i {
-      color:#000;
-      margin-right:10px;
-    }
-    .close-message:before { content:"\f00d"; }
-    .close-message {
-      cursor:pointer;
-      position:relative;
-      top:5px;
-      left:5px;
-      float:right;
-      opacity:.4;
-    }
-    .success { background:#e7f4e4; }
-    .success .m-icon:before { content: "\f058"; }
-    .error { background:#f9dede; }
-    .error .m-icon:before { content: "\f057"; }
-    .warning { background: #fff1d2; }
-    .warning .m-icon:before { content:"\f071"; }
-    .info { background:#e1f3f8; }
-    .info .m-icon:before { content: "\f05a"; }
-}
 /* Extract list styles --------------------------------- */
 .extracts {
   background: url('/static/img/bg_50_opacity.png');
@@ -230,13 +202,5 @@ export default {
   margin-left:20px;
   margin-right:0;
   }
-}
-
-.usa-button.clear-message {
-	background: transparent;
-	position: relative;
-	float: right;
-	top: -18px;
-	left: 20px;
 }
 </style>
