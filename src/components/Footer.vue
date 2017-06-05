@@ -13,7 +13,7 @@
         </div>
         <div class="signature">
           <div>
-            <img src="/static/img/logo_global-blue.svg" />
+            <img src="/static/img/logo_global-blue.svg" alt="U.S. Department of Housing and Urban Development Logo"/>
           </div>
         </div>
       </div>
