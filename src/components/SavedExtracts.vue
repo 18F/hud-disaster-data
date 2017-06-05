@@ -47,7 +47,6 @@
 </template>
 <script>
 import disaster from './Disaster'
-import { mapMutations } from 'vuex'
 
 export default {
   components: {disaster},
@@ -80,24 +79,25 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      clear: 'clearCurrentExtract'
-    }),
-    saveExtract: function () {
+    clear () {
+      this.$store.commit('clearCurrentExtract')
+      this.selectedExtractName = ''
+    },
+    saveExtract () {
       this.$store.commit('saveExtract', this.extractName)
       this.selectedExtractName = this.extractName
       this.extractName = ''
     },
-    deleteExtract: function () {
+    deleteExtract () {
       if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return
       this.$store.commit('deleteExtract', this.selectedExtractName)
       this.selectedExtractName = ''
       this.extractName = ''
     },
-    loadExtract: function () {
+    loadExtract () {
       this.$store.commit('loadExtract', this.selectedExtractName)
     },
-    hideMessage: function () {
+    hideMessage () {
       this.$store.commit('resetStatus')
     },
     setActive (index) {
