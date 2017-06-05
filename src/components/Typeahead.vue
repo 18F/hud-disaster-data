@@ -12,7 +12,7 @@
                       <label for="search-text" class="sr-only">search FEMA disasters</label>
                       <input type="text" id="search-text"
                                class="Typeahead__input"
-                               placeholder="search by disaster number, type or state"
+                               placeholder="Search by disaster number, type, or state"
                                autocomplete="off"
                                v-model="query"
                                @keydown.down="down"
