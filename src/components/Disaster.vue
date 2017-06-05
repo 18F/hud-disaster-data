@@ -67,13 +67,20 @@ export default {
 }
 </script>
 <style lang="scss">
-.disaster { font-size:15px; }
+$check-color: #2e8540;
+
+.disaster {
+  font-size:15px;
+  button:focus {
+    outline: 1px dotted $check-color;
+  }
+}
 .disaster .select-button {
   background:transparent;
   color:#000;
-  outline:none;
-  padding-top:0;
-  padding-bottom:0;
+  margin: 0 2rem;
+  padding: 0;
+
 }
 .disaster .select-button:focus {
   box-shadow:none;
@@ -89,7 +96,7 @@ export default {
   font-family: "Source Sans Pro", "Roboto", sans-serif;
 }
 .disaster i.fa-check-square-o {
-  color:#2e8540;
+  color: $check-color;
 }
 .counties {
   background-color:#fff;

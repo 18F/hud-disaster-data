@@ -34,7 +34,7 @@
     </div>
     <div id="list">
       <ul>
-        <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
+        <li v-for="(item, $item) in items">
           <disaster :prefix="'saved'" :item="item"></disaster>
         </li>
       </ul>
@@ -53,8 +53,7 @@ export default {
   data: function () {
     return {
       extractName: '',
-      selectedExtractName: '',
-      current: -1
+      selectedExtractName: ''
     }
   },
   computed: {
@@ -99,14 +98,6 @@ export default {
     },
     hideMessage () {
       this.$store.commit('resetStatus')
-    },
-    setActive (index) {
-      this.current = index
-    },
-    activeClass (index) {
-      return {
-        active: this.current === index
-      }
     }
   }
 }
@@ -179,15 +170,13 @@ export default {
   }
   li:before { content: ''; }
   li {
-    &>.active {
+    &:hover {
        background: #f1f1f1;
        span {
           color: white;
         }
       }
-    &:not(.active){
-      background: white;
-    }
+    background: white;
     display:block;
     border-bottom: 1px solid #ccc;
     margin:0;

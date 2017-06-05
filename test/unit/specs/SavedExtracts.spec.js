@@ -1,4 +1,3 @@
-/* global Event, describe, it, expect, sinon */
 import 'es6-promise/auto' // eslint-disable-line
 import Vue from 'vue' // eslint-disable-line
 import Vuex from 'vuex' // eslint-disable-line
@@ -136,7 +135,6 @@ describe('SavedExtracts component', function () {
     let $messages = vm.$el.querySelector('#messages')
     expect($messages.style.display).to.be.equal('')
     let $x = vm.$el.querySelector('#message-clear-button')
-    debugger
     dispatchEvent($x, 'click')
     Vue.nextTick(() => {
       expect(mutations.resetStatus.called).to.equal(true)
@@ -178,16 +176,5 @@ describe('SavedExtracts component', function () {
     let $button = vm.$el.querySelector('#save-button')
     expect(vm.selectedExtractName).to.be.equal('')
     expect($button.disabled)
-  })
-
-  describe('setActive', () => {
-    it('should set the current item', () => {
-      getters.savedExtracts = () => [{name: 'test', disasters: TWO_RECORDS}]
-      store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(SavedExtracts)
-      const vm = new Constructor({store}).$mount()
-      vm.setActive(1)
-      expect(vm.current).to.be.equal(1)
-    })
   })
 })

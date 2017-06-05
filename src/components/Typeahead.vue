@@ -15,9 +15,6 @@
                                placeholder="Search by disaster number, type, or state"
                                autocomplete="off"
                                v-model="query"
-                               @keydown.down="down"
-                               @keydown.up="up"
-                               @keydown.enter="hit"
                                @keydown.esc="reset"
                                @input="update"/>
                                <i class="fa fa-spinner fa-spin" v-if="loading"></i>
@@ -27,7 +24,7 @@
                                  </template>
                       <div v-show="hasItems" class="disaster-list">
                         <ul class="disaster-search-recs">
-                          <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
+                          <li v-for="(item, $item) in items">
                             <disaster :prefix="'search'" :item="item"></disaster>
                           </li>
                         </ul>
@@ -48,51 +45,39 @@
 </template>
 
 <script>
-import VueTypeahead from '../lib/TypeAhead'
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
 import store from '../store'
 
 export default {
-  extends: VueTypeahead,
   components: {disaster, savedExtracts},
+  data () {
+    return { query: '' }
+  },
   computed: {
     items () {
       return this.$store.getters.currentSearchResult
+    },
+    hasItems () {
+      return this.items.length > 0
+    },
+    isEmpty () {
+      return !this.query
+    },
+    isDirty () {
+      return !!this.query
     }
   },
   methods: {
     update () {
-      this.cancel()
-
       if (!this.query) return this.reset()
       if (this.query.length < 2) return
 
       this.$store.dispatch('loadDisasterList', this.query)
     },
-    onHit (item) {
-      this.$store.commit('toggleCurrentExtract', item)
-      this.update()
-    },
     reset () {
       this.query = ''
       store.commit({type: 'clearSearch'})
-    },
-    up () {
-      if (this.current > 0) {
-        this.current--
-      } else if (this.current === -1) {
-        this.current = this.items.length - 1
-      } else {
-        this.current = -1
-      }
-    },
-    down () {
-      if (this.current < this.items.length - 1) {
-        this.current++
-      } else {
-        this.current = -1
-      }
     }
   }
 }
@@ -101,16 +86,13 @@ export default {
 
 <style src="../../public/assets/css/font-awesome.min.css"/>
 <style src="../../public/assets/_scss/app.scss" lang="scss"/>
-<style>
+<style lang="scss">
 /* global overrides ----------------------------------- */
 span {
   display: block;
   color: #2c3e50;
 }
-.active { background-color: #f1f1f1; }
-.active span {
-  color: white;
-}
+
 .screen-name { font-style: italic; }
 .no-padding { padding: 0; }
 .wrapper input[type="text"] { width:100%; max-width:100%; }
@@ -143,6 +125,39 @@ span {
   right: 18px;
 }
 
+/* Disaster list styles --------------------------------- */
+.disaster-list {
+  background-color: #fff;
+  box-shadow:0 5px 10px #000;
+  height:355px;
+  left:31px;
+  overflow-x:hidden;
+  overflow-y:scroll;
+  padding:0;
+  position: absolute;
+  right:11px;
+  top:136px;
+  z-index: 1000;
+}
+.disaster-list ul {
+  display:block;
+  margin:0;
+  list-style-type: none;
+}
+.disaster-list li:before { content: ''; }
+.disaster-list li {
+  display:block;
+  border-bottom: 1px solid #ccc;
+  margin:0;
+  line-height:20px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f1f1f1;
+    span {
+      color: white;
+    }
+  }
+}
 /* Typeahead styles ----------------------------------- */
 .Typeahead {
   padding-bottom:20px;
@@ -164,31 +179,4 @@ span {
   text-align:right;
 }
 
-/* Disaster list styles --------------------------------- */
-.disaster-list {
-  background-color: #fff;
-  box-shadow:0 5px 10px #000;
-  height:355px;
-  left:31px;
-  overflow-x:hidden;
-  overflow-y:scroll;
-  padding:0;
-  position: absolute;
-  right:11px;
-  top:136px;
-  z-index: 1000;
-}
-.disaster-list ul, #extracts {
-  display:block;
-  margin:0;
-  list-style-type: none;
-}
-.disaster-list li:before, #extracts li:before { content: ''; }
-.disaster-list li, #extracts li {
-  display:block;
-  border-bottom: 1px solid #ccc;
-  margin:0;
-  line-height:20px;
-  cursor: pointer;
-}
 </style>
