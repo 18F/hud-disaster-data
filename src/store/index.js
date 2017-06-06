@@ -91,8 +91,8 @@ export const mutations = {
   resetStatus: function (state) {
     state.status = { type: 'normal', message: '' }
   },
-  error: function (state, msg) {
-    state.status = { type: 'error', scope: 'app', message: msg }
+  setStatus: function (state, {type, msg}) {
+    state.status = { type: type, scope: 'app', message: msg }
   }
 }
 
@@ -100,11 +100,11 @@ export const actions = {
   loadDisasterList: function ({ commit }, qry) {
     axios.get(`/api/disasters/${qry}`).then((response) => {
       commit('updateDisasterList', { list: response.data })
-      if (response.data && response.data.length === 0) return commit('error', 'No results found!')
+      if (response.data && response.data.length === 0) return commit('setStatus', {type: 'info', msg: 'No results found!'})
       commit('resetStatus')
     }, (err) => {
       console.log(err)
-      commit('error', 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.')
+      commit('setStatus', {type: 'error', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
     })
   }
 }
