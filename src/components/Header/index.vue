@@ -74,35 +74,37 @@ export default {
 
   i { margin:2px 10px 0 0; }
 }
-.logo--block p { font-size:24px; }
-.logo--block .logo-img {
-  margin-left: 30px;
+.logo--block {
+  p { font-size:24px; }
+  .logo-img {
+    margin-left: 30px;
+  }
 }
 
 #gov-banner {
   background:#fff;
   padding:0 5%;
   text-align:center;
-}
-.gov-banner-outer {
-  margin:0 auto;
-  width:80%;
-}
-.gov-banner-inner { padding:2.3rem 10%; }
-.gov-banner-img {
-  float:left;
-  text-align:right;
-  padding-right:10px;
-
-  img{
-    border:none;
-    height:38px;
-    width:38px;
+  .gov-banner-outer {
+    margin:0 auto;
+    width:80%;
   }
-}
-.gov-banner-text {
-  font-size:14px;
-  float:left;
-  text-align:left;
+  .gov-banner-inner { padding:2.3rem 10%; }
+  .gov-banner-img {
+    float:left;
+    text-align:right;
+    padding-right:10px;
+
+    img{
+      border:none;
+      height:38px;
+      width:38px;
+    }
+  }
+  .gov-banner-text {
+    font-size:14px;
+    float:left;
+    text-align:left;
+  }
 }
 </style>
