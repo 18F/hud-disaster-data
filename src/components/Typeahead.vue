@@ -173,59 +173,63 @@ span {
       opacity:.4;
     }
 }
-#message {
-  color: #fff;
-  text-align: center;
-  height:50px;
-}
+
 .search-container {
   margin-top:125px;
   padding:0;
-}
-.search-wrapper {
-  .fa-times { cursor:pointer; }
-  .fa {
-    float: right;
-    font-size:24px;
-    position: relative;
-    top: -40px;
-    right: 18px;
-  }
-}
 
-/* Disaster list styles --------------------------------- */
-.disaster-list {
-  background-color: #fff;
-  box-shadow:0 5px 10px #000;
-  height:355px;
-  left:31px;
-  overflow-x:hidden;
-  overflow-y:scroll;
-  padding:0;
-  position: absolute;
-  right:11px;
-  top:136px;
-  z-index: 1000;
-}
-.disaster-list ul {
-  display:block;
-  margin:0;
-  list-style-type: none;
-}
-.disaster-list li:before { content: ''; }
-.disaster-list li {
-  display:block;
-  border-bottom: 1px solid #ccc;
-  margin:0;
-  line-height:20px;
-  cursor: pointer;
-  &:hover {
-    background-color: #f1f1f1;
-    span {
-      color: white;
+  div#message {
+    color: #fff;
+    text-align: center;
+    height:50px;
+  }
+
+  .search-wrapper {
+    .fa-times { cursor:pointer; }
+    .fa {
+      float: right;
+      font-size:24px;
+      position: relative;
+      top: -40px;
+      right: 18px;
+    }
+  }
+  .disaster-list {
+    background-color: #fff;
+    box-shadow:0 5px 10px #000;
+    height:355px;
+    left:31px;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    padding:0;
+    position: absolute;
+    right:11px;
+    top:136px;
+    z-index: 1000;
+    ul {
+      display:block;
+      margin:0;
+      list-style-type: none;
+      li {
+        display:block;
+        border-bottom: 1px solid #ccc;
+        margin:0;
+        line-height:20px;
+        cursor: pointer;
+        &:before { content: ''; }
+        &:hover {
+          background-color: #f1f1f1;
+          span {
+            color: white;
+          }
+        }
+      }
     }
   }
 }
+
+
+/* Disaster list styles --------------------------------- */
 /* Typeahead styles ----------------------------------- */
 .Typeahead {
   padding-bottom:20px;
