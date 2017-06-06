@@ -115,6 +115,37 @@ export default {
   div#saved_searches {
     height:50px;
 
+    select, input {
+      float:left;
+      display:block;
+      max-height:44px;
+    }
+    select {
+      -webkit-appearance: none;
+      -webkit-border-radius: 0px;
+      background: url("data:image/svg+xml;utf8,%3Csvg%20version%3D%271.1%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20xmlns%3Axlink%3D%27http%3A//www.w3.org/1999/xlink%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20fill%3D%27%23000%27%20d%3D%27M7.406%207.828l4.594%204.594%204.594-4.594%201.406%201.406-6%206-6-6z%27%3E%3C/path%3E%3C/svg%3E");
+      background-position: 100% 50%;
+      background-repeat: no-repeat;
+      background-color: white;
+      height: 44px;
+    }
+
+    button {
+      background:transparent;
+      border-radius:4px;
+      margin:0;
+      padding:10px;
+
+      &:focus {
+        box-shadow:none;
+      }
+    }
+
+    i {
+      cursor:pointer;
+      float:left;
+    }
+
     &>div {
       float:left;
       width:75%;
@@ -134,7 +165,9 @@ export default {
         opacity: 0.3;
       }
     }
+
   }
+
   ul {
     display:block;
     margin:0;
@@ -155,52 +188,25 @@ export default {
     line-height:20px;
     cursor: pointer;
   }
-}
-.extracts div#saved_searches {
-  select, input {
-    float:left;
-    display:block;
-    max-height:44px;
-  }
-  select {
-    -webkit-appearance: none;
-    -webkit-border-radius: 0px;
-    background: url("data:image/svg+xml;utf8,%3Csvg%20version%3D%271.1%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20xmlns%3Axlink%3D%27http%3A//www.w3.org/1999/xlink%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20fill%3D%27%23000%27%20d%3D%27M7.406%207.828l4.594%204.594%204.594-4.594%201.406%201.406-6%206-6-6z%27%3E%3C/path%3E%3C/svg%3E");
-    background-position: 100% 50%;
-    background-repeat: no-repeat;
-    background-color: white;
-    height: 44px;
-  }
-}
-.extracts div#saved_searches button{
-  background:transparent;
-  border-radius:4px;
-  margin:0;
-  padding:10px;
-}
-.extracts div#saved_searches button:focus {
-  box-shadow:none;
-}
-.extracts div#saved_searches i {
-  cursor:pointer;
-  float:left;
-}
-.extracts div#list {
-  background: url('/static/img/bg_25_opacity.png');
-  border:1px solid #353434;
-  clear:both;
-  overflow-y:scroll;
-  overflow:auto;
-  height:410px;
-}
-.extracts div#action-buttons {
-  height:50px;
-  margin-top:20px;
-  text-align: right;
 
-  button {
-  margin-left:20px;
-  margin-right:0;
+  div#list {
+    background: url('/static/img/bg_25_opacity.png');
+    border:1px solid #353434;
+    clear:both;
+    overflow-y:scroll;
+    overflow:auto;
+    height:410px;
+  }
+
+  div#action-buttons {
+    height:50px;
+    margin-top:20px;
+    text-align: right;
+
+    button {
+    margin-left:20px;
+    margin-right:0;
+    }
   }
 }
 </style>
