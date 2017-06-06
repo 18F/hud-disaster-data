@@ -123,11 +123,6 @@ export const getters = {
     if (state.currentExtract.length === 0) state.newExtract = false
     return state.newExtract
   },
-  defaultExtractName: state => {
-    let extracts = getSavedExtracts()
-    if (extracts && extracts.length > 0) return extracts[0].name
-    return ''
-  },
   status: state => {
     return state.status
   }
