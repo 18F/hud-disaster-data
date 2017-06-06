@@ -30,7 +30,9 @@ export const mutations = {
     }
     state.savedExtracts.push({
       name,
-      disasters: _.clone(state.currentExtract)
+      disasters: _.map(state.currentExtract, function (disaster) {
+        return `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`
+      })
     })
     setSavedExtracts(state.savedExtracts)
     state.newExtract = false
@@ -49,7 +51,10 @@ export const mutations = {
   loadExtract: function (state, name) {
     mutations.clearCurrentExtract(state)
     let savedExtracts = getSavedExtracts()
-    state.currentExtract = _.find(savedExtracts, { name }).disasters
+    let disasterNumbers = _.find(savedExtracts, {name}).disasters.join()
+    axios.get(`/api/disasternumber/${disasterNumbers}`).then((response) => {
+      state.currentExtract = response.data
+    })
     state.newExtract = false
   },
   updateDisasterList: function (state, { list }) {
