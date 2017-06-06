@@ -74,39 +74,37 @@ $check-color: #2e8540;
   button:focus {
     outline: 1px dotted $check-color;
   }
-}
-.disaster .select-button {
-  background:transparent;
-  color:#000;
-  margin: 0 2rem;
-  padding: 0;
+  .select-button {
+    background:transparent;
+    color:#000;
+    margin: 0 2rem;
+    padding: 0;
+    &:focus {
+      box-shadow:none;
+    }
+  }
+  input[type="checkbox"] {
+    position:relative;
+    left:0;
+    width:24px;
+    height:24px;
+  }
+  h5 {
+    font-family: "Source Sans Pro", "Roboto", sans-serif;
+  }
+  i.fa-check-square-o {
+    color: $check-color;
+  }
+  .counties {
+    background-color:#fff;
+    border:1px solid #ccc;
+    padding:10px;
+    margin-top:10px;
 
-}
-.disaster .select-button:focus {
-  box-shadow:none;
-}
-
-.disaster input[type="checkbox"] {
-  position:relative;
-  left:0;
-  width:24px;
-  height:24px;
-}
-.disaster h5 {
-  font-family: "Source Sans Pro", "Roboto", sans-serif;
-}
-.disaster i.fa-check-square-o {
-  color: $check-color;
-}
-.counties {
-  background-color:#fff;
-  border:1px solid #ccc;
-  padding:10px;
-  margin-top:10px;
-
-  ul li {
-    border:none;
-    display: block;
+    ul li {
+      border:none;
+      display: block;
+    }
   }
 }
 </style>
