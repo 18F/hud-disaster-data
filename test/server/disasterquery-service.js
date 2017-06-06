@@ -110,4 +110,15 @@ describe('/api/disasterquery/:qry', function () {
     .expect(200)
     .expect('Content-Type', /json/, done)
   })
+
+  it('should ignore trailing dashes', (done) => {
+    request(app).get('/api/disasterquery/DR-')
+    .expect(function (res) {
+      const body = res.body
+      body.length.should.be.aboveOrEqual(1)
+      body[0].declaredCountyArea.length.should.be.aboveOrEqual(1)
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
 })
