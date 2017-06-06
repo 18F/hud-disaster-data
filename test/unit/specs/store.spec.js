@@ -5,7 +5,7 @@ import axios from 'axios' // eslint-disable-line
 import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions } from '../../../src/store' // eslint-disable-line
 const { toggleCurrentExtract, clearCurrentExtract, updateDisasterList, saveExtract,
-        loadExtract, deleteExtract } = mutations
+        loadExtract, deleteExtract, resetStatus, error } = mutations
 const { loadDisasterList } = actions
 
 const TWO_RECORDS = [
@@ -160,6 +160,24 @@ describe('store', function () {
       })
       expect(mySavedExtract.length).to.be.equal(0)
       done()
+    })
+  })
+
+  describe('resetStatus', function () {
+    it('should reset status', function () {
+      let state = {status: { type: 'error', message: 'Testing error message' }}
+      resetStatus(state)
+      expect(state.status.type).to.be.equal('normal')
+    })
+  })
+
+  describe('error', function () {
+    it('should set the status type of error and message', function () {
+      let state = {status: { type: 'normal', message: '' }}
+      let msg = 'Testing Error Message'
+      error(state, msg)
+      expect(state.status.type).to.be.equal('error')
+      expect(state.status.message).to.be.equal(msg)
     })
   })
 })
