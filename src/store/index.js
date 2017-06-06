@@ -53,7 +53,10 @@ export const mutations = {
     let savedExtracts = getSavedExtracts()
     let disasterNumbers = _.find(savedExtracts, {name}).disasters.join()
     axios.get(`/api/disasternumber/${disasterNumbers}`).then((response) => {
-      state.currentExtract = response.data
+      state.currentExtract = _.map(response.data, (disaster) => {
+        disaster.currentExtract = true
+        return disaster
+      })
     })
     state.newExtract = false
   },
