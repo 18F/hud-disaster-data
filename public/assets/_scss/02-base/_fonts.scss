@@ -9,6 +9,17 @@ $merri-list: "bold","italic","light","regular";
           url('../fonts/merriweather-#{$current-merri}-webfont.woff2') format('woff2'),
           url('../fonts/merriweather-#{$current-merri}-webfont.woff') format('woff'),
           url('../fonts/merriweather-#{$current-merri}-webfont.ttf') format('truetype');
+      font-style:normal;
+      @if $current-merri == "bold" {
+        font-weight:700;
+      } @else if $current-merri == "italic" {
+        font-style:italic;
+        font-weight:400;
+      } @else if $current-merri == "light" {
+        font-weight:300;
+      } @else {
+        font-weight:400;
+      }
     }
 }
 
@@ -23,6 +34,17 @@ $source-list: "bold","italic","light","regular";
           url('../fonts/sourcesanspro-#{$current-source}-webfont.woff2') format('woff2'),
           url('../fonts/sourcesanspro-#{$current-source}-webfont.woff') format('woff'),
           url('../fonts/sourcesanspro-#{$current-source}-webfont.ttf') format('truetype');
+          font-style:normal;
+          @if $current-source == "bold" {
+            font-weight:700;
+          } @else if $current-source == "italic" {
+            font-style:italic;
+            font-weight:400;
+          } @else if $current-source == "light" {
+            font-weight:300;
+          } @else {
+            font-weight:400;
+          }
     }
 }
 
