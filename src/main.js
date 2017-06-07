@@ -7,6 +7,8 @@ import store from './store'
 import Typeahead from './components/Typeahead'
 import AppHeader from './components/Header'
 import AppFooter from './components/Footer'
+import es6Promise from 'es6-promise'
+es6Promise.polyfill()
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
