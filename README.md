@@ -20,7 +20,7 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 ## Setup
 ### Local environment
 #### Dependencies
-Install [node](https://nodejs.org/en/) (you probably want the stable version)
+Install [node](https://nodejs.org/en/) (You should get a 6.10.x version)
 
 Install [git](https://git-scm.com/)
 
