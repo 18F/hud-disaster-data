@@ -37,11 +37,25 @@
 <style lang="scss">
   /* -- Style Overrides ---------------------- */
   body{
-    background:url('static/img/map-background.svg') #323a45 center bottom no-repeat;
-    background-size:80% 80%;
+    background-image: url('static/img/map-background.svg');
+    background-color: #323a45;
+    background-position: 50% 65%;
+    background-repeat: no-repeat;
+    background-size:65% 75%;
   }
   button { border-radius: 0.3rem; }
   select:focus, input[type="text"]:focus { box-shadow:none; }
+
+  /* -- Font-awesome accessibility classes ---- */
+  .fa {
+    font-family: $sans-serif;
+    font-smoothing: none;
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+  }
+  .fa-external-link::before {
+    font-size: .75em;
+  }
 
   /* -- USA button overrrides ----------------- */
   .usa-button i, .usa-button-secondary i { margin-left:5px; }
