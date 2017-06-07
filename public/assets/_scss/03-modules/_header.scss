@@ -24,7 +24,7 @@
 .logo{
   &--block{
     padding:0px;
-    @include make-row(0);
+    @include make-xs-column(6,0);
 
     img,.logo-img{
       float:left;
@@ -47,5 +47,25 @@
       color:$color-white;
     }
   }
-
+}
+.avi{
+  &--block{
+    .icon--avatar {
+      display:inline-block;
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      background-image:url("../img/icon-avatar.jpg");
+      background-repeat:no-repeat;
+      background-size:contain;
+      img {
+        display:none;//remove later
+      }
+    }
+    .fa,i {
+      margin:8px 0 0 5px;
+      vertical-align: top;
+      color:$color-white;
+    }
+  }
 }

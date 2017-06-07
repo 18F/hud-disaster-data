@@ -9,25 +9,37 @@
               <div class="col Typeahead">
                 <div id="search">
                     <div class="offset-bg">
-                      <input type="text"
-                               class="Typeahead__input"
-                               placeholder="search by disaster number, type or state"
-                               autocomplete="off"
-                               v-model="query"
-                               @keydown.down="down"
-                               @keydown.up="up"
-                               @keydown.enter="hit"
-                               @keydown.esc="reset"
-                               @input="update"/>
-                               <i class="fa fa-spinner fa-spin" v-if="loading"></i>
-                                 <template v-else>
-                                   <i class="fa fa-search" v-show="isEmpty"></i>
-                                   <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
-                                 </template>
+                      <div class="search-wrapper">
+                        <label for="search-text" class="sr-only">search FEMA disasters</label>
+                        <input type="text" id="search-text"
+                                 class="Typeahead__input"
+                                 placeholder="Search by disaster number, type, or state"
+                                 autocomplete="off"
+                                 v-model="query"
+                                 @keydown.esc="reset"
+                                 @input="update"/>
+                        <i class="fa fa-spinner fa-spin" v-if="loading"></i>
+                        <template v-else>
+                          <i class="fa fa-search" v-show="isEmpty"></i>
+                          <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
+                        </template>
+                      </div>
+                      <div class="message-wrapper">
+                       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
+                         <div :class="status.type">
+                           <i class="m-icon fa fa-lg"></i>
+                           {{status.message}}
+                           <label for="app-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+                         </div>
+                         <button @click="hideMessage" class="usa-button clear-message" id="app-message-clear-button">
+                           <i class="close-message fa fa-times"></i>
+                         </button>
+                       </div>
+                      </div>
                       <div v-show="hasItems" class="disaster-list">
                         <ul class="disaster-search-recs">
-                          <li v-for="(item, $item) in items" :class="activeClass($item)" @mousemove="setActive($item)">
-                            <disaster :item="item"></disaster>
+                          <li v-for="(item, $item) in items">
+                            <disaster :prefix="'search'" :item="item"></disaster>
                           </li>
                         </ul>
                       </div>
@@ -47,51 +59,52 @@
 </template>
 
 <script>
-import VueTypeahead from '../lib/TypeAhead'
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
 import store from '../store'
 
 export default {
-  extends: VueTypeahead,
   components: {disaster, savedExtracts},
+  data () {
+    return {
+      query: '',
+      loading: false
+    }
+  },
   computed: {
     items () {
       return this.$store.getters.currentSearchResult
+    },
+    hasItems () {
+      return this.items.length > 0
+    },
+    isEmpty () {
+      return !this.query
+    },
+    isDirty () {
+      return !!this.query
+    },
+    status () {
+      return this.$store.getters.status
+    },
+    displayMessage () {
+      if (this.status.type === 'normal' || this.status.scope !== 'app') return false
+      return true
     }
   },
   methods: {
     update () {
-      this.cancel()
-
       if (!this.query) return this.reset()
       if (this.query.length < 2) return
 
       this.$store.dispatch('loadDisasterList', this.query)
     },
-    onHit (item) {
-      this.$store.commit('toggleCurrentExtract', item)
-      this.update()
-    },
     reset () {
       this.query = ''
       store.commit({type: 'clearSearch'})
     },
-    up () {
-      if (this.current > 0) {
-        this.current--
-      } else if (this.current === -1) {
-        this.current = this.items.length - 1
-      } else {
-        this.current = -1
-      }
-    },
-    down () {
-      if (this.current < this.items.length - 1) {
-        this.current++
-      } else {
-        this.current = -1
-      }
+    hideMessage () {
+      this.$store.commit('resetStatus')
     }
   }
 }
@@ -100,94 +113,7 @@ export default {
 
 <style src="../../public/assets/css/font-awesome.min.css"/>
 <style src="../../public/assets/_scss/app.scss" lang="scss"/>
-<style>
+<style lang="scss">
 /* global overrides ----------------------------------- */
-span {
-  display: block;
-  color: #2c3e50;
-}
-.active { background-color: #f1f1f1; }
-.active span {
-  color: white;
-}
-.screen-name { font-style: italic; }
-.no-padding { padding: 0; }
-.wrapper input[type="text"] { width:100%; max-width:100%; }
-
-#opaque-bg {
-  background: url('/static/img/bg_50_opacity.png');
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  margin:0 auto;
-  overflow: hidden;
-}
-.offset-bg {
-  padding:0 10px 0 30px;
-}
-#message {
-  color: #fff;
-  text-align: center;
-  height:50px;
-}
-.search-container {
-  margin-top:125px;
-  padding:0;
-}
-#search .fa-times { cursor:pointer; }
-#search .fa-search, #search .fa-times, #search .fa-spinner {
-  float: right;
-  font-size:24px;
-  position: relative;
-  top: -40px;
-  right: 18px;
-}
-
-/* Typeahead styles ----------------------------------- */
-.Typeahead {
-  padding-bottom:20px;
-}
-.Typeahead__input {
-  font-size: 14px;
-  color: #2c3e50;
-  line-height: 1.42857143;
-  font-weight: 300;
-  border: 1px solid #ccc;
-  letter-spacing: 1px;
-  box-sizing: border-box;
-}
-.Typeahead__input:focus {
-  outline: 0;
-}
-.link-advanced-search {
-  padding:20px 40px;
-  text-align:right;
-}
-
-/* Disaster list styles --------------------------------- */
-.disaster-list {
-  background-color: #fff;
-  box-shadow:0 5px 10px #000;
-  height:355px;
-  left:31px;
-  overflow-x:hidden;
-  overflow-y:scroll;
-  padding:0;
-  position: absolute;
-  right:11px;
-  top:136px;
-  z-index: 1000;
-}
-.disaster-list ul, #extracts {
-  display:block;
-  margin:0;
-  list-style-type: none;
-}
-.disaster-list li:before, #extracts li:before { content: ''; }
-.disaster-list li, #extracts li {
-  display:block;
-  border-bottom: 1px solid #ccc;
-  margin:0;
-  line-height:20px;
-  cursor: pointer;
-}
+// moved styles to _scss/03-modules/typeahead.scss
 </style>
