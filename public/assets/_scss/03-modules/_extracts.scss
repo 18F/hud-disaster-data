@@ -34,6 +34,10 @@
       &:focus {
         box-shadow:none;
       }
+
+      &:disabled i {
+        cursor: default;
+      }
     }
 
     i {
