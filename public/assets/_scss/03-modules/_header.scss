@@ -8,7 +8,7 @@
 
     p {
       margin:0;
-      font-size:rem($small-font-size);
+      font-size:1.2rem;
       color:$color-white;
       @include make-row(0);
     }
