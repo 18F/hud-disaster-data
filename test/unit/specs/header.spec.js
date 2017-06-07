@@ -10,7 +10,7 @@ describe('Header index.vue', () => {
     const Constructor = Vue.extend(index)
     const vm = new Constructor().$mount()
     Vue.nextTick(function () {
-      expect(vm.$el.textContent).to.be.equal('An official website of the United States Government  Disaster Data Portal')
+      expect(vm.$refs.title.textContent).to.be.equal(vm.title)
       done()
     })
   })

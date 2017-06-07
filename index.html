@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>HUD Disaster Data Portal</title>
@@ -16,10 +16,10 @@
     <div id="search-extract" class="container">
       <typeahead></typeahead>
     </div>
+    <app-footer></app-footer>
   </div>
 </body>
 
-<script src="build/build.js"></script>
 <script>
   ! function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0],
@@ -33,12 +33,73 @@
   }(document, 'script', 'twitter-wjs');
 </script>
 
-<style>
+<style lang="scss">
   /* -- Style Overrides ---------------------- */
   body{
-    background:url('static/img/map-background.svg') #323a45 center bottom no-repeat;
-    background-size:80% 80%;
+    background-image: url('static/img/map-background.png');
+    background-color: #323a45;
+    background-position: 50% 65%;
+    background-repeat: no-repeat;
+    background-size:55% 70%;
   }
-  button { border-radius:4px; }
+  button { border-radius: 0.3rem; }
+  select:focus, input[type="text"]:focus { box-shadow:none; }
+
+  /* -- Font-awesome accessibility classes required by 18F  ---- */
+  .fa {
+    font-family: $sans-serif;
+    font-smoothing: none;
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+  }
+  .fa-external-link::before {
+    font-size: .75em;
+  }
+
+  /* -- USA button overrrides ----------------- */
+  .usa-button i, .usa-button-secondary i { margin-left:5px; }
+  .usa-button, .usa-button:hover, .usa-button:active, .usa-button:focus,
+  .usa-button-secondary, .usa-button-secondary:hover, .usa-button-secondary:active, .usa-button-secondary:focus,
+  .usa-button.green, .usa-button.green:hover, .usa-button.green:active, .usa-button.green:focus,
+  .usa-button.alt-button, .usa-button-alt:hover, .usa-button-alt:active, .usa-button-alt:focus,
+  .usa-banner-button-alt, .usa-banner-button-alt:hover, .usa-banner-button-alt:active, .usa-banner-button-alt:focus
+   { box-shadow:none; }
+
+  .usa-button.green {
+    background-color:#2e8540;
+    color:#fff;
+  }
+  .usa-button.green:hover { background-color:#247334;  }
+  .usa-button.green:active { background-color:#1a5f28; }
+  .usa-button.alt-button {
+    background:transparent;
+    color:#fff;
+    border:1px solid #fff;
+  }
+  .usa-button.alt-button:hover { border:1px solid #e3e4e5; }
+  .usa-button.alt-button:active { border:1px solid #909396; }
+  div#search-extract { padding:30px 0 60px 0; }
+
+  .usa-banner-button-alt {
+  	background-color: transparent;
+  	border: 0;
+    color: #fff;
+  	display: inline;
+  	font-size: 1.2rem;
+  	margin: 0 0 0 5px;
+  	outline: 0;
+  	padding: 0;
+  	text-decoration: underline;
+    text-align: left;
+    -webkit-font-smoothing: auto;
+  }
+  .usa-banner-button-alt:hover { background: transparent; text-decoration: underline; }
+  .usa-banner-button-alt i:before { content: "\f107"; }
+  .usa-banner-button-alt.expanded i:before { content: "\f106"; }
+  .usa-banner-button-alt i {
+    color:#fff;
+    margin-left:3px;
+    font-size:14px;
+  }
 </style>
 </html>

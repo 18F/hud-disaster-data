@@ -3,14 +3,14 @@
     margin:0 0 40px;
   }
   &--pre{
-    padding:10px 20px;
+    padding:10px 0;
     background:$brand-primary;
 
     p {
       margin:0;
-      font-size:rem($small-font-size);
+      font-size:1.2rem;
       color:$color-white;
-      @include make-row();
+      @include make-row(0);
     }
   }
   &--masthead{
@@ -24,7 +24,7 @@
 .logo{
   &--block{
     padding:0px;
-    @include make-row();
+    @include make-xs-column(6,0);
 
     img,.logo-img{
       float:left;
@@ -42,10 +42,30 @@
 
     p{
       padding:35px 0 0;
-      font-size:rem($lead-font-size);
+      font-size:24px;//update variable later
       line-height:1;
       color:$color-white;
     }
   }
-
+}
+.avi{
+  &--block{
+    .icon--avatar {
+      display:inline-block;
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      background-image:url("../img/icon-avatar.jpg");
+      background-repeat:no-repeat;
+      background-size:contain;
+      img {
+        display:none;//remove later
+      }
+    }
+    .fa,i {
+      margin:8px 0 0 5px;
+      vertical-align: top;
+      color:$color-white;
+    }
+  }
 }

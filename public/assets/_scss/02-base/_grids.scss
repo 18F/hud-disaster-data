@@ -1,0 +1,6 @@
+.container-block{
+  //@include make-row(0);
+  @include container-fixed;
+  @include objectLarge;
+  background:none;
+}
