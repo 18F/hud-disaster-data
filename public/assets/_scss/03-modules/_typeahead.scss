@@ -68,13 +68,14 @@ span {
   }
 
   .search-wrapper {
-    .fa-times { cursor:pointer; }
+    .fa-times { cursor:pointer;}
     .fa {
       float: right;
       font-size:24px;
       position: relative;
-      top: -40px;
+      top: -38px;
       right: 18px;
+      background-color:#fff;
     }
   }
   .disaster-list {
