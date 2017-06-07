@@ -1,5 +1,8 @@
 $usa-form-width: 32rem;
 
+input,select{
+  @include Sourcesans;
+}
 form {
   @include media($medium-screen) {
     max-width: $usa-form-width;

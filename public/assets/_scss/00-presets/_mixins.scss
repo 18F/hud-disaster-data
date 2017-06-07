@@ -101,3 +101,13 @@
     }
   }
 }
+
+@mixin fontAwesome{
+  font-family:'fontAwesome';
+}
+@mixin Merriweather(){
+  font-family:'merriweather';
+}
+@mixin Sourcesans(){
+  font-family:'sourcesanspro';
+}

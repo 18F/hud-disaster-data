@@ -1,0 +1,28 @@
+//MERRIWEATHER FONT DEC LOOP
+$merri-list: "bold","italic","light","regular";
+@each $current-merri in $merri-list {
+    $i: index($merri-list, $current-merri);
+    @font-face{
+      font-family:'merriweather';
+      src:url('../fonts/merriweather-#{$current-merri}-webfont.eot');
+      src:url('../fonts/merriweather-#{$current-merri}-webfont.eot#iefix') format('embedded-opentype'),
+          url('../fonts/merriweather-#{$current-merri}-webfont.woff2') format('woff2'),
+          url('../fonts/merriweather-#{$current-merri}-webfont.woff') format('woff'),
+          url('../fonts/merriweather-#{$current-merri}-webfont.ttf') format('truetype');
+    }
+}
+
+//SOURCE SANS PRO FONT DEC LOOP
+$source-list: "bold","italic","light","regular";
+@each $current-source in $source-list {
+    $i: index($source-list, $current-source);
+    @font-face{
+      font-family:'sourcesanspro';
+      src:url('../fonts/sourcesanspro-#{$current-source}-webfont.eot');
+      src:url('../fonts/sourcesanspro-#{$current-source}-webfont.eot#iefix') format('embedded-opentype'),
+          url('../fonts/sourcesanspro-#{$current-source}-webfont.woff2') format('woff2'),
+          url('../fonts/sourcesanspro-#{$current-source}-webfont.woff') format('woff'),
+          url('../fonts/sourcesanspro-#{$current-source}-webfont.ttf') format('truetype');
+    }
+}
+
