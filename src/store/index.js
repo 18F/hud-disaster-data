@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import _ from 'lodash'
+import es6Promise from 'es6-promise'
+es6Promise.polyfill()
 Vue.use(Vuex)
 
 function findDisaster (list, disaster) {
