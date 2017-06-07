@@ -102,8 +102,15 @@ $check-color: #2e8540;
     margin-top:10px;
 
     ul li {
+      background-color: transparent;
       border:none;
       display: block;
+      padding-left:10px;
+      line-height:36px;
+    }
+
+    ul li:hover {
+      background-color:#f1f1f1;
     }
   }
 }
