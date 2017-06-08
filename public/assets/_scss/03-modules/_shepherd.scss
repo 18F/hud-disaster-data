@@ -7,7 +7,7 @@
   left: 0;
   z-index: 1040;
   background-color: #000000;
-  opacity: .4;
+  opacity: .5;
 }
 body:not(.shepherd-active) #tour-backdrop {
     display: none;
@@ -15,9 +15,11 @@ body:not(.shepherd-active) #tour-backdrop {
 .shepherd-enabled {
   z-index: 1042;
   position: relative;
+  outline: 2px solid white;
 }
 .shepherd-step {
   z-index: 1042;
+  outline: none;
 }
 
 .shepherd-element.shepherd-theme-square .shepherd-content footer .shepherd-buttons {
