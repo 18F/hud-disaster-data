@@ -46,7 +46,7 @@
           <p ref="title">{{title}}</p>
         </div>
         <div class="avi avi--block pull-right">
-          <span class="icon icon--avatar"><img src="/public/assets/img/icon-avatar.jpeg" /></span>
+          <span class="icon icon--avatar"></span>
           <i class=" fa fa-caret-down"></i>
         </div>
       </div>
@@ -65,4 +65,3 @@ export default {
   }
 }
 </script>
-
