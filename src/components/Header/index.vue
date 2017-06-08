@@ -45,7 +45,7 @@
           <span class="logo-img" alt="U.S. Department of Housing and Urban Development logo"></span>
           <p ref="title">{{title}}</p>
         </div>
-        <div class="avi avi--block pull-right">
+        <div class="avi avi--block pull-right" @click="startTour">
           <span class="icon icon--avatar"></span>
           <i class=" fa fa-caret-down"></i>
         </div>
@@ -55,12 +55,18 @@
 </template>
 
 <script>
+import tour from '../../tour'
 export default {
   data () {
     return {
       title: 'Disaster Data Portal',
       premsg: 'An official website of the United States Government',
       showGovBanner: false
+    }
+  },
+  methods: {
+    startTour () {
+      tour.start()
     }
   }
 }

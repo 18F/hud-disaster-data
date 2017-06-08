@@ -37,7 +37,7 @@ tour.addStep('enter-search', {
 })
 .addStep('save-search', {
   text: 'You\'ve selected a disaster and it is now listed here. You can either export the associated FEMA data, or save this search to export the data in the future.',
-  attachTo: '#saved_searches',
+  attachTo: '#saved_searches top',
   buttons: backNext
 })
 
