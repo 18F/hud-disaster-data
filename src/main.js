@@ -7,6 +7,7 @@ import store from './store'
 import Typeahead from './components/Typeahead'
 import AppHeader from './components/Header'
 import AppFooter from './components/Footer'
+import tour from './tour'
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 
@@ -16,6 +17,9 @@ Vue.prototype.$http = Axios
 
 /* eslint-disable no-new */
 new Vue({
+  mounted () {
+    tour.start()
+  },
   el: '#page',
   store,
   components: {

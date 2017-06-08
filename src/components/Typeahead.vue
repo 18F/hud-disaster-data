@@ -76,7 +76,7 @@ export default {
       return this.$store.getters.currentSearchResult
     },
     hasItems () {
-      return this.items.length > 0
+      return this.items && this.items.length > 0
     },
     isEmpty () {
       return !this.query
@@ -109,9 +109,4 @@ export default {
   }
 }
 </script>
-
 <style src="../../public/assets/_scss/app.scss" lang="scss"/>
-<style lang="scss">
-/* global overrides ----------------------------------- */
-// moved styles to _scss/03-modules/typeahead.scss
-</style>
