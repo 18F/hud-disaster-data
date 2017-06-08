@@ -8,37 +8,34 @@ const tour = new Shepherd.Tour({
   }
 })
 
-let backNext = [
-  {
-    text: 'Back',
-    action: tour.back
-  },
-  {
-    text: 'Next',
-    action: tour.next
-  }
-]
+let back = {
+  text: 'Back',
+  action: tour.back
+}
+let next = {
+  text: 'Next',
+  action: tour.next
+}
+let cancel = {
+  text: 'Cancel',
+  action: tour.cancel
+}
 
 tour.addStep('enter-search', {
   text: 'Start here by typing in a FEMA disaster ID in the format "DR-4272-TX"',
   attachTo: '.search-wrapper bottom',
   advanceOn: '.disaster-search-recs DOMSubtreeModified',
-  buttons: [
-    {
-      text: 'Next',
-      action: tour.next
-    }
-  ]
+  buttons: [cancel]
 })
 .addStep('select-disasters', {
   text: 'Click the box to select a disaster',
   attachTo: '.disaster-list top',
-  buttons: backNext
+  buttons: [back, next]
 })
 .addStep('save-search', {
   text: 'You\'ve selected a disaster and it is now listed here. You can either export the associated FEMA data, or save this search to export the data in the future.',
   attachTo: '#saved_searches top',
-  buttons: backNext
+  buttons: [back, next]
 })
 
 export default {
