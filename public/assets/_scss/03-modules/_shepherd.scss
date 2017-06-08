@@ -1,5 +1,4 @@
-@import "../../../node_modules/tether-shepherd/dist/css/shepherd-theme-dark.css";
-@import "../../../node_modules/tether-shepherd/dist/css/shepherd-theme-arrows.css";
+@import "../../../node_modules/tether-shepherd/dist/css/shepherd-theme-square.css";
 #tour-backdrop {
   position: fixed;
   top: 0;
@@ -13,16 +12,19 @@
 body:not(.shepherd-active) #tour-backdrop {
     display: none;
 }
-.shepherd-target {
+.shepherd-enabled {
   z-index: 1042;
   position: relative;
 }
 .shepherd-step {
   z-index: 1042;
-  ul.shepherd-buttons {
-    li:before {
+}
+
+.shepherd-element.shepherd-theme-square .shepherd-content footer .shepherd-buttons {
+  li {
+    &:before {
       content: "";
-      display: inline;
     }
+    display: inline-block;
   }
 }
