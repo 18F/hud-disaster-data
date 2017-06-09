@@ -25,7 +25,7 @@
                         </template>
                       </div>
                       <div class="message-wrapper">
-                       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
+                       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages" id="search-message">
                          <div :class="status.type">
                            <i class="m-icon fa fa-lg"></i>
                            {{status.message}}
@@ -61,7 +61,6 @@
 <script>
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
-import store from '../store'
 
 export default {
   components: {disaster, savedExtracts},
@@ -101,7 +100,7 @@ export default {
     },
     reset () {
       this.query = ''
-      store.commit({type: 'clearSearch'})
+      this.$store.commit({type: 'clearSearch'})
     },
     hideMessage () {
       this.$store.commit('resetStatus')

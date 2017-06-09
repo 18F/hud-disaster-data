@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     startTour () {
-      tour.start()
+      tour.start(this.$store)
     }
   }
 }
