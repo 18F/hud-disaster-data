@@ -1,9 +1,8 @@
 import Shepherd from 'tether-shepherd'
 import $store from './store'
-let unwatchStatus
+import _ from 'lodash'
 
-// let $store
-const tour = new Shepherd.Tour({
+const disasterSearchTour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-element shepherd-open shepherd-theme-square',
     showCancelLink: true,
@@ -13,18 +12,14 @@ const tour = new Shepherd.Tour({
 
 let back = {
   text: 'Back',
-  action: tour.back
+  action: disasterSearchTour.back
 }
 let next = {
   text: 'Next',
-  action: tour.next
+  action: disasterSearchTour.next
 }
-// let cancel = {
-//   text: 'Cancel',
-//   action: tour.cancel
-// }
 
-tour.addStep('enter-search', {
+disasterSearchTour.addStep('enter-search', {
   text: 'Start here by typing in a FEMA disaster ID in the format "DR-4272-TX"',
   attachTo: '.search-wrapper right',
   when: {
@@ -33,7 +28,20 @@ tour.addStep('enter-search', {
       input.focus()
       input.select()
     }
-  }
+  },
+  buttons: [
+    {
+      text: 'Next',
+      action: () => {
+        if (_.get($store.getters.status, 'scope') === 'app') {
+          disasterSearchTour.cancel()
+          appErrorTour.start()
+        } else if ($store.getters.currentSearchResult.length > 0) {
+          disasterSearchTour.next()
+        }
+      }
+    }
+  ]
 })
 .addStep('select-disasters', {
   text: 'Click the box to select a disaster',
@@ -60,7 +68,7 @@ const appErrorTour = new Shepherd.Tour({
       text: 'Back',
       action: () => {
         appErrorTour.cancel()
-        tour.start()
+        disasterSearchTour.start()
       }
     }
   ]
@@ -69,13 +77,10 @@ const appErrorTour = new Shepherd.Tour({
 export default {
   start () {
     if (Shepherd.activeTour) return
-    if (unwatchStatus) unwatchStatus()
-    unwatchStatus = $store.watch(state => state.status, (status) => {
-      if (status.scope === 'app') {
-        tour.cancel()
-        appErrorTour.start()
-      }
-    })
-    tour.start()
+    disasterSearchTour.start()
+  },
+  tours: {
+    disasterSearchTour,
+    appErrorTour
   }
 }
