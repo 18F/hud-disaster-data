@@ -46,7 +46,20 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('select-disasters', {
   text: 'Click the box to select a disaster',
   attachTo: '.disaster-list right',
-  buttons: [back, next]
+  buttons: [
+    back,
+    {
+      text: 'Next',
+      action: () => {
+        if ($store.getters.currentExtract.length === 0) {
+          disasterSearchTour.cancel()
+          appErrorTour.show('show-non-selected-error')
+        } else {
+          disasterSearchTour.next()
+        }
+      }
+    }
+  ]
 })
 .addStep('save-search', {
   text: 'You\'ve selected a disaster and it is now listed here. You can either export the associated FEMA data, or save this search to export the data in the future.',
@@ -69,6 +82,19 @@ const appErrorTour = new Shepherd.Tour({
       action: () => {
         appErrorTour.cancel()
         disasterSearchTour.start()
+      }
+    }
+  ]
+})
+.addStep('show-non-selected-error', {
+  text: 'Looks like you selected no disasters.  Click try again and try selecting one or more disasters',
+  attachTo: '.disaster-list right',
+  buttons: [
+    {
+      text: 'Try Again',
+      action: () => {
+        appErrorTour.cancel()
+        disasterSearchTour.show('select-disasters')
       }
     }
   ]
