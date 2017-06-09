@@ -43,7 +43,10 @@
     }
   }
 }
-
+// MAX OBJECT SIZES
+@mixin objectLarge{
+  max-width:1280px;
+}
 // Content size helpers
 @mixin allow-layout-classes {
 
@@ -97,4 +100,14 @@
       margin-left: 2em;
     }
   }
+}
+
+@mixin fontAwesome{
+  font-family:'fontAwesome';
+}
+@mixin Merriweather(){
+  font-family:'merriweather';
+}
+@mixin Sourcesans(){
+  font-family:'sourcesanspro';
 }

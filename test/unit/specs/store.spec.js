@@ -5,7 +5,7 @@ import axios from 'axios' // eslint-disable-line
 import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions } from '../../../src/store' // eslint-disable-line
 const { toggleCurrentExtract, clearCurrentExtract, updateDisasterList, saveExtract,
-        loadExtract, deleteExtract } = mutations
+        loadExtract, deleteExtract, resetStatus, setStatus } = mutations
 const { loadDisasterList } = actions
 
 const TWO_RECORDS = [
@@ -91,6 +91,47 @@ describe('store', function () {
       }
       loadDisasterList({ commit }, 'DR')
     })
+
+    it('when loading the data, if a non JSON result is returned, set error status and proper message', function (done) {
+      moxios.uninstall()
+      moxios.install()
+      moxios.wait(function () {
+        let request = moxios.requests.mostRecent()
+        request.respondWith({
+          status: 404,
+          response: '<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"></html>'
+        })
+      })
+
+      let commit = function (name, data) {
+        if (name === 'setStatus') {
+          expect(data).to.have.property('type').that.is.equal('error')
+          expect(data).to.have.property('msg').that.is.equal('HUD disaster data is unavailable at this time.  Try again later or contact your administrator.')
+          done()
+        }
+      }
+      loadDisasterList({ commit }, 'DR')
+    })
+    it('when loading the data, if no data is returned, set info status and proper message', function (done) {
+      moxios.uninstall()
+      moxios.install()
+      moxios.wait(function () {
+        let request = moxios.requests.mostRecent()
+        request.respondWith({
+          status: 200,
+          response: []
+        })
+      })
+
+      let commit = function (name, data) {
+        if (name === 'setStatus') {
+          expect(data).to.have.property('type').that.is.equal('info')
+          expect(data).to.have.property('msg').that.is.equal('No results found!')
+          done()
+        }
+      }
+      loadDisasterList({ commit }, 'DR')
+    })
   })
 
   describe('Saving Retrieving and Deleting Extracts', function () {
@@ -133,12 +174,22 @@ describe('store', function () {
       done()
     })
 
-    it('should load saved extract to currentExtract from localStorage', function (done) {
+    it('should load saved extract to currentExtract from API endpoint', function (done) {
+      moxios.install()
+      moxios.wait(function () {
+        let request = moxios.requests.mostRecent()
+        request.respondWith({
+          status: 200,
+          response: _.clone(TWO_RECORDS)
+        }).then(function () {
+          debugger
+          expect(state.savedExtracts.length).to.be.above(0)
+          expect(state.currentExtract.length).to.be.equal(2)
+          done()
+        })
+      })
       saveExtract(state, 'TESTSavedExtract')
       loadExtract(state, 'TESTSavedExtract')
-      expect(state.savedExtracts.length).to.be.above(0)
-      expect(state.currentExtract.length).to.be.equal(2)
-      done()
     })
 
     it('should delete saved extract from savedExtracts', function (done) {
@@ -160,6 +211,24 @@ describe('store', function () {
       })
       expect(mySavedExtract.length).to.be.equal(0)
       done()
+    })
+  })
+
+  describe('resetStatus', function () {
+    it('should reset status', function () {
+      let state = {status: { type: 'error', message: 'Testing error message' }}
+      resetStatus(state)
+      expect(state.status.type).to.be.equal('normal')
+    })
+  })
+
+  describe('setStatus', function () {
+    it('should set the status type of status and message', function () {
+      let state = {status: { type: 'normal', message: '' }}
+      let msg = 'Testing Error Message'
+      setStatus(state, {type: 'info', msg})
+      expect(state.status.type).to.be.equal('info')
+      expect(state.status.message).to.be.equal(msg)
     })
   })
 })

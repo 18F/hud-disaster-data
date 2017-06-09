@@ -1,4 +1,3 @@
-/* global Event, describe, it, expect, sinon */
 import 'es6-promise/auto' // eslint-disable-line
 import Vue from 'vue' // eslint-disable-line
 import Vuex from 'vuex' // eslint-disable-line
@@ -126,20 +125,86 @@ describe('SavedExtracts component', function () {
     store = new Vuex.Store({state: {}, mutations, getters})
     const Constructor = Vue.extend(SavedExtracts)
     const vm = new Constructor({store}).$mount()
-    let $messages = vm.$el.querySelector('#messages')
+    let $messages = vm.$el.querySelector('.messages')
     expect($messages.style.display).to.be.equal('none')
   })
 
   it('should call resetStatus when the x is clicked', function (done) {
     const Constructor = Vue.extend(SavedExtracts)
     const vm = new Constructor({store}).$mount()
-    let $messages = vm.$el.querySelector('#messages')
-    expect($messages.style.display).to.be.equal('')
-    let $x = vm.$el.querySelector('#messages .close-message')
+    let $messages = vm.$el.querySelector('.messages')
+    expect($messages.style.display).to.be.equal('none')
+    let $x = vm.$el.querySelector('.clear-message')
     dispatchEvent($x, 'click')
     Vue.nextTick(() => {
       expect(mutations.resetStatus.called).to.equal(true)
       done()
+    })
+  })
+
+  it('dropdown should default to "Saved searches" on page load even if there are saved searches', function () {
+    getters.savedExtracts = () => [{name: 'test', disasters: TWO_RECORDS}]
+    store = new Vuex.Store({state: {}, mutations, getters})
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    expect(vm.selectedExtractName).to.be.equal('')
+  })
+
+  it('should show "Saved searches..." and empty the current extract when clear is clicked', function (done) {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $button = vm.$el.querySelector('#clear-button')
+    dispatchEvent($button, 'click')
+    Vue.nextTick(() => {
+      expect(mutations.clearCurrentExtract.called).to.equal(true)
+      expect(vm.selectedExtractName).to.be.equal('')
+      done()
+    })
+  })
+
+  it('should disable the delete-button when there is no selected extract', function () {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $button = vm.$el.querySelector('#delete-button')
+    expect(vm.selectedExtractName).to.be.equal('')
+    expect($button.disabled)
+  })
+
+  it('should disable the save-button when newExtract is false', function () {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $button = vm.$el.querySelector('#save-button')
+    expect(vm.selectedExtractName).to.be.equal('')
+    expect($button.disabled)
+  })
+
+  describe('displayMessage', function () {
+    it('should return false if status.type is normal', function () {
+      getters.status = function () {
+        return { type: 'normal' }
+      }
+      store = new Vuex.Store({state: {}, mutations, getters})
+      const Constructor = Vue.extend(SavedExtracts)
+      const vm = new Constructor({store}).$mount()
+      expect(vm.displayMessage).to.be.equal(false)
+    })
+    it('should return false if status.scope is not "extract"', function () {
+      getters.status = function () {
+        return { type: 'error', scope: 'app' }
+      }
+      store = new Vuex.Store({state: {}, mutations, getters})
+      const Constructor = Vue.extend(SavedExtracts)
+      const vm = new Constructor({store}).$mount()
+      expect(vm.displayMessage).to.be.equal(false)
+    })
+    it('should return true if status.scope is "extract"', function () {
+      getters.status = function () {
+        return { type: 'error', scope: 'extract' }
+      }
+      store = new Vuex.Store({state: {}, mutations, getters})
+      const Constructor = Vue.extend(SavedExtracts)
+      const vm = new Constructor({store}).$mount()
+      expect(vm.displayMessage).to.be.equal(true)
     })
   })
 })
