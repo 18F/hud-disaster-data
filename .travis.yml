@@ -8,7 +8,7 @@ before_script:
 - npm install
 script:
 - npm run build
-- [ -n "$SONAR_TOKEN" ] && sonar-scanner
+- if [[ -n "$SONAR_TOKEN" ]]; then sonar-scanner; else echo "skipping SonarQube upload"; fi
 addons:
   sonarqube:
     organization: flexion
