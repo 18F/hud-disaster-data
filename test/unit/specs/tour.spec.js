@@ -50,7 +50,50 @@ describe('tour', () => {
     showMessageStub.restore()
     currentStepStub.restore()
   })
-
+  describe('start', () => {
+    it('should start the tour', () => {
+      let stub = sinon.stub(tour.tour, 'start')
+      tour.start()
+      expect(stub.called).to.equal(true)
+      stub.restore()
+    })
+    it('should not start the tour if one is already started', () => {
+      let shepherd = require('tether-shepherd')
+      shepherd.activeTour = true
+      let stub = sinon.stub(tour.tour, 'start')
+      tour.start()
+      expect(stub.called).to.equal(false)
+      stub.restore()
+    })
+  })
+  describe('showError', () => {
+    it('should hide the message and show the error', () => {
+      let elements = {
+        '.tour-message': [{style: {}}],
+        '.tour-error': [{style: {}}]
+      }
+      let stub = sinon.stub(document, 'querySelectorAll').callsFake(selector => elements[selector])
+      showErrorStub.restore()
+      tour.showError()
+      expect(elements['.tour-message'][0].style.display).to.equal('none')
+      expect(elements['.tour-error'][0].style.display).to.equal('block')
+      stub.restore()
+    })
+  })
+  describe('showMessage', () => {
+    it('should hide the error and show the message', () => {
+      let elements = {
+        '.tour-message': [{style: {}}],
+        '.tour-error': [{style: {}}]
+      }
+      let stub = sinon.stub(document, 'querySelectorAll').callsFake(selector => elements[selector])
+      showMessageStub.restore()
+      tour.showMessage()
+      expect(elements['.tour-message'][0].style.display).to.equal('block')
+      expect(elements['.tour-error'][0].style.display).to.equal('none')
+      stub.restore()
+    })
+  })
   describe('enter-search', () => {
     describe('show', () => {
       it('should give focus to #search-text and select it\'s contents', () => {

@@ -1,6 +1,5 @@
 import Shepherd from 'tether-shepherd'
-import $ from 'jquery'
-let $store = require('./store')
+let $store
 
 const disasterSearchTour = new Shepherd.Tour({
   defaults: {
@@ -125,7 +124,8 @@ disasterSearchTour.addStep('enter-search', {
 })
 
 const TourObject = {
-  start () {
+  start (store) {
+    this.setStore(store)
     if (Shepherd.activeTour) return
     disasterSearchTour.start()
   },
@@ -134,12 +134,13 @@ const TourObject = {
     if (store) $store = store
   },
   showError () {
-    $('.tour-message').hide()
-    $('.tour-error').show()
+    debugger
+    document.querySelectorAll('.tour-message').forEach($el => ($el.style.display = 'none'))
+    document.querySelectorAll('.tour-error').forEach($el => ($el.style.display = 'block'))
   },
   showMessage () {
-    $('.tour-error').hide()
-    $('.tour-message').show()
+    document.querySelectorAll('.tour-error').forEach($el => ($el.style.display = 'none'))
+    document.querySelectorAll('.tour-message').forEach($el => ($el.style.display = 'block'))
   }
 }
 export default TourObject
