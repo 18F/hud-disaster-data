@@ -117,10 +117,69 @@ disasterSearchTour.addStep('enter-search', {
     }
   ]
 })
-.addStep('save-search', {
-  text: 'You\'ve selected a disaster and it is now listed here. You can either export the associated FEMA data, or save this search to export the data in the future.',
-  attachTo: '.extracts left',
+.addStep('export-data', {
+  text: `
+  <p>
+  You’ve selected a disaster and it is now listed here.
+  You can export the associated FEMA data now, or save this search to export the data in the future.
+  You can also search for additional disasters to add too this list.
+  </p>
+  <p>
+  First, let’s try exporting the data.
+  </p>
+  <p>To get household level data for the disaster selected, click the export button.</p>
+  <p>Your computer will download a .csv formatted file</p>
+  `,
+  attachTo: '#export-button top',
   buttons: [back, next]
+})
+.addStep('mutiple-disaster-select', {
+  text: `
+  <div class="tour-message">
+    <p>
+    If you want to export data for multiple disasters at the same time, you can search for another disaster and add it to the list.
+    </p>
+    <p>
+    Try typing in the postal code for your state (example, “TX”, “LA”, “CA")
+    </p>
+  </div>
+  <div class="tour-error">
+  It looks like you entered an invalid postal code.  Try typing "TX".
+  </div>
+  `,
+  attachTo: '.search-wrapper left',
+  when: {
+    show: function () {
+      if (this.error) {
+        this.error = false
+        return
+      }
+      TourObject.showMessage()
+      $store.commit('clearSearch')
+      const input = document.getElementById('search-text')
+      input.focus()
+      input.value = ''
+      input.dispatchEvent(new Event('hdd.clear'))
+    }
+  },
+  buttons: [
+    back,
+    {
+      text: 'Next',
+      action: function () {
+        let step = disasterSearchTour.getCurrentStep()
+        if ($store.getters.currentSearchResult.length > 0) {
+          disasterSearchTour.next()
+        } else {
+          step.hide()
+          TourObject.showError()
+          step.error = true
+          step.show()
+        }
+      }
+    }
+
+  ]
 })
 
 const TourObject = {

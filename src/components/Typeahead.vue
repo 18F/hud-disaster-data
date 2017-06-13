@@ -12,6 +12,7 @@
                       <div class="search-wrapper">
                         <label for="search-text" class="sr-only">search FEMA disasters</label>
                         <input type="text" id="search-text"
+                                 ref="searchText"
                                  class="Typeahead__input"
                                  placeholder="Search by disaster number, type, or state"
                                  autocomplete="off"
@@ -64,6 +65,11 @@ import savedExtracts from './SavedExtracts'
 
 export default {
   components: {disaster, savedExtracts},
+  mounted () {
+    this.$refs.searchText.addEventListener('hdd.clear', () => {
+      if (this.$refs.searchText.value === '') this.query = ''
+    })
+  },
   data () {
     return {
       query: '',
