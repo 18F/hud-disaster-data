@@ -1,6 +1,6 @@
 import Shepherd from 'tether-shepherd'
 import $store from './store'
-import _ from 'lodash'
+import $ from 'jquery'
 
 const disasterSearchTour = new Shepherd.Tour({
   defaults: {
@@ -18,12 +18,41 @@ let next = {
   text: 'Next',
   action: disasterSearchTour.next
 }
+let disasterLink = `
+    <p>
+    Don’t know the disaster ID?
+    Click <a href="https://www.fema.gov/disasters">here</a>. (<a href="https://www.fema.gov/disasters">https://www.fema.gov/disasters</a>)
+    </p>`
 
 disasterSearchTour.addStep('enter-search', {
-  text: 'Start here by typing in a FEMA disaster ID in the format "DR-4272-TX"',
+  text: `
+    <div class="tour-message">
+      <p>
+      Start here by typing in a FEMA disaster ID.<br/>
+      These IDs follow the format “DR‐4272‐TX” But you can also type “4272”.
+      </p>
+      <p>
+      If you want to see all the recent disasters in a stat, type the states 2 character abbreviation (examples, “TX”, “CA”, “FL).
+      </p>
+      ${disasterLink}
+    </div>
+    <div class="tour-error" style="display:none;">
+      <p>
+      It looks like you typed an invalid Disaster ID.
+      Try typing just the four‐digit number (example, “4272”).
+      </p>
+      ${disasterLink}
+    </div>
+    `,
   attachTo: '.search-wrapper right',
   when: {
-    show: () => {
+    show: function () {
+      if (this.error) {
+        this.error = false
+        return
+      }
+      $('.tour-message').show()
+      $('.tour-error').hide()
       const input = document.getElementById('search-text')
       input.focus()
       input.select()
@@ -32,28 +61,61 @@ disasterSearchTour.addStep('enter-search', {
   buttons: [
     {
       text: 'Next',
-      action: () => {
-        if (_.get($store.getters.status, 'scope') === 'app') {
-          disasterSearchTour.cancel()
-          appErrorTour.start()
-        } else if ($store.getters.currentSearchResult.length > 0) {
+      action: function () {
+        let step = disasterSearchTour.getCurrentStep()
+        if ($store.getters.currentSearchResult.length > 0) {
           disasterSearchTour.next()
+        } else {
+          step.hide()
+          $('.tour-message').hide()
+          $('.tour-error').show()
+          step.error = true
+          step.show()
         }
       }
     }
   ]
 })
 .addStep('select-disasters', {
-  text: 'Click the box to select a disaster',
+  text: `
+    <div class="tour-message">
+      <p>
+      Click the checkbox located under the disaster ID to select a disaster.
+      </p>
+    </div>
+    <div class="tour-error" style="display:none;">
+      <p>
+      No disasters selected.
+      </p>
+      <p>
+      Please select a disaster.
+      </p>
+    </div>
+    `,
   attachTo: '.disaster-list right',
+  when: {
+    show: function () {
+      if (this.error) {
+        this.error = false
+        return
+      }
+      $('.tour-message').show()
+      $('.tour-error').hide()
+    }
+  },
   buttons: [
     back,
     {
       text: 'Next',
       action: () => {
+        let step = disasterSearchTour.getCurrentStep()
         if ($store.getters.currentExtract.length === 0) {
-          disasterSearchTour.cancel()
-          appErrorTour.show('show-non-selected-error')
+          step.hide()
+          $('.tour-message').hide()
+          $('.tour-error').show()
+          step.error = true
+          step.show()
+          debugger
         } else {
           disasterSearchTour.next()
         }
@@ -74,8 +136,14 @@ const appErrorTour = new Shepherd.Tour({
     scrollTo: false
   }
 }).addStep('show-error', {
-  text: 'Looks like there are no results.  Click back and try searching on TX',
-  attachTo: '#search-message right',
+  text: `
+    <p>
+    It looks like you typed an invalid Disaster ID.
+    Try typing just the four‐digit number (example, “4272”).
+    </p>
+    ${disasterLink}
+    `,
+  attachTo: '.search-wrapper right',
   buttons: [
     {
       text: 'Back',
@@ -87,17 +155,19 @@ const appErrorTour = new Shepherd.Tour({
   ]
 })
 .addStep('show-non-selected-error', {
-  text: 'Looks like you selected no disasters.  Click try again and try selecting one or more disasters',
+  text: 'No disasters selected.  Please select a disaster from the list.',
   attachTo: '.disaster-list right',
-  buttons: [
-    {
-      text: 'Try Again',
-      action: () => {
-        appErrorTour.cancel()
+  when: {
+    show: () => {
+      let destroy = $store.watch((state) => state.currentExtract, (currentExtract) => {
+        if (currentExtract.length === 0) return
+        appErrorTour.hide()
         disasterSearchTour.show('select-disasters')
-      }
+        destroy()
+      })
     }
-  ]
+  },
+  buttons: []
 })
 
 export default {
