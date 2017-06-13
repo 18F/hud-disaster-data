@@ -8,7 +8,7 @@ before_script:
 - npm install
 script:
 - npm run build
-- sonar-scanner
+- if [[ -n "$SONAR_TOKEN" ]]; then sonar-scanner; else echo "skipping SonarQube upload"; fi
 addons:
   sonarqube:
     organization: flexion
@@ -18,22 +18,12 @@ addons:
     - sonar-*
 before_deploy: "git config --global http.postBuffer 157286400"
 deploy:
-- provider: azure_web_apps
-  verbose: true
-  skip_cleanup: false
-  username: dev-deploy-sa
-  password: hudD1sasterDataPortal
-  site: hud-disaster-data-dev
-  on:
-    branch: sprint-*
-
 - manifest: ./cg-deploy/manifests/manifest-dev.yml
   edge: true
   provider: cloudfoundry
   api: https://api.fr.cloud.gov
-  username: 40b6e18f-6956-43d4-936e-8f998f89e48a
-  password:
-    secure: sKXF2CTSJut5JFisKAYI+gexFnXoHZD7DUplPoaczf7T0+zEhKHjOIfNB1AX0bdtvSjl8OUOKG6XLKSkVsNoFeiMCEMR5XHDJP/A/K/u/PPvPuCybIxFMVSvHOowGTGpLiacIa28sQqEVaaVnRV6LIFvER3NbpMwyDCDecOMv7yuDsYKIQTQ3TUEbTcLZ8XVxcFC8jxVPpB0POtWEwqzFKyr9z4PzEPAbGUPj0+5tIyaTB9+fbOEMg3jkC4KZWexLlnQZvcuyPM5GaqBxhGzBcvPkA6qhJvyGupYjYyW8fxxhoH4o6P40fAogXB/pByRFTeetLb1t1e5w6/S9p9Zp9ndCqf1ff8ZKaOSoWpf1n0gm11BdFMB6mf3tA7ZpPjIYxYtGtPmmoGKpbvJkehBC0ZnUGq/bZJU78L9rmwcgzQh7msevapyOn0kjxLJ2wRKlhefl9+lLp76rYqzjaWG3t04umZy+CPbuuMljF6TdFXRkWUIZKwyWoUQgd/WkENwIN0gpv/shp17nt+JDsLxx2GKgSbI+hLx55gwQWISdTmf83Sna3dz1ShrCk8YrHsqrXlDrY0ADe98vKmYWDIGbbb27BBdYlcUDAWavAJIWE64bniaFxmfjiGki5LwNkMcdeOGrEYm060HbQab6cDMOlU3WIEq68lE8Nhk3ghIGwg=
+  username: $DEV_CF_USERNAME
+  password: $DEV_CF_PASSWORD
   organization: hud-disaster-data
   space: dev
   on:
@@ -42,23 +32,10 @@ deploy:
   edge: true
   provider: cloudfoundry
   api: https://api.fr.cloud.gov
-  username: 0a5e068e-0b24-449a-ab24-593745283a04
-  password:
-    secure: HcRpt9HU23mGUrsMNoTm0Rbx/AFzqy0OMoUZJF9bIKDiY/uPDQQTL1ib+TmMX22luOqjiIURxcJGrId+dDlCgg/kQWMROU0uYL5SEzgJnnJTINnlYmapBnmf2W54n1QzCzKYQVO4jH/mm+VYGMEOCnqKwi2gFi/wom0W8ruqiYF0E3fJe33p+xWBL2i0v4XYNKJ5vfVkBMUIcuh/HK46LONvSmmaWyqbJRNv4KqlTYJgURK/MCWA3FX1bHOvAZxPUjrxMPsXU1E/MdK4M9XZvMRyBvcGac/puU9K9///OgQ/phH5UmCmMwaeT5xV97JqKIcM9d3uZVeXHLBjps7f7GgYzSvop4LHiuRLhzC/QAh31cdejn60hAjsTukAxQnu944DacelHXFhUu+WnejgkF97+dioBU8ESMP7n0EJrJS3uvoTt3INAAjItNxGEJ4TuvHYTRzGQMvH4024B6InmKTxs2swXKS9a1HGLAYn1wusd0dhr61nbSEMAxE3lJhUsyUjfg/XwvO4dSO7aO+VkVJMNAgMhf6pS6UyTeYnmLw+eZmpQYHMTfCOMnRwrdyCm/eBmQkZ3RLiaBwCFrxeuqbHt46VOsFdxWsWYlN87YO3oIKpryT6v8abxAD5yT6c8hE8N+igurYGYDyvqEVduswd3g/P5E8/GFSMS770w10=
+  username: $STAGING_CF_USERNAME
+  password: $STAGING_CF_PASSWORD
   organization: hud-disaster-data
   space: staging
   on:
     branch: master
     condition: "$TRAVIS_REPO_SLUG = 'flexion/hud-disaster-data'"
-- manifest: ./cg-deploy/manifests/manifest-prod.yml
-  edge: true
-  provider: cloudfoundry
-  api: https://api.fr.cloud.gov
-  username: e87b4180-b9d4-4e88-8abc-c346c9cb1b4d
-  password:
-    secure: NzSaSb2RacKG0QFKaNP0OkGDCIkuxHWB6esGzNyQxP76D9+9i3io1qS8xuvZ6/aLv9ibC6pM1X5Lz5PSN+muVcPd1ct8KOxQtp+XwoR9POYaj084s06o469b6/g/AGt5peqQp3UYnmYFHVgbKoKViH3IwsAH7Yf9V6mB5r8mcI9yx5FZk2YLLKgdBHVdXe04i39v8I9ozl9VzeOjiv/SpMFDquphZeNc3h4te+WSSuPTY3cJsAxTYapRZoRHhWBBU0pjE6eEfYr9pofLf/iu++OQjfFdNbWk+Cz5WpUK87m9KQ05yJZQMAGFTxD5fF13dVWCk4X9b3vu2RYJWQzrkGQtmibkbIxIKW9ObVBVjYdIvGBj3lTNPnsTLGqPXEpLVqAIVOZM/OSVn4F1fvyNAB2NsNjS+BMEm0zJGmlHx/BnOJUG2HKsJGy4ReQhhiTSfDzD86b2RjWsOL1PBzKHvZMwWnt67b44wJm98zeZoJS6XwwiL1A06I1NtKBGdnjKDNe3lOwlGuCB7vEk8E1NZe5lRrLilvR3/3eEMA6O1cSTu6CNG44gLPH3RgxTfP6ZD/wD4o+l8kzTSWd3Zif7SnkrPA4jwRinAc8/np0Azigs3RH4hI9CjBhoFfzFz17bo4g9/p8m5idhTl1/YZAain5jnjUeLAVk+krHME4ngYk=
-  organization: hud-disaster-data
-  space: prod
-  on:
-    branch: master
-    condition: "$TRAVIS_REPO_SLUG = '18F/hud-disaster-data'"
