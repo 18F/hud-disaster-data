@@ -131,9 +131,21 @@ disasterSearchTour.addStep('enter-search', {
   <p>Your computer will download a .csv formatted file</p>
   `,
   attachTo: '#export-button top',
-  buttons: [back, next]
+  buttons: [
+    {
+      text: 'Back',
+      action: function () {
+        if ($store.getters.currentSearchResult.length > 0) {
+          disasterSearchTour.back()
+        } else {
+          disasterSearchTour.hide()
+          disasterSearchTour.start()
+        }
+      }
+    },
+    next]
 })
-.addStep('mutiple-disaster-select', {
+.addStep('mutiple-enter-search', {
   text: `
   <div class="tour-message">
     <p>
@@ -147,9 +159,9 @@ disasterSearchTour.addStep('enter-search', {
   It looks like you entered an invalid postal code.  Try typing "TX".
   </div>
   `,
-  attachTo: '.search-wrapper left',
+  attachTo: '.search-wrapper right',
   when: {
-    show: function () {
+    'before-show': function () {
       if (this.error) {
         this.error = false
         return
@@ -178,10 +190,86 @@ disasterSearchTour.addStep('enter-search', {
         }
       }
     }
-
   ]
 })
-
+.addStep('multiple-select-disasters', {
+  text: `
+    <div class="tour-message">
+      <p>
+      Here are all the recent disasters in your state.
+      Select additional states by clicking the checkbox located under the disaster ID.
+      </p>
+    </div>
+    <div class="tour-error" style="display:none;">
+      <p>
+      Less than 2 disasters selected.
+      </p>
+      <p>
+      Please select multiple disasters.
+      </p>
+    </div>
+    `,
+  attachTo: '.disaster-list right',
+  when: {
+    show: function () {
+      if (this.error) {
+        this.error = false
+        return
+      }
+      TourObject.showMessage()
+    }
+  },
+  buttons: [
+    back,
+    {
+      text: 'Next',
+      action: () => {
+        let step = disasterSearchTour.getCurrentStep()
+        if ($store.getters.currentExtract.length < 2) {
+          step.hide()
+          TourObject.showError()
+          step.error = true
+          step.show()
+        } else {
+          disasterSearchTour.next()
+        }
+      }
+    }
+  ]
+})
+.addStep('save-search', {
+  text: `
+  <div class="tour-message">
+  <p>
+  You now have multiple disasters listed within your search list.
+  </p>
+  <p>
+  If you would like to save this search to run again in the future, enter a name in the name input field and click the save button to the right
+  </p>
+  </div>
+  <div class="tour-error">
+  You have encountered an error.  Please correct your action and try again.
+  </div>
+  `,
+  attachTo: '#saved_searches left',
+  buttons: [back,
+    {
+      text: 'Next',
+      action: () => {
+        let step = disasterSearchTour.getCurrentStep()
+        debugger
+        if ($store.getters.status.type !== 'success') {
+          step.hide()
+          TourObject.showError()
+          step.error = true
+          step.show()
+        } else {
+          disasterSearchTour.next()
+        }
+      }
+    }
+  ]
+})
 const TourObject = {
   start (store) {
     this.setStore(store)
@@ -193,7 +281,6 @@ const TourObject = {
     if (store) $store = store
   },
   showError () {
-    debugger
     document.querySelectorAll('.tour-message').forEach($el => ($el.style.display = 'none'))
     document.querySelectorAll('.tour-error').forEach($el => ($el.style.display = 'block'))
   },
