@@ -1,55 +1,92 @@
 import tour from '@/tour'
 import sinon from 'sinon'
-import store from '@/store'
+import Vuex from 'vuex'
 import _ from 'lodash'
 
-const ONE_RECORD = [
-  {
-    disasterNumber: 4311,
-    state: 'UT',
-    declarationDate: 'April 21, 2017',
-    disasterType: 'DR',
-    incidentType: 'Flood',
-    title: 'SEVERE WINTER STORMS AND FLOODING',
-    declaredCountyArea: [ 'Box Elder (County)', 'Cache (County)' ],
-    placeCode: 99003,
-    id: '58fa2e008a4f31363dac2c6a'
-  } ]
 describe('tour', () => {
-  beforeEach(() => {
-    store.commit('clearCurrentExtract')
+  let store
+  let mutations
+  let getters
+  let step
+  let showErrorStub
+  let showMessageStub
+  let hideStub
+  let showStub
+  let currentStepStub
+
+  beforeEach(function () {
+    getters = {
+      defaultExtractName: function () { return '' },
+      currentExtract: function () { return [] },
+      savedExtracts: function () { return [] },
+      newExtract: function () { return false },
+      currentSearchResult: function () { return [] },
+      status: function () { return { type: 'error', message: '' } }
+    }
+    mutations = {
+      clearCurrentExtract: sinon.stub(),
+      resetStatus: sinon.stub(),
+      loadExtract: sinon.stub(),
+      saveExtract: sinon.stub(),
+      deleteExtract: sinon.stub()
+    }
+
+    store = new Vuex.Store({state: {}, mutations, getters})
+    tour.setStore(store)
+
+    showErrorStub = sinon.stub(tour, 'showError')
+    showMessageStub = sinon.stub(tour, 'showMessage')
+    hideStub = sinon.stub()
+    showStub = sinon.stub()
+    step = {
+      hide: hideStub,
+      show: showStub
+    }
+    currentStepStub = sinon.stub(tour.tour, 'getCurrentStep').callsFake(() => step)
   })
+
+  afterEach(function () {
+    showErrorStub.restore()
+    showMessageStub.restore()
+    currentStepStub.restore()
+  })
+
   describe('enter-search', () => {
     describe('show', () => {
       it('should give focus to #search-text and select it\'s contents', () => {
         let focus = sinon.stub()
         let select = sinon.stub()
         let stub = sinon.stub(document, 'getElementById').callsFake(() => { return {focus, select} })
-        let disasterSearchTour = tour.tours.disasterSearchTour.getById('enter-search')
-        disasterSearchTour.options.when.show()
+        let step = tour.tour.getById('enter-search')
+        step.options.when.show()
+        expect(showMessageStub.called).to.equal(true)
         expect(focus.called).to.equal(true)
         expect(select.called).to.equal(true)
         stub.restore()
       })
+      it('should set error to false and return if error is true', () => {
+        let step = tour.tour.getById('enter-search')
+        step.error = true
+        step.options.when.show.apply(step)
+        expect(step.error).to.equal(false)
+      })
     })
     describe('Next button action', () => {
-      it('should cancel the disasterSearchTour and start the appErrorTour if the status scope is app', () => {
-        store.commit('setStatus', {type: 'info', msg: 'bla bla'})
-        let disasterSearchTour = tour.tours.disasterSearchTour
-        let appErrorTour = tour.tours.appErrorTour
+      it('should show the error message if there are 0 disasters in the current search result', () => {
+        let disasterSearchTour = tour.tour
         let action = _.find(disasterSearchTour.getById('enter-search').options.buttons, { text: 'Next' }).action
-        let cancelStub = sinon.stub(disasterSearchTour, 'cancel')
-        let startStub = sinon.stub(appErrorTour, 'start')
         action()
-        expect(cancelStub.called).to.equal(true)
-        expect(startStub.called).to.equal(true)
-        cancelStub.restore()
-        startStub.restore()
-        store.commit('resetStatus')
+        expect(hideStub.called).to.equal(true)
+        expect(showStub.called).to.equal(true)
+        expect(step.error).to.equal(true)
+        expect(showErrorStub.called).to.equal(true)
+        expect(showMessageStub.called).to.equal(false)
       })
       it('should go to next step in the disasterSearchTour if the search returned at least one record', () => {
-        store.commit('updateDisasterList', {list: ONE_RECORD})
-        let disasterSearchTour = tour.tours.disasterSearchTour
+        getters.currentSearchResult = function () { return [1] }
+        store = new Vuex.Store({state: {}, mutations, getters})
+        tour.setStore(store)
+        let disasterSearchTour = tour.tour
         let action = _.find(disasterSearchTour.getById('enter-search').options.buttons, { text: 'Next' }).action
         let nextStub = sinon.stub(disasterSearchTour, 'next')
         action()
@@ -60,63 +97,40 @@ describe('tour', () => {
   })
 
   describe('select-disasters', () => {
-    describe('Next button action', () => {
-      it('should cancel the disasterSearchTour and start the appErrorTour if there are no selected disasters', () => {
-        store.commit('updateDisasterList', {list: ONE_RECORD})
-        let disasterSearchTour = tour.tours.disasterSearchTour
-        let appErrorTour = tour.tours.appErrorTour
-        let action = _.find(disasterSearchTour.getById('select-disasters').options.buttons, { text: 'Next' }).action
-        let cancelStub = sinon.stub(disasterSearchTour, 'cancel')
-        let showStub = sinon.stub(appErrorTour, 'show')
-        action()
-        expect(cancelStub.called).to.equal(true)
-        expect(showStub.called).to.equal(true)
-        cancelStub.restore()
-        showStub.restore()
+    describe('show', () => {
+      it('should show the step message if error is false', () => {
+        let step = tour.tour.getById('select-disasters')
+        step.options.when.show()
+        expect(showMessageStub.called).to.equal(true)
       })
-      it('should go to next step in the disasterSearchTour if the selected disasters are one or more', () => {
-        store.commit('updateDisasterList', {list: ONE_RECORD})
-        store.commit('toggleCurrentExtract', ONE_RECORD)
-        let disasterSearchTour = tour.tours.disasterSearchTour
+      it('should set error to false and return if error is true', () => {
+        let step = tour.tour.getById('select-disasters')
+        step.error = true
+        step.options.when.show.apply(step)
+        expect(step.error).to.equal(false)
+      })
+    })
+    describe('Next button action', () => {
+      it('should show the error message if there are 0 disasters in the current extract', () => {
+        let disasterSearchTour = tour.tour
+        let action = _.find(disasterSearchTour.getById('select-disasters').options.buttons, { text: 'Next' }).action
+        action()
+        expect(hideStub.called).to.equal(true)
+        expect(showStub.called).to.equal(true)
+        expect(step.error).to.equal(true)
+        expect(showErrorStub.called).to.equal(true)
+        expect(showMessageStub.called).to.equal(false)
+      })
+      it('should go to next step in the disasterSearchTour if the current extract has at least one record', () => {
+        getters.currentExtract = function () { return [1] }
+        store = new Vuex.Store({state: {}, mutations, getters})
+        tour.setStore(store)
+        let disasterSearchTour = tour.tour
         let action = _.find(disasterSearchTour.getById('select-disasters').options.buttons, { text: 'Next' }).action
         let nextStub = sinon.stub(disasterSearchTour, 'next')
         action()
         expect(nextStub.called).to.equal(true)
         nextStub.restore()
-      })
-    })
-  })
-
-  describe('show-error', () => {
-    describe('Customized Back button action', () => {
-      it('should cancel the appErrorTour and start the disasterSearchTour when clicked', () => {
-        let disasterSearchTour = tour.tours.disasterSearchTour
-        let appErrorTour = tour.tours.appErrorTour
-        let action = _.find(appErrorTour.getById('show-error').options.buttons, { text: 'Back' }).action
-        let cancelStub = sinon.stub(appErrorTour, 'cancel')
-        let startStub = sinon.stub(disasterSearchTour, 'start')
-        action()
-        expect(cancelStub.called).to.equal(true)
-        expect(startStub.called).to.equal(true)
-        cancelStub.restore()
-        startStub.restore()
-      })
-    })
-  })
-
-  describe('show-non-selected-error', () => {
-    describe('Customized Try Again button action', () => {
-      it('should cancel the appErrorTour and go back to the disasterSearchTour when clicked', () => {
-        let disasterSearchTour = tour.tours.disasterSearchTour
-        let appErrorTour = tour.tours.appErrorTour
-        let action = _.find(appErrorTour.getById('show-non-selected-error').options.buttons, { text: 'Try Again' }).action
-        let cancelStub = sinon.stub(appErrorTour, 'cancel')
-        let showStub = sinon.stub(disasterSearchTour, 'show')
-        action()
-        expect(cancelStub.called).to.equal(true)
-        expect(showStub.called).to.equal(true)
-        cancelStub.restore()
-        showStub.restore()
       })
     })
   })

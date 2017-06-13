@@ -1,6 +1,6 @@
 import Shepherd from 'tether-shepherd'
-import $store from './store'
 import $ from 'jquery'
+let $store = require('./store')
 
 const disasterSearchTour = new Shepherd.Tour({
   defaults: {
@@ -51,8 +51,7 @@ disasterSearchTour.addStep('enter-search', {
         this.error = false
         return
       }
-      $('.tour-message').show()
-      $('.tour-error').hide()
+      TourObject.showMessage()
       const input = document.getElementById('search-text')
       input.focus()
       input.select()
@@ -67,8 +66,7 @@ disasterSearchTour.addStep('enter-search', {
           disasterSearchTour.next()
         } else {
           step.hide()
-          $('.tour-message').hide()
-          $('.tour-error').show()
+          TourObject.showError()
           step.error = true
           step.show()
         }
@@ -99,8 +97,7 @@ disasterSearchTour.addStep('enter-search', {
         this.error = false
         return
       }
-      $('.tour-message').show()
-      $('.tour-error').hide()
+      TourObject.showMessage()
     }
   },
   buttons: [
@@ -111,11 +108,9 @@ disasterSearchTour.addStep('enter-search', {
         let step = disasterSearchTour.getCurrentStep()
         if ($store.getters.currentExtract.length === 0) {
           step.hide()
-          $('.tour-message').hide()
-          $('.tour-error').show()
+          TourObject.showError()
           step.error = true
           step.show()
-          debugger
         } else {
           disasterSearchTour.next()
         }
@@ -129,54 +124,22 @@ disasterSearchTour.addStep('enter-search', {
   buttons: [back, next]
 })
 
-const appErrorTour = new Shepherd.Tour({
-  defaults: {
-    classes: 'shepherd-element shepherd-open shepherd-theme-square',
-    showCancelLink: true,
-    scrollTo: false
-  }
-}).addStep('show-error', {
-  text: `
-    <p>
-    It looks like you typed an invalid Disaster ID.
-    Try typing just the four‐digit number (example, “4272”).
-    </p>
-    ${disasterLink}
-    `,
-  attachTo: '.search-wrapper right',
-  buttons: [
-    {
-      text: 'Back',
-      action: () => {
-        appErrorTour.cancel()
-        disasterSearchTour.start()
-      }
-    }
-  ]
-})
-.addStep('show-non-selected-error', {
-  text: 'No disasters selected.  Please select a disaster from the list.',
-  attachTo: '.disaster-list right',
-  when: {
-    show: () => {
-      let destroy = $store.watch((state) => state.currentExtract, (currentExtract) => {
-        if (currentExtract.length === 0) return
-        appErrorTour.hide()
-        disasterSearchTour.show('select-disasters')
-        destroy()
-      })
-    }
-  },
-  buttons: []
-})
-
-export default {
+const TourObject = {
   start () {
     if (Shepherd.activeTour) return
     disasterSearchTour.start()
   },
-  tours: {
-    disasterSearchTour,
-    appErrorTour
+  tour: disasterSearchTour,
+  setStore (store) {
+    if (store) $store = store
+  },
+  showError () {
+    $('.tour-message').hide()
+    $('.tour-error').show()
+  },
+  showMessage () {
+    $('.tour-error').hide()
+    $('.tour-message').show()
   }
 }
+export default TourObject
