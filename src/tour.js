@@ -130,14 +130,28 @@ disasterSearchTour.addStep('enter-search', {
     }
   ]
 })
-.addStep('export-data', {
+.addStep('selected-export-data', {
   title: 'Disaster selected',
   text: `
   <p>
-  You’ve selected a disaster and it is now listed here.
+  You’ve selected a disaster and it is now listed in the export area.
   You can export the associated FEMA data now or save this search to export the data in the future.
   You can also search for additional disasters to add to this list.
   </p>
+  <p>
+  First, let’s try exporting the data.
+  </p>
+  `,
+  buttons: [back, next],
+  attachTo: '#list left',
+  when: {
+    'before-show': function () { document.getElementById('list').style['z-index'] = '1' },
+    hide: function () { document.getElementById('list').style['z-index'] = null }
+  }
+})
+.addStep('export-data', {
+  title: 'Disaster selected',
+  text: `
   <p>
   First, let’s try exporting the data.
   </p>
