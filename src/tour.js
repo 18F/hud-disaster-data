@@ -24,6 +24,7 @@ let disasterLink = `
     </p>`
 
 disasterSearchTour.addStep('enter-search', {
+  title: 'Start Here',
   text: `
     <div class="tour-message">
       <p>
@@ -68,6 +69,9 @@ disasterSearchTour.addStep('enter-search', {
           TourObject.showError()
           step.error = true
           step.show()
+          const input = document.getElementById('search-text')
+          input.focus()
+          input.select()
         }
       }
     }
@@ -269,6 +273,65 @@ disasterSearchTour.addStep('enter-search', {
     }
   ]
 })
+.addStep('use-saved-search', {
+  text: `
+    <p>
+    You have saved this disaster (or disasters), and can now access this list by clicking here.
+    </p>
+  </div>
+  `,
+  attachTo: '#saved_searches left',
+  buttons: [back, next]
+})
+.addStep('deselect-disaster', {
+  text: `
+    <p>
+    If you want to remove a specific disaster from your list, deselect it by clicking the checkbox under the disaster ID.
+    </p>
+  </div>
+  `,
+  attachTo: '#list right',
+  buttons: [back, next]
+})
+.addStep('clear-current-extract', {
+  text: `
+    <p>
+    If you want to clear all the disasters in your list and start over, click the clear button
+    </p>
+  </div>
+  `,
+  attachTo: '#clear-button left',
+  buttons: [back,
+    {
+      text: 'Next',
+      action: () => {
+        $store.commit('clearCurrentExtract')
+        disasterSearchTour.next()
+      }
+    }
+  ]
+})
+.addStep('clear-current-extract', {
+  text: `
+    <p>
+    If you want to select a previously saved list of disaster(s), select an option from the dropdown list
+    </p>
+  </div>
+  `,
+  attachTo: '#saved_searches left',
+  buttons: [back, next]
+})
+.addStep('clear-current-extract', {
+  text: `
+    <p>
+    If you want to delete a previously saved list of disaster(s), select an option from the dropdown to load, then click the delete button
+    </p>
+  </div>
+  `,
+  attachTo: '#saved_searches right',
+  buttons: [back, next]
+})
+
 const TourObject = {
   start (store) {
     this.setStore(store)
