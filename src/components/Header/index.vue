@@ -45,8 +45,8 @@
           <span class="logo-img" alt="U.S. Department of Housing and Urban Development logo"></span>
           <p ref="title">{{title}}</p>
         </div>
-        <div class="avi avi--block pull-right">
-          <span class="icon icon--avatar"><img src="/public/assets/img/icon-avatar.jpeg" /></span>
+        <div class="avi avi--block pull-right" @click="startTour">
+          <span class="icon icon--avatar"></span>
           <i class=" fa fa-caret-down"></i>
         </div>
       </div>
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import tour from '../../tour'
 export default {
   data () {
     return {
@@ -62,7 +63,11 @@ export default {
       premsg: 'An official website of the United States Government',
       showGovBanner: false
     }
+  },
+  methods: {
+    startTour () {
+      tour.start(this.$store)
+    }
   }
 }
 </script>
-
