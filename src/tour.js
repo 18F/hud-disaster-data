@@ -32,7 +32,7 @@ disasterSearchTour.addStep('enter-search', {
       These IDs follow the format “DR‐4272‐TX” But you can also type “4272”.
       </p>
       <p>
-      If you want to see all the recent disasters in a stat, type the states 2 character abbreviation (examples, “TX”, “CA”, “FL).
+      If you want to see all the recent disasters in a state, type the state's 2 character abbreviation (examples, “TX”, “CA”, “FL).
       </p>
       ${disasterLink}
     </div>
@@ -125,8 +125,8 @@ disasterSearchTour.addStep('enter-search', {
   text: `
   <p>
   You’ve selected a disaster and it is now listed here.
-  You can export the associated FEMA data now, or save this search to export the data in the future.
-  You can also search for additional disasters to add too this list.
+  You can export the associated FEMA data now or save this search to export the data in the future.
+  You can also search for additional disasters to add to this list.
   </p>
   <p>
   First, let’s try exporting the data.
