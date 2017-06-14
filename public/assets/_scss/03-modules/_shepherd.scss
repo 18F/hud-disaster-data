@@ -44,11 +44,8 @@ body:not(.shepherd-active) #tour-backdrop {
     padding: 10px 20px !important;
     &.tour-back {
       background: none !important;
-      border: none !important;
+      border: 1px solid #000 !important;
       color: #000 !important;
-      font-weight: normal !important;
-      text-decoration: underline !important;
-
     }
   }
 }

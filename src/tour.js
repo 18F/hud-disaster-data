@@ -38,17 +38,17 @@ disasterSearchTour.addStep('enter-search', {
       Start here by typing in a FEMA disaster ID.
       </p>
       <p>
-      These IDs follow the format “DR‐4272‐TX” But you can also type “4272”.
+      These IDs follow the format "DR‐4272‐TX" But you can also type "4272".
       </p>
       <p>
-      If you want to see all the recent disasters in a state, type the state's 2 character abbreviation (examples, “TX”, “CA”, “FL").
+      If you want to see all the recent disasters in a state, type the state's 2 character abbreviation (examples, "TX", "CA", "FL").
       </p>
       ${disasterLink}
     </div>
     <div class="tour-error" style="display:none;">
       <p>
       It looks like you typed an invalid Disaster ID.
-      Try typing just the four‐digit number (example, “4272”).
+      Try typing just the four‐digit number (example, "4272").
       </p>
       ${disasterLink}
     </div>
@@ -135,7 +135,7 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Disaster selected',
   text: `
   <p>
-  You’ve selected a disaster and it is now listed in the export area.
+  You’ve selected a disaster and it is now listed in the selected disasters area.
   You can export the associated FEMA data now or save this search to export the data in the future.
   You can also search for additional disasters to add to this list.
   </p>
@@ -151,13 +151,10 @@ disasterSearchTour.addStep('enter-search', {
   }
 })
 .addStep('export-data', {
-  title: 'Disaster selected',
+  title: 'Export Data',
   text: `
-  <p>
-  First, let’s try exporting the data.
-  </p>
   <p>To get household level data for the disaster selected, click the export button.</p>
-  <p>Your computer will download a .csv formatted file</p>
+  <p>Your computer will download a .csv formatted file.</p>
   `,
   attachTo: '#export-button top',
   buttons: [
@@ -183,7 +180,7 @@ disasterSearchTour.addStep('enter-search', {
     If you want to export data for multiple disasters at the same time, you can search for another disaster and add it to the list.
     </p>
     <p>
-    Try typing in the postal code for your state (example, “TX”, “LA”, “CA")
+    Try typing in the postal code for your state (example, "TX", "LA", "CA")
     </p>
   </div>
   <div class="tour-error" style="display:none;">
@@ -277,10 +274,10 @@ disasterSearchTour.addStep('enter-search', {
   text: `
   <div class="tour-message">
   <p>
-  You now have multiple disasters listed within your search list.
+  You now have multiple disasters listed within your selected disaster list.
   </p>
   <p>
-  If you would like to save this search to run again in the future, enter a name in the name input field and click the save button to the right
+  If you would like to save this search to run again in the future, enter a name in the name input field and click the save button to the right.
   </p>
   </div>
   <div class="tour-error" style="display:none;">
