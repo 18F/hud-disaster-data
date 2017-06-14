@@ -257,7 +257,6 @@ disasterSearchTour.addStep('enter-search', {
       text: 'Next',
       action: () => {
         let step = disasterSearchTour.getCurrentStep()
-        debugger
         if ($store.getters.status.type !== 'success') {
           step.hide()
           TourObject.showError()
