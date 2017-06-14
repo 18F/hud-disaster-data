@@ -11,6 +11,7 @@ const disasterSearchTour = new Shepherd.Tour({
 
 let back = {
   text: 'Back',
+  classes: 'tour-back',
   action: function () {
     TourObject.showMessage()
     disasterSearchTour.back()
@@ -162,6 +163,7 @@ disasterSearchTour.addStep('enter-search', {
   buttons: [
     {
       text: 'Back',
+      classes: 'tour-back',
       action: function () {
         if ($store.getters.currentSearchResult.length > 0) {
           disasterSearchTour.back()
