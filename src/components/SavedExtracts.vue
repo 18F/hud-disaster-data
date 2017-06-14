@@ -41,7 +41,7 @@
     </div>
     <div id="action-buttons">
       <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
-      <button id='export-button' class="usa-button green">Export <i class="fa fa-sign-out"></i></button> <!-- disabled="true"  usa-button-disabled -->
+      <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export <i class="fa fa-sign-out"></i></button> <!-- disabled="true"  usa-button-disabled -->
     </div>
   </div>
 </template>
