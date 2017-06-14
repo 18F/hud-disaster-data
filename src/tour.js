@@ -26,19 +26,21 @@ let next = {
 let disasterLink = `
     <p>
     Don’t know the disaster ID?
-    Click <a href="https://www.fema.gov/disasters">here</a>. (<a href="https://www.fema.gov/disasters">https://www.fema.gov/disasters</a>)
+    Click here: <a target="_blank" href="https://www.fema.gov/disasters">https://www.fema.gov/disasters</a>
     </p>`
 
 disasterSearchTour.addStep('enter-search', {
-  title: 'Start Here',
+  title: 'Search for a disaster',
   text: `
     <div class="tour-message">
       <p>
-      Start here by typing in a FEMA disaster ID.<br/>
+      Start here by typing in a FEMA disaster ID.
+      </p>
+      <p>
       These IDs follow the format “DR‐4272‐TX” But you can also type “4272”.
       </p>
       <p>
-      If you want to see all the recent disasters in a state, type the state's 2 character abbreviation (examples, “TX”, “CA”, “FL).
+      If you want to see all the recent disasters in a state, type the state's 2 character abbreviation (examples, “TX”, “CA”, “FL").
       </p>
       ${disasterLink}
     </div>
@@ -84,6 +86,7 @@ disasterSearchTour.addStep('enter-search', {
   ]
 })
 .addStep('select-disasters', {
+  title: 'Select a disaster',
   text: `
     <div class="tour-message">
       <p>
@@ -128,6 +131,7 @@ disasterSearchTour.addStep('enter-search', {
   ]
 })
 .addStep('export-data', {
+  title: 'Disaster selected',
   text: `
   <p>
   You’ve selected a disaster and it is now listed here.
@@ -156,6 +160,7 @@ disasterSearchTour.addStep('enter-search', {
     next]
 })
 .addStep('mutiple-enter-search', {
+  title: 'Add to your list',
   text: `
   <div class="tour-message">
     <p>
@@ -165,7 +170,7 @@ disasterSearchTour.addStep('enter-search', {
     Try typing in the postal code for your state (example, “TX”, “LA”, “CA")
     </p>
   </div>
-  <div class="tour-error">
+  <div class="tour-error" style="display:none;">
   It looks like you entered an invalid postal code.  Try typing "TX".
   </div>
   `,
@@ -206,11 +211,12 @@ disasterSearchTour.addStep('enter-search', {
   ]
 })
 .addStep('multiple-select-disasters', {
+  title: 'Select another disaster',
   text: `
     <div class="tour-message">
       <p>
       Here are all the recent disasters in your state.
-      Select additional states by clicking the checkbox located under the disaster ID.
+      Select additional disasters by clicking the checkbox located under the disaster ID.
       </p>
     </div>
     <div class="tour-error" style="display:none;">
@@ -251,6 +257,7 @@ disasterSearchTour.addStep('enter-search', {
   ]
 })
 .addStep('save-search', {
+  title: 'Name and save your list',
   text: `
   <div class="tour-message">
   <p>
@@ -260,8 +267,8 @@ disasterSearchTour.addStep('enter-search', {
   If you would like to save this search to run again in the future, enter a name in the name input field and click the save button to the right
   </p>
   </div>
-  <div class="tour-error">
-  You have encountered an error.  Please correct your action and try again.
+  <div class="tour-error" style="display:none;">
+  You have encountered an error.  Please enter a different search name and try again.
   </div>
   `,
   attachTo: '#saved_searches left',
@@ -283,6 +290,7 @@ disasterSearchTour.addStep('enter-search', {
   ]
 })
 .addStep('use-saved-search', {
+  title: 'Access Saved Search',
   text: `
     <p>
     You have saved this disaster (or disasters), and can now access this list by clicking here.
@@ -293,6 +301,7 @@ disasterSearchTour.addStep('enter-search', {
   buttons: [back, next]
 })
 .addStep('deselect-disaster', {
+  title: 'Remove from list',
   text: `
     <p>
     If you want to remove a specific disaster from your list, deselect it by clicking the checkbox under the disaster ID.
@@ -303,6 +312,7 @@ disasterSearchTour.addStep('enter-search', {
   buttons: [back, next]
 })
 .addStep('clear-current-extract', {
+  title: 'Clear list',
   text: `
     <p>
     If you want to clear all the disasters in your list and start over, click the clear button
@@ -320,7 +330,8 @@ disasterSearchTour.addStep('enter-search', {
     }
   ]
 })
-.addStep('clear-current-extract', {
+.addStep('select-previous-search', {
+  title: 'Select a previously saved list',
   text: `
     <p>
     If you want to select a previously saved list of disaster(s), select an option from the dropdown list
@@ -330,7 +341,8 @@ disasterSearchTour.addStep('enter-search', {
   attachTo: '#saved_searches left',
   buttons: [back, next]
 })
-.addStep('clear-current-extract', {
+.addStep('delete-saved-search', {
+  title: 'Delete previously saved list',
   text: `
     <p>
     If you want to delete a previously saved list of disaster(s), select an option from the dropdown to load, then click the delete button
@@ -339,6 +351,24 @@ disasterSearchTour.addStep('enter-search', {
   `,
   attachTo: '#saved_searches right',
   buttons: [back, next]
+})
+.addStep('end-of-tour', {
+  title: 'Complete',
+  text: `
+    <p>
+    Congratulations, you have completed the guided experience. Click here (link: FAQ) if you have additional questions.
+    </p>
+  </div>
+  `,
+  buttons: [back,
+    {
+      text: 'End Tour',
+      action: function () {
+        disasterSearchTour.cancel()
+        disasterSearchTour.hide()
+      }
+    }
+  ]
 })
 
 const TourObject = {

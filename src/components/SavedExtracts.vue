@@ -84,8 +84,8 @@ export default {
     },
     saveExtract () {
       this.$store.commit('saveExtract', this.extractName)
+      if (this.status.type === 'error') return (this.extractName = '')
       this.selectedExtractName = this.extractName
-      this.extractName = ''
     },
     deleteExtract () {
       if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return
