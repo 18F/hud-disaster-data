@@ -238,12 +238,17 @@ describe('tour', () => {
       it('should show the error message if there are 0 disasters in the current search result', () => {
         let disasterSearchTour = tour.tour
         let action = _.find(disasterSearchTour.getById('mutiple-enter-search').options.buttons, { text: 'Next' }).action
+        let focus = sinon.stub()
+        let select = sinon.stub()
+        let input = {focus, select}
+        let getElementByIdStub = sinon.stub(document, 'getElementById').callsFake(() => input)
         action()
         expect(hideStub.called).to.equal(true)
         expect(showStub.called).to.equal(true)
         expect(step.error).to.equal(true)
         expect(showErrorStub.called).to.equal(true)
         expect(showMessageStub.called).to.equal(false)
+        getElementByIdStub.restore()
       })
       it('should go to next step in the disasterSearchTour if the current search result has at least one record', () => {
         getters.currentSearchResult = function () { return [1] }

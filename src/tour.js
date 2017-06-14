@@ -11,11 +11,17 @@ const disasterSearchTour = new Shepherd.Tour({
 
 let back = {
   text: 'Back',
-  action: disasterSearchTour.back
+  action: function () {
+    TourObject.showMessage()
+    disasterSearchTour.back()
+  }
 }
 let next = {
   text: 'Next',
-  action: disasterSearchTour.next
+  action: function () {
+    TourObject.showMessage()
+    disasterSearchTour.next()
+  }
 }
 let disasterLink = `
     <p>
@@ -189,6 +195,9 @@ disasterSearchTour.addStep('enter-search', {
         } else {
           step.hide()
           TourObject.showError()
+          const input = document.getElementById('search-text')
+          input.focus()
+          input.select()
           step.error = true
           step.show()
         }
