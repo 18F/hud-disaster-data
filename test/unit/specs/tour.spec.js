@@ -15,6 +15,7 @@ describe('tour', () => {
   let showStub
   let currentStepStub
   let emitSpy
+  let querySelectorAll
 
   beforeEach(function () {
     getters = {
@@ -47,6 +48,7 @@ describe('tour', () => {
     }
     currentStepStub = sinon.stub(tour.tour, 'getCurrentStep').callsFake(() => step)
     emitSpy = sinon.stub(magic, '$emit')
+    querySelectorAll = sinon.stub(document, 'querySelectorAll').callsFake(() => [])
   })
 
   afterEach(function () {
@@ -54,6 +56,7 @@ describe('tour', () => {
     showMessageStub.restore()
     currentStepStub.restore()
     emitSpy.restore()
+    querySelectorAll.restore()
   })
 
   describe('start', () => {
@@ -78,6 +81,7 @@ describe('tour', () => {
         '.tour-message': [{style: {}}],
         '.tour-error': [{style: {}}]
       }
+      querySelectorAll.restore()
       let stub = sinon.stub(document, 'querySelectorAll').callsFake(selector => elements[selector])
       showErrorStub.restore()
       tour.showError()
@@ -92,6 +96,7 @@ describe('tour', () => {
         '.tour-message': [{style: {}}],
         '.tour-error': [{style: {}}]
       }
+      querySelectorAll.restore()
       let stub = sinon.stub(document, 'querySelectorAll').callsFake(selector => elements[selector])
       showMessageStub.restore()
       tour.showMessage()

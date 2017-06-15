@@ -55,11 +55,13 @@ export const mutations = {
     mutations.clearCurrentExtract(state, true)
     let savedExtracts = getSavedExtracts()
     let disasterNumbers = _.find(savedExtracts, {name}).disasters.join()
+    state.loading = true
     axios.get(`/api/disasternumber/${disasterNumbers}`).then((response) => {
       state.currentExtract = _.map(response.data, (disaster) => {
         disaster.currentExtract = true
         return disaster
       })
+      state.loading = false
     })
     state.newExtract = false
   },
@@ -138,6 +140,9 @@ export const getters = {
   },
   status: state => {
     return state.status
+  },
+  loading: state => {
+    return state.loading
   }
 }
 
@@ -147,7 +152,8 @@ const store = new Vuex.Store({
     currentExtract: [],
     savedExtracts: getSavedExtracts(),
     newExtract: false,
-    status: { type: 'normal', message: '' }
+    status: { type: 'normal', message: '' },
+    loading: false
   },
   actions,
   mutations,

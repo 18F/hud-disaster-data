@@ -33,6 +33,10 @@
       </div>
     </div>
     <div id="list">
+      <div v-if="loading">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+      </div>
       <ul>
         <li v-for="(item, $item) in items">
           <disaster :prefix="'saved'" :item="item"></disaster>
@@ -79,6 +83,9 @@ export default {
       if (this.status.type === 'normal' || this.status.scope !== 'extract') return false
       this.$nextTick(() => this.$refs.messages.focus())
       return true
+    },
+    loading () {
+      return this.$store.getters.loading
     }
   },
   methods: {

@@ -6,7 +6,12 @@ const disasterSearchTour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-element shepherd-open shepherd-theme-square',
     showCancelLink: true,
-    scrollTo: false
+    scrollTo: false,
+    when: {
+      show: function () {
+        document.querySelectorAll('.shepherd-cancel-link').forEach(link => (link.textContent = ''))
+      }
+    }
   }
 })
 
@@ -57,6 +62,7 @@ disasterSearchTour.addStep('enter-search', {
   attachTo: '.search-wrapper right',
   when: {
     show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
       if (this.error) {
         this.error = false
         return
@@ -107,6 +113,7 @@ disasterSearchTour.addStep('enter-search', {
   attachTo: '.disaster-list right',
   when: {
     show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
       if (this.error) {
         this.error = false
         return
@@ -147,6 +154,9 @@ disasterSearchTour.addStep('enter-search', {
   buttons: [back, next],
   attachTo: '#list left',
   when: {
+    show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
+    },
     'before-show': function () { document.getElementById('list').style['z-index'] = '1' },
     hide: function () { document.getElementById('list').style['z-index'] = null }
   }
@@ -190,6 +200,9 @@ disasterSearchTour.addStep('enter-search', {
   `,
   attachTo: '.search-wrapper right',
   when: {
+    show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
+    },
     'before-show': function () {
       if (this.error) {
         this.error = false
@@ -245,6 +258,7 @@ disasterSearchTour.addStep('enter-search', {
   attachTo: '.disaster-list right',
   when: {
     show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
       if (this.error) {
         this.error = false
         return
