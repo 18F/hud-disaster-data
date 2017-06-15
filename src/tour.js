@@ -1,4 +1,5 @@
 import Shepherd from 'tether-shepherd'
+import magic from '@/bus'
 let $store
 
 const disasterSearchTour = new Shepherd.Tour({
@@ -199,7 +200,7 @@ disasterSearchTour.addStep('enter-search', {
       const input = document.getElementById('search-text')
       input.focus()
       input.value = ''
-      input.dispatchEvent(new Event('hdd.clear'))
+      magic.$emit('clearQuery')
     }
   },
   buttons: [

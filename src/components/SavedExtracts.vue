@@ -47,9 +47,13 @@
 </template>
 <script>
 import disaster from './Disaster'
+import magic from '@/bus'
 
 export default {
   components: {disaster},
+  created () {
+    magic.$on('clearCurrentExtract', () => (this.selectedExtractName = ''))
+  },
   data: function () {
     return {
       extractName: '',
@@ -80,12 +84,12 @@ export default {
   methods: {
     clear () {
       this.$store.commit('clearCurrentExtract')
-      this.selectedExtractName = ''
     },
     saveExtract () {
       this.$store.commit('saveExtract', this.extractName)
       if (this.status.type === 'error') return (this.extractName = '')
       this.selectedExtractName = this.extractName
+      this.extractName = ''
     },
     deleteExtract () {
       if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return

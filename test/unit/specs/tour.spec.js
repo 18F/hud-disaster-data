@@ -2,6 +2,7 @@ import tour from '@/tour'
 import sinon from 'sinon'
 import Vuex from 'vuex'
 import _ from 'lodash'
+import magic from '@/bus'
 
 describe('tour', () => {
   let store
@@ -13,6 +14,7 @@ describe('tour', () => {
   let hideStub
   let showStub
   let currentStepStub
+  let emitSpy
 
   beforeEach(function () {
     getters = {
@@ -44,12 +46,14 @@ describe('tour', () => {
       show: showStub
     }
     currentStepStub = sinon.stub(tour.tour, 'getCurrentStep').callsFake(() => step)
+    emitSpy = sinon.stub(magic, '$emit')
   })
 
   afterEach(function () {
     showErrorStub.restore()
     showMessageStub.restore()
     currentStepStub.restore()
+    emitSpy.restore()
   })
 
   describe('start', () => {
@@ -216,15 +220,14 @@ describe('tour', () => {
       it('should show the step message if error is false', () => {
         let step = tour.tour.getById('mutiple-enter-search')
         let focus = sinon.stub()
-        let dispatchEvent = sinon.stub()
-        let input = {focus, dispatchEvent}
+        let input = {focus}
         let getElementByIdStub = sinon.stub(document, 'getElementById').callsFake(() => input)
         step.options.when['before-show']()
         expect(showMessageStub.called).to.equal(true)
+        expect(emitSpy.calledWith('clearQuery')).to.equal(true)
         expect(mutations.clearSearch.called).to.equal(true)
         expect(focus.called).to.equal(true)
         expect(input.value).to.equal('')
-        expect(dispatchEvent.called).to.equal(true)
         getElementByIdStub.restore()
       })
       it('should set error to false and return if error is true', () => {

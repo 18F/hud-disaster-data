@@ -62,11 +62,12 @@
 <script>
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
+import magic from '@/bus'
 
 export default {
   components: {disaster, savedExtracts},
   mounted () {
-    this.$refs.searchText.addEventListener('hdd.clear', () => {
+    magic.$on('clearQuery', () => {
       if (this.$refs.searchText.value === '') this.query = ''
     })
   },
