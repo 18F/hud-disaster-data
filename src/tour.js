@@ -360,7 +360,7 @@ disasterSearchTour.addStep('enter-search', {
     <p>
     If you want to delete a previously saved list of disaster(s), select an option from the dropdown to load, then click the delete button.
     </p>
-    <p style="color: red; font-weight: bold;">
+    <p>
     Warning: this will actually delete the list. If you do not want to delete a list, click Next.
     </p>
   </div>
