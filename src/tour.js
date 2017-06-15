@@ -328,7 +328,7 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Clear list',
   text: `
     <p>
-    If you want to clear all the disasters in your list and start over, click the clear button
+    If you want to clear all the disasters in your list and start over, click the clear button.
     </p>
   </div>
   `,
@@ -347,7 +347,7 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Select a previously saved list',
   text: `
     <p>
-    If you want to select a previously saved list of disaster(s), select an option from the dropdown list
+    If you want to select a previously saved list of disaster(s), select an option from the dropdown list.
     </p>
   </div>
   `,
@@ -358,7 +358,10 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Delete previously saved list',
   text: `
     <p>
-    If you want to delete a previously saved list of disaster(s), select an option from the dropdown to load, then click the delete button
+    If you want to delete a previously saved list of disaster(s), select an option from the dropdown to load, then click the delete button.
+    </p>
+    <p style="color: red; font-weight: bold;">
+    Warning: this will actually delete the list. If you do not want to delete a list, click Next.
     </p>
   </div>
   `,
