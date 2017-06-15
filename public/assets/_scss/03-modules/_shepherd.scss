@@ -57,8 +57,16 @@ body:not(.shepherd-active) #tour-backdrop {
     }
     &.tour-back {
       background: none !important;
-      border: 1px solid #000 !important;
-      color: #000 !important;
+      border: 1px solid #0071bc !important;
+      color: #0071bc !important;
+    }
+    &.tour-back:hover {
+      border: 1px solid #205493 !important;
+      color: #205493 !important;
+    }
+    &.tour-back:active {
+      border: 1px solid #112e51 !important;
+      color: #112e51 !important;
     }
   }
 }
