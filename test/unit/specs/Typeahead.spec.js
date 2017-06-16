@@ -3,7 +3,6 @@ import Vue from 'vue' // eslint-disable-line
 import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
 import store, {actions} from '../../../src/store' // eslint-disable-line
-
 import Typeahead from '@/components/Typeahead' // eslint-disable-line
 
 Vue.use(Vuex)
