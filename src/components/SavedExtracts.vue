@@ -45,13 +45,16 @@
     </div>
     <div id="action-buttons">
       <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
-      <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export <i class="fa fa-sign-out"></i></button> <!-- disabled="true"  usa-button-disabled -->
+      <a :href="download()" download>
+        <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export <i class="fa fa-sign-out"></i></button> <!-- disabled="true"  usa-button-disabled -->
+      </a>
     </div>
   </div>
 </template>
 <script>
 import disaster from './Disaster'
 import magic from '@/bus'
+import moment from 'moment'
 
 export default {
   components: {disaster},
@@ -89,6 +92,11 @@ export default {
     }
   },
   methods: {
+    download () {
+      if (this.selectedExtractName) return `/api/export/${this.selectedExtractName}`
+      const timeStamp = moment().format('YYYY-MM-DD-kk:mm:ss')
+      return `/api/export/${timeStamp}`
+    },
     clear () {
       this.$store.commit('clearCurrentExtract')
     },

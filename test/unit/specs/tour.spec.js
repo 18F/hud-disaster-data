@@ -59,6 +59,22 @@ describe('tour', () => {
     querySelectorAll.restore()
   })
 
+  // describe('before start', () => {
+  //   it('our default next and back buttons should show the appropriate message and then call next or back, respectively', () => {
+  //     let disasterSearchTour = tour.tour
+  //     debugger
+  //     let nextStub = sinon.stub(tour.tour, 'next')
+  //     let backStub = sinon.stub(tour.tour, 'back')
+  //     disasterSearchTour.addStep('my-step', {buttons: [tour.tour.back, tour.tour.next]})
+  //     disasterSearchTour.show('my-step')
+  //     disasterSearchTour.next()
+  //     disasterSearchTour.back()
+  //     expect(showMessageStub.called).to.equal(true)
+  //     expect(nextStub.called).to.equal(true)
+  //     expect(backStub.called).to.equal(true)
+  //   })
+  // })
+
   describe('start', () => {
     it('should start the tour', () => {
       let stub = sinon.stub(tour.tour, 'start')
