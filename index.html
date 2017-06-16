@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
   <title>HUD Disaster Data Portal</title>
 </head>
 
@@ -45,7 +46,25 @@
   button { border-radius: 0.3rem; }
   select:focus, input[type="text"]:focus { box-shadow:none; }
 
-  /* -- Font-awesome accessibility classes required by 18F  ---- */
+  /* -- Font-awesome svg accessibility classes required by 18F  ---- */
+  .hdd-icon {
+      fill: #ffffff;
+      height: 1em;
+      width: 1em;
+  }
+  .hdd-icon.ico-lg {
+    height: 2em;
+    width: 2em;
+  }
+  #export-button .hdd-icon.export {
+    fill: #fff;
+    margin-left:5px;
+    vertical-align:middle;
+  }
+  #export-button:disabled .hdd-icon.export {
+    fill: #000;
+    vertical-align:middle;
+  }
   .fa {
     font-family: $sans-serif;
     font-smoothing: none;

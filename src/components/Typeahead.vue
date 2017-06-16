@@ -1,5 +1,7 @@
 <template>
   <div class="wrapper container-fluid">
+    <div v-once v-html="sprites">
+    </div>
     <div class="row">
       <div class="col-xs-12 col-md-6 search-container">
         <div id="opaque-bg" class="row">
@@ -63,10 +65,12 @@
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
 import magic from '@/bus'
+import sprites from '!!raw-loader!@/../public/assets/img/sprites.svg'
 
 export default {
   components: {disaster, savedExtracts},
   mounted () {
+    console.log(sprites)
     magic.$on('clearQuery', () => {
       if (this.$refs.searchText.value === '') this.query = ''
     })
@@ -74,7 +78,8 @@ export default {
   data () {
     return {
       query: '',
-      loading: false
+      loading: false,
+      sprites
     }
   },
   computed: {

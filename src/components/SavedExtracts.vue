@@ -11,25 +11,31 @@
       </div>
       <div id="cta">
         <label for="save-button" class="sr-only">Save selected disaster search</label>
-        <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract">
-          <i class="fa fa-2x fa-save"></i>
+        <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract" style="vertical-align:top;">
+          <!-- <i class="fa fa-2x fa-save"></i> -->
+          <svg class="hdd-icon ico-lg gray">
+            <use xlink:href="#fa-save"></use>
+          </svg>
         </button>
         <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
         <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
-          <i class="fa fa-2x fa-trash-o"></i>
+          <!-- <i class="fa fa-2x fa-trash-o"></i> -->
+          <svg class="hdd-icon ico-lg gray">
+            <use xlink:href="#fa-trash-o"></use>
+          </svg>
         </button>
       </div>
     </div>
     <div class="message-wrapper">
       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
-          <i class="m-icon fa fa-lg"></i>
+          <svg :class="`hdd-icon status-type ${status.type }`"><use :xlink:href="iconName()"></use></svg>
           {{status.message}}
           <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+          <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
+            <svg class="hdd-icon close-message"><use xlink:href="#fa-times"></use></svg>
+          </button>
         </div>
-        <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
-          <i class="close-message fa fa-times"></i>
-        </button>
       </div>
     </div>
     <div id="list">
@@ -46,15 +52,26 @@
     <div id="action-buttons">
       <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
       <a :href="download()" download>
-        <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export <i class="fa fa-sign-out"></i></button> <!-- disabled="true"  usa-button-disabled -->
+      <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export
+        <svg class="hdd-icon export">
+          <use xlink:href="#fa-sign-out"></use>
+        </svg>
+      </button>
       </a>
     </div>
   </div>
 </template>
+
 <script>
 import disaster from './Disaster'
 import magic from '@/bus'
 import moment from 'moment'
+const messages = {
+  success: '#fa-check-circle',
+  error: '#fa-times-circle',
+  warning: 'fa-warning',
+  info: '#fa-info-circle'
+}
 
 export default {
   components: {disaster},
@@ -117,6 +134,9 @@ export default {
     },
     hideMessage () {
       this.$store.commit('resetStatus')
+    },
+    iconName () {
+      return messages[this.status.type]
     }
   }
 }
