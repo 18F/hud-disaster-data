@@ -29,14 +29,10 @@
     <div class="message-wrapper">
       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
-          <svg class="hdd-icon status-type success"><use xlink:href="#fa-check-circle"></use></svg>
-          <!-- <svg class="hdd-icon status-type error"><use xlink:href="#fa-times-circle"></use></svg>
-          <svg class="hdd-icon status-type warning"><use xlink:href="#fa-exclamation-triangle"></use></svg>
-          <svg class="hdd-icon status-type info"><use xlink:href="# fa-info-circle"></use></svg> -->
+          <svg :class="`hdd-icon status-type ${status.type }`"><use :xlink:href="iconName()"></use></svg>
           {{status.message}}
           <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
           <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
-            <!-- <i class="close-message fa fa-times"></i> -->
             <svg class="hdd-icon close-message"><use xlink:href="#fa-times"></use></svg>
           </button>
         </div>
@@ -59,13 +55,20 @@
         <svg class="hdd-icon export">
           <use xlink:href="#fa-sign-out"></use>
         </svg>
-      </button> <!-- disabled="true"  usa-button-disabled -->
+      </button>
     </div>
   </div>
 </template>
+
 <script>
 import disaster from './Disaster'
 import magic from '@/bus'
+const messages = {
+  success: '#fa-check-circle',
+  error: '#fa-times-circle',
+  warning: 'fa-warning',
+  info: '#fa-info-circle'
+}
 
 export default {
   components: {disaster},
@@ -123,6 +126,9 @@ export default {
     },
     hideMessage () {
       this.$store.commit('resetStatus')
+    },
+    iconName () {
+      return messages[this.status.type]
     }
   }
 }

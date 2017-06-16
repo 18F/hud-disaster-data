@@ -29,8 +29,8 @@ span {
       margin-right:10px;
       margin-left: -1.5em;
     }
-    .close-message:before { content:"\f00d"; }
     /*
+    .close-message:before { content:"\f00d"; }
     .close-message {
       cursor:pointer;
       position:absolute;
@@ -39,31 +39,34 @@ span {
       opacity:.4;
     }
     */
-    .success { 
-        background:#e7f4e4;   
-        padding:10px;
-        vertical-align:middle;
+    .close-message {
+      fill: #000;
     }
-    /* .success .m-icon:before { content: "\f058"; } */
-    .success .hdd-icon {
+    .success, .error, .warning, .info {
+      padding:10px;
+      vertical-align:middle;
+    }
+    .success { background:#e7f4e4; }
+    .error { background:#f9dede; }
+    .warning { background: #fff1d2; }
+    .info { background:#e1f3f8; }
+    /* .success .m-icon:before { content: "\f058"; } 
+       .error .m-icon:before { content: "\f057"; } 
+       .warning .m-icon:before { content:"\f071"; } 
+       .info .m-icon:before { content: "\f05a"; }
+    */
+   .hdd-icon.status-type  {
       margin-right:10px;
       fill: #000;
       height:3em;
       width:3em;
     }
-    .error { background:#f9dede; }
-    .error .m-icon:before { content: "\f057"; }
-    .warning { background: #fff1d2; }
-    .warning .m-icon:before { content:"\f071"; }
-    .info { background:#e1f3f8; }
-    .info .m-icon:before { content: "\f05a"; }
     .usa-button.clear-message {
       background: transparent;
-      font-size:24px;
       cursor:pointer;
       position:absolute;
-      top:-5px;
-      right:-25px;
+      right:10px;
+      margin-top:.3em;
     }
 }
 
