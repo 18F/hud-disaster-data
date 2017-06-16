@@ -70,7 +70,7 @@ import sprites from '!!raw-loader!@/../public/assets/img/sprites.svg'
 export default {
   components: {disaster, savedExtracts},
   mounted () {
-    console.log(sprites)
+    // console.log(sprites)
     magic.$on('clearQuery', () => {
       if (this.$refs.searchText.value === '') this.query = ''
     })
