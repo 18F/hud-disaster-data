@@ -12,7 +12,10 @@
       <div id="cta">
         <label for="save-button" class="sr-only">Save selected disaster search</label>
         <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract">
-          <i class="fa fa-2x fa-save"></i>
+          <!-- <i class="fa fa-2x fa-save"></i> -->
+          <svg class="icon">
+            <use xlink:href="/static/img/sprites.svg#fa-save"></use>
+          </svg>
         </button>
         <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
         <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
@@ -115,4 +118,11 @@ export default {
 </script>
 <style lang="scss">
 //moved to 03-modules/_extracts.scss
+.extracts {
+  .icon {
+    fill: gray;
+    height: 2em;
+    width: 2em;
+  }
+}
 </style>
