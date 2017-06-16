@@ -39,13 +39,17 @@ span {
       opacity:.4;
     }
     */
-    .success { background:#e7f4e4; }
+    .success { 
+        background:#e7f4e4;   
+        padding:10px;
+        vertical-align:middle;
+    }
     /* .success .m-icon:before { content: "\f058"; } */
     .success .hdd-icon {
       margin-right:10px;
       fill: #000;
-      height:2em;
-      width:2em;
+      height:3em;
+      width:3em;
     }
     .error { background:#f9dede; }
     .error .m-icon:before { content: "\f057"; }

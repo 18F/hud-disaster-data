@@ -35,11 +35,11 @@
           <svg class="hdd-icon status-type info"><use xlink:href="# fa-info-circle"></use></svg> -->
           {{status.message}}
           <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+          <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
+            <!-- <i class="close-message fa fa-times"></i> -->
+            <svg class="hdd-icon close-message"><use xlink:href="#fa-times"></use></svg>
+          </button>
         </div>
-        <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
-          <!-- <i class="close-message fa fa-times"></i> -->
-          <svg class="hdd-icon close-message"><use xlink:href="#fa-times"></use></svg>
-        </button>
       </div>
     </div>
     <div id="list">
