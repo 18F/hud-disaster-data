@@ -1,9 +1,12 @@
 <template>
   <div class="extracts">
     <div id="saved_searches">
+      <div class="hdd-label">
+        Saved searches
+      </div>
       <div>
         <select required v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName">
-          <option value="" disabled selected>Saved searches......</option>
+          <option value="" disabled selected>Select a search...</option>
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
         <label for="extract-name" class="sr-only">Search Name</label>
@@ -20,6 +23,9 @@
         </button>
       </div>
     </div>
+    <div class="hdd-label">
+      Selected disasters list
+    </div>
     <div class="message-wrapper">
       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
@@ -33,9 +39,11 @@
       </div>
     </div>
     <div id="list">
-      <div v-if="loading">
-        <!-- TODO: fix this
-          <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> -->
+      <div class="list-loader" v-if="loading">
+        <icon class="fa-spin ico-xl" name="fa-spinner"></icon>
+        <span class="fa-spin-text">
+          Loading ...
+        </span>
         <span class="sr-only">Loading...</span>
       </div>
       <ul>

@@ -6,8 +6,8 @@
           <label v-if="item.currentExtract" :for="labelId" class="sr-only">{{ `Unselect ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
           <label v-else :for="labelId" class="sr-only">{{ `Select ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
           <button @click="toggleSelected(item)" class="select-button" :id="labelId" :name="disasterId">
-            <icon v-if="item.currentExtract" class="fa-3x" name="fa-check-square-o"></icon>
-            <icon v-else class="fa-3x" name="fa-square-o"></icon>
+            <icon v-if="item.currentExtract" class="ico-xl" name="fa-check-square-o"></icon>
+            <icon v-else class="ico-xl" name="fa-square-o"></icon>
           </button>
       </div>
       <div class="col-xs-12 col-sm-8 col-md-9">
