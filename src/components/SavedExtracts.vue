@@ -12,10 +12,7 @@
       <div id="cta">
         <label for="save-button" class="sr-only">Save selected disaster search</label>
         <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract" style="vertical-align:top;">
-          <!-- <i class="fa fa-2x fa-save"></i> -->
-          <svg class="hdd-icon ico-lg gray">
-            <use xlink:href="#fa-save"></use>
-          </svg>
+          <icon class="ico-lg gray" name="fa-save"></icon>
         </button>
         <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
         <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
@@ -65,6 +62,8 @@
 import disaster from './Disaster'
 import magic from '@/bus'
 import moment from 'moment'
+import icon from './Icon'
+
 const messages = {
   success: '#fa-check-circle',
   error: '#fa-times-circle',
@@ -73,7 +72,7 @@ const messages = {
 }
 
 export default {
-  components: {disaster},
+  components: {disaster, icon},
   created () {
     magic.$on('clearCurrentExtract', () => (this.selectedExtractName = ''))
   },
