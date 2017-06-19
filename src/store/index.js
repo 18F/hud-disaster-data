@@ -114,6 +114,7 @@ export const mutations = {
 export const actions = {
   loadDisasterList: function ({ commit }, qry) {
     axios.get(`/api/disasterquery/${qry}`).then((response) => {
+      debugger
       commit('updateDisasterList', { list: response.data })
       if (response.data && response.data.length === 0) return commit('setStatus', {type: 'info', msg: 'No results found!'})
       commit('resetStatus')

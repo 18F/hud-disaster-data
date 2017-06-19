@@ -1,5 +1,6 @@
 import Shepherd from 'tether-shepherd'
 import magic from '@/bus'
+import _ from 'lodash'
 let $store
 
 const disasterSearchTour = new Shepherd.Tour({
@@ -9,7 +10,10 @@ const disasterSearchTour = new Shepherd.Tour({
     scrollTo: false,
     when: {
       show: function () {
-        document.querySelectorAll('.shepherd-cancel-link').forEach(link => (link.textContent = ''))
+        _.each(document.querySelectorAll('.shepherd-cancel-link'), link => {
+          link.textContent = ''
+          link.innerHTML = '<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>'
+        })
       }
     }
   }
@@ -415,12 +419,12 @@ const TourObject = {
     if (store) $store = store
   },
   showError () {
-    document.querySelectorAll('.tour-message').forEach($el => ($el.style.display = 'none'))
-    document.querySelectorAll('.tour-error').forEach($el => ($el.style.display = 'block'))
+    _.each(document.querySelectorAll('.tour-message'), $el => ($el.style.display = 'none'))
+    _.each(document.querySelectorAll('.tour-error'), $el => ($el.style.display = 'block'))
   },
   showMessage () {
-    document.querySelectorAll('.tour-error').forEach($el => ($el.style.display = 'none'))
-    document.querySelectorAll('.tour-message').forEach($el => ($el.style.display = 'block'))
+    _.each(document.querySelectorAll('.tour-error'), $el => ($el.style.display = 'none'))
+    _.each(document.querySelectorAll('.tour-message'), $el => ($el.style.display = 'block'))
   }
 }
 export default TourObject

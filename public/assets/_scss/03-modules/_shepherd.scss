@@ -27,10 +27,6 @@ body:not(.shepherd-active) #tour-backdrop {
       border-top-left-radius: 8px !important;
       background-color: #0071bc !important;
       color: #fff !important;
-      a.shepherd-cancel-link:before {
-        @extend .fa;
-        @extend .fa-times:before;
-      }
       a.shepherd-cancel-link {
         color: inherit !important;
         &:hover {

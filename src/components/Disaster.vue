@@ -6,8 +6,8 @@
           <label v-if="item.currentExtract" :for="labelId" class="sr-only">{{ `Unselect ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
           <label v-else :for="labelId" class="sr-only">{{ `Select ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
           <button @click="toggleSelected(item)" class="select-button" :id="labelId" :name="disasterId">
-            <i v-if="item.currentExtract" class="fa fa-3x fa-check-square-o"></i>
-            <i v-else class="fa fa-3x fa-square-o"></i>
+            <icon v-if="item.currentExtract" class="fa-3x" name="fa-check-square-o"></icon>
+            <icon v-else class="fa-3x" name="fa-square-o"></icon>
           </button>
       </div>
       <div class="col-xs-12 col-sm-8 col-md-9">
@@ -21,8 +21,8 @@
       <div class="col-xs-12 col-sm-8 col-md-9">
         <label :for="`show-areas-${labelId}`" class="sr-only">Show {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}</label>
         <label :for="`hide-areas-${labelId}`" class="sr-only">Hide {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}</label>
-        <button v-if="!showAreas" @click="showAreas=!showAreas" class="usa-button" :id="`show-areas-${labelId}`">({{ item.declaredCountyArea.length }}) Affected Areas <i class="fa fa-caret-down"></i></button>
-        <button v-else="!showAreas" @click="showAreas=!showAreas" class="usa-button-secondary" :id="`hide-areas-${labelId}`"> ({{ item.declaredCountyArea.length }}) Affected Areas <i class="fa fa-caret-up"></i></button>
+        <button v-if="!showAreas" @click="showAreas=!showAreas" class="usa-button" :id="`show-areas-${labelId}`">({{ item.declaredCountyArea.length }}) Affected Areas <icon class="affected-areas" name="fa-caret-down"></icon></button>
+        <button v-else="!showAreas" @click="showAreas=!showAreas" class="usa-button-secondary" :id="`hide-areas-${labelId}`"> ({{ item.declaredCountyArea.length }}) Affected Areas <icon class="affected-areas" name="fa-caret-up"></icon></button>
       </div>
     </div>
     <div class="row">
@@ -42,8 +42,10 @@
 </template>
 <script>
 import { mapMutations } from 'vuex'
+import icon from './Icon'
 
 export default {
+  components: {icon},
   props: ['item', 'prefix'],
   data () {
     return {
@@ -67,51 +69,5 @@ export default {
 }
 </script>
 <style lang="scss">
-$check-color: #2e8540;
-
-.disaster {
-  font-size:15px;
-  button:focus {
-    outline: 1px dotted $check-color;
-  }
-  .select-button {
-    background:transparent;
-    color:#000;
-    margin: 0 2rem;
-    padding: 0;
-    &:focus {
-      box-shadow:none;
-    }
-  }
-  input[type="checkbox"] {
-    position:relative;
-    left:0;
-    width:24px;
-    height:24px;
-  }
-  h5 {
-    font-family: "Source Sans Pro", "Roboto", sans-serif;
-  }
-  i.fa-check-square-o {
-    color: $check-color;
-  }
-  .counties {
-    background-color:#fff;
-    border:1px solid #ccc;
-    padding:10px;
-    margin-top:10px;
-
-    ul li {
-      background-color: transparent;
-      border:none;
-      display: block;
-      padding-left:10px;
-      line-height:36px;
-    }
-
-    ul li:hover {
-      background-color:#f1f1f1;
-    }
-  }
-}
+//moved to 03-modules/_disaster.scss
 </style>

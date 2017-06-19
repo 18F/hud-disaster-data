@@ -3,9 +3,9 @@
     <div class="header header--pre">
       <div class="container-block">
         <p>
-          <i class="icon icon--flag" alt="U.S. flag"></i>{{premsg}}
+          <span class="icon icon--flag" alt="U.S. flag"></span>{{premsg}}
           <button :class="[showGovBanner ? 'usa-banner-button-alt expanded' : 'usa-banner-button-alt']" @click="showGovBanner=!showGovBanner">
-              Here's how you know <i class="fa"></i>
+              Here's how you know <icon :name="[showGovBanner ? 'fa-caret-up' : 'fa-caret-down']"></icon>
           </button>
         </p>
       </div>
@@ -47,7 +47,7 @@
         </div>
         <div class="avi avi--block pull-right" @click="startTour">
           <span class="icon icon--avatar"></span>
-          <i class=" fa fa-caret-down"></i>
+          <icon name="fa-caret-down"></icon>
         </div>
       </div>
     </div>
@@ -56,7 +56,10 @@
 
 <script>
 import tour from '../../tour'
+import icon from '../Icon'
+
 export default {
+  components: {icon},
   data () {
     return {
       title: 'Disaster Data Portal',

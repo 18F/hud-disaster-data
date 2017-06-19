@@ -25,6 +25,7 @@ span {
 #app-message-clear-button {
   right:-5px;
 }
+/* Messages styles --------------------------------- */
 .messages {
   /*  position: relative; */
       margin-top:20px;
@@ -84,17 +85,8 @@ span {
         cursor: pointer;
       }
     }
-    /*
-    .fa {
-      float: right;
-      font-size:24px;
-      position: relative;
-      top: -38px;
-      right: 18px;
-      background-color:#fff;
-    }
-    */
   }
+  /* Disaster list styles --------------------------------- */
   .disaster-list {
     background-color: #fff;
     box-shadow:0 5px 10px #000;
@@ -127,9 +119,6 @@ span {
     }
   }
 }
-
-
-/* Disaster list styles --------------------------------- */
 /* Typeahead styles ----------------------------------- */
 .Typeahead {
   padding-bottom:20px;

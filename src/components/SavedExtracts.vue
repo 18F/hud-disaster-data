@@ -16,27 +16,26 @@
         </button>
         <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
         <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
-          <svg class="hdd-icon ico-lg gray">
-            <use xlink:href="#fa-trash-o"></use>
-          </svg>
+          <icon class="ico-lg gray" name="fa-trash-o"></icon>
         </button>
       </div>
     </div>
     <div class="message-wrapper">
       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
-          <svg :class="`hdd-icon status-type ${status.type }`"><use :xlink:href="iconName()"></use></svg>
+          <icon :class="`status-type ${status.type}`" :name="iconName()"></icon>
           {{status.message}}
           <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
           <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
-            <svg class="hdd-icon close-message"><use xlink:href="#fa-times"></use></svg>
+            <icon class="close-message" name="fa-times"></icon>
           </button>
         </div>
       </div>
     </div>
     <div id="list">
       <div v-if="loading">
-        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        <!-- TODO: fix this
+          <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> -->
         <span class="sr-only">Loading...</span>
       </div>
       <ul>
@@ -49,9 +48,7 @@
       <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
       <a :href="download()" download>
       <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export
-        <svg class="hdd-icon export">
-          <use xlink:href="#fa-sign-out"></use>
-        </svg>
+        <icon class="export" name="fa-sign-out"></icon>
       </button>
       </a>
     </div>
@@ -65,10 +62,10 @@ import moment from 'moment'
 import icon from './Icon'
 
 const messages = {
-  success: '#fa-check-circle',
-  error: '#fa-times-circle',
+  success: 'fa-check-circle',
+  error: 'fa-times-circle',
   warning: 'fa-warning',
-  info: '#fa-info-circle'
+  info: 'fa-info-circle'
 }
 
 export default {
