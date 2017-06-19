@@ -19,7 +19,6 @@
         </button>
         <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
         <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
-          <!-- <i class="fa fa-2x fa-trash-o"></i> -->
           <svg class="hdd-icon ico-lg gray">
             <use xlink:href="#fa-trash-o"></use>
           </svg>

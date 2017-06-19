@@ -4,7 +4,7 @@
       <div class="col-xs-12 col-md-6 search-container">
         <div id="opaque-bg" class="row">
               <div class="col" id="message">
-                <h3>Relax, Finding things just got easier!</h3>
+                <h3>Disaster search</h3>
               </div>
               <div class="col Typeahead">
                 <div id="search">
@@ -21,20 +21,24 @@
                                  @input="update"/>
                         <i class="fa fa-spinner fa-spin" v-if="loading"></i>
                         <template v-else>
-                          <i class="fa fa-search" v-show="isEmpty"></i>
-                          <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
+                          <svg class="hdd-icon" v-show="isEmpty">
+                            <use xlink:href="#fa-search"></use>
+                          </svg>
+                          <svg class="hdd-icon clear-text" v-show="isDirty" @click="reset">
+                            <use xlink:href="#fa-times"></use>
+                          </svg>
                         </template>
                       </div>
                       <div class="message-wrapper">
                        <div class="messages" v-show="displayMessage" tabindex="0" ref="messages" id="search-message">
                          <div :class="status.type">
-                           <i class="m-icon fa fa-lg"></i>
+                           <svg :class="`hdd-icon status-type ${status.type }`"><use :xlink:href="iconName()"></use></svg>
                            {{status.message}}
                            <label for="app-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+                           <button @click="hideMessage" class="usa-button clear-message" id="app-message-clear-button">
+                             <svg class="hdd-icon close-message"><use xlink:href="#fa-times"></use></svg>
+                           </button>
                          </div>
-                         <button @click="hideMessage" class="usa-button clear-message" id="app-message-clear-button">
-                           <i class="close-message fa fa-times"></i>
-                         </button>
                        </div>
                       </div>
                       <div v-show="hasItems" class="disaster-list">
@@ -44,10 +48,10 @@
                           </li>
                         </ul>
                       </div>
+                      <div class="link-advanced-search">
+                          <a href="#">Advanced Search</a>
+                      </div>
                     </div>
-                </div>
-                <div class="link-advanced-search">
-                  <!-- <a href="#">Advanced Search</a> -->
                 </div>
             </div>
         </div>
@@ -63,6 +67,12 @@
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
 import magic from '@/bus'
+const messages = {
+  success: '#fa-check-circle',
+  error: '#fa-times-circle',
+  warning: 'fa-warning',
+  info: '#fa-info-circle'
+}
 
 export default {
   components: {disaster, savedExtracts},
@@ -111,6 +121,9 @@ export default {
     },
     hideMessage () {
       this.$store.commit('resetStatus')
+    },
+    iconName () {
+      return messages[this.status.type]
     }
   }
 }
