@@ -19,13 +19,13 @@
                                  v-model="query"
                                  @keydown.esc="reset"
                                  @input="update"/>
-                        <icon class="fa-spin" name="fa-spinner"></icon> 
-                      <!--  <template v-else>
+                        <icon v-if="loading" class="fa-spin" name="fa-spinner"></icon> 
+                        <template v-else>
                           <icon name="fa-search" v-show="isEmpty"></icon>
                           <a href="#" @click="reset" v-show="isDirty">
                             <icon class="clear-text" name="fa-times"></icon>
                           </a>
-                        </template> -->
+                        </template>
                       </div>
                       <div class="message-wrapper">
                        <div class="messages" v-show="displayMessage" tabindex="0" ref="messages" id="search-message">
