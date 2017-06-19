@@ -1,5 +1,6 @@
 import 'es6-promise/auto' // eslint-disable-line
 import Vue from 'vue' // eslint-disable-line
+import '@/vue-mixins'
 import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
 import SavedExtracts from '@/components/SavedExtracts' // eslint-disable-line

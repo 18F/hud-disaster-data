@@ -56,10 +56,8 @@
 
 <script>
 import tour from '../../tour'
-import icon from '../Icon'
 
 export default {
-  components: {icon},
   data () {
     return {
       title: 'Disaster Data Portal',

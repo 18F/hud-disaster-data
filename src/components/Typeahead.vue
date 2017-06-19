@@ -19,7 +19,7 @@
                                  v-model="query"
                                  @keydown.esc="reset"
                                  @input="update"/>
-                        <icon v-if="loading" class="fa-spin" name="fa-spinner"></icon> 
+                        <icon v-if="loading" class="fa-spin" name="fa-spinner"></icon>
                         <template v-else>
                           <icon name="fa-search" v-show="isEmpty"></icon>
                           <a href="#" @click="reset" v-show="isDirty">
@@ -65,16 +65,9 @@
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
 import magic from '@/bus'
-import icon from './Icon'
-const messages = {
-  success: 'fa-check-circle',
-  error: 'fa-times-circle',
-  warning: 'fa-warning',
-  info: 'fa-info-circle'
-}
 
 export default {
-  components: {disaster, icon, savedExtracts},
+  components: {disaster, savedExtracts},
   mounted () {
     magic.$on('clearQuery', () => {
       if (this.$refs.searchText.value === '') this.query = ''
@@ -120,9 +113,6 @@ export default {
     },
     hideMessage () {
       this.$store.commit('resetStatus')
-    },
-    iconName () {
-      return messages[this.status.type]
     }
   }
 }
