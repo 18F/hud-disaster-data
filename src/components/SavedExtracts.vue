@@ -59,17 +59,9 @@
 import disaster from './Disaster'
 import magic from '@/bus'
 import moment from 'moment'
-import icon from './Icon'
-
-const messages = {
-  success: 'fa-check-circle',
-  error: 'fa-times-circle',
-  warning: 'fa-warning',
-  info: 'fa-info-circle'
-}
 
 export default {
-  components: {disaster, icon},
+  components: {disaster},
   created () {
     magic.$on('clearCurrentExtract', () => (this.selectedExtractName = ''))
   },
@@ -129,9 +121,6 @@ export default {
     },
     hideMessage () {
       this.$store.commit('resetStatus')
-    },
-    iconName () {
-      return messages[this.status.type]
     }
   }
 }

@@ -42,10 +42,8 @@
 </template>
 <script>
 import { mapMutations } from 'vuex'
-import icon from './Icon'
 
 export default {
-  components: {icon},
   props: ['item', 'prefix'],
   data () {
     return {

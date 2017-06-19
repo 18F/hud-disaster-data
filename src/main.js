@@ -8,8 +8,25 @@ import Sprites from './components/Sprites'
 import Typeahead from './components/Typeahead'
 import AppHeader from './components/Header'
 import AppFooter from './components/Footer'
+import icon from './components/Icon'
+
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
+
+const messages = {
+  success: 'fa-check-circle',
+  error: 'fa-times-circle',
+  warning: 'fa-warning',
+  info: 'fa-info-circle'
+}
+Vue.mixin({
+  components: {icon},
+  methods: {
+    iconName () {
+      return messages[this.status.type]
+    }
+  }
+})
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
