@@ -18,8 +18,12 @@ span {
   padding:0 10px 0 30px;
 }
 .message-wrapper {
-    min-height:20px;
+  /*  min-height:20px; */
     font-family: "Source Sans Pro", sans-serif;
+}
+/*this style is REQUIRED to line up typeahead and messaging clearing "x" */
+#app-message-clear-button {
+  right:-5px;
 }
 .messages {
   /*  position: relative; */
@@ -29,16 +33,6 @@ span {
       margin-right:10px;
       margin-left: -1.5em;
     }
-    /*
-    .close-message:before { content:"\f00d"; }
-    .close-message {
-      cursor:pointer;
-      position:absolute;
-      top:0;
-      right:0;
-      opacity:.4;
-    }
-    */
     .close-message {
       fill: #000;
     }
@@ -50,11 +44,6 @@ span {
     .error { background:#f9dede; }
     .warning { background: #fff1d2; }
     .info { background:#e1f3f8; }
-    /* .success .m-icon:before { content: "\f058"; } 
-       .error .m-icon:before { content: "\f057"; } 
-       .warning .m-icon:before { content:"\f071"; } 
-       .info .m-icon:before { content: "\f05a"; }
-    */
    .hdd-icon.status-type  {
       margin-right:10px;
       fill: #000;
@@ -76,12 +65,26 @@ span {
 
   div#message {
     color: #fff;
-    text-align: center;
-    height:50px;
+    text-align: left;
+    margin-left:30px;
+    height:35px;
   }
 
   .search-wrapper {
-    .fa-times { cursor:pointer;}
+    .hdd-icon {
+      background-color:#fff;
+      fill: #000;
+      float:right;
+      position:relative;
+      top:-38px;
+      right:10px;
+      height:1.3em;
+      width:1.3em;
+      &.clear-text {
+        cursor: pointer;
+      }
+    }
+    /*
     .fa {
       float: right;
       font-size:24px;
@@ -90,18 +93,19 @@ span {
       right: 18px;
       background-color:#fff;
     }
+    */
   }
   .disaster-list {
     background-color: #fff;
     box-shadow:0 5px 10px #000;
-    height:355px;
+    height:340px;
     left:31px;
     overflow-x:hidden;
     overflow-y:scroll;
     padding:0;
     position: absolute;
     right:11px;
-    top:136px;
+    top:116px;
     ul {
       display:block;
       margin:0;
@@ -142,6 +146,10 @@ span {
   outline: 0;
 }
 .link-advanced-search {
-  padding:20px 40px;
+  padding-top:20px;
+  padding-bottom:20px;
   text-align:right;
+  a {
+    display:none;
+  }
 }
