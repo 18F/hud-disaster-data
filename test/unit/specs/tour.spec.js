@@ -59,21 +59,25 @@ describe('tour', () => {
     querySelectorAll.restore()
   })
 
-  // describe('before start', () => {
-  //   it('our default next and back buttons should show the appropriate message and then call next or back, respectively', () => {
-  //     let disasterSearchTour = tour.tour
-  //     debugger
-  //     let nextStub = sinon.stub(tour.tour, 'next')
-  //     let backStub = sinon.stub(tour.tour, 'back')
-  //     disasterSearchTour.addStep('my-step', {buttons: [tour.tour.back, tour.tour.next]})
-  //     disasterSearchTour.show('my-step')
-  //     disasterSearchTour.next()
-  //     disasterSearchTour.back()
-  //     expect(showMessageStub.called).to.equal(true)
-  //     expect(nextStub.called).to.equal(true)
-  //     expect(backStub.called).to.equal(true)
-  //   })
-  // })
+  describe('before start', () => {
+    it('our default next and back buttons should show the appropriate message and then call next or back, respectively', () => {
+      let back = tour.back
+      let next = tour.next
+      let disasterSearchTour = tour.tour
+      let backStub = sinon.stub(disasterSearchTour, 'back')
+      let nextStub = sinon.stub(disasterSearchTour, 'next')
+      disasterSearchTour.addStep('my-step', {title: 'my test step', buttons: [tour.back, tour.next]})
+      disasterSearchTour.show('my-step')
+      back.action()
+      next.action()
+      expect(showMessageStub.called).to.equal(true)
+      expect(nextStub.called).to.equal(true)
+      expect(backStub.called).to.equal(true)
+      nextStub.restore()
+      backStub.restore()
+      disasterSearchTour.hide() // needed for next test (should start the tour)
+    })
+  })
 
   describe('start', () => {
     it('should start the tour', () => {
