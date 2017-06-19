@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Axios from 'axios'
 import store from './store'
+import Sprites from './components/Sprites'
 import Typeahead from './components/Typeahead'
 import AppHeader from './components/Header'
 import AppFooter from './components/Footer'
@@ -19,6 +20,7 @@ new Vue({
   el: '#page',
   store,
   components: {
+    Sprites,
     AppHeader,
     Typeahead,
     AppFooter
