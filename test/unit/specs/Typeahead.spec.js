@@ -4,6 +4,7 @@ import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
 import store, {actions} from '../../../src/store' // eslint-disable-line
 import Typeahead from '@/components/Typeahead' // eslint-disable-line
+import magic from '@/bus' // eslint-disable-line
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
@@ -64,6 +65,19 @@ describe('Typeahead.vue', () => {
       vm.update()
       expect(stub.called).to.be.equal(false)
     })
+
+    // it('should call loadDisasterList if query is >= 2 in length', () => {
+    //   let mutations = {}
+    //   let stub = sinon.stub(mutations, 'loadDisasterList')
+    //   const myStore = new Vuex.Store({state: {}, mutations})
+    //   const Constructor = Vue.extend(Typeahead)
+    //   const vm = new Constructor({store: myStore}).$mount()
+    //   expect(vm.query).to.be.equal('')
+    //   vm.query = 'DR'
+    //   vm.update()
+    //   expect(stub.called).to.be.equal(true)
+    //   stub.restore()
+    // })
   })
 
   describe('displayMessage', function () {
@@ -122,6 +136,26 @@ describe('Typeahead.vue', () => {
       const vm = new Constructor({store}).$mount()
       vm.hideMessage()
       expect(mutations.resetStatus.called).to.be.equal(true)
+    })
+  })
+
+  describe('mounted', () => {
+    it('magic should listen for clearQuery and set query to blank if searchText is blank', () => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor({store}).$mount()
+      vm.$refs.searchText.value = ''
+      vm.query = 'something'
+      magic.$emit('clearQuery')
+      expect(vm.query).to.be.equal('')
+    })
+
+    it('magic should listen for clearQuery and not set query to blank if searchText is not blank', () => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor({store}).$mount()
+      vm.$refs.searchText.value = ''
+      vm.query = 'something'
+      magic.$emit('clearQuery')
+      expect(vm.query).to.be.equal('')
     })
   })
 })

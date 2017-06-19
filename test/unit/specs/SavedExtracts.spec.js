@@ -78,6 +78,28 @@ describe('SavedExtracts component', function () {
     dispatchEvent($button, 'click')
     Vue.nextTick(() => {
       expect(mutations.saveExtract.calledOnce).to.equal(true)
+      expect(vm.extractName).to.equal('')
+      done()
+    })
+  })
+
+  it('should set extractName to blank when save creates an error message', function (done) {
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    vm.saveExtract()
+    expect(vm.extractName).to.equal('')
+    done()
+  })
+
+  it('should call set selectedExtractName to extractName when the save does not return error', function (done) {
+    getters.status = function () { return {type: 'success', message: 'success message'} }
+    store = new Vuex.Store({state: {}, mutations, getters})
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    let $button = vm.$el.querySelector('#save-button')
+    dispatchEvent($button, 'click')
+    Vue.nextTick(() => {
+      expect(mutations.saveExtract.calledOnce).to.equal(true)
       done()
     })
   })
@@ -176,6 +198,32 @@ describe('SavedExtracts component', function () {
     let $button = vm.$el.querySelector('#save-button')
     expect(vm.selectedExtractName).to.be.equal('')
     expect($button.disabled)
+  })
+
+  it('should set selectedExtractName to blank when newExtract is true', function () {
+    getters.newExtract = function () { return true }
+    store = new Vuex.Store({state: {}, mutations, getters})
+    const Constructor = Vue.extend(SavedExtracts)
+    const vm = new Constructor({store}).$mount()
+    expect(vm.selectedExtractName).to.be.equal('')
+  })
+
+  describe('download', function () {
+    it('should return correct API endpoint with search name when called with a selectedExtractName', function () {
+      const Constructor = Vue.extend(SavedExtracts)
+      const vm = new Constructor({store}).$mount()
+      vm.selectedExtractName = 'MyTEST'
+      let downloadURL = vm.download()
+      expect(downloadURL).to.be.equal('/api/export/MyTEST')
+    })
+
+    it('should return correct API endpoint with timestamp when called without a selectedExtractName', function () {
+      const Constructor = Vue.extend(SavedExtracts)
+      const vm = new Constructor({store}).$mount()
+      vm.selectedExtractName = ''
+      let downloadURL = vm.download()
+      expect(downloadURL.should.not.be.empty)
+    })
   })
 
   describe('displayMessage', function () {

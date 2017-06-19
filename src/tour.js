@@ -409,6 +409,8 @@ const TourObject = {
     disasterSearchTour.start()
   },
   tour: disasterSearchTour,
+  next: next,
+  back: back,
   setStore (store) {
     if (store) $store = store
   },
