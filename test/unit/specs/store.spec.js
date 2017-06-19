@@ -182,7 +182,6 @@ describe('store', function () {
           status: 200,
           response: _.clone(TWO_RECORDS)
         }).then(function () {
-          debugger
           expect(state.savedExtracts.length).to.be.above(0)
           expect(state.currentExtract.length).to.be.equal(2)
           done()

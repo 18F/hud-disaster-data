@@ -41,7 +41,7 @@
     </div>
     <div id="action-buttons">
       <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
-      <button class="usa-button green">Export <i class="fa fa-sign-out"></i></button> <!-- disabled="true"  usa-button-disabled -->
+      <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export <i class="fa fa-sign-out"></i></button> <!-- disabled="true"  usa-button-disabled -->
     </div>
   </div>
 </template>
@@ -84,8 +84,8 @@ export default {
     },
     saveExtract () {
       this.$store.commit('saveExtract', this.extractName)
+      if (this.status.type === 'error') return (this.extractName = '')
       this.selectedExtractName = this.extractName
-      this.extractName = ''
     },
     deleteExtract () {
       if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return

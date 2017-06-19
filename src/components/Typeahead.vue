@@ -12,6 +12,7 @@
                       <div class="search-wrapper">
                         <label for="search-text" class="sr-only">search FEMA disasters</label>
                         <input type="text" id="search-text"
+                                 ref="searchText"
                                  class="Typeahead__input"
                                  placeholder="Search by disaster number, type, or state"
                                  autocomplete="off"
@@ -25,7 +26,7 @@
                         </template>
                       </div>
                       <div class="message-wrapper">
-                       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
+                       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages" id="search-message">
                          <div :class="status.type">
                            <i class="m-icon fa fa-lg"></i>
                            {{status.message}}
@@ -61,10 +62,14 @@
 <script>
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
-import store from '../store'
 
 export default {
   components: {disaster, savedExtracts},
+  mounted () {
+    this.$refs.searchText.addEventListener('hdd.clear', () => {
+      if (this.$refs.searchText.value === '') this.query = ''
+    })
+  },
   data () {
     return {
       query: '',
@@ -76,7 +81,7 @@ export default {
       return this.$store.getters.currentSearchResult
     },
     hasItems () {
-      return this.items.length > 0
+      return this.items && this.items.length > 0
     },
     isEmpty () {
       return !this.query
@@ -101,7 +106,7 @@ export default {
     },
     reset () {
       this.query = ''
-      store.commit({type: 'clearSearch'})
+      this.$store.commit({type: 'clearSearch'})
     },
     hideMessage () {
       this.$store.commit('resetStatus')
@@ -109,9 +114,4 @@ export default {
   }
 }
 </script>
-
 <style src="../../public/assets/_scss/app.scss" lang="scss"/>
-<style lang="scss">
-/* global overrides ----------------------------------- */
-// moved styles to _scss/03-modules/typeahead.scss
-</style>

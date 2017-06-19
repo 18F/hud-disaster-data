@@ -1,0 +1,66 @@
+@import "../../../node_modules/tether-shepherd/dist/css/shepherd-theme-square.css";
+#tour-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000000;
+  opacity: .5;
+}
+body:not(.shepherd-active) #tour-backdrop {
+    display: none;
+}
+.shepherd-enabled {
+  z-index: 1042;
+  position: relative;
+  outline: 2px solid white;
+}
+.shepherd-step {
+  z-index: 1042;
+  outline: none;
+  .shepherd-content {
+    border-radius: 8px !important;
+    header {
+      border-top-right-radius: 8px !important;
+      border-top-left-radius: 8px !important;
+      background-color: #0095fe !important;
+      color: #fff !important;
+      a.shepherd-cancel-link {
+        color: inherit !important;
+        &:hover {
+          background: #0095fe !important;
+        }
+      }
+    }
+  }
+  .shepherd-button {
+    @extend .usa-button;
+    border-radius: 0.3rem !important;
+    text-transform: none !important;
+    font-size: 17px !important;
+    letter-spacing: normal !important;
+    padding: 10px 20px !important;
+    &.tour-back {
+      background: none !important;
+      border: none !important;
+      color: #000 !important;
+      font-weight: normal !important;
+      text-decoration: underline !important;
+
+    }
+  }
+}
+.shepherd-element * {
+  font-family: "Source Sans Pro", "Roboto", sans-serif;
+  font-weight: 300;
+}
+.shepherd-element.shepherd-theme-square .shepherd-content footer .shepherd-buttons {
+  li {
+    &:before {
+      content: "";
+    }
+    display: inline-block;
+  }
+}
