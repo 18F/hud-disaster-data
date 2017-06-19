@@ -1,20 +1,20 @@
 <template>
-  <svg :class="classes()"><use :xlink:href="icon()"></use></svg>
+  <svg :class="getClasses()"><use :xlink:href="getIcon()"></use></svg>
 </template>
 <script>
 const iconClass = 'hdd-icon'
 
 export default {
   props: [
-    'class',
+    'classes',
     'name'
   ],
   methods: {
-    classes () {
-      if (!this.class) return iconClass
-      return `${iconClass} ${this.class}`
+    getClasses () {
+      if (!this.classes) return iconClass
+      return `${iconClass} ${this.classes}`
     },
-    icon () {
+    getIcon () {
       return `#${this.name}`
     }
   }

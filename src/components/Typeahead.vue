@@ -19,22 +19,22 @@
                                  v-model="query"
                                  @keydown.esc="reset"
                                  @input="update"/>
-                        <icon v-if="loading" class="fa-spin" name="fa-spinner"></icon>
+                        <icon v-if="loading" classes="fa-spin" name="fa-spinner"></icon>
                         <template v-else>
                           <icon name="fa-search" v-show="isEmpty"></icon>
                           <a href="#" @click="reset" v-show="isDirty">
-                            <icon class="clear-text" name="fa-times"></icon>
+                            <icon classes="clear-text" name="fa-times"></icon>
                           </a>
                         </template>
                       </div>
                       <div class="message-wrapper">
                        <div class="messages" v-show="displayMessage" tabindex="0" ref="messages" id="search-message">
                          <div :class="status.type">
-                           <icon :class="`status-type ${status.type}`" :name="iconName()"></icon>
+                           <icon :classes="`status-type ${status.type}`" :name="iconName()"></icon>
                            {{status.message}}
                            <label for="app-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
                            <button @click="hideMessage" class="usa-button clear-message" id="app-message-clear-button">
-                            <icon class="close-message" name="fa-times"></icon>
+                            <icon classes="close-message" name="fa-times"></icon>
                            </button>
                          </div>
                        </div>

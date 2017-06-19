@@ -21,8 +21,8 @@
       <div class="col-xs-12 col-sm-8 col-md-9">
         <label :for="`show-areas-${labelId}`" class="sr-only">Show {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}</label>
         <label :for="`hide-areas-${labelId}`" class="sr-only">Hide {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}</label>
-        <button v-if="!showAreas" @click="showAreas=!showAreas" class="usa-button" :id="`show-areas-${labelId}`">({{ item.declaredCountyArea.length }}) Affected Areas <icon class="affected-areas" name="fa-caret-down"></icon></button>
-        <button v-else="!showAreas" @click="showAreas=!showAreas" class="usa-button-secondary" :id="`hide-areas-${labelId}`"> ({{ item.declaredCountyArea.length }}) Affected Areas <icon class="affected-areas" name="fa-caret-up"></icon></button>
+        <button v-if="!showAreas" @click="showAreas=!showAreas" class="usa-button" :id="`show-areas-${labelId}`">({{ item.declaredCountyArea.length }}) Affected Areas <icon classes="affected-areas" name="fa-caret-down"></icon></button>
+        <button v-else="!showAreas" @click="showAreas=!showAreas" class="usa-button-secondary" :id="`hide-areas-${labelId}`"> ({{ item.declaredCountyArea.length }}) Affected Areas <icon classes="affected-areas" name="fa-caret-up"></icon></button>
       </div>
     </div>
     <div class="row">

@@ -15,11 +15,11 @@
       <div id="cta">
         <label for="save-button" class="sr-only">Save selected disaster search</label>
         <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract" style="vertical-align:top;">
-          <icon class="ico-lg gray" name="fa-save"></icon>
+          <icon classes="ico-lg gray" name="fa-save"></icon>
         </button>
         <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
         <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
-          <icon class="ico-lg gray" name="fa-trash-o"></icon>
+          <icon classes="ico-lg gray" name="fa-trash-o"></icon>
         </button>
       </div>
     </div>
@@ -29,11 +29,11 @@
     <div class="message-wrapper">
       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
-          <icon :class="`status-type ${status.type}`" :name="iconName()"></icon>
+          <icon :classes="`status-type ${status.type}`" :name="iconName()"></icon>
           {{status.message}}
           <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
           <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
-            <icon class="close-message" name="fa-times"></icon>
+            <icon classes="close-message" name="fa-times"></icon>
           </button>
         </div>
       </div>
@@ -56,7 +56,7 @@
       <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
       <a :href="download()" download>
       <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export
-        <icon class="export" name="fa-sign-out"></icon>
+        <icon classes="export" name="fa-sign-out"></icon>
       </button>
       </a>
     </div>
