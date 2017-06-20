@@ -45,9 +45,6 @@
               icon.ico-lg(name='fa-bar-chart')
               span
                 | Reports
-        .avi.avi--block.pull-right
-          span.icon.icon--avatar
-          icon(name='fa-caret-down')
     #ribbon
       span
         | Need Help?

@@ -7,8 +7,14 @@
   border-radius:10px;
   padding:20px;
 
+  h4 {
+    color:#fff;
+    line-height:18px;
+    margin-top:10px;
+  }
+  h4.no-margin { margin-top:0; }
   div#saved_searches {
-    height:100px;
+    height:90px;
 
     select, input {
       float:left;

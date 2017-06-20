@@ -5,7 +5,7 @@
   &--pre{
     padding:10px 0;
     /* background:$brand-primary; */
-    background:#0071bd;
+    background:#0071bc;
 
     p {
       margin:0;
@@ -15,7 +15,7 @@
     }
   }
   &--masthead{
-    padding-top:20px;
+    padding-top:12px;
     background: #fff;
 
     p {
@@ -55,25 +55,25 @@
 #tabs{
   position:relative;
   top:0;
-  margin-left:50%;
+  margin-left:52%;
 
   .tab{
-    background:#f7f7f7;
-    border:1px solid #000;
-    border-radius:4px;
+    border:1px solid #e8e8e9;
+    border-bottom:none;
+    border-top-left-radius:4px;
+    border-top-right-radius:4px;
     float:left;
-    height:100px;
+    height:110px;
     margin:0 10px;
     text-align:center;
-    padding-top:15px;
+    padding-top:20px;
     width:140px;
 
     &.selected {
-      background-color:#000;
+      background-color:#191d22;
+      border:transparent;
       color:#fff;
       height:110px;
-      border-bottom-left-radius:0;
-      border-bottom-right-radius:0;
 
       svg { fill:#fff; }
       span { color:#fff; }
@@ -87,9 +87,9 @@
 
 #ribbon {
   height:60px;
-  background:#000;
+  background:#191d22;
   text-align:center;
-  padding-top:5px;
+  padding-top:3px;
 
   span{
     display:inline;

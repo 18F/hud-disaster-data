@@ -1,9 +1,7 @@
 <template>
   <div class="extracts">
     <div id="saved_searches">
-      <div class="hdd-label">
-        Saved searches
-      </div>
+      <h4>Saved searches</h4>
       <div>
         <select required v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName">
           <option value="" disabled selected>Select a search...</option>
@@ -23,9 +21,7 @@
         </button>
       </div>
     </div>
-    <div class="hdd-label">
-      Selected disasters list
-    </div>
+    <h4>Selected disasters list</h4>
     <div class="message-wrapper">
       <div class="messages"  v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
