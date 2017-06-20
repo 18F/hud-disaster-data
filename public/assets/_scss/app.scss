@@ -25,16 +25,35 @@ background-size: contain;
 /* -- Global style overrides ---------------------------- */
 button { border-radius: 0.3rem; }
 select:focus, input[type="text"]:focus { box-shadow:none; }
+button:focus {
+  outline: 1px dotted $check-color;
+}
+
+/* -- Label and title styles ----------------------*/
+h5 {
+  font-family: "Source Sans Pro", "Roboto", sans-serif;
+}
+
+.hdd-label {
+  color:#fff;
+  padding: 10px 0;
+}
 
 /* -- Icon svg accessibility classes ------------ */
 .hdd-icon {
     fill: #ffffff;
     height: 1em;
     width: 1em;
-}
-.hdd-icon.ico-lg {
-  height: 2em;
-  width: 2em;
+
+    &.ico-lg {
+      height: 2em; 
+      width: 2em;
+    }
+
+    &.ico-xl {
+      height:3em;
+      width:3em;
+    }
 }
 #export-button .hdd-icon.export {
   fill: #fff;

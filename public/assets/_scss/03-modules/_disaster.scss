@@ -2,21 +2,6 @@ $check-color: #2e8540;
 .disaster {
   font-size:15px;
   
-  h5 {
-    font-family: "Source Sans Pro", "Roboto", sans-serif;
-  }
-  
-  button:focus {
-    outline: 1px dotted $check-color;
-  }
-
-  input[type="checkbox"] {
-    position:relative;
-    left:0;
-    width:24px;
-    height:24px;
-  }
-  
   .affected-areas {
     vertical-align:bottom;
   }
