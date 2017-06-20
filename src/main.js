@@ -1,10 +1,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import './vue-mixins'
+import './vue-mixins' // All vue components will share these
 import Vuex from 'vuex'
 import Axios from 'axios'
-import store from './store'
+import store from './store' // This is our Vuex store.  It helps us manage state.
 import Sprites from './components/Sprites'
 import Typeahead from './components/Typeahead'
 import AppHeader from './components/Header'
