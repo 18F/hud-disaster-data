@@ -5,7 +5,7 @@
         Saved searches
       </div>
       <div>
-        <select required v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName">
+        <select required v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName" title='saved searches'>
           <option value="" disabled selected>Select a search...</option>
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
@@ -14,11 +14,11 @@
       </div>
       <div id="cta">
         <label for="save-button" class="sr-only">Save selected disaster search</label>
-        <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract" style="vertical-align:top;">
+        <button @click="saveExtract" class="usa-button" id="save-button" title="save button" :disabled="!newExtract" style="vertical-align:top;">
           <icon classes="ico-lg gray" name="fa-save"></icon>
         </button>
         <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
-        <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
+        <button @click="deleteExtract" class="usa-button" id="delete-button" title="delete button" :disabled="selectedExtractName === ''">
           <icon classes="ico-lg gray" name="fa-trash-o"></icon>
         </button>
       </div>
@@ -32,7 +32,7 @@
           <icon :classes="`status-type ${status.type}`" :name="iconName()"></icon>
           {{status.message}}
           <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
-          <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
+          <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button" title="extract message clear button">
             <icon classes="close-message" name="fa-times"></icon>
           </button>
         </div>
@@ -54,7 +54,7 @@
     </div>
     <div id="action-buttons">
       <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
-      <a  :href="download()" download>
+      <a :href="download()" tabindex="-1" download>
         <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export
         <icon classes="export" name="fa-sign-out"></icon>
         </button>
