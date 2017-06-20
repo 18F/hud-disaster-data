@@ -215,10 +215,10 @@ describe('SavedExtracts component', function () {
       const vm = new Constructor({store}).$mount()
       vm.selectedExtractName = 'MyTEST'
       let downloadURL = vm.download()
-      expect(downloadURL).to.be.equal('/api/export/MyTEST')
+      expect(downloadURL).to.contain('/api/export/MyTEST')
     })
 
-    it('should return correct API endpoint with timestamp when called without a selectedExtractName', function () {
+    it('should return API endpoint when called without a selectedExtractName', function () {
       const Constructor = Vue.extend(SavedExtracts)
       const vm = new Constructor({store}).$mount()
       vm.selectedExtractName = ''

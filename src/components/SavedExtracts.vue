@@ -64,10 +64,10 @@
     </div>
     <div id="action-buttons">
       <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
-      <a :href="download()" download>
-      <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export
+      <a  :href="download()" download>
+        <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export
         <icon classes="export" name="fa-sign-out"></icon>
-      </button>
+        </button>
       </a>
     </div>
   </div>
@@ -77,6 +77,7 @@
 import disaster from './Disaster'
 import magic from '@/bus'
 import moment from 'moment'
+import _ from 'lodash'
 
 export default {
   components: {disaster},
@@ -115,9 +116,12 @@ export default {
   },
   methods: {
     download () {
-      if (this.selectedExtractName) return `/api/export/${this.selectedExtractName}`
       const timeStamp = moment().format('YYYY-MM-DD-kk:mm:ss')
-      return `/api/export/${timeStamp}`
+      const url = this.selectedExtractName ? `/api/export/${this.selectedExtractName}-${timeStamp}` : `/api/export/${timeStamp}`
+      const data = _.map(this.$store.getters.currentExtract, disaster => {
+        return `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`
+      })
+      return `${url}?disasters=${data}`
     },
     clear () {
       this.$store.commit('clearCurrentExtract')
