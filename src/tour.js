@@ -7,7 +7,7 @@ const disasterSearchTour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-element shepherd-open shepherd-theme-square',
     showCancelLink: true,
-    scrollTo: false,
+    scrollTo: true,
     when: {
       show: function () {
         _.each(document.querySelectorAll('.shepherd-cancel-link'), link => {

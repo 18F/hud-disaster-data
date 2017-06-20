@@ -21,7 +21,7 @@
         </button>
       </div>
     </div>
-    <h4>Selected disasters list</h4>
+    <h4>Selected disasters area</h4>
     <div class="message-wrapper">
       <div class="messages"  v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">

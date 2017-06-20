@@ -1,7 +1,11 @@
 $check-color: #2e8540;
 .disaster {
   font-size:15px;
-  
+
+  h5{
+    font-weight:700;
+  }
+
   .affected-areas {
     vertical-align:bottom;
   }
@@ -11,7 +15,7 @@ $check-color: #2e8540;
     border:1px solid #ccc;
     padding:10px;
     margin-top:10px;
-    
+
     ul li {
       background-color: transparent;
       border:none;
@@ -24,17 +28,17 @@ $check-color: #2e8540;
       background-color:#f1f1f1;
     }
   }
-  
+
   .select-button {
     background:transparent;
     color:#000;
     margin: 0;
     padding: 0;
-    
+
     &:focus {
       box-shadow:none;
     }
-    
+
     .hdd-icon {
       fill: $check-color;
     }
