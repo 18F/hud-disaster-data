@@ -4,7 +4,8 @@
   }
   &--pre{
     padding:10px 0;
-    background:$brand-primary;
+    /* background:$brand-primary; */
+    background:#0071bd;
 
     p {
       margin:0;
@@ -14,7 +15,8 @@
     }
   }
   &--masthead{
-    padding:20px 0;
+    padding-top:20px;
+    background: #fff;
 
     p {
       margin:0;
@@ -44,10 +46,60 @@
       padding:35px 0 0;
       font-size:24px;//update variable later
       line-height:1;
-      color:$color-white;
+      /* color:$color-white; */
+      color:#000;
     }
   }
 }
+
+#tabs{
+  position:relative;
+  top:0;
+  margin-left:50%;
+
+  .tab{
+    background:#f7f7f7;
+    border:1px solid #000;
+    border-radius:4px;
+    float:left;
+    height:100px;
+    margin:0 10px;
+    text-align:center;
+    padding-top:15px;
+    width:140px;
+
+    &.selected {
+      background-color:#000;
+      color:#fff;
+      height:110px;
+      border-bottom-left-radius:0;
+      border-bottom-right-radius:0;
+
+      svg { fill:#fff; }
+      span { color:#fff; }
+
+    }
+
+    svg{ fill:#000; }
+    span { color:#000; }
+  }
+}
+
+#ribbon {
+  height:60px;
+  background:#000;
+  text-align:center;
+  padding-top:5px;
+
+  span{
+    display:inline;
+    color: #fff;
+    margin-right:10px;
+  }
+
+  button { display:inline; }
+}
+
 .avi{
   &--block{
     .icon--avatar {
@@ -58,6 +110,12 @@
       background-image:url("../img/icon-avatar.jpg");
       background-repeat:no-repeat;
       background-size:contain;
+
+      .hdd-icon{
+        fill:#000;
+      }
+
+
       img {
         display:none;//remove later
       }
