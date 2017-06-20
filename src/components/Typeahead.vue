@@ -22,7 +22,7 @@
                         <icon v-if="loading" classes="fa-spin" name="fa-spinner"></icon>
                         <template v-else>
                           <icon name="fa-search" v-show="isEmpty"></icon>
-                          <a href="#" @click="reset" v-show="isDirty">
+                          <a href="#" @click="reset" v-if="isDirty">
                             <icon classes="clear-text" name="fa-times"></icon>
                           </a>
                         </template>
@@ -33,7 +33,7 @@
                            <icon :classes="`status-type ${status.type}`" :name="iconName()"></icon>
                            {{status.message}}
                            <label for="app-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
-                           <button @click="hideMessage" class="usa-button clear-message" id="app-message-clear-button">
+                           <button @click="hideMessage" class="usa-button clear-message" title="app message clear button" id="app-message-clear-button">
                             <icon classes="close-message" name="fa-times"></icon>
                            </button>
                          </div>

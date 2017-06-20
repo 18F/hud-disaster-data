@@ -6,13 +6,13 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node index",
-    "build": "npm test && node build/build.js",
+    "build": "npm test && node build/build.js && npm run 508-test",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "server-unit": "mocha test/server && mocha test",
-    "test": "npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit && npm run 508-test",
+    "test": "npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
     "standard": "standard 'src/**/*.js' 'lib/**/*.js' 'test/**/*.js'",
-    "508-test": "npm run start & sleep 5 && trap 'kill $(jobs -p)' EXIT && ./node_modules/.bin/pa11y http://localhost:3000"
+    "508-test": "npm run start & sleep 5 && trap 'kill $(jobs -p)' EXIT && ./node_modules/.bin/pa11y -i notice http://localhost:3000"
   },
   "repository": {
     "type": "git",
