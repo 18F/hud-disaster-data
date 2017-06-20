@@ -27,14 +27,24 @@
       Selected disasters list
     </div>
     <div class="message-wrapper">
-      <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
+      <div class="messages"  v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
-          <icon :classes="`status-type ${status.type}`" :name="iconName()"></icon>
-          {{status.message}}
-          <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
-          <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
-            <icon classes="close-message" name="fa-times"></icon>
-          </button>
+          <div style="padding:10px; overflow:hidden;">
+            <div id="container_03" style="float:left; width:10%; padding:5px;">
+               <icon :classes="`ico-lg status-type ${status.type}`" :name="iconName()"></icon>
+            </div>
+            <div id="container_02" style="float:left; width:80%;">
+              <div style="line-height: 20px; padding:12px 0;">
+                {{status.message}}
+              </div>
+            </div>
+            <div id="container_03" style="float:left;">
+              <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+              <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
+                <icon classes="close-message" name="fa-times"></icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -32,28 +32,28 @@ span {
       fill: #000;
     }
     .success, .error, .warning, .info {
-      padding:10px;
+    /*  padding:10px; */
       vertical-align:middle;
+      fill:#000;
     }
     .success { background:#e7f4e4; }
     .error { background:#f9dede; }
     .warning { background: #fff1d2; }
     .info { background:#e1f3f8; }
-   .hdd-icon.status-type  {
-      margin-right:10px;
+   /* .hdd-icon.status-type  {
+      /* margin-right:10px;
       fill: #000;
-      height:3em;
-      width:3em;
-    }
+    } */
     .usa-button.clear-message {
       background: transparent;
       cursor:pointer;
       position:absolute;
       right:10px;
-      margin-top:.3em;
+      margin-top:2px;
     }
 }
 
+/* Search container styles ----------------------------- */
 .search-container {
   margin-top:125px;
   padding:0;
