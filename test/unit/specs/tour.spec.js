@@ -2,6 +2,7 @@ import tour from '@/tour'
 import sinon from 'sinon'
 import Vuex from 'vuex'
 import _ from 'lodash'
+import magic from '@/bus'
 
 describe('tour', () => {
   let store
@@ -13,6 +14,8 @@ describe('tour', () => {
   let hideStub
   let showStub
   let currentStepStub
+  let emitSpy
+  let querySelectorAll
 
   beforeEach(function () {
     getters = {
@@ -44,12 +47,36 @@ describe('tour', () => {
       show: showStub
     }
     currentStepStub = sinon.stub(tour.tour, 'getCurrentStep').callsFake(() => step)
+    emitSpy = sinon.stub(magic, '$emit')
+    querySelectorAll = sinon.stub(document, 'querySelectorAll').callsFake(() => [])
   })
 
   afterEach(function () {
     showErrorStub.restore()
     showMessageStub.restore()
     currentStepStub.restore()
+    emitSpy.restore()
+    querySelectorAll.restore()
+  })
+
+  describe('before start', () => {
+    it('our default next and back buttons should show the appropriate message and then call next or back, respectively', () => {
+      let back = tour.back
+      let next = tour.next
+      let disasterSearchTour = tour.tour
+      let backStub = sinon.stub(disasterSearchTour, 'back')
+      let nextStub = sinon.stub(disasterSearchTour, 'next')
+      disasterSearchTour.addStep('my-step', {title: 'my test step', buttons: [tour.back, tour.next]})
+      disasterSearchTour.show('my-step')
+      back.action()
+      next.action()
+      expect(showMessageStub.called).to.equal(true)
+      expect(nextStub.called).to.equal(true)
+      expect(backStub.called).to.equal(true)
+      nextStub.restore()
+      backStub.restore()
+      disasterSearchTour.hide() // needed for next test (should start the tour)
+    })
   })
 
   describe('start', () => {
@@ -74,6 +101,7 @@ describe('tour', () => {
         '.tour-message': [{style: {}}],
         '.tour-error': [{style: {}}]
       }
+      querySelectorAll.restore()
       let stub = sinon.stub(document, 'querySelectorAll').callsFake(selector => elements[selector])
       showErrorStub.restore()
       tour.showError()
@@ -88,6 +116,7 @@ describe('tour', () => {
         '.tour-message': [{style: {}}],
         '.tour-error': [{style: {}}]
       }
+      querySelectorAll.restore()
       let stub = sinon.stub(document, 'querySelectorAll').callsFake(selector => elements[selector])
       showMessageStub.restore()
       tour.showMessage()
@@ -216,15 +245,14 @@ describe('tour', () => {
       it('should show the step message if error is false', () => {
         let step = tour.tour.getById('mutiple-enter-search')
         let focus = sinon.stub()
-        let dispatchEvent = sinon.stub()
-        let input = {focus, dispatchEvent}
+        let input = {focus}
         let getElementByIdStub = sinon.stub(document, 'getElementById').callsFake(() => input)
         step.options.when['before-show']()
         expect(showMessageStub.called).to.equal(true)
+        expect(emitSpy.calledWith('clearQuery')).to.equal(true)
         expect(mutations.clearSearch.called).to.equal(true)
         expect(focus.called).to.equal(true)
         expect(input.value).to.equal('')
-        expect(dispatchEvent.called).to.equal(true)
         getElementByIdStub.restore()
       })
       it('should set error to false and return if error is true', () => {

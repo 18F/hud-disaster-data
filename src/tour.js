@@ -1,11 +1,21 @@
 import Shepherd from 'tether-shepherd'
+import magic from '@/bus'
+import _ from 'lodash'
 let $store
 
 const disasterSearchTour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-element shepherd-open shepherd-theme-square',
     showCancelLink: true,
-    scrollTo: false
+    scrollTo: true,
+    when: {
+      show: function () {
+        _.each(document.querySelectorAll('.shepherd-cancel-link'), link => {
+          link.textContent = ''
+          link.innerHTML = '<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>'
+        })
+      }
+    }
   }
 })
 
@@ -38,17 +48,17 @@ disasterSearchTour.addStep('enter-search', {
       Start here by typing in a FEMA disaster ID.
       </p>
       <p>
-      These IDs follow the format “DR‐4272‐TX” But you can also type “4272”.
+      These IDs follow the format "DR‐4272‐TX" But you can also type "4272".
       </p>
       <p>
-      If you want to see all the recent disasters in a state, type the state's 2 character abbreviation (examples, “TX”, “CA”, “FL").
+      If you want to see all the recent disasters in a state, type the state's 2 character abbreviation (examples, "TX", "CA", "FL").
       </p>
       ${disasterLink}
     </div>
     <div class="tour-error" style="display:none;">
       <p>
       It looks like you typed an invalid Disaster ID.
-      Try typing just the four‐digit number (example, “4272”).
+      Try typing just the four‐digit number (example, "4272").
       </p>
       ${disasterLink}
     </div>
@@ -56,6 +66,7 @@ disasterSearchTour.addStep('enter-search', {
   attachTo: '.search-wrapper right',
   when: {
     show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
       if (this.error) {
         this.error = false
         return
@@ -106,6 +117,7 @@ disasterSearchTour.addStep('enter-search', {
   attachTo: '.disaster-list right',
   when: {
     show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
       if (this.error) {
         this.error = false
         return
@@ -135,7 +147,7 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Disaster selected',
   text: `
   <p>
-  You’ve selected a disaster and it is now listed in the export area.
+  You’ve selected a disaster and it is now listed in the selected disasters area.
   You can export the associated FEMA data now or save this search to export the data in the future.
   You can also search for additional disasters to add to this list.
   </p>
@@ -146,18 +158,18 @@ disasterSearchTour.addStep('enter-search', {
   buttons: [back, next],
   attachTo: '#list left',
   when: {
+    show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
+    },
     'before-show': function () { document.getElementById('list').style['z-index'] = '1' },
     hide: function () { document.getElementById('list').style['z-index'] = null }
   }
 })
 .addStep('export-data', {
-  title: 'Disaster selected',
+  title: 'Export Data',
   text: `
-  <p>
-  First, let’s try exporting the data.
-  </p>
   <p>To get household level data for the disaster selected, click the export button.</p>
-  <p>Your computer will download a .csv formatted file</p>
+  <p>Your computer will download a .csv formatted file.</p>
   `,
   attachTo: '#export-button top',
   buttons: [
@@ -183,7 +195,7 @@ disasterSearchTour.addStep('enter-search', {
     If you want to export data for multiple disasters at the same time, you can search for another disaster and add it to the list.
     </p>
     <p>
-    Try typing in the postal code for your state (example, “TX”, “LA”, “CA")
+    Try typing in the postal code for your state (example, "TX", "LA", "CA")
     </p>
   </div>
   <div class="tour-error" style="display:none;">
@@ -192,6 +204,9 @@ disasterSearchTour.addStep('enter-search', {
   `,
   attachTo: '.search-wrapper right',
   when: {
+    show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
+    },
     'before-show': function () {
       if (this.error) {
         this.error = false
@@ -202,7 +217,7 @@ disasterSearchTour.addStep('enter-search', {
       const input = document.getElementById('search-text')
       input.focus()
       input.value = ''
-      input.dispatchEvent(new Event('hdd.clear'))
+      magic.$emit('clearQuery')
     }
   },
   buttons: [
@@ -247,6 +262,7 @@ disasterSearchTour.addStep('enter-search', {
   attachTo: '.disaster-list right',
   when: {
     show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
       if (this.error) {
         this.error = false
         return
@@ -277,10 +293,10 @@ disasterSearchTour.addStep('enter-search', {
   text: `
   <div class="tour-message">
   <p>
-  You now have multiple disasters listed within your search list.
+  You now have multiple disasters listed within your selected disaster list.
   </p>
   <p>
-  If you would like to save this search to run again in the future, enter a name in the name input field and click the save button to the right
+  If you would like to save this search to run again in the future, enter a name in the name input field and click the save button to the right.
   </p>
   </div>
   <div class="tour-error" style="display:none;">
@@ -331,7 +347,7 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Clear list',
   text: `
     <p>
-    If you want to clear all the disasters in your list and start over, click the clear button
+    If you want to clear all the disasters in your list and start over, click the clear button.
     </p>
   </div>
   `,
@@ -350,7 +366,7 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Select a previously saved list',
   text: `
     <p>
-    If you want to select a previously saved list of disaster(s), select an option from the dropdown list
+    If you want to select a previously saved list of disaster(s), select an option from the dropdown list.
     </p>
   </div>
   `,
@@ -361,7 +377,10 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Delete previously saved list',
   text: `
     <p>
-    If you want to delete a previously saved list of disaster(s), select an option from the dropdown to load, then click the delete button
+    If you want to delete a previously saved list of disaster(s), select an option from the dropdown to load, then click the delete button.
+    </p>
+    <p>
+    Warning: this will actually delete the list. If you do not want to delete a list, click Next.
     </p>
   </div>
   `,
@@ -394,16 +413,18 @@ const TourObject = {
     disasterSearchTour.start()
   },
   tour: disasterSearchTour,
+  next: next,
+  back: back,
   setStore (store) {
     if (store) $store = store
   },
   showError () {
-    document.querySelectorAll('.tour-message').forEach($el => ($el.style.display = 'none'))
-    document.querySelectorAll('.tour-error').forEach($el => ($el.style.display = 'block'))
+    _.each(document.querySelectorAll('.tour-message'), $el => ($el.style.display = 'none'))
+    _.each(document.querySelectorAll('.tour-error'), $el => ($el.style.display = 'block'))
   },
   showMessage () {
-    document.querySelectorAll('.tour-error').forEach($el => ($el.style.display = 'none'))
-    document.querySelectorAll('.tour-message').forEach($el => ($el.style.display = 'block'))
+    _.each(document.querySelectorAll('.tour-error'), $el => ($el.style.display = 'none'))
+    _.each(document.querySelectorAll('.tour-message'), $el => ($el.style.display = 'block'))
   }
 }
 export default TourObject

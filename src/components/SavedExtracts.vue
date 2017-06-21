@@ -1,9 +1,10 @@
 <template>
   <div class="extracts">
     <div id="saved_searches">
+      <h4>Saved searches</h4>
       <div>
-        <select required v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName">
-          <option value="" disabled selected>Saved searches......</option>
+        <select required v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName" title='saved searches'>
+          <option value="" disabled selected>Select a search...</option>
           <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
         </select>
         <label for="extract-name" class="sr-only">Search Name</label>
@@ -11,28 +12,46 @@
       </div>
       <div id="cta">
         <label for="save-button" class="sr-only">Save selected disaster search</label>
-        <button @click="saveExtract" class="usa-button" id="save-button" :disabled="!newExtract">
-          <i class="fa fa-2x fa-save"></i>
+        <button @click="saveExtract" class="usa-button" id="save-button" title="save button" :disabled="!newExtract" style="vertical-align:top;">
+          <icon classes="ico-lg gray" name="fa-save"></icon>
         </button>
         <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
-        <button @click="deleteExtract" class="usa-button" id="delete-button" :disabled="selectedExtractName === ''">
-          <i class="fa fa-2x fa-trash-o"></i>
+        <button @click="deleteExtract" class="usa-button" id="delete-button" title="delete button" :disabled="selectedExtractName === ''">
+          <icon classes="ico-lg gray" name="fa-trash-o"></icon>
         </button>
       </div>
     </div>
+    <h4>Selected disasters area</h4>
     <div class="message-wrapper">
-      <div class="messages" v-show="displayMessage" tabindex="0" ref="messages">
+      <div class="messages"  v-show="displayMessage" tabindex="0" ref="messages">
         <div :class="status.type">
-          <i class="m-icon fa fa-lg"></i>
-          {{status.message}}
-          <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+          <div style="padding:10px; overflow:hidden;">
+            <div id="container_03" style="float:left; width:10%; padding:5px;">
+               <icon :classes="`ico-lg status-type ${status.type}`" :name="iconName()"></icon>
+            </div>
+            <div id="container_02" style="float:left; width:80%;">
+              <div style="line-height: 20px; padding:12px 0;">
+                {{status.message}}
+              </div>
+            </div>
+            <div id="container_01" style="float:left;">
+              <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+              <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button" title="extract message clear button">
+                <icon classes="close-message" name="fa-times"></icon>
+              </button>
+            </div>
+          </div>
         </div>
-        <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button">
-          <i class="close-message fa fa-times"></i>
-        </button>
       </div>
     </div>
     <div id="list">
+      <div class="list-loader" v-if="loading">
+        <icon class="fa-spin ico-xl" name="fa-spinner"></icon>
+        <span class="fa-spin-text">
+          Loading ...
+        </span>
+        <span class="sr-only">Loading...</span>
+      </div>
       <ul>
         <li v-for="(item, $item) in items">
           <disaster :prefix="'saved'" :item="item"></disaster>
@@ -41,15 +60,26 @@
     </div>
     <div id="action-buttons">
       <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
-      <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export <i class="fa fa-sign-out"></i></button> <!-- disabled="true"  usa-button-disabled -->
+      <a :href="download()" tabindex="-1" download>
+        <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export
+        <icon classes="export" name="fa-sign-out"></icon>
+        </button>
+      </a>
     </div>
   </div>
 </template>
+
 <script>
 import disaster from './Disaster'
+import magic from '@/bus'
+import moment from 'moment'
+import _ from 'lodash'
 
 export default {
   components: {disaster},
+  created () {
+    magic.$on('clearCurrentExtract', () => (this.selectedExtractName = ''))
+  },
   data: function () {
     return {
       extractName: '',
@@ -75,17 +105,28 @@ export default {
       if (this.status.type === 'normal' || this.status.scope !== 'extract') return false
       this.$nextTick(() => this.$refs.messages.focus())
       return true
+    },
+    loading () {
+      return this.$store.getters.loading
     }
   },
   methods: {
+    download () {
+      const timeStamp = moment().format('YYYY-MM-DD-kk:mm:ss')
+      const url = this.selectedExtractName ? `/api/export/${this.selectedExtractName}-${timeStamp}` : `/api/export/${timeStamp}`
+      const data = _.map(this.$store.getters.currentExtract, disaster => {
+        return `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`
+      })
+      return `${url}?disasters=${data}`
+    },
     clear () {
       this.$store.commit('clearCurrentExtract')
-      this.selectedExtractName = ''
     },
     saveExtract () {
       this.$store.commit('saveExtract', this.extractName)
       if (this.status.type === 'error') return (this.extractName = '')
       this.selectedExtractName = this.extractName
+      this.extractName = ''
     },
     deleteExtract () {
       if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return

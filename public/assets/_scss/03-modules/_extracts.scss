@@ -7,14 +7,22 @@
   border-radius:10px;
   padding:20px;
 
+  h4 {
+    color:#fff;
+    line-height:18px;
+    margin-top:10px;
+  }
+  h4.no-margin { margin-top:0; }
   div#saved_searches {
-    height:50px;
+    height:90px;
 
     select, input {
       float:left;
       display:block;
       max-height:44px;
+      margin-top:0;
     }
+
     select {
       -webkit-appearance: none;
       -webkit-border-radius: 0px;
@@ -59,6 +67,7 @@
       text-align:right;
       width:25%;
 
+      button { padding-top:0; }
       button[disabled=disabled] {
         color: gray;
         opacity: 0.3;
@@ -95,7 +104,20 @@
     overflow-y:scroll;
     overflow:auto;
     height:410px;
+
+    .list-loader {
+      text-align:center;
+      padding-top:20%;
+
+      .fa-spin-text {
+        color:#fff;
+        margin-top:20px;
+        letter-spacing:1.5px;
+      }
+    }
   }
+
+
 
   div#action-buttons {
     height:50px;
