@@ -4,7 +4,7 @@
       <div class="col-xs-12 col-md-6 search-container">
         <div id="opaque-bg" class="row">
               <div class="col" id="message">
-                <h3>Disaster search</h3>
+                <h2>Disaster search</h2>
               </div>
               <div class="col Typeahead">
                 <div id="search">
