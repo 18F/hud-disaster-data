@@ -1,73 +1,46 @@
-<template>
-  <div class="wrapper container-fluid">
-    <div class="row">
-      <div class="col-xs-12 col-md-6 search-container">
-        <div id="opaque-bg" class="row">
-              <div class="col" id="message">
-                <h2>Disaster search</h2>
-              </div>
-              <div class="col Typeahead">
-                <div id="search">
-                    <div class="offset-bg">
-                      <div class="search-wrapper">
-                        <label for="search-text" class="sr-only">search FEMA disasters</label>
-                        <input type="text" id="search-text"
-                                 ref="searchText"
-                                 class="Typeahead__input"
-                                 placeholder="Search by disaster number, type, or state"
-                                 autocomplete="off"
-                                 v-model="query"
-                                 @keydown.esc="reset"
-                                 @input="update"/>
-                        <icon v-if="loading" classes="fa-spin" name="fa-spinner"></icon>
-                        <template v-else>
-                          <icon name="fa-search" v-show="isEmpty"></icon>
-                          <a href="#" @click="reset" v-if="isDirty">
-                            <icon classes="clear-text" name="fa-times"></icon>
-                          </a>
-                        </template>
-                      </div>
-                      <div class="message-wrapper">
-                       <div class="messages" v-show="displayMessage" tabindex="0" ref="messages" id="search-message">
-                         <div :class="status.type">
-                           <icon :classes="`status-type ${status.type}`" :name="iconName()"></icon>
-                           {{status.message}}
-                           <label for="app-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
-                           <button @click="hideMessage" class="usa-button clear-message" title="app message clear button" id="app-message-clear-button">
-                            <icon classes="close-message" name="fa-times"></icon>
-                           </button>
-                         </div>
-                       </div>
-                      </div>
-                      <div v-show="hasItems" class="disaster-list">
-                        <ul class="disaster-search-recs">
-                          <li v-for="(item, $item) in items">
-                            <disaster :prefix="'search'" :item="item"></disaster>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="link-advanced-search">
-                          <a href="#">Advanced Search</a>
-                      </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-      <div class="col-xs-12 col-md-6 no-padding">
-        <savedExtracts ref="extracts"></savedExtracts>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+  .wrapper.container-fluid
+    .row
+      .col-xs-12.col-md-6.search-container
+        #opaque-bg.row
+          #message.col
+            h2 Disaster search
+          .col.Typeahead
+            #search
+              .offset-bg
+                .search-wrapper
+                  label.sr-only(for='search-text') search FEMA disasters
+                  input#search-text.Typeahead__input(type='text', ref='searchText', placeholder='Search by disaster number, type, or state', autocomplete='off', v-model='query', @keydown.esc='reset', @input='update')
+                  icon(v-if='loading', classes='fa-spin', name='fa-spinner')
+                  template(v-else='')
+                    icon(name='fa-search', v-show='isEmpty')
+                    a(href='#', @click='reset', v-if='isDirty')
+                      icon(classes='clear-text', name='fa-times')
+                .message-wrapper
+                  #search-message.messages(v-show='displayMessage', tabindex='0', ref='messages')
+                    div(:class='status.type')
+                      icon(:classes='`status-type ${status.type}`', :name='iconName()')
+                      | {{status.message}}
+                      label.sr-only(for='app-message-clear-button') Close {{ status.type }} message
+                      button#app-message-clear-button.usa-button.clear-message(@click='hideMessage', title='app message clear button')
+                        icon(classes='close-message', name='fa-times')
+                .disaster-list(v-show='hasItems')
+                  ul.disaster-search-recs
+                    li(v-for='(item, $item) in items')
+                      disaster(:prefix="'search'", :item='item')
+                .link-advanced-search
+                  a(href='#') Advanced Search
+      .col-xs-12.col-md-6.no-padding
+        savedextracts(ref='extracts')
 </template>
 
 <script>
 import disaster from './Disaster'
-import savedExtracts from './SavedExtracts'
+import savedextracts from './SavedExtracts'
 import magic from '@/bus'
 
 export default {
-  components: {disaster, savedExtracts},
+  components: {disaster, savedextracts},
   mounted () {
     magic.$on('clearQuery', () => {
       if (this.$refs.searchText.value === '') this.query = ''

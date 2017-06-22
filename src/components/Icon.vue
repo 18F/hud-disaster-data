@@ -1,5 +1,6 @@
-<template>
-  <svg :class="getClasses()"><use :xlink:href="getIcon()"></use></svg>
+<template lang="pug">
+  svg(:class="getClasses()")
+    use(:xlink:href="getIcon()")
 </template>
 <script>
 const iconClass = 'hdd-icon'
