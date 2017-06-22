@@ -46,14 +46,15 @@
               span
                 | Reports
     #ribbon
-      span
-        | Need Help?
-      button.usa-button.green(@click='startTour')
-        | Guide Me
+      div(style="position:relative; top:-5px;")
+        span
+          | Need Help?
+        button.usa-button.green(@click='startTour')
+          | Guide Me
 </template>
 
 <script>
-import tour from '../../tour'
+import tour from '../tour'
 
 export default {
   data () {

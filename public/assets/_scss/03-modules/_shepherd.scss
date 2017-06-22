@@ -15,7 +15,7 @@ body:not(.shepherd-active) #tour-backdrop {
 .shepherd-enabled {
   z-index: 1042;
   position: relative;
-  outline: 2px solid white;
+  outline: 2px solid yellow;
 }
 .shepherd-step {
   z-index: 1042;
@@ -66,15 +66,22 @@ body:not(.shepherd-active) #tour-backdrop {
     }
   }
 }
-.shepherd-element * {
+.shepherd-element {
+  * {
   font-family: "Source Sans Pro", "Roboto", sans-serif;
   font-weight: 300;
-}
-.shepherd-element.shepherd-theme-square .shepherd-content footer .shepherd-buttons {
-  li {
-    &:before {
-      content: "";
+  }
+
+  &.shepherd-theme-square .shepherd-content header a.shepherd-cancel-link {
+    top: -.1em;
+  }
+
+  &.shepherd-theme-square .shepherd-content footer .shepherd-buttons {
+    li {
+      &:before {
+        content: "";
+      }
+      display: inline-block;
     }
-    display: inline-block;
   }
 }
