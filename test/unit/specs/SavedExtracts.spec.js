@@ -148,15 +148,15 @@ describe('SavedExtracts component', function () {
     store = new Vuex.Store({state: {}, mutations, getters})
     const Constructor = Vue.extend(SavedExtracts)
     const vm = new Constructor({store}).$mount()
-    let $messages = vm.$el.querySelector('.messages')
-    expect($messages.style.display).to.be.equal('none')
+    let $message = vm.$el.querySelector('.message-container')
+    expect($message.style.display).to.be.equal('none')
   })
 
   it('should call resetStatus when the x is clicked', function (done) {
     const Constructor = Vue.extend(SavedExtracts)
     const vm = new Constructor({store}).$mount()
-    let $messages = vm.$el.querySelector('.messages')
-    expect($messages.style.display).to.be.equal('none')
+    let $message = vm.$el.querySelector('.message-container')
+    expect($message.style.display).to.be.equal('none')
     let $x = vm.$el.querySelector('.clear-message')
     dispatchEvent($x, 'click')
     Vue.nextTick(() => {
