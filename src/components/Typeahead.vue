@@ -17,13 +17,7 @@
                     a(href='#', @click='reset', v-if='isDirty')
                       icon(classes='clear-text', name='fa-times')
                 .message-wrapper
-                  #search-message.messages(v-show='displayMessage', tabindex='0', ref='messages')
-                    div(:class='status.type')
-                      icon(:classes='`status-type ${status.type}`', :name='iconName()')
-                      | {{status.message}}
-                      label.sr-only(for='app-message-clear-button') Close {{ status.type }} message
-                      button#app-message-clear-button.usa-button.clear-message(@click='hideMessage', title='app message clear button')
-                        icon(classes='close-message', name='fa-times')
+                  message(:status="status" :locationOfMessage="'app-message'")
                 .disaster-list(v-show='hasItems')
                   ul.disaster-search-recs
                     li(v-for='(item, $item) in items')
@@ -36,11 +30,12 @@
 
 <script>
 import disaster from './Disaster'
+import message from './Message'
 import savedextracts from './SavedExtracts'
 import magic from '@/bus'
 
 export default {
-  components: {disaster, savedextracts},
+  components: {disaster, savedextracts, message},
   mounted () {
     magic.$on('clearQuery', () => {
       if (this.$refs.searchText.value === '') this.query = ''
@@ -67,10 +62,6 @@ export default {
     },
     status () {
       return this.$store.getters.status
-    },
-    displayMessage () {
-      if (this.status.type === 'normal' || this.status.scope !== 'app') return false
-      return true
     }
   },
   methods: {
@@ -83,9 +74,6 @@ export default {
     reset () {
       this.query = ''
       this.$store.commit({type: 'clearSearch'})
-    },
-    hideMessage () {
-      this.$store.commit('resetStatus')
     }
   }
 }

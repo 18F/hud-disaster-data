@@ -17,18 +17,7 @@
           icon(classes='ico-lg gray', name='fa-trash-o')
     h4 Selected disasters list
     .message-wrapper
-      .message-container(v-show='displayMessage', tabindex='0', ref='messages')
-        div(:class='status.type')
-          .message
-            .ico
-              icon(:classes='`ico-lg status-type ${status.type}`', :name='iconName()')
-            .body
-              div
-                | {{status.message}}
-            .close
-              label.sr-only(for='extract-message-clear-button') Close {{ status.type }} message
-              button#extract-message-clear-button.usa-button.clear-message(@click='hideMessage', title='extract message clear button')
-                icon(classes='close-message', name='fa-times')
+      message(:status="status" :locationOfMessage="'extract-message'")
     #list
       .list-loader(v-if='loading')
         icon.fa-spin.ico-xl(name='fa-spinner')
@@ -48,12 +37,13 @@
 
 <script>
 import disaster from './Disaster'
+import message from './Message'
 import magic from '@/bus'
 import moment from 'moment'
 import _ from 'lodash'
 
 export default {
-  components: {disaster},
+  components: {disaster, message},
   created () {
     magic.$on('clearCurrentExtract', () => (this.selectedExtractName = ''))
   },
@@ -77,11 +67,6 @@ export default {
     },
     status () {
       return this.$store.getters.status
-    },
-    displayMessage () {
-      if (this.status.type === 'normal' || this.status.scope !== 'extract') return false
-      this.$nextTick(() => this.$refs.messages.focus())
-      return true
     },
     loading () {
       return this.$store.getters.loading
@@ -113,9 +98,6 @@ export default {
     },
     loadExtract () {
       this.$store.commit('loadExtract', this.selectedExtractName)
-    },
-    hideMessage () {
-      this.$store.commit('resetStatus')
     }
   }
 }
