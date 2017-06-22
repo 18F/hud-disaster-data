@@ -17,15 +17,15 @@
           icon(classes='ico-lg gray', name='fa-trash-o')
     h4 Selected disasters list
     .message-wrapper
-      .messages(v-show='displayMessage', tabindex='0', ref='messages')
+      .message-container(v-show='displayMessage', tabindex='0', ref='messages')
         div(:class='status.type')
-          div(style='padding:10px; overflow:hidden;')
-            #container_03(style='float:left; width:10%; padding:5px;')
+          .message
+            .ico
               icon(:classes='`ico-lg status-type ${status.type}`', :name='iconName()')
-            #container_02(style='float:left; width:80%;')
-              div(style='line-height: 20px; padding:12px 0;')
+            .body
+              div
                 | {{status.message}}
-            #container_01(style='float:left;')
+            .close
               label.sr-only(for='extract-message-clear-button') Close {{ status.type }} message
               button#extract-message-clear-button.usa-button.clear-message(@click='hideMessage', title='extract message clear button')
                 icon(classes='close-message', name='fa-times')
@@ -121,5 +121,5 @@ export default {
 }
 </script>
 <style lang="scss">
-//moved to 03-modules/_extracts.scss
+  //moved to 03-modules/_extracts.scss
 </style>
