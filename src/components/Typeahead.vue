@@ -4,7 +4,7 @@
       <div class="col-xs-12 col-md-6 search-container">
         <div id="opaque-bg" class="row">
               <div class="col" id="message">
-                <h3>Relax, Finding things just got easier!</h3>
+                <h3>Disaster search</h3>
               </div>
               <div class="col Typeahead">
                 <div id="search">
@@ -19,22 +19,24 @@
                                  v-model="query"
                                  @keydown.esc="reset"
                                  @input="update"/>
-                        <i class="fa fa-spinner fa-spin" v-if="loading"></i>
+                        <icon v-if="loading" classes="fa-spin" name="fa-spinner"></icon>
                         <template v-else>
-                          <i class="fa fa-search" v-show="isEmpty"></i>
-                          <i class="fa fa-times" v-show="isDirty" @click="reset"></i>
+                          <icon name="fa-search" v-show="isEmpty"></icon>
+                          <a href="#" @click="reset" v-if="isDirty">
+                            <icon classes="clear-text" name="fa-times"></icon>
+                          </a>
                         </template>
                       </div>
                       <div class="message-wrapper">
                        <div class="messages" v-show="displayMessage" tabindex="0" ref="messages" id="search-message">
                          <div :class="status.type">
-                           <i class="m-icon fa fa-lg"></i>
+                           <icon :classes="`status-type ${status.type}`" :name="iconName()"></icon>
                            {{status.message}}
                            <label for="app-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
+                           <button @click="hideMessage" class="usa-button clear-message" title="app message clear button" id="app-message-clear-button">
+                            <icon classes="close-message" name="fa-times"></icon>
+                           </button>
                          </div>
-                         <button @click="hideMessage" class="usa-button clear-message" id="app-message-clear-button">
-                           <i class="close-message fa fa-times"></i>
-                         </button>
                        </div>
                       </div>
                       <div v-show="hasItems" class="disaster-list">
@@ -44,10 +46,10 @@
                           </li>
                         </ul>
                       </div>
+                      <div class="link-advanced-search">
+                          <a href="#">Advanced Search</a>
+                      </div>
                     </div>
-                </div>
-                <div class="link-advanced-search">
-                  <!-- <a href="#">Advanced Search</a> -->
                 </div>
             </div>
         </div>
@@ -62,11 +64,12 @@
 <script>
 import disaster from './Disaster'
 import savedExtracts from './SavedExtracts'
+import magic from '@/bus'
 
 export default {
   components: {disaster, savedExtracts},
   mounted () {
-    this.$refs.searchText.addEventListener('hdd.clear', () => {
+    magic.$on('clearQuery', () => {
       if (this.$refs.searchText.value === '') this.query = ''
     })
   },

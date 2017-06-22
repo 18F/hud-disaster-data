@@ -25,30 +25,44 @@ body:not(.shepherd-active) #tour-backdrop {
     header {
       border-top-right-radius: 8px !important;
       border-top-left-radius: 8px !important;
-      background-color: #0095fe !important;
+      background-color: #0071bc !important;
       color: #fff !important;
       a.shepherd-cancel-link {
         color: inherit !important;
         &:hover {
-          background: #0095fe !important;
+          background: #0071bc !important;
+          font-weight:500;
+          opacity: 1.0;
         }
       }
     }
   }
   .shepherd-button {
     @extend .usa-button;
+    background:#0071bc !important;
     border-radius: 0.3rem !important;
     text-transform: none !important;
     font-size: 17px !important;
     letter-spacing: normal !important;
     padding: 10px 20px !important;
+    &:hover {
+      background: #205463 !important;
+    }
+    &:active {
+      background:#112e51 !important;
+    }
     &.tour-back {
       background: none !important;
-      border: none !important;
-      color: #000 !important;
-      font-weight: normal !important;
-      text-decoration: underline !important;
-
+      border: 1px solid #0071bc !important;
+      color: #0071bc !important;
+    }
+    &.tour-back:hover {
+      border: 1px solid #205493 !important;
+      color: #205493 !important;
+    }
+    &.tour-back:active {
+      border: 1px solid #112e51 !important;
+      color: #112e51 !important;
     }
   }
 }

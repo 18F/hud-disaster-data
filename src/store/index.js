@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import _ from 'lodash'
 import es6Promise from 'es6-promise'
+import magic from '@/bus'
 es6Promise.polyfill()
 Vue.use(Vuex)
 
@@ -51,14 +52,16 @@ export const mutations = {
     state.status = { type: 'success', scope: 'extract', message: 'Successfully deleted saved extract' }
   },
   loadExtract: function (state, name) {
-    mutations.clearCurrentExtract(state)
+    mutations.clearCurrentExtract(state, true)
     let savedExtracts = getSavedExtracts()
     let disasterNumbers = _.find(savedExtracts, {name}).disasters.join()
+    state.loading = true
     axios.get(`/api/disasternumber/${disasterNumbers}`).then((response) => {
       state.currentExtract = _.map(response.data, (disaster) => {
         disaster.currentExtract = true
         return disaster
       })
+      state.loading = false
     })
     state.newExtract = false
   },
@@ -90,10 +93,12 @@ export const mutations = {
     }
     state.newExtract = true
   },
-  clearCurrentExtract: function (state) {
+  clearCurrentExtract: function (state, noemit) {
+    if (!noemit) magic.$emit('clearCurrentExtract')
     state.currentExtract = []
     state.newExtract = false
     state.disasters = _.map(state.disasters, disaster => _.omit(disaster, 'currentExtract'))
+    mutations.resetStatus(state)
   },
   clearSearch: function (state) {
     state.disasters = []
@@ -135,6 +140,9 @@ export const getters = {
   },
   status: state => {
     return state.status
+  },
+  loading: state => {
+    return state.loading
   }
 }
 
@@ -144,7 +152,8 @@ const store = new Vuex.Store({
     currentExtract: [],
     savedExtracts: getSavedExtracts(),
     newExtract: false,
-    status: { type: 'normal', message: '' }
+    status: { type: 'normal', message: '' },
+    loading: false
   },
   actions,
   mutations,

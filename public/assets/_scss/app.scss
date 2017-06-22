@@ -15,3 +15,96 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+#search-extract {
+background-image: url('~/static/img/map-background2.png');
+background-color: #323a45;
+background-repeat: no-repeat;
+background-size: contain;
+}
+
+/* -- Global style overrides ---------------------------- */
+button { border-radius: 0.3rem; }
+select:focus, input[type="text"]:focus { box-shadow:none; }
+button:focus {
+  outline: 1px dotted $check-color;
+}
+
+/* -- Label and title styles ----------------------*/
+h1, h2, h3, h4, h5 {
+  font-family: "Source Sans Pro", "Roboto", sans-serif;
+  font-weight: normal;
+}
+
+.hdd-label {
+  color:#fff;
+  padding: 10px 0;
+}
+
+/* -- Icon svg accessibility classes ------------ */
+.hdd-icon {
+    fill: #ffffff;
+    height: 1em;
+    width: 1em;
+
+    &.ico-lg {
+      height: 2em;
+      width: 2em;
+    }
+
+    &.ico-xl {
+      height:3em;
+      width:3em;
+    }
+}
+#export-button .hdd-icon.export {
+  fill: #fff;
+  margin-left:5px;
+  vertical-align:top;
+}
+#export-button:disabled .hdd-icon.export {
+  fill: #000;
+  vertical-align:top;
+}
+div#search-extract { padding:30px 0 60px 0; }
+/* -- USA button overrrides ----------------- */
+.usa-button i, .usa-button-secondary i { margin-left:5px; }
+.usa-button, .usa-button:hover, .usa-button:active, .usa-button:focus,
+.usa-button-secondary, .usa-button-secondary:hover, .usa-button-secondary:active, .usa-button-secondary:focus,
+.usa-button.green, .usa-button.green:hover, .usa-button.green:active, .usa-button.green:focus,
+.usa-button.alt-button, .usa-button-alt:hover, .usa-button-alt:active, .usa-button-alt:focus,
+.usa-banner-button-alt, .usa-banner-button-alt:hover, .usa-banner-button-alt:active, .usa-banner-button-alt:focus
+ { box-shadow:none; }
+
+.usa-button.green {
+  background-color:#2e8540;
+  color:#fff;
+}
+.usa-button.green:hover { background-color:#247334;  }
+.usa-button.green:active { background-color:#1a5f28; }
+.usa-button.green[disabled]{
+  background:#d6d7d9;
+  color:#323a45;
+  pointer-events:none;
+}
+.usa-button.alt-button {
+  background:transparent;
+  color:#fff;
+  border:1px solid #fff;
+}
+.usa-button.alt-button:hover { border:1px solid #e3e4e5; }
+.usa-button.alt-button:active { border:1px solid #909396; }
+.usa-banner-button-alt {
+  background-color: transparent;
+  border: 0;
+  color: #fff;
+  display: inline;
+  font-size: 1.2rem;
+  margin: 0 0 0 5px;
+  outline: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-align: left;
+  -webkit-font-smoothing: auto;
+}
+.usa-banner-button-alt:hover { background: transparent; text-decoration: underline; }
+.usa-banner-button-alt .hdd-icon { vertical-align:bottom; }

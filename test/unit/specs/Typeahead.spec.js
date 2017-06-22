@@ -1,10 +1,11 @@
 import 'es6-promise/auto' // eslint-disable-line
 import Vue from 'vue' // eslint-disable-line
+import '@/vue-mixins'
 import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
-import store, {actions} from '../../../src/store' // eslint-disable-line
-
+import store, {actions, getters} from '../../../src/store' // eslint-disable-line
 import Typeahead from '@/components/Typeahead' // eslint-disable-line
+import magic from '@/bus'
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
@@ -65,6 +66,17 @@ describe('Typeahead.vue', () => {
       vm.update()
       expect(stub.called).to.be.equal(false)
     })
+
+    it('should call loadDisasterList if query is >= 2 in length', () => {
+      let loadDisasterListStub = sinon.stub()
+      const myStore = new Vuex.Store({state: store.state, mutations: {loadDisasterList: loadDisasterListStub()}, getters})
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor({store: myStore}).$mount()
+      expect(vm.query).to.be.equal('')
+      vm.query = 'DR'
+      vm.update()
+      expect(loadDisasterListStub.called).to.be.equal(true)
+    })
   })
 
   describe('displayMessage', function () {
@@ -123,6 +135,26 @@ describe('Typeahead.vue', () => {
       const vm = new Constructor({store}).$mount()
       vm.hideMessage()
       expect(mutations.resetStatus.called).to.be.equal(true)
+    })
+  })
+
+  describe('mounted', () => {
+    it('magic should listen for clearQuery and set query to blank if searchText is blank', () => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor({store}).$mount()
+      vm.$refs.searchText.value = ''
+      vm.query = 'something'
+      magic.$emit('clearQuery')
+      expect(vm.query).to.be.equal('')
+    })
+
+    it('magic should listen for clearQuery and not set query to blank if searchText is not blank', () => {
+      const Constructor = Vue.extend(Typeahead)
+      const vm = new Constructor({store}).$mount()
+      vm.$refs.searchText.value = 'somethingelse'
+      vm.query = 'something'
+      magic.$emit('clearQuery')
+      expect(vm.query).to.be.equal('something')
     })
   })
 })
