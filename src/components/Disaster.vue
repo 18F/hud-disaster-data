@@ -1,44 +1,37 @@
-<template>
-  <div class="disaster container-fluid">
-    <div class="row">
-      <div class="col-xs-12 col-sm-4 col-md-3">
-          <h5>{{disasterId}}</h5>
-          <label v-if="item.currentExtract" :for="labelId" class="sr-only">{{ `Unselect ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
-          <label v-else :for="labelId" class="sr-only">{{ `Select ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}</label>
-          <button @click="toggleSelected(item)" class="select-button" :id="labelId" :name="disasterId">
-            <icon v-if="item.currentExtract" class="ico-xl" name="fa-check-square-o"></icon>
-            <icon v-else class="ico-xl" name="fa-square-o"></icon>
-          </button>
-      </div>
-      <div class="col-xs-12 col-sm-8 col-md-9">
-        <h5>{{ item.title }}</h5>
-        <div>Incident Type: {{ item.incidentType }}</div>
-        <div>Declaration Date: {{ item.declarationDate }}</div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12 col-sm-4 col-md-3"></div>
-      <div class="col-xs-12 col-sm-8 col-md-9">
-        <label :for="`show-areas-${labelId}`" class="sr-only">Show {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}</label>
-        <label :for="`hide-areas-${labelId}`" class="sr-only">Hide {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}</label>
-        <button v-if="!showAreas" @click="showAreas=!showAreas" class="usa-button" :id="`show-areas-${labelId}`">({{ item.declaredCountyArea.length }}) Affected Areas <icon classes="affected-areas" name="fa-caret-down"></icon></button>
-        <button v-else="!showAreas" @click="showAreas=!showAreas" class="usa-button-secondary" :id="`hide-areas-${labelId}`"> ({{ item.declaredCountyArea.length }}) Affected Areas <icon classes="affected-areas" name="fa-caret-up"></icon></button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="counties" v-show="showAreas" tabindex="0">
-          <div>
-            <ul>
-              <li v-for="(area,index) in item.declaredCountyArea" :key="area.id">
-                {{ area }}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+  .disaster.container-fluid
+    .row
+      .col-xs-12.col-sm-4.col-md-3
+        h5 {{disasterId}}
+        label.sr-only(v-if='item.currentExtract', :for='labelId')
+          | {{ `Unselect ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}
+        label.sr-only(v-else='', :for='labelId')
+          | {{ `Select ${disasterId} ${item.title} incident type:${item.incidentType} declaration date:${item.declarationDate}` }}
+        button.select-button(@click='toggleSelected(item)', :id='labelId', :name='disasterId')
+          icon.ico-xl(v-if='item.currentExtract', name='fa-check-square-o')
+          icon.ico-xl(v-else='', name='fa-square-o')
+      .col-xs-12.col-sm-8.col-md-9
+        h5 {{ item.title }}
+        div Incident Type: {{ item.incidentType }}
+        div Declaration Date: {{ item.declarationDate }}
+    .row
+      .col-xs-12.col-sm-4.col-md-3
+      .col-xs-12.col-sm-8.col-md-9
+        label.sr-only(:for='`show-areas-${labelId}`') Show {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}
+        label.sr-only(:for='`hide-areas-${labelId}`') Hide {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}
+        button.usa-button(v-if='!showAreas', @click='showAreas=!showAreas', :id='`show-areas-${labelId}`')
+          | ({{ item.declaredCountyArea.length }}) Affected Areas
+          icon(classes='affected-areas', name='fa-caret-down')
+        button.usa-button-secondary(v-else='!showAreas', @click='showAreas=!showAreas', :id='`hide-areas-${labelId}`')
+          | ({{ item.declaredCountyArea.length }}) Affected Areas
+          icon(classes='affected-areas', name='fa-caret-up')
+    .row
+      .col-md-12
+        .counties(v-show='showAreas', tabindex='0')
+          div
+            ul
+              li(v-for='(area,index) in item.declaredCountyArea', :key='area.id')
+                | {{ area }}
 </template>
 <script>
 import { mapMutations } from 'vuex'
