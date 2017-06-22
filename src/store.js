@@ -106,8 +106,8 @@ export const mutations = {
   resetStatus: function (state) {
     state.status = { type: 'normal', message: '' }
   },
-  setStatus: function (state, {type, msg}) {
-    state.status = { type: type, scope: 'app', message: msg }
+  setStatus: function (state, {type, scope, msg}) {
+    state.status = { type: type, scope: scope, message: msg }
   }
 }
 
@@ -115,11 +115,11 @@ export const actions = {
   loadDisasterList: function ({ commit }, qry) {
     axios.get(`/api/disasterquery/${qry}`).then((response) => {
       commit('updateDisasterList', { list: response.data })
-      if (response.data && response.data.length === 0) return commit('setStatus', {type: 'info', msg: 'No results found!'})
+      if (response.data && response.data.length === 0) return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       commit('resetStatus')
     }, (err) => {
       console.log(err)
-      commit('setStatus', {type: 'error', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
+      commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
     })
   }
 }
@@ -152,7 +152,7 @@ const store = new Vuex.Store({
     currentExtract: [],
     savedExtracts: getSavedExtracts(),
     newExtract: false,
-    status: { type: 'normal', message: '' },
+    status: { type: 'normal', scope: '', message: '' },
     loading: false
   },
   actions,
