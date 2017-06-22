@@ -1,6 +1,5 @@
 /* global describe, it */
 const should = require('should')
-const request = require('supertest')
 
 describe('index', function () {
   it('should listen on port 3000 by default', function (done) {
