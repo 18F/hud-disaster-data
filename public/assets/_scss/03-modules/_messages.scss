@@ -1,10 +1,9 @@
 /*this style is REQUIRED to line up typeahead and messaging clearing "x" */
-#app-message-clear-button { right:-5px; }
-
 /* Messages styles --------------------------------- */
 .normal { display:none; }
 .message-wrapper {
   font-family: "Source Sans Pro", sans-serif;
+  border:1px solid transparent;
   .message-container {
       .message {
         overflow:hidden;

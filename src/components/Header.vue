@@ -31,7 +31,7 @@
       .container-block
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
-          p(ref='title') {{title}}
+          h1(ref='title') {{title}}
         #tabs
           .tab.selected
               icon.ico-lg(name='fa-sign-out')

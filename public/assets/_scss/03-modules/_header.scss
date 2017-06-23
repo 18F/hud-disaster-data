@@ -3,7 +3,7 @@
     margin:0 0 40px;
   }
   &--pre{
-    padding:10px 0;
+    padding:5px 0;
     /* background:$brand-primary; */
     background:#0071bc;
 
@@ -35,7 +35,6 @@
       margin-right:10px;
     }
     .logo-img{
-      display:block;
       width:100px;
       height:100px;
       margin:0 20px 0 0;
@@ -44,12 +43,10 @@
       background-size:contain;
     }
 
-    p{
-      padding:35px 0 0;
-      font-size:24px;//update variable later
-      line-height:1;
-      /* color:$color-white; */
-      color:#000;
+    h1{
+      display: inline-block;
+      margin:0;
+      padding-top:20px;
     }
   }
 }

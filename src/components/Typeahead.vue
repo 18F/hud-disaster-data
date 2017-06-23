@@ -3,7 +3,7 @@
     .row
       .col-xs-12.col-md-6.search-container
         #opaque-bg.row
-          #message.col
+          #message     <!-- .col -->
             h2 Disaster search
           .col.Typeahead
             #search

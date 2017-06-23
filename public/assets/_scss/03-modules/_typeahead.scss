@@ -5,7 +5,11 @@ span {
 
 .screen-name { font-style: italic; }
 .no-padding { padding: 0; }
-.wrapper input[type="text"] { width:100%; max-width:100%; }
+.wrapper input[type="text"] {
+  width:100%;
+  max-width:100%;
+  margin-bottom:0;
+}
 
 #opaque-bg {
   background: url('/static/img/bg_50_opacity.png');
@@ -17,42 +21,6 @@ span {
 .offset-bg {
   padding:0 10px 0 30px;
 }
-.message-wrapper {
-  /*  min-height:20px; */
-    font-family: "Source Sans Pro", sans-serif;
-}
-/*this style is REQUIRED to line up typeahead and messaging clearing "x" */
-#app-message-clear-button {
-  right:-5px;
-}
-/* Messages styles --------------------------------- */
-.messages {
-  /* margin-top:20px; */
-    .close-message {
-      fill: #000;
-    }
-    .success, .error, .warning, .info {
-    /*  padding:10px; */
-      vertical-align:middle;
-      fill:#000;
-    }
-    .success { background:#e7f4e4; }
-    .error { background:#f9dede; }
-    .warning { background: #fff1d2; }
-    .info { background:#e1f3f8; }
-   /* .hdd-icon.status-type  {
-      /* margin-right:10px;
-      fill: #000;
-    } */
-    .usa-button.clear-message {
-      background: transparent;
-      cursor:pointer;
-      position:absolute;
-      right:10px;
-      margin-top:2px;
-    }
-}
-
 /* Search container styles ----------------------------- */
 .search-container {
   margin-top:125px;
@@ -63,6 +31,8 @@ span {
     text-align: left;
     margin-left:30px;
     height:35px;
+
+    h2{ margin-top:1em; }
   }
 
   .search-wrapper {
@@ -71,7 +41,7 @@ span {
       fill: #000;
       float:right;
       position:relative;
-      top:-38px;
+      top:-33px;
       right:10px;
       height:1.3em;
       width:1.3em;
@@ -91,7 +61,8 @@ span {
     padding:0;
     position: absolute;
     right:11px;
-    top:125px;
+    top:110px;
+    z-index:100;
     ul {
       display:block;
       margin:0;
@@ -115,7 +86,9 @@ span {
 }
 /* Typeahead styles ----------------------------------- */
 .Typeahead {
-  padding-bottom:20px;
+  padding-bottom:40px;
+  /*this style is REQUIRED to line up typeahead and messaging clearing "x" */
+  #message-clear-button { right:-5px; }
 }
 .Typeahead__input {
   font-size: 14px;
@@ -129,10 +102,10 @@ span {
   outline: 0;
 }
 .link-advanced-search {
+  display: none;
   padding-top:20px;
   padding-bottom:20px;
   text-align:right;
-  a {
-    display:none;
-  }
+
+  a { /* display:none; */ }
 }
