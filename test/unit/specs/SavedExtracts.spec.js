@@ -150,7 +150,7 @@ describe('SavedExtracts component', function () {
     const Constructor = Vue.extend(SavedExtracts)
     const vm = new Constructor({store}).$mount()
     let $message = vm.$el.querySelector('.message-container')
-    expect($message.style.display).to.be.equal('none')
+    expect($message).to.not.exist // eslint-disable-line
   })
 
   it('dropdown should default to "Saved searches" on page load even if there are saved searches', function () {
