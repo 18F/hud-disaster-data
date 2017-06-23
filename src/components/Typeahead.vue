@@ -43,8 +43,7 @@ export default {
   },
   data () {
     return {
-      query: '',
-      loading: false
+      query: ''
     }
   },
   computed: {
@@ -62,6 +61,9 @@ export default {
     },
     status () {
       return this.$store.getters.status
+    },
+    loading () {
+      return this.$store.getters.searchLoading
     }
   },
   methods: {

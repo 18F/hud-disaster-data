@@ -55,15 +55,18 @@ export const mutations = {
     mutations.clearCurrentExtract(state, true)
     let savedExtracts = getSavedExtracts()
     let disasterNumbers = _.find(savedExtracts, {name}).disasters.join()
-    state.loading = true
+    state.extractLoading = true
     axios.get(`/api/disasternumber/${disasterNumbers}`).then((response) => {
       state.currentExtract = _.map(response.data, (disaster) => {
         disaster.currentExtract = true
         return disaster
       })
-      state.loading = false
+      state.extractLoading = false
     })
     state.newExtract = false
+  },
+  setSearchLoading: function (state, status) {
+    state.searchLoading = status
   },
   updateDisasterList: function (state, { list }) {
     list.forEach(disaster => {
@@ -113,13 +116,16 @@ export const mutations = {
 
 export const actions = {
   loadDisasterList: function ({ commit }, qry) {
+    commit('setSearchLoading', true)
     axios.get(`/api/disasterquery/${qry}`).then((response) => {
       commit('updateDisasterList', { list: response.data })
       if (response.data && response.data.length === 0) return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       commit('resetStatus')
+      commit('setSearchLoading', false)
     }, (err) => {
       console.log(`Error fetching disaster list: ${err}`)
       commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
+      commit('setSearchLoading', false)
     })
   }
 }
@@ -141,8 +147,11 @@ export const getters = {
   status: state => {
     return state.status
   },
-  loading: state => {
-    return state.loading
+  extractLoading: state => {
+    return state.extractLoading
+  },
+  searchLoading: state => {
+    return state.searchLoading
   }
 }
 
@@ -153,7 +162,8 @@ const store = new Vuex.Store({
     savedExtracts: getSavedExtracts(),
     newExtract: false,
     status: { type: 'normal', scope: '', message: '' },
-    loading: false
+    extractLoading: false,
+    searchLoading: false
   },
   actions,
   mutations,
