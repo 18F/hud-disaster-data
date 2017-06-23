@@ -4,6 +4,7 @@ import '@/vue-mixins'
 import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
 import SavedExtracts from '@/components/SavedExtracts' // eslint-disable-line
+import Message from '@/components/Message' // eslint-disable-line
 import _ from 'lodash' // eslint-disable-line
 
 Vue.use(Vuex)
@@ -51,7 +52,7 @@ describe('SavedExtracts component', function () {
       currentExtract: function () { return [] },
       savedExtracts: function () { return [] },
       newExtract: function () { return false },
-      status: function () { return { type: 'error', message: '' } }
+      status: function () { return { type: 'error', msg: '' } }
     }
     mutations = {
       clearCurrentExtract: sinon.stub(),
@@ -93,7 +94,7 @@ describe('SavedExtracts component', function () {
   })
 
   it('should call set selectedExtractName to extractName when the save does not return error', function (done) {
-    getters.status = function () { return {type: 'success', message: 'success message'} }
+    getters.status = function () { return {type: 'success', msg: 'success message'} }
     store = new Vuex.Store({state: {}, mutations, getters})
     const Constructor = Vue.extend(SavedExtracts)
     const vm = new Constructor({store}).$mount()
@@ -144,25 +145,12 @@ describe('SavedExtracts component', function () {
   })
 
   it('should not display the error message if there is none to display', function () {
-    getters.status = function () { return { type: 'normal', message: '' } }
+    getters.status = function () { return { type: 'normal', msg: '' } }
     store = new Vuex.Store({state: {}, mutations, getters})
     const Constructor = Vue.extend(SavedExtracts)
     const vm = new Constructor({store}).$mount()
     let $message = vm.$el.querySelector('.message-container')
-    expect($message.style.display).to.be.equal('none')
-  })
-
-  it('should call resetStatus when the x is clicked', function (done) {
-    const Constructor = Vue.extend(SavedExtracts)
-    const vm = new Constructor({store}).$mount()
-    let $message = vm.$el.querySelector('.message-container')
-    expect($message.style.display).to.be.equal('none')
-    let $x = vm.$el.querySelector('.clear-message')
-    dispatchEvent($x, 'click')
-    Vue.nextTick(() => {
-      expect(mutations.resetStatus.called).to.equal(true)
-      done()
-    })
+    expect($message).to.not.exist // eslint-disable-line
   })
 
   it('dropdown should default to "Saved searches" on page load even if there are saved searches', function () {
@@ -224,36 +212,6 @@ describe('SavedExtracts component', function () {
       vm.selectedExtractName = ''
       let downloadURL = vm.download()
       expect(downloadURL.should.not.be.empty)
-    })
-  })
-
-  describe('displayMessage', function () {
-    it('should return false if status.type is normal', function () {
-      getters.status = function () {
-        return { type: 'normal' }
-      }
-      store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(SavedExtracts)
-      const vm = new Constructor({store}).$mount()
-      expect(vm.displayMessage).to.be.equal(false)
-    })
-    it('should return false if status.scope is not "extract"', function () {
-      getters.status = function () {
-        return { type: 'error', scope: 'app' }
-      }
-      store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(SavedExtracts)
-      const vm = new Constructor({store}).$mount()
-      expect(vm.displayMessage).to.be.equal(false)
-    })
-    it('should return true if status.scope is "extract"', function () {
-      getters.status = function () {
-        return { type: 'error', scope: 'extract' }
-      }
-      store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(SavedExtracts)
-      const vm = new Constructor({store}).$mount()
-      expect(vm.displayMessage).to.be.equal(true)
     })
   })
 })

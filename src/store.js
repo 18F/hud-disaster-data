@@ -118,7 +118,7 @@ export const actions = {
       if (response.data && response.data.length === 0) return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       commit('resetStatus')
     }, (err) => {
-      console.log(err)
+      console.log(`Error fetching disaster list: ${err}`)
       commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
     })
   }

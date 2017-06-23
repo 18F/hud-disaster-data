@@ -3,8 +3,9 @@ import Vue from 'vue' // eslint-disable-line
 import '@/vue-mixins'
 import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
-import store, {actions, getters} from '../../../src/store' // eslint-disable-line
+import store, {actions, getters, mutations} from '../../../src/store' // eslint-disable-line
 import Typeahead from '@/components/Typeahead' // eslint-disable-line
+import Message from '@/components/Message' // eslint-disable-line
 import magic from '@/bus'
 
 Vue.use(Vuex)
@@ -59,7 +60,7 @@ describe('Typeahead.vue', () => {
 
     it('should return before loading if query is shorter than 2', () => {
       const Constructor = Vue.extend(Typeahead)
-      let stub = sinon.stub(actions, 'updateDisasterList')
+      let stub = sinon.stub(mutations, 'updateDisasterList')
       const vm = new Constructor({store}).$mount()
       expect(vm.query).to.be.equal('')
       vm.query = 'A'
@@ -69,7 +70,7 @@ describe('Typeahead.vue', () => {
 
     it('should call loadDisasterList if query is >= 2 in length', () => {
       let loadDisasterListStub = sinon.stub()
-      const myStore = new Vuex.Store({state: store.state, mutations: {loadDisasterList: loadDisasterListStub()}, getters})
+      const myStore = new Vuex.Store({state: store.state, actions: {loadDisasterList: loadDisasterListStub}, getters})
       const Constructor = Vue.extend(Typeahead)
       const vm = new Constructor({store: myStore}).$mount()
       expect(vm.query).to.be.equal('')
@@ -108,53 +109,29 @@ describe('Typeahead.vue', () => {
         return { type: 'normal' }
       }
       store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(Typeahead)
+      const Constructor = Vue.extend(Message)
       const vm = new Constructor({store}).$mount()
       expect(vm.displayMessage).to.be.equal(false)
     })
-    it('should return false if status.scope is not "app"', function () {
-      getters.status = function () {
-        return { type: 'error', scope: 'extract' }
-      }
-      store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(Typeahead)
-      const vm = new Constructor({store}).$mount()
-      expect(vm.displayMessage).to.be.equal(false)
-    })
-    it('should return true if status.scope is "app"', function () {
-      getters.status = function () {
-        return { type: 'error', scope: 'app' }
-      }
-      store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(Typeahead)
-      const vm = new Constructor({store}).$mount()
-      expect(vm.displayMessage).to.be.equal(true)
-    })
-    it('hideMessage should call resetStatus on the store', function () {
-      const Constructor = Vue.extend(Typeahead)
-      const vm = new Constructor({store}).$mount()
-      vm.hideMessage()
-      expect(mutations.resetStatus.called).to.be.equal(true)
-    })
-  })
 
-  describe('mounted', () => {
-    it('magic should listen for clearQuery and set query to blank if searchText is blank', () => {
-      const Constructor = Vue.extend(Typeahead)
-      const vm = new Constructor({store}).$mount()
-      vm.$refs.searchText.value = ''
-      vm.query = 'something'
-      magic.$emit('clearQuery')
-      expect(vm.query).to.be.equal('')
-    })
+    describe('mounted', () => {
+      it('magic should listen for clearQuery and set query to blank if searchText is blank', () => {
+        const Constructor = Vue.extend(Typeahead)
+        const vm = new Constructor({store}).$mount()
+        vm.$refs.searchText.value = ''
+        vm.query = 'something'
+        magic.$emit('clearQuery')
+        expect(vm.query).to.be.equal('')
+      })
 
-    it('magic should listen for clearQuery and not set query to blank if searchText is not blank', () => {
-      const Constructor = Vue.extend(Typeahead)
-      const vm = new Constructor({store}).$mount()
-      vm.$refs.searchText.value = 'somethingelse'
-      vm.query = 'something'
-      magic.$emit('clearQuery')
-      expect(vm.query).to.be.equal('something')
+      it('magic should listen for clearQuery and not set query to blank if searchText is not blank', () => {
+        const Constructor = Vue.extend(Typeahead)
+        const vm = new Constructor({store}).$mount()
+        vm.$refs.searchText.value = 'somethingelse'
+        vm.query = 'something'
+        magic.$emit('clearQuery')
+        expect(vm.query).to.be.equal('something')
+      })
     })
   })
 })

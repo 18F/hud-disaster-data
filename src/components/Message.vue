@@ -1,12 +1,11 @@
 <template lang="pug">
-.message-container(v-show='displayMessage', tabindex='0', ref='messages')
+.message-container(v-if='displayMessage', tabindex='0', ref='messages')
   div(:class='status.type')
     .message
       .ico
         icon(:classes='`ico-lg status-type ${status.type}`', :name='iconName()')
       .body
-        div
-          | {{status.message}}
+        div {{status.message}}
       .close
         label.sr-only(for='message-clear-button') Close {{ status.type }} message
         button#message-clear-button.usa-button.clear-message(@click='hideMessage', title='message clear button')
@@ -15,7 +14,7 @@
 <script>
 
 export default {
-  props: ['status', 'locationOfMessage'],
+  props: ['locationOfMessage'],
   computed: {
     displayMessage () {
       var status = this.$store.getters.status
@@ -24,6 +23,9 @@ export default {
       if (status.scope === 'app' && this.locationOfMessage !== 'app-message') return false
       this.$nextTick(() => this.$refs.messages.focus())
       return true
+    },
+    status () {
+      return this.$store.getters.status
     }
   },
   methods: {
