@@ -4,14 +4,14 @@
   "description": "FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.",
   "main": "index.js",
   "scripts": {
-    "dev": "### Run the client side hot reloading dev server\n    node build/dev-server.js",
-    "start": "### Start the server\n    node index",
-    "build": "### Run the tests, build the webpack bundle, and test for 508 compliance.\n    npm test && node build/build.js && npm run 508-test",
-    "unit": "### Run the client side tests\n    cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "server-unit": "### Run the server side tests\n    mocha test/server && mocha test",
-    "test": "### Run all tests\n    npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
-    "lint": "### Run the linter\n    eslint --ext .js,.vue src test/unit/specs",
-    "508-test": "### Run the 508 compliance tests\n    npm run start & sleep 5 && trap 'kill $(jobs -p)' EXIT && ./node_modules/.bin/pa11y -i notice http://localhost:3000"
+    "dev": "echo 'Run the client side hot reloading dev server' && node build/dev-server.js",
+    "start": "echo 'Start the server' && node index",
+    "build": "echo 'Run the tests, build the webpack bundle, and test for 508 compliance.' && npm test && node build/build.js && npm run 508-test",
+    "unit": "echo 'Run the client side tests' && cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "server-unit": "echo 'Run the server side tests' && mocha test/server && mocha test",
+    "test": "echo 'Run all tests' && npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
+    "lint": "echo 'Run the linter' && eslint --ext .js,.vue src test/unit/specs",
+    "508-test": "echo 'Run the 508 compliance tests' && npm run start & sleep 5 && trap 'kill $(jobs -p)' EXIT && ./node_modules/.bin/pa11y -i notice http://localhost:3000"
   },
   "repository": {
     "type": "git",
