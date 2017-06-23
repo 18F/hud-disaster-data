@@ -3,7 +3,7 @@ import Vue from 'vue' // eslint-disable-line
 import '@/vue-mixins'
 import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
-import store, {actions, getters} from '../../../src/store' // eslint-disable-line
+import store, {actions, getters, mutations} from '../../../src/store' // eslint-disable-line
 import Typeahead from '@/components/Typeahead' // eslint-disable-line
 import Message from '@/components/Message' // eslint-disable-line
 import magic from '@/bus'
@@ -60,7 +60,7 @@ describe('Typeahead.vue', () => {
 
     it('should return before loading if query is shorter than 2', () => {
       const Constructor = Vue.extend(Typeahead)
-      let stub = sinon.stub(actions, 'updateDisasterList')
+      let stub = sinon.stub(mutations, 'updateDisasterList')
       const vm = new Constructor({store}).$mount()
       expect(vm.query).to.be.equal('')
       vm.query = 'A'
@@ -70,7 +70,7 @@ describe('Typeahead.vue', () => {
 
     it('should call loadDisasterList if query is >= 2 in length', () => {
       let loadDisasterListStub = sinon.stub()
-      const myStore = new Vuex.Store({state: store.state, mutations: {loadDisasterList: loadDisasterListStub()}, getters})
+      const myStore = new Vuex.Store({state: store.state, actions: {loadDisasterList: loadDisasterListStub}, getters})
       const Constructor = Vue.extend(Typeahead)
       const vm = new Constructor({store: myStore}).$mount()
       expect(vm.query).to.be.equal('')

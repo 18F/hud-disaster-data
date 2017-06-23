@@ -1,5 +1,5 @@
 <template lang="pug">
-.message-container(v-show='displayMessage', tabindex='0', ref='messages')
+.message-container(v-if='displayMessage', tabindex='0', ref='messages')
   div(:class='status.type')
     .message
       .ico

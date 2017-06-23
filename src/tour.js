@@ -47,7 +47,6 @@ disasterSearchTour.addStep('enter-search', {
       <p>
       Start here by typing in a FEMA disaster ID.
       </p>
-      <input type="button" onclick="alert('<script>$store.getters.currentSearchResult.length</script>')" value="Click Me" />
       <p>
       These IDs follow the format "DR‐4272‐TX" But you can also type "4272".
       </p>
