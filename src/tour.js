@@ -331,7 +331,7 @@ disasterSearchTour.addStep('enter-search', {
     You have successfully created a saved disaster search!
     </p>
     <p>
-    It can be now be be accessed at any time when selected in the "Saved Searches" dropdwon selector"
+    It can be now be be accessed at any time when selected in the "Saved Searches" dropdown selector."
     </p>
   </div>
   `,
