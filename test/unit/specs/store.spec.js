@@ -89,7 +89,7 @@ describe('store', function () {
       let hideLoading
       let updateDisasterList
       let resetStatus
-      var commitSpy = sinon.stub().callsFake((name, data) => {
+      var commitStub = sinon.stub(this, 'commit').callsFake((name, data) => {
         if (name === 'setSearchLoading' && data) showLoading = true
         if (name === 'updateDisasterList' && data) {
           expect(data).to.have.property('list').that.is.an('array')
@@ -99,7 +99,8 @@ describe('store', function () {
         if (name === 'setSearchLoading' && !data) hideLoading = true
       })
 
-      loadDisasterList({ commit: commitSpy }, 'DR')
+      loadDisasterList({ commit: commitStub }, 'DR')
+      commitStub.restore()
       moxios.wait(() => {
         expect(showLoading).to.be.equal(true)
         expect(hideLoading).to.be.equal(true)
