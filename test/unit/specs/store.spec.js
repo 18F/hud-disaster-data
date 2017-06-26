@@ -105,7 +105,6 @@ describe('store', function () {
         expect(hideLoading).to.be.equal(true)
         expect(updateDisasterList).to.be.equal(true)
         expect(resetStatus).to.be.equal(true)
-        commitStub.restore()
         done()
       })
     })
