@@ -28,9 +28,9 @@
         li(v-for='(item, $item) in items')
           disaster(:prefix="'saved'", :item='item')
     #action-buttons
-      button#clear-button.usa-button.alt-button(@click='clear') Clear
+      button#clear-button.usa-button.alt-button(@click='clear' title='Clear Button') Clear
       a(:href='download()', tabindex='-1', download='')
-        button#export-button.usa-button.green(:disabled='items.length === 0')
+        button#export-button.usa-button.green(:disabled='items.length === 0' title='Export Button')
           | Export
           icon(classes='export', name='fa-sign-out')
 </template>

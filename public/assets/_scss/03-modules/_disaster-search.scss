@@ -26,20 +26,19 @@ span {
   margin-top:125px;
   padding:0;
 
-  div#message {
+  h2 {
     color: #fff;
     text-align: left;
     margin-left:30px;
     height:35px;
-
-    h2{ margin-top:1em; }
+    margin-top:1em;
   }
 
   .search-wrapper {
-    :-ms-input-placeholder {color:#ccc; opacity:1;}
-    :-webkit-input-placeholder {color:#ccc; opacity:1;}
-    :-moz-placeholder {color:#ccc; opacity:1;}
-    :-moz-p {color:#ccc; opacity:1;}
+    :-ms-input-placeholder {color:#777777; opacity:1;}
+    :-webkit-input-placeholder {color:#777777;}
+    :-moz-placeholder {color:#777777;}
+    :-moz-p {color:#777777;}
 
     .hdd-icon {
       background-color:#fff;
@@ -67,7 +66,6 @@ span {
     position: absolute;
     right:11px;
     top:110px;
-    z-index:100;
     ul {
       display:block;
       margin:0;
