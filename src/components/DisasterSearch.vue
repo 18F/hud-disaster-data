@@ -33,7 +33,7 @@ import disaster from './Disaster'
 import message from './Message'
 import savedextracts from './SavedExtracts'
 import magic from '@/bus'
-
+let timeoutId = 0
 export default {
   name: 'disaster-search',
   components: {disaster, savedextracts, message},
@@ -69,10 +69,13 @@ export default {
   },
   methods: {
     update () {
-      if (!this.query) return this.reset()
-      if (this.query.length < 2) return
-
-      this.$store.dispatch('loadDisasterList', this.query)
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        if (!this.query) return this.reset()
+        if (/^\d+$/.test(this.query) && this.query.length < 4) return
+        if (this.query.length < 2) return
+        this.$store.dispatch('loadDisasterList', this.query)
+      }, 500)
     },
     reset () {
       this.query = ''

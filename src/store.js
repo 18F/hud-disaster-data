@@ -65,9 +65,6 @@ export const mutations = {
     })
     state.newExtract = false
   },
-  setSearchLoading: function (state, status) {
-    state.searchLoading = status
-  },
   updateDisasterList: function (state, { list }) {
     list.forEach(disaster => {
       var disasterInExtract = findDisaster(state.currentExtract, disaster)
@@ -108,9 +105,11 @@ export const mutations = {
   },
   resetStatus: function (state) {
     state.status = { type: 'normal', message: '' }
+    state.searchLoading = false
   },
   setStatus: function (state, {type, scope, msg}) {
     state.status = { type: type, scope: scope, message: msg }
+    state.searchLoading = false
   }
 }
 
