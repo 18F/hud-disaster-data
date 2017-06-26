@@ -4,7 +4,7 @@ import '@/vue-mixins'
 import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
 import store, {actions, getters, mutations} from '../../../src/store' // eslint-disable-line
-import Typeahead from '@/components/Typeahead' // eslint-disable-line
+import DisasterSearch from '@/components/DisasterSearch' // eslint-disable-line
 import Message from '@/components/Message' // eslint-disable-line
 import magic from '@/bus'
 
@@ -26,9 +26,9 @@ const ONE_RECORD = [
     id: '58fa2e008a4f31363dac2c6a'
   } ]
 
-describe('Typeahead.vue', () => {
+describe('DisasterSearch.vue', () => {
   it('should render correct list item contents', done => {
-    const Constructor = Vue.extend(Typeahead)
+    const Constructor = Vue.extend(DisasterSearch)
     const vm = new Constructor({store}).$mount()
     vm.$store.commit('updateDisasterList', { list: ONE_RECORD })
     Vue.nextTick(function () {
@@ -38,7 +38,7 @@ describe('Typeahead.vue', () => {
   })
 
   it('should not populate items if query is empty', done => {
-    const Constructor = Vue.extend(Typeahead)
+    const Constructor = Vue.extend(DisasterSearch)
     const vm = new Constructor({store}).$mount()
     vm.$store.commit('updateDisasterList', { list: [] })
     Vue.nextTick(function () {
@@ -49,7 +49,7 @@ describe('Typeahead.vue', () => {
 
   describe('update', () => {
     it('should force a reset if query is undefined', () => {
-      const Constructor = Vue.extend(Typeahead)
+      const Constructor = Vue.extend(DisasterSearch)
       const vm = new Constructor({store}).$mount()
       expect(vm.query).to.be.equal('')
       vm.query = undefined
@@ -59,7 +59,7 @@ describe('Typeahead.vue', () => {
     })
 
     it('should return before loading if query is shorter than 2', () => {
-      const Constructor = Vue.extend(Typeahead)
+      const Constructor = Vue.extend(DisasterSearch)
       let stub = sinon.stub(mutations, 'updateDisasterList')
       const vm = new Constructor({store}).$mount()
       expect(vm.query).to.be.equal('')
@@ -71,7 +71,7 @@ describe('Typeahead.vue', () => {
     it('should call loadDisasterList if query is >= 2 in length', () => {
       let loadDisasterListStub = sinon.stub()
       const myStore = new Vuex.Store({state: store.state, actions: {loadDisasterList: loadDisasterListStub}, getters})
-      const Constructor = Vue.extend(Typeahead)
+      const Constructor = Vue.extend(DisasterSearch)
       const vm = new Constructor({store: myStore}).$mount()
       expect(vm.query).to.be.equal('')
       vm.query = 'DR'
@@ -116,7 +116,7 @@ describe('Typeahead.vue', () => {
 
     describe('mounted', () => {
       it('magic should listen for clearQuery and set query to blank if searchText is blank', () => {
-        const Constructor = Vue.extend(Typeahead)
+        const Constructor = Vue.extend(DisasterSearch)
         const vm = new Constructor({store}).$mount()
         vm.$refs.searchText.value = ''
         vm.query = 'something'
@@ -125,7 +125,7 @@ describe('Typeahead.vue', () => {
       })
 
       it('magic should listen for clearQuery and not set query to blank if searchText is not blank', () => {
-        const Constructor = Vue.extend(Typeahead)
+        const Constructor = Vue.extend(DisasterSearch)
         const vm = new Constructor({store}).$mount()
         vm.$refs.searchText.value = 'somethingelse'
         vm.query = 'something'

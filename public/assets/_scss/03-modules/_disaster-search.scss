@@ -89,13 +89,13 @@ span {
     }
   }
 }
-/* Typeahead styles ----------------------------------- */
-.Typeahead {
+/* DisasterSearch styles ----------------------------------- */
+.DisasterSearch {
   padding-bottom:40px;
-  /*this style is REQUIRED to line up typeahead and messaging clearing "x" */
+  /*this style is REQUIRED to line up disaster-search and messaging clearing "x" */
   #message-clear-button { right:-5px; }
 }
-.Typeahead__input {
+.DisasterSearch__input {
   font-size: 14px;
   color: #2c3e50;
   line-height: 1.42857143;
@@ -103,7 +103,7 @@ span {
   //letter-spacing: 1px;
   box-sizing: border-box;
 }
-.Typeahead__input:focus {
+.DisasterSearch__input:focus {
   outline: 0;
 }
 .link-advanced-search {
