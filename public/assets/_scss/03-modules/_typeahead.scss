@@ -36,6 +36,11 @@ span {
   }
 
   .search-wrapper {
+    :-ms-input-placeholder {color:#ccc; opacity:1;}
+    :-webkit-input-placeholder {color:#ccc; opacity:1;}
+    :-moz-placeholder {color:#ccc; opacity:1;}
+    :-moz-p {color:#ccc; opacity:1;}
+
     .hdd-icon {
       background-color:#fff;
       fill: #000;
