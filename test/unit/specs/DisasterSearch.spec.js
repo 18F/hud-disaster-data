@@ -55,7 +55,9 @@ describe('DisasterSearch.vue', () => {
       vm.query = undefined
       expect(vm.query).to.be.equal(undefined)
       vm.update()
-      expect(vm.query).to.be.equal('')
+      Vue.nextTick(() => {
+        expect(vm.query).to.be.equal('')
+      })
     })
 
     it('should return before loading if query is shorter than 2', () => {
@@ -68,15 +70,17 @@ describe('DisasterSearch.vue', () => {
       expect(stub.called).to.be.equal(false)
     })
 
-    it('should call loadDisasterList if query is >= 2 in length', () => {
+    it('should call loadDisasterList if query is >= 2 in length and is not all numeric', () => {
       let loadDisasterListStub = sinon.stub()
       const myStore = new Vuex.Store({state: store.state, actions: {loadDisasterList: loadDisasterListStub}, getters})
       const Constructor = Vue.extend(DisasterSearch)
       const vm = new Constructor({store: myStore}).$mount()
       expect(vm.query).to.be.equal('')
-      vm.query = 'DR'
+      vm.query = 'DR1'
       vm.update()
-      expect(loadDisasterListStub.called).to.be.equal(true)
+      Vue.nextTick(() => {
+        expect(loadDisasterListStub.called).to.be.equal(true)
+      })
     })
   })
 
