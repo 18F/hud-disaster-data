@@ -3,8 +3,7 @@
     .row
       .col-xs-12.col-md-6.search-container
         #opaque-bg.row
-          #message     <!-- .col -->
-            h2 Disaster search
+          h2 Disaster search
           .col.DisasterSearch
             #search
               .offset-bg

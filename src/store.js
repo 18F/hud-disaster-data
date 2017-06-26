@@ -118,7 +118,10 @@ export const actions = {
     commit('setSearchLoading', true)
     axios.get(`/api/disasterquery/${qry}`).then((response) => {
       commit('updateDisasterList', { list: response.data })
-      if (response.data && response.data.length === 0) return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+      if (response.data && response.data.length === 0) {
+        commit('setSearchLoading', false)
+        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+      }
       commit('resetStatus')
       commit('setSearchLoading', false)
     }, (err) => {

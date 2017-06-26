@@ -17,13 +17,13 @@
     .row
       .col-xs-12.col-sm-4.col-md-3
       .col-xs-12.col-sm-8.col-md-9
-        label.sr-only(:for='`show-areas-${labelId}`') Show {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}
-        label.sr-only(:for='`hide-areas-${labelId}`') Hide {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}
-        button.usa-button(v-if='!showAreas', @click='showAreas=!showAreas', :id='`show-areas-${labelId}`' title='Show Affected Areas' )
-          | ({{ item.declaredCountyArea.length }} ) Show Affected Areas
+        label.sr-only(v-if='!showAreas' :for='`show-areas-${labelId}`') Show {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}
+        label.sr-only(v-else :for='`hide-areas-${labelId}`') Hide {{ item.declaredCountyArea.length }} affected areas for {{ disasterId }}
+        button.usa-button(v-if='!showAreas', @click='showAreas=!showAreas', :id='`show-areas-${labelId}`' :title='`Show Affected Areas for ${disasterId}`')
+          | Show Affected Areas ({{ item.declaredCountyArea.length }}) &nbsp;
           icon(classes='affected-areas', name='fa-caret-down')
-        button.usa-button-secondary(v-else='!showAreas', @click='showAreas=!showAreas', :id='`hide-areas-${labelId}`', title='Hide Affected Areas')
-          | ({{ item.declaredCountyArea.length }}) Hide Affected Areas
+        button.usa-button-secondary(v-else, @click='showAreas=!showAreas', :id='`hide-areas-${labelId}`', :title='`Hide Affected Areas for ${disasterId}`')
+          | Hide Affected Areas ({{ item.declaredCountyArea.length }}) &nbsp;
           icon(classes='affected-areas', name='fa-caret-up')
     .row
       .col-md-12
