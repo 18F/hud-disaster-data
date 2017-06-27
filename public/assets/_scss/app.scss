@@ -52,6 +52,11 @@ h6, .h6 { font-size: 12px; }
     height: 1em;
     width: 1em;
 
+    &.ico-md {
+      height:1.3em;
+      width:1.3em;
+    }
+
     &.ico-lg {
       height: 2em;
       width: 2em;
