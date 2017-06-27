@@ -110,6 +110,9 @@ export const mutations = {
   setStatus: function (state, {type, scope, msg}) {
     state.status = { type: type, scope: scope, message: msg }
     state.searchLoading = false
+  },
+  setSearchLoading: function (state, status) {
+    state.searchLoading = status
   }
 }
 
