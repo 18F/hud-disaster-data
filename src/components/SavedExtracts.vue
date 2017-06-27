@@ -42,6 +42,10 @@ import magic from '@/bus'
 import moment from 'moment'
 import _ from 'lodash'
 
+/**
+* Component responsible for enabling a user to build and save criteria for data exports.
+* @module components/SavedExtracts
+*/
 export default {
   components: {disaster, message},
   created () {

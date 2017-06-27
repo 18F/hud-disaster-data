@@ -1,5 +1,10 @@
 import Vue from 'vue'
 import icon from './components/Icon'
+/**
+* These are mixins for all components.  Helping us stay DRY!
+* @module vueMixins
+*/
+
 const messages = {
   success: 'fa-check-circle',
   error: 'fa-times-circle',
@@ -9,8 +14,9 @@ const messages = {
 Vue.mixin({
   components: {icon},
   methods: {
+    /** return the correct icon based on status */
     iconName () {
-      return messages[this.status.type]
+      return messages[this.$store.getters.status.type]
     }
   }
 })

@@ -12,7 +12,10 @@
           icon(classes='close-message', name='fa-times')
 </template>
 <script>
-
+/**
+* User message display component
+* @module components/Message
+*/
 export default {
   props: ['locationOfMessage'],
   computed: {

@@ -4,7 +4,10 @@
 </template>
 <script>
 const iconClass = 'hdd-icon'
-
+/**
+* Displays an svg version of font-awesome icons
+* @module components/Icon
+*/
 export default {
   props: [
     'classes',

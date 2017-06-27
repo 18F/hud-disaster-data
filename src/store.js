@@ -119,15 +119,12 @@ export const actions = {
     axios.get(`/api/disasterquery/${qry}`).then((response) => {
       commit('updateDisasterList', { list: response.data })
       if (response.data && response.data.length === 0) {
-        commit('setSearchLoading', false)
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
       commit('resetStatus')
-      commit('setSearchLoading', false)
     }, (err) => {
       console.log(`Error fetching disaster list: ${err}`)
       commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
-      commit('setSearchLoading', false)
     })
   }
 }
@@ -161,7 +158,6 @@ export const getters = {
 * Manages the state for client functions.
 * @module store
 */
-
 const store = new Vuex.Store({
   state: {
     disasters: [],
