@@ -43,6 +43,9 @@ span {
       right: 0;
       fill: #fff;
     }
+    &:active, &:visited, &:focus {
+      background-color: $color-primary
+    }
   }
 
   #clear-text {
