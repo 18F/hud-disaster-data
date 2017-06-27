@@ -35,8 +35,12 @@ span {
   }
   #search-btn {
     height: 46px;
-    margin-top: 3px;
-    border: 1px solid #5b616b;
+    margin-top: 4px;
+    border-radius:0;
+    /* border: 1px solid #5b616b; */
+    &:focus{
+      box-shadow:none;
+    }
     .hdd-icon {
       top: 0;
       background: transparent;
@@ -92,8 +96,8 @@ span {
     overflow-y:scroll;
     padding:0;
     position: absolute;
-    right:11px;
-    top:125px;
+    right:20px;
+    top:135px;
     ul {
       display:block;
       margin:0;
@@ -126,6 +130,7 @@ span {
   color: #2c3e50;
   line-height: 1.42857143;
   border: 1px solid #ccc;
+  height:46px;
   //letter-spacing: 1px;
   box-sizing: border-box;
 }
