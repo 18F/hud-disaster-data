@@ -7,14 +7,23 @@
           .col.DisasterSearch
             #search
               .offset-bg
-                .search-wrapper
+                .search-wrapper.input-group
                   label.sr-only(for='search-text') search FEMA disasters
-                  input#search-text.DisasterSearch__input(type='text', ref='searchText', placeholder='Search by disaster number, type, or state', autocomplete='off', v-model='query', @keydown.esc='reset', @input='update')
-                  icon(v-if='loading', classes='fa-spin', name='fa-spinner')
-                  template(v-else='')
-                    icon(name='fa-search', v-show='isEmpty')
-                    a(href='#', @click='reset', v-if='isDirty')
+                  input#search-text.DisasterSearch__input(
+                    type='text',
+                    ref='searchText',
+                    placeholder='Search by disaster number, type, or state',
+                    autocomplete='off',
+                    v-model='query',
+                    @keydown.esc='reset',
+                    @keydown.enter='update')
+                  icon(v-if="loading", classes='fa-spin', name='fa-spinner')
+                  template(v-else)
+                    button#clear-text(@click='reset', v-if='isDirty')
                       icon(classes='clear-text', name='fa-times')
+                  span.input-group-btn
+                    button#search-btn.btn.btn-default(type="button", @click="update")
+                      icon(name='fa-search')
                 .message-wrapper
                   message(:status="status" :locationOfMessage="'app-message'")
                 .disaster-list(v-show='hasItems')
@@ -32,7 +41,6 @@ import disaster from './Disaster'
 import message from './Message'
 import savedextracts from './SavedExtracts'
 import magic from '@/bus'
-let timeoutId = 0
 
 /**
 * Component responsible for enabling a user to search for and select disasters to be included in a data export.
@@ -73,13 +81,10 @@ export default {
   },
   methods: {
     update () {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(() => {
-        if (!this.query) return this.reset()
-        if (/^\d+$/.test(this.query) && this.query.length < 4) return
-        if (this.query.length < 2) return
-        this.$store.dispatch('loadDisasterList', this.query)
-      }, 500)
+      if (!this.query) return this.reset()
+      if (/^\d+$/.test(this.query) && this.query.length < 4) return
+      if (this.query.length < 2) return
+      this.$store.dispatch('loadDisasterList', this.query)
     },
     reset () {
       this.query = ''
