@@ -16,4 +16,9 @@ describe('/api/export/:fileNamePart', function () {
     })
     .expect(200, done)
   })
+
+  it('should return a 406 code if no disasters were sent', (done) => {
+    request(app).get('/api/export/My_Document_Name?disasters=')
+    .expect(406, done)
+  })
 })

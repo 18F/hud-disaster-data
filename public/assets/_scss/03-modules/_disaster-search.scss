@@ -5,73 +5,84 @@ span {
 
 .screen-name { font-style: italic; }
 .no-padding { padding: 0; }
-.wrapper input[type="text"] { width:100%; max-width:100%; }
+.wrapper input[type="text"] {
+  width:100%;
+  max-width:100%;
+  margin-bottom:0;
+}
 
 #opaque-bg {
   background: url('/static/img/bg_50_opacity.png');
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  @include media($large-screen) {
+    border-radius: 10px 0 0 10px;
+  }
+  border-radius: 10px;
   margin:0 auto;
   overflow: hidden;
 }
 .offset-bg {
-  padding:0 10px 0 30px;
+  padding:0 10px 0 20px;
 }
-.message-wrapper {
-  /*  min-height:20px; */
-    font-family: "Source Sans Pro", sans-serif;
-}
-/*this style is REQUIRED to line up typeahead and messaging clearing "x" */
-#app-message-clear-button {
-  right:-5px;
-}
-/* Messages styles --------------------------------- */
-.messages {
-  /* margin-top:20px; */
-    .close-message {
-      fill: #000;
-    }
-    .success, .error, .warning, .info {
-    /*  padding:10px; */
-      vertical-align:middle;
-      fill:#000;
-    }
-    .success { background:#e7f4e4; }
-    .error { background:#f9dede; }
-    .warning { background: #fff1d2; }
-    .info { background:#e1f3f8; }
-   /* .hdd-icon.status-type  {
-      /* margin-right:10px;
-      fill: #000;
-    } */
-    .usa-button.clear-message {
-      background: transparent;
-      cursor:pointer;
-      position:absolute;
-      right:10px;
-      margin-top:2px;
-    }
-}
-
 /* Search container styles ----------------------------- */
 .search-container {
   margin-top:125px;
   padding:0;
 
-  div#message {
+  h2 {
     color: #fff;
     text-align: left;
-    margin-left:30px;
+    margin-left:20px;
     height:35px;
+    margin-top:1em;
+  }
+  #search-btn {
+    height: 46px;
+    margin-top: 4px;
+    border-radius:0;
+    /* border: 1px solid #5b616b; */
+    &:focus{
+      box-shadow:none;
+    }
+    .hdd-icon {
+      top: 0;
+      background: transparent;
+      right: 0;
+      fill: #fff;
+    }
+    &:active, &:visited, &:focus {
+      background-color: $color-primary
+    }
+  }
+
+  #clear-text {
+    background: none;
+    position: relative;
+    float: right;
+    margin-top: -46px;
+    max-width: 24px;
+    .hdd-icon {
+      right: 0;
+      left: 12px;
+      top: 2px;
+    }
   }
 
   .search-wrapper {
+    :-ms-input-placeholder {color:#777777; opacity:1;}
+    :-webkit-input-placeholder {color:#777777;}
+    :-moz-placeholder {color:#777777;}
+    :-moz-p {color:#777777;}
+
+    .fa-spin.hdd-icon {
+      margin-top: -34px;
+      left: -16px;
+    }
     .hdd-icon {
       background-color:#fff;
       fill: #000;
       float:right;
       position:relative;
-      top:-38px;
+      top: 0;
       right:10px;
       height:1.3em;
       width:1.3em;
@@ -83,15 +94,14 @@ span {
   /* Disaster list styles --------------------------------- */
   .disaster-list {
     background-color: #fff;
-    box-shadow:0 5px 10px #000;
     height:340px;
-    left:31px;
+    left:21px;
     overflow-x:hidden;
     overflow-y:scroll;
     padding:0;
     position: absolute;
-    right:11px;
-    top:116px;
+    right:20px;
+    top:135px;
     ul {
       display:block;
       margin:0;
@@ -113,26 +123,29 @@ span {
     }
   }
 }
-/* Typeahead styles ----------------------------------- */
-.Typeahead {
-  padding-bottom:20px;
+/* DisasterSearch styles ----------------------------------- */
+.DisasterSearch {
+  padding-bottom:40px;
+  /*this style is REQUIRED to line up disaster-search and messaging clearing "x" */
+  #message-clear-button { right:-5px; }
 }
-.Typeahead__input {
+.DisasterSearch__input {
   font-size: 14px;
   color: #2c3e50;
   line-height: 1.42857143;
   border: 1px solid #ccc;
+  height:46px;
   //letter-spacing: 1px;
   box-sizing: border-box;
 }
-.Typeahead__input:focus {
+.DisasterSearch__input:focus {
   outline: 0;
 }
 .link-advanced-search {
+  display: none;
   padding-top:20px;
   padding-bottom:20px;
   text-align:right;
-  a {
-    display:none;
-  }
+
+  a { /* display:none; */ }
 }

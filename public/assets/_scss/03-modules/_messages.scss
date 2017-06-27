@@ -1,0 +1,50 @@
+/*this style is REQUIRED to line up disaster-search and messaging clearing "x" */
+/* Messages styles --------------------------------- */
+.normal { display:none; }
+.message-wrapper {
+  font-family: "Source Sans Pro", sans-serif;
+  border:1px solid transparent;
+  .message-container {
+      .message {
+        overflow:hidden;
+        padding:10px;
+
+        .ico {
+          float:left;
+          padding:5px;
+          width:10%;
+        }
+
+        .body {
+          float:left;
+          width:80%;
+
+          div {
+            line-height: 20px;
+            padding:12px 0;
+          }
+        }
+
+        .close { float:left; }
+      }
+
+      .close-message { fill: #000; }
+      .success, .error, .warning, .info {
+        vertical-align:middle;
+        fill:#000;
+      }
+
+      .success { background:#e7f4e4; }
+      .error { background:#f9dede; }
+      .warning { background: #fff1d2; }
+      .info { background:#e1f3f8; }
+
+      .usa-button.clear-message {
+        background: transparent;
+        cursor:pointer;
+        position:absolute;
+        right:10px;
+        margin-top:2px;
+      }
+  }
+}

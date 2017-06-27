@@ -6,7 +6,7 @@ import Vuex from 'vuex'
 import Axios from 'axios'
 import store from './store' // This is our Vuex store.  It helps us manage state.
 import Sprites from './components/Sprites'
-import Typeahead from './components/Typeahead'
+import DisasterSearch from './components/DisasterSearch'
 import AppHeader from './components/Header'
 import AppFooter from './components/Footer'
 import es6Promise from 'es6-promise'
@@ -16,6 +16,10 @@ Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.prototype.$http = Axios
 
+/**
+* The main vue component.  All other components are children of this one.
+* @module components/App
+*/
 /* eslint-disable no-new */
 new Vue({
   el: '#page',
@@ -23,7 +27,7 @@ new Vue({
   components: {
     Sprites,
     AppHeader,
-    Typeahead,
+    DisasterSearch,
     AppFooter
   }
 })

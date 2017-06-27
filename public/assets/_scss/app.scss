@@ -28,12 +28,21 @@ select:focus, input[type="text"]:focus { box-shadow:none; }
 button:focus {
   outline: 1px dotted $check-color;
 }
+a:focus {
+  box-shadow: none;
+}
 
 /* -- Label and title styles ----------------------*/
 h1, h2, h3, h4, h5 {
   font-family: "Source Sans Pro", "Roboto", sans-serif;
   font-weight: normal;
 }
+h1, .h1 { font-size: 36px; }
+h2, .h2 { font-size: 30px; }
+h3, .h3 { font-size: 20px; }
+h4, .h4 { font-size: 18px; }
+h5, .h5 { font-size: 14px; }
+h6, .h6 { font-size: 12px; }
 
 .hdd-label {
   color:#fff;
@@ -45,6 +54,11 @@ h1, h2, h3, h4, h5 {
     fill: #ffffff;
     height: 1em;
     width: 1em;
+
+    &.ico-md {
+      height:1.3em;
+      width:1.3em;
+    }
 
     &.ico-lg {
       height: 2em;
@@ -65,7 +79,7 @@ h1, h2, h3, h4, h5 {
   fill: #000;
   vertical-align:top;
 }
-div#search-extract { padding:30px 0 60px 0; }
+div#search-extract { padding:30px 0; }
 /* -- USA button overrrides ----------------- */
 .usa-button i, .usa-button-secondary i { margin-left:5px; }
 .usa-button, .usa-button:hover, .usa-button:active, .usa-button:focus,

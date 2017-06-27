@@ -4,6 +4,7 @@ import _ from 'lodash'
 import axios from 'axios' // eslint-disable-line
 import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions } from '../../../src/store' // eslint-disable-line
+import sinon from 'sinon'
 const { toggleCurrentExtract, clearCurrentExtract, updateDisasterList, saveExtract,
         loadExtract, deleteExtract, resetStatus, setStatus } = mutations
 const { loadDisasterList } = actions
@@ -78,18 +79,28 @@ describe('store', function () {
   })
 
   describe('loadDisasterList', function () {
-    it('should call commit when the data is loaded', function (done) {
+    it('should call commit for setSearchLoading and updateDisasterList when the data is loaded', function (done) {
       moxios.install()
       moxios.stubRequest(/DR/, {
         status: 200,
         response: _.clone(TWO_RECORDS)
       })
-      let commit = function (name, data) {
-        expect(name).to.be.equal('updateDisasterList')
-        expect(data).to.have.property('list').that.is.an('array')
+      let updateDisasterList
+      let resetStatus
+      var commitStub = sinon.stub().callsFake((name, data) => {
+        if (name === 'updateDisasterList' && data) {
+          expect(data).to.have.property('list').that.is.an('array')
+          updateDisasterList = true
+        }
+        if (name === 'resetStatus') resetStatus = true
+      })
+
+      loadDisasterList({ commit: commitStub }, 'DR')
+      moxios.wait(() => {
+        expect(updateDisasterList).to.be.equal(true)
+        expect(resetStatus).to.be.equal(true)
         done()
-      }
-      loadDisasterList({ commit }, 'DR')
+      })
     })
 
     it('when loading the data, if a non JSON result is returned, set error status and proper message', function (done) {

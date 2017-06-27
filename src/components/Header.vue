@@ -31,29 +31,33 @@
       .container-block
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
-          p(ref='title') {{title}}
-        #tabs
-          .tab.selected
-              icon.ico-lg(name='fa-sign-out')
-              span
-                | Data Export
-          .tab
-              icon.ico-lg(name='fa-globe')
-              span
-                | View Map
-          .tab
-              icon.ico-lg(name='fa-bar-chart')
-              span
-                | Reports
+          h1(ref='title') {{title}}
+        #tabs.hidden-xs
+          a(href="#")
+            .tab.selected(tabindex='0')
+                icon.ico-md(name='fa-sign-out')
+                span
+                  | Data Export
+          a(href="#")
+            .tab(tabindex='0')
+                icon.ico-md(name='fa-globe')
+                span
+                  | View Map
+          a(href="3")
+            .tab(tabindex='0')
+                icon.ico-md(name='fa-bar-chart')
+                span
+                  | Reports
     #ribbon
-      span
-        | Need Help?
-      button.usa-button.green(@click='startTour')
-        | Guide Me
+      div(style="position:relative; top:-5px;")
+        span
+          | Need Help?
+        button.usa-button.green(@click='startTour' title='Guide Me Button')
+          | Guide Me
 </template>
 
 <script>
-import tour from '../../tour'
+import tour from '../tour'
 
 export default {
   data () {
