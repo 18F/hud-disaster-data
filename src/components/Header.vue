@@ -32,19 +32,22 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        #tabs
-          .tab.selected(tabindex='0')
-              icon.ico-lg(name='fa-sign-out')
-              span
-                | Data Export
-          .tab(tabindex='0')
-              icon.ico-lg(name='fa-globe')
-              span
-                | View Map
-          .tab(tabindex='0')
-              icon.ico-lg(name='fa-bar-chart')
-              span
-                | Reports
+        #tabs.hidden-xs
+          a(href="#")
+            .tab.selected(tabindex='0')
+                icon.ico-md(name='fa-sign-out')
+                span
+                  | Data Export
+          a(href="#")
+            .tab(tabindex='0')
+                icon.ico-md(name='fa-globe')
+                span
+                  | View Map
+          a(href="3")
+            .tab(tabindex='0')
+                icon.ico-md(name='fa-bar-chart')
+                span
+                  | Reports
     #ribbon
       div(style="position:relative; top:-5px;")
         span
