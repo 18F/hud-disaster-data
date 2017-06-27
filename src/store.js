@@ -161,7 +161,6 @@ export const getters = {
 * Manages the state for client functions.
 * @module store
 */
-
 const store = new Vuex.Store({
   state: {
     disasters: [],

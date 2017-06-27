@@ -33,6 +33,11 @@ import message from './Message'
 import savedextracts from './SavedExtracts'
 import magic from '@/bus'
 let timeoutId = 0
+
+/**
+* Component responsible for enabling a user to search for and select disasters to be included in a data export.
+* @module components/DisasterSearch
+*/
 export default {
   name: 'disaster-search',
   components: {disaster, savedextracts, message},

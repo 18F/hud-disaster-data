@@ -35,7 +35,10 @@
 </template>
 <script>
 import { mapMutations } from 'vuex'
-
+/**
+* A disaster info card.  Used for adding and removing disasters from an extract
+* @module components/Disaster
+*/
 export default {
   props: ['item', 'prefix'],
   data () {
