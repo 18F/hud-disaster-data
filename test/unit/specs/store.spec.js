@@ -85,24 +85,18 @@ describe('store', function () {
         status: 200,
         response: _.clone(TWO_RECORDS)
       })
-      let showLoading
-      let hideLoading
       let updateDisasterList
       let resetStatus
-      var commitStub = sinon.stub({}, 'commit').callsFake((name, data) => {
-        if (name === 'setSearchLoading' && data) showLoading = true
+      var commitStub = sinon.stub().callsFake((name, data) => {
         if (name === 'updateDisasterList' && data) {
           expect(data).to.have.property('list').that.is.an('array')
           updateDisasterList = true
         }
         if (name === 'resetStatus') resetStatus = true
-        if (name === 'setSearchLoading' && !data) hideLoading = true
       })
 
       loadDisasterList({ commit: commitStub }, 'DR')
       moxios.wait(() => {
-        expect(showLoading).to.be.equal(true)
-        expect(hideLoading).to.be.equal(true)
         expect(updateDisasterList).to.be.equal(true)
         expect(resetStatus).to.be.equal(true)
         done()
