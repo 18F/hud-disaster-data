@@ -24,11 +24,11 @@ function setSavedExtracts (extracts) {
 export const mutations = {
   saveExtract: function (state, name) {
     if (_.find(state.savedExtracts, { name })) {
-      state.status = { type: 'error', scope: 'extract', message: 'Extract already exists' }
+      state.status = { type: 'error', scope: 'extract', message: 'The list name "' + name + '" already exists' }
       return
     }
     if (!name || name === '') {
-      state.status = { type: 'error', scope: 'extract', message: 'Name can not be empty' }
+      state.status = { type: 'error', scope: 'extract', message: 'The list name can not be empty' }
       return
     }
     state.savedExtracts.push({
@@ -39,7 +39,7 @@ export const mutations = {
     })
     setSavedExtracts(state.savedExtracts)
     state.newExtract = false
-    state.status = { type: 'success', scope: 'extract', message: 'Extract successfully saved' }
+    state.status = { type: 'success', scope: 'extract', message: 'The list ' + name + ' has successfully saved' }
   },
   deleteExtract: function (state, name) {
     let extracts = getSavedExtracts()
@@ -49,7 +49,7 @@ export const mutations = {
     mutations.clearCurrentExtract(state)
     state.newExtract = (extracts.length < 1)
     state.currentExtract = []
-    state.status = { type: 'success', scope: 'extract', message: 'Successfully deleted saved extract' }
+    state.status = { type: 'success', scope: 'extract', message: 'The list ' + name + ' has been successfully deleted' }
   },
   loadExtract: function (state, name) {
     mutations.clearCurrentExtract(state, true)

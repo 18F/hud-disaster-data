@@ -28,6 +28,9 @@ select:focus, input[type="text"]:focus { box-shadow:none; }
 button:focus {
   outline: 1px dotted $check-color;
 }
+a:focus {
+  box-shadow: none;
+}
 
 /* -- Label and title styles ----------------------*/
 h1, h2, h3, h4, h5 {
