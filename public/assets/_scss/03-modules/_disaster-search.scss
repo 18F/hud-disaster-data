@@ -13,8 +13,10 @@ span {
 
 #opaque-bg {
   background: url('/static/img/bg_50_opacity.png');
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  @include media($large-screen) {
+    border-radius: 10px 0 0 10px;
+  }
+  border-radius: 10px;
   margin:0 auto;
   overflow: hidden;
 }
