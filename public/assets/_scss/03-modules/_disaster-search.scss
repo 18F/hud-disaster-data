@@ -37,7 +37,7 @@ span {
   }
   #search-btn {
     height: 46px;
-    margin-top: 4px;
+    margin:0;
     border-radius:0;
     /* border: 1px solid #5b616b; */
     &:focus{
@@ -58,8 +58,9 @@ span {
     background: none;
     position: relative;
     float: right;
-    margin-top: -46px;
+    margin: -36px 25px 0 0;
     max-width: 24px;
+    padding:0;
     .hdd-icon {
       right: 0;
       left: 12px;
@@ -77,6 +78,11 @@ span {
       margin-top: -34px;
       left: -16px;
     }
+
+    .input-group-btn {
+      top:2px;
+    }
+
     .hdd-icon {
       background-color:#fff;
       fill: #000;
@@ -100,8 +106,8 @@ span {
     overflow-y:scroll;
     padding:0;
     position: absolute;
-    right:20px;
-    top:135px;
+    right:10px;
+    top:130px;
     ul {
       display:block;
       margin:0;
@@ -111,7 +117,6 @@ span {
         border-bottom: 1px solid #ccc;
         margin:0;
         line-height:20px;
-        cursor: pointer;
         &:before { content: ''; }
         &:hover {
           background-color: #e2f6fd;
