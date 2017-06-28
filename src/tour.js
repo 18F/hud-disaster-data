@@ -3,6 +3,10 @@ import magic from '@/bus'
 import _ from 'lodash'
 let $store
 
+/**
+* This module is responsible for the implementing all steps of tour.
+* @module tour
+*/
 const disasterSearchTour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-element shepherd-open shepherd-theme-square',
@@ -63,7 +67,7 @@ disasterSearchTour.addStep('enter-search', {
       ${disasterLink}
     </div>
     `,
-  attachTo: '.search-wrapper right',
+  attachTo: '.search-wrapper bottom',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
@@ -75,6 +79,7 @@ disasterSearchTour.addStep('enter-search', {
       const input = document.getElementById('search-text')
       input.focus()
       input.select()
+      this.tether.position()
     }
   },
   buttons: [
