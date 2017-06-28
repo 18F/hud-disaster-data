@@ -83,6 +83,19 @@ describe('DisasterSearch.vue', () => {
       })
     })
   })
+  describe('isEmpty', () => {
+    it('should return true if query is empty', () => {
+      const Constructor = Vue.extend(DisasterSearch)
+      const vm = new Constructor({store}).$mount()
+      expect(vm.query).to.be.equal('')
+      vm.query = undefined
+      expect(vm.query).to.be.equal(undefined)
+      vm.update()
+      Vue.nextTick(() => {
+        expect(vm.isEmpty()).to.be.equal(true)
+      })
+    })
+  })
 
   describe('displayMessage', function () {
     let store
