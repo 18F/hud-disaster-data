@@ -18,6 +18,9 @@ body:not(.shepherd-active) #tour-backdrop {
   outline: 2px solid yellow;
 }
 .shepherd-step {
+  @include media($small-screen) {
+    font-size: .8em !important;;
+  }
   z-index: 1042;
   outline: none;
   .shepherd-content {

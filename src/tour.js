@@ -119,7 +119,7 @@ disasterSearchTour.addStep('enter-search', {
       </p>
     </div>
     `,
-  attachTo: '.disaster-list right',
+  attachTo: '.disaster-list top',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
