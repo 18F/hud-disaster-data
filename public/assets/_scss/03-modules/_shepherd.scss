@@ -13,7 +13,7 @@ body:not(.shepherd-active) #tour-backdrop {
     display: none;
 }
 .shepherd-enabled {
-  z-index: 1042;
+  z-index: 1042 !important;
   position: relative;
   outline: 2px solid yellow;
 }

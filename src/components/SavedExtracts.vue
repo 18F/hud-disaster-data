@@ -96,7 +96,7 @@ export default {
       this.extractName = ''
     },
     deleteExtract () {
-      if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return
+      if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"?`)) return
       this.$store.commit('deleteExtract', this.selectedExtractName)
       this.selectedExtractName = ''
       this.extractName = ''

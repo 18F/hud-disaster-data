@@ -25,8 +25,13 @@ span {
 }
 /* Search container styles ----------------------------- */
 .search-container {
-  margin-top:125px;
+  @include media($large-screen) {
+    margin-top:125px;
+  }
   padding:0;
+  &.with-extracts {
+    margin-bottom: 360px;
+  }
 
   h2 {
     color: #fff;

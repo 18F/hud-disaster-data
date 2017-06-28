@@ -79,7 +79,6 @@ disasterSearchTour.addStep('enter-search', {
       const input = document.getElementById('search-text')
       input.focus()
       input.select()
-      this.tether.position()
     }
   },
   buttons: [

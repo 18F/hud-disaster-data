@@ -1,7 +1,7 @@
 <template lang="pug">
   .wrapper.container-fluid
     .row
-      .col-xs-12.col-md-6.search-container
+      .col-xs-12.col-md-6.search-container(:class="hasItems?'with-extracts':''")
         #opaque-bg.row
           h2 Disaster search
           .col.DisasterSearch
@@ -32,7 +32,7 @@
                       disaster(:prefix="'search'" :item='item')
                 .link-advanced-search
                   a(href='#') Advanced Search
-      .col-xs-12.col-md-6.no-padding
+      .col-xs-12.col-md-6.no-padding.saved-extracts
         savedextracts(ref='extracts')
 </template>
 
