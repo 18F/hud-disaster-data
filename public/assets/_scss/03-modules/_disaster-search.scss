@@ -18,7 +18,9 @@ span {
   }
   border-radius: 10px;
   margin:0 auto;
+  margin-bottom:20px;
   overflow: hidden;
+
 }
 .offset-bg {
   padding:0 10px 0 20px;
@@ -37,7 +39,7 @@ span {
     color: #fff;
     text-align: left;
     margin-left:20px;
-    height:35px;
+    height:25px;
     margin-top:1em;
   }
   #search-btn {
@@ -112,7 +114,7 @@ span {
     padding:0;
     position: absolute;
     right:10px;
-    top:130px;
+    top:132px;
     ul {
       display:block;
       margin:0;

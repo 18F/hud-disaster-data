@@ -55,6 +55,35 @@
   }
 }
 
+#burger-menu {
+  width: 100%;
+  background-color: #0071bc;
+  clear: left;
+  text-align: center;
+  padding-top: 1px;
+  ul {
+    margin-left: 40rem;
+    text-align: left;
+    li {
+      vertical-align: top;
+      &::before {
+        content: "";
+      }
+
+      a {
+        text-decoration: none;
+        color: #fff;
+        padding: 10px;
+
+        .hdd-icon {
+          margin-bottom: -4px;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
+
 #tabs{
   position:relative;
   top:7px;

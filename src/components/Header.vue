@@ -8,7 +8,7 @@
           button(:class="[showGovBanner ? 'usa-banner-button-alt expanded' : 'usa-banner-button-alt']", @click='showGovBanner=!showGovBanner')
             | Here's how you know
             icon(:name="[showGovBanner ? 'fa-caret-up' : 'fa-caret-down']")
-    #gov-banner(v-show='showGovBanner', tabindex='0')
+    #gov-banner(v-show='showGovBanner')
       .gov-banner-outer
         .container-fluid
           .row.gov-banner-inner
@@ -32,7 +32,9 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        #tabs.hidden-xs
+        #burger.hidden-lg.pull-right(@click='toggleBurger')
+          icon(name='fa-bars' classes='ico-lg fill-black')
+        #tabs(role="navigation").hidden-sm
           a(href="#")
             .tab.selected(tabindex='0')
                 icon.ico-md(name='fa-sign-out')
@@ -48,6 +50,20 @@
                 icon.ico-md(name='fa-bar-chart')
                 span
                   | Reports
+      #burger-menu.hidden-lg.hidden(ref='burgerMenu')
+        ul
+          li
+            a(href='#')
+              icon.ico-md(name='fa-sign-out')
+              | Data Export
+          li
+            a(href='#')
+              icon.ico-md(name='fa-globe')
+              | View Map
+          li
+            a(href='#')
+              icon.ico-md(name='fa-bar-chart')
+              | Reports
     #ribbon
       div(style="position:relative; top:-5px;")
         span
@@ -70,6 +86,9 @@ export default {
   methods: {
     startTour () {
       tour.start(this.$store)
+    },
+    toggleBurger () {
+      this.$refs.burgerMenu.classList.toggle('hidden')
     }
   }
 }
