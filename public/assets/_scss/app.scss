@@ -15,12 +15,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-#search-extract {
+#app-container{
 background-image: url('~/static/img/map-background2.png');
 background-color: #323a45;
 background-repeat: no-repeat;
 background-size: contain;
 min-height: 800px;
+padding:30px 0;
 }
 
 /* -- Global style overrides ---------------------------- */
@@ -117,7 +118,7 @@ h6, .h6 { font-size: 12px; }
   fill: #000;
   vertical-align:top;
 }
-div#search-extract { padding:30px 0; }
+
 /* -- USA button overrrides ----------------- */
 .usa-button i, .usa-button-secondary i { margin-left:5px; }
 .usa-button, .usa-button:hover, .usa-button:active, .usa-button:focus,

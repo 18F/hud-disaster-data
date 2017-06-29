@@ -35,17 +35,17 @@
         #burger.hidden-lg.pull-right(@click='toggleBurger')
           icon(name='fa-bars' classes='ico-lg fill-black')
         #tabs(role="navigation").hidden-sm
-          a(href="#")
+          router-link(:to='{name: "disasterSearch"}')
             .tab.selected(tabindex='0')
                 icon.ico-md(name='fa-sign-out')
                 span
                   | Data Export
-          a(href="#")
+          router-link(:to='{name: "maps"}')
             .tab(tabindex='0')
                 icon.ico-md(name='fa-globe')
                 span
                   | View Map
-          a(href="3")
+          router-link(:to='{name: "reports"}')
             .tab(tabindex='0')
                 icon.ico-md(name='fa-bar-chart')
                 span
