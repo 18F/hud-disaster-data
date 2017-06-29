@@ -103,6 +103,10 @@ h6, .h6 { font-size: 12px; }
       height:3em;
       width:3em;
     }
+
+    &.fill-black {
+      fill: #000;
+    }
 }
 #export-button .hdd-icon.export {
   fill: #fff;
