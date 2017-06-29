@@ -18,6 +18,12 @@
   a {
     color:#fff;
     text-decoration:none;
+
+    /* REQUIRED for 508 compliancy ---- */
+    &:focus{
+      outline:1px dotted #fff;
+      outline-offset:5px;
+    }
   }
   .signature {
     padding-top:10px;

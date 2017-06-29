@@ -8,7 +8,7 @@
           button(:class="[showGovBanner ? 'usa-banner-button-alt expanded' : 'usa-banner-button-alt']", @click='showGovBanner=!showGovBanner')
             | Here's how you know
             icon(:name="[showGovBanner ? 'fa-caret-up' : 'fa-caret-down']")
-    #gov-banner(v-show='showGovBanner', tabindex='0')
+    #gov-banner(v-show='showGovBanner')
       .gov-banner-outer
         .container-fluid
           .row.gov-banner-inner
@@ -32,7 +32,7 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        #tabs.hidden-xs
+        #tabs(role="navigation").hidden-xs
           a(href="#")
             .tab.selected(tabindex='0')
                 icon.ico-md(name='fa-sign-out')
