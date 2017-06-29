@@ -60,10 +60,11 @@
   background-color: #0071bc;
   clear: left;
   text-align: center;
-  padding-top: 1px;
+
   ul {
-    margin-left: 40rem;
+    margin: 0 0 0 40rem;
     text-align: left;
+    padding-top: 15px;
     li {
       vertical-align: top;
       &::before {
