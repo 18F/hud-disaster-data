@@ -30,4 +30,5 @@ else
   echo $NC
 fi
 
-kill -9 $node_id
+kill -9 $node_id 
+exit $retCode
