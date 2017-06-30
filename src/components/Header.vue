@@ -39,7 +39,7 @@
           icon(name='fa-bars' classes='ico-lg fill-black')
         #tabs(role="navigation").hidden-sm
           router-link(:to='{name: "disasterSearch"}' href="")
-            .tab.selected(tabindex='-1')
+            .tab(tabindex='-1')
                 icon.ico-md(name='fa-sign-out')
                 span
                   | Data Export

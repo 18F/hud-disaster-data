@@ -93,17 +93,17 @@
 
   a{
     cursor:pointer;
-
-    .tab{
+    display:inline-block;
     border-style:solid;
     border-width:0 0 5px 0;
     border-color:transparent;
-    border-width:0 0 5px 0;
     color:#0071bc;
-    float:left;
     text-align:left;
     margin-right:50px;
     padding:10px 0;
+
+    .tab{
+    float:left;
 
     .ico-md {
       float:left;
@@ -115,27 +115,28 @@
       color:#0071bc;
       padding-left:30px;
     }
+  }
 
-    &.selected {
-      border-color:#112e51;
-      svg {fill:#112e51;}
-      span {color:#112e51;}
-    }
+  &:hover{
+    border-color:#205493;
+    svg {fill:#205493;}
+    span {color:#205493;}
+  }
 
-    &:hover{
-      border-color:#205493;
-      svg {fill:#205493;}
-      span {color:#205493;}
-    }
+  &:focus{
+    border-color:#112e51;
+    svg {fill:#112e51;}
+    span {color:#112e51;}
+  }
 
-    &:focus{
-      border-color:#112e51;
-      svg {fill:#112e51;}
-      span {color:#112e51;}
-    }
+  &.selected {
+    border-color:#112e51;
+    svg {fill:#112e51;}
+    span {color:#112e51;}
   }
 }
   }
+
 #ribbon {
   height:45px;
   background:#191d22;

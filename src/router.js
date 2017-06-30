@@ -25,7 +25,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  linkExactActiveClass: 'selected'
 })
 
 export default router
