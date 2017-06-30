@@ -1,5 +1,8 @@
 <template lang="pug">
   #appHeader.header.--global
+    <!-- REQUIRED for 508 compliancy -->
+    #skiptocontent
+      a(tabindex="0" @click="skipToContent" @keyup.enter="skipToContent") skip to main content
     .header.header--pre
       .container-block
         p
@@ -53,22 +56,22 @@
       #burger-menu.hidden-lg.hidden(ref='burgerMenu')
         ul
           li
-            a(href='#')
+            router-link(:to='{name: "disasterSearch"}' href="")
               icon.ico-md(name='fa-sign-out')
               | Data Export
           li
-            a(href='#')
+            router-link(:to='{name: "maps"}'  href="")
               icon.ico-md(name='fa-globe')
               | View Map
           li
-            a(href='#')
+            router-link(:to='{name: "reports"}'  href="")
               icon.ico-md(name='fa-bar-chart')
               | Reports
     #ribbon
       div(style="position:relative; top:-5px;")
         span
           | Need Help?
-        button.usa-button.green(@click='startTour' title='Guide Me Button')
+        button.usa-button.green(@click='startTour' title='Guide Me Button' ref="guideMe")
           | Guide Me
 </template>
 
@@ -89,6 +92,9 @@ export default {
     },
     toggleBurger () {
       this.$refs.burgerMenu.classList.toggle('hidden')
+    },
+    skipToContent () {
+      this.$refs.guideMe.focus()
     }
   }
 }
