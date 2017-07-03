@@ -6,6 +6,10 @@ import es6Promise from 'es6-promise'
 import magic from '@/bus'
 es6Promise.polyfill()
 Vue.use(Vuex)
+/**
+* Manages the state for client functions.
+* @module store
+*/
 
 function findDisaster (list, disaster) {
   return _.find(list, {disasterType: disaster.disasterType, disasterNumber: disaster.disasterNumber, state: disaster.state})
@@ -22,6 +26,9 @@ function setSavedExtracts (extracts) {
 }
 
 export const mutations = {
+  /**
+  Saves the current list of disasters
+  */
   saveExtract: function (state, name) {
     if (_.find(state.savedExtracts, { name })) {
       state.status = { type: 'error', scope: 'extract', message: 'The list name "' + name + '" already exists' }
@@ -115,7 +122,9 @@ export const mutations = {
     state.searchLoading = status
   }
 }
-
+/**
+These are the vuex actions
+*/
 export const actions = {
   loadDisasterList: function ({ commit }, qry) {
     commit('setSearchLoading', true)
@@ -157,10 +166,6 @@ export const getters = {
   }
 }
 
-/**
-* Manages the state for client functions.
-* @module store
-*/
 const store = new Vuex.Store({
   state: {
     disasters: [],
