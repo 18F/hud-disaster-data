@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import DisasterSearch from './components/DisasterSearch'
+import Report from './components/Report'
+import Map from './components/Map'
 
 Vue.use(VueRouter)
 /**
@@ -27,11 +29,13 @@ const beforeRouteEnter = function (to, from, next) {
 }
 
 DisasterSearch.beforeRouteEnter = beforeRouteEnter
+Report.beforeRouteEnter = beforeRouteEnter
+Map.beforeRouteEnter = beforeRouteEnter
 
 const routes = [
   { path: '/', name: 'disasterSearch', component: DisasterSearch },
-  { path: '/reports', name: 'reports', component: { beforeRouteEnter, template: '<div style="color: #fff; font-size: xx-large;" tabindex="0">This is the reports</div>' } },
-  { path: '/maps', name: 'maps', component: { beforeRouteEnter, template: '<div style="color: #fff; font-size: xx-large;" tabindex="0">This is the map</div>' } }
+  { path: '/reports', name: 'reports', component: Report },
+  { path: '/maps', name: 'maps', component: Map }
 ]
 
 const router = new VueRouter({

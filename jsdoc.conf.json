@@ -4,6 +4,7 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "source": {
+        "include": ["lib"],
         "includePattern": "\\.[vue|js]",
         "excludePattern": "(^|\\/|\\\\)_"
     },
