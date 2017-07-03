@@ -22,6 +22,7 @@
       display:block;
       max-height:44px;
       margin-top:0;
+      max-width: 100%;
     }
 
     select {
@@ -56,7 +57,12 @@
 
     &>div {
       float:left;
-      width:75%;
+      @media (min-width: $screen-md-min){
+        width:75%;
+      }
+      @media (max-width: $screen-sm-max) {
+        width: 82%
+      }
 
       select:required:invalid { color:gray; }
       option {
@@ -66,7 +72,12 @@
     &>div#cta {
       float:right;
       text-align:right;
-      width:25%;
+      @media (min-width: $screen-md-min){
+        width:25%;
+      }
+      @media (max-width: $screen-sm-max) {
+        width: 18%
+      }
 
       button {
         padding-top:0;
@@ -109,6 +120,7 @@
     overflow-y:scroll;
     overflow:auto;
     height:410px;
+    margin-top:1px;
 
     .list-loader {
       text-align:center;

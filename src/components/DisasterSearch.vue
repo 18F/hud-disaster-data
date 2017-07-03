@@ -1,7 +1,7 @@
 <template lang="pug">
   .wrapper.container-fluid
     .row
-      .col-xs-12.col-md-6.search-container
+      .col-xs-12.col-md-6.search-container(:class="hasItems?'with-extracts':''")
         #opaque-bg.row
           h2 Disaster search
           .col.DisasterSearch
@@ -32,7 +32,7 @@
                       disaster(:prefix="'search'" :item='item')
                 .link-advanced-search
                   a(href='#') Advanced Search
-      .col-xs-12.col-md-6.no-padding
+      .col-xs-12.col-md-6.no-padding.saved-extracts
         savedextracts(ref='extracts')
 </template>
 
@@ -80,6 +80,10 @@ export default {
     }
   },
   methods: {
+    /**
+    * Will submit query to load disasters if it is a number with a length >= 4 or >= 2 alpha characters
+    * @function update
+    */
     update () {
       if (!this.query) return this.reset()
       if (/^\d+$/.test(this.query) && this.query.length < 4) return

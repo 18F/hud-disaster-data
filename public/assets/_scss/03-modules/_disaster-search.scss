@@ -18,26 +18,33 @@ span {
   }
   border-radius: 10px;
   margin:0 auto;
+  margin-bottom:20px;
   overflow: hidden;
+
 }
 .offset-bg {
   padding:0 10px 0 20px;
 }
 /* Search container styles ----------------------------- */
 .search-container {
-  margin-top:125px;
+  @include media($large-screen) {
+    margin-top:125px;
+  }
   padding:0;
+  &.with-extracts {
+    margin-bottom: 360px;
+  }
 
   h2 {
     color: #fff;
     text-align: left;
     margin-left:20px;
-    height:35px;
+    height:25px;
     margin-top:1em;
   }
   #search-btn {
     height: 46px;
-    margin-top: 4px;
+    margin:0;
     border-radius:0;
     /* border: 1px solid #5b616b; */
     &:focus{
@@ -58,8 +65,9 @@ span {
     background: none;
     position: relative;
     float: right;
-    margin-top: -46px;
+    margin: -36px 25px 0 0;
     max-width: 24px;
+    padding:0;
     .hdd-icon {
       right: 0;
       left: 12px;
@@ -77,6 +85,11 @@ span {
       margin-top: -34px;
       left: -16px;
     }
+
+    .input-group-btn {
+      top:2px;
+    }
+
     .hdd-icon {
       background-color:#fff;
       fill: #000;
@@ -100,8 +113,8 @@ span {
     overflow-y:scroll;
     padding:0;
     position: absolute;
-    right:20px;
-    top:135px;
+    right:10px;
+    top:132px;
     ul {
       display:block;
       margin:0;
@@ -111,7 +124,6 @@ span {
         border-bottom: 1px solid #ccc;
         margin:0;
         line-height:20px;
-        cursor: pointer;
         &:before { content: ''; }
         &:hover {
           background-color: #e2f6fd;

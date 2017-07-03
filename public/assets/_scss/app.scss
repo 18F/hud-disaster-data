@@ -15,11 +15,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-#search-extract {
+#app-container{
 background-image: url('~/static/img/map-background2.png');
 background-color: #323a45;
 background-repeat: no-repeat;
 background-size: contain;
+min-height: 800px;
+padding:30px 0;
 }
 
 /* -- Global style overrides ---------------------------- */
@@ -31,8 +33,41 @@ button:focus {
 a:focus {
   box-shadow: none;
 }
+/* -- SkipNAV styles -------------------------------------*/
+#skiptocontent {
+  margin:0;
+  padding:0;
 
-/* -- Label and title styles ----------------------*/
+  a {
+    /* background:#00ffff;  */
+    background:transparent;
+    padding:10px;
+    position:absolute;
+    text-decoration:none;
+    top:-40px;
+    left:0px;
+    color:#fff;
+    outline:0;
+    z-index:100;
+    transition:top .1s ease-in, background .5s linear;
+  /*   transition:top 1s ease-out, background 1s linear; */
+  /*  -webkit-transition: top 1s ease-out, background 1s linear; */
+
+    &:focus{
+      position: absolute;
+      left:0px;
+      top:0px;
+      background:#bf1722;
+      /* transition:top .1s ease-in, background .5s linear; */
+      transition:top .5s ease-out, background .5s linear;
+      /* -webkit-transition: top .1s ease-in, background .5s linear; */
+    }
+  }
+
+}
+
+
+/* -- Label and title styles ------------------------------*/
 h1, h2, h3, h4, h5 {
   font-family: "Source Sans Pro", "Roboto", sans-serif;
   font-weight: normal;
@@ -69,6 +104,10 @@ h6, .h6 { font-size: 12px; }
       height:3em;
       width:3em;
     }
+
+    &.fill-black {
+      fill: #000;
+    }
 }
 #export-button .hdd-icon.export {
   fill: #fff;
@@ -79,7 +118,7 @@ h6, .h6 { font-size: 12px; }
   fill: #000;
   vertical-align:top;
 }
-div#search-extract { padding:30px 0; }
+
 /* -- USA button overrrides ----------------- */
 .usa-button i, .usa-button-secondary i { margin-left:5px; }
 .usa-button, .usa-button:hover, .usa-button:active, .usa-button:focus,

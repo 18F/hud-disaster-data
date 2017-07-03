@@ -19,6 +19,15 @@
 export default {
   props: ['locationOfMessage'],
   computed: {
+    /**
+    * <ul style="list-style: none;">
+    * <li> Will examine the message scope and the location of the message to determine which messages should be displayed.
+    * <li> If the scope is extract and location is extract-message, it will display.
+    * <li> If the scope is app and location is app-message, it will display.
+    * <li> Otherwise, it will not display.
+    * </ul>
+    * @function displayMessage
+    */
     displayMessage () {
       var status = this.$store.getters.status
       if (status.type === 'normal') return false

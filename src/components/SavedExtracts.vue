@@ -29,7 +29,7 @@
           disaster(:prefix="'saved'", :item='item')
     #action-buttons
       button#clear-button.usa-button.alt-button(@click='clear' title='Clear Button') Clear
-      a(:href='download()', tabindex='-1', download='')
+      a(:href='download()' tabindex='-1' download='')
         button#export-button.usa-button.green(:disabled='items.length === 0' title='Export Button')
           | Export
           icon(classes='export', name='fa-sign-out')
@@ -78,6 +78,7 @@ export default {
   },
   methods: {
     download () {
+      if (this.items.length === 0) return
       const timeStamp = moment().format('YYYY-MM-DD-kk:mm:ss')
       const url = this.selectedExtractName ? `/api/export/${this.selectedExtractName}-${timeStamp}` : `/api/export/${timeStamp}`
       const data = _.map(this.$store.getters.currentExtract, disaster => {
@@ -95,7 +96,7 @@ export default {
       this.extractName = ''
     },
     deleteExtract () {
-      if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"`)) return
+      if (!confirm(`Are you sure you want to delete "${this.selectedExtractName}"?`)) return
       this.$store.commit('deleteExtract', this.selectedExtractName)
       this.selectedExtractName = ''
       this.extractName = ''

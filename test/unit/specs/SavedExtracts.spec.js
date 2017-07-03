@@ -199,6 +199,8 @@ describe('SavedExtracts component', function () {
 
   describe('download', function () {
     it('should return correct API endpoint with search name when called with a selectedExtractName', function () {
+      getters.currentExtract = () => { return TWO_RECORDS }
+      store = new Vuex.Store({state: {}, mutations, getters})
       const Constructor = Vue.extend(SavedExtracts)
       const vm = new Constructor({store}).$mount()
       vm.selectedExtractName = 'MyTEST'
@@ -207,6 +209,8 @@ describe('SavedExtracts component', function () {
     })
 
     it('should return API endpoint when called without a selectedExtractName', function () {
+      getters.currentExtract = () => { return TWO_RECORDS }
+      store = new Vuex.Store({state: {}, mutations, getters})
       const Constructor = Vue.extend(SavedExtracts)
       const vm = new Constructor({store}).$mount()
       vm.selectedExtractName = ''
