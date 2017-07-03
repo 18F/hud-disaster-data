@@ -35,7 +35,7 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        #burger.hidden-lg.pull-right(@click='toggleBurger')
+        #burger.hidden-md.hidden-lg.pull-right(@click='toggleBurger')
           icon(name='fa-bars' classes='ico-lg fill-black')
         #tabs(role="navigation").hidden-sm
           router-link(:to='{name: "disasterSearch"}' href="")
@@ -53,7 +53,7 @@
                 icon.ico-md(name='fa-bar-chart')
                 span
                   | Reports
-      #burger-menu.hidden-lg.hidden(ref='burgerMenu')
+      #burger-menu.hidden-md.hidden-lg.hidden(ref='burgerMenu')
         ul
           li
             router-link(:to='{name: "disasterSearch"}' href="")
