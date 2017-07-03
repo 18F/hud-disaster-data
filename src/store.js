@@ -15,19 +15,21 @@ function findDisaster (list, disaster) {
   return _.find(list, {disasterType: disaster.disasterType, disasterNumber: disaster.disasterNumber, state: disaster.state})
 }
 
-function getSavedExtracts () {
+function loadSavedExtracts () {
   let item = localStorage.getItem('saved-extracts')
   if (!item) return []
   return JSON.parse(item)
 }
 
-function setSavedExtracts (extracts) {
+function storeSavedExtracts (extracts) {
   localStorage.setItem('saved-extracts', JSON.stringify(extracts))
 }
 
 export const mutations = {
   /**
-  Saves the current list of disasters
+  Saves the current list of select disasters to storage
+  @function saveExtract
+  @param {String} name - The name for the list being saved
   */
   saveExtract: function (state, name) {
     if (_.find(state.savedExtracts, { name })) {
@@ -44,23 +46,33 @@ export const mutations = {
         return `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`
       })
     })
-    setSavedExtracts(state.savedExtracts)
+    storeSavedExtracts(state.savedExtracts)
     state.newExtract = false
     state.status = { type: 'success', scope: 'extract', message: 'The list ' + name + ' has successfully saved' }
   },
+  /**
+  Delete a saved disaster list from storage
+  @function deleteExtract
+  @param {String} name - Name of the list to delete
+  */
   deleteExtract: function (state, name) {
-    let extracts = getSavedExtracts()
+    let extracts = loadSavedExtracts()
     _.remove(extracts, {name: name})
-    setSavedExtracts(extracts)
+    storeSavedExtracts(extracts)
     state.savedExtracts = extracts
     mutations.clearCurrentExtract(state)
     state.newExtract = (extracts.length < 1)
     state.currentExtract = []
     state.status = { type: 'success', scope: 'extract', message: 'The list ' + name + ' has been successfully deleted' }
   },
+  /**
+  Load a saved disaster list into the currentExtract (selected disaster list)
+  @function loadExtract
+  @param {String} name - Name of the list to load
+  */
   loadExtract: function (state, name) {
     mutations.clearCurrentExtract(state, true)
-    let savedExtracts = getSavedExtracts()
+    let savedExtracts = loadSavedExtracts()
     let disasterNumbers = _.find(savedExtracts, {name}).disasters.join()
     state.extractLoading = true
     axios.get(`/api/disasternumber/${disasterNumbers}`).then((response) => {
@@ -72,13 +84,21 @@ export const mutations = {
     })
     state.newExtract = false
   },
-  updateDisasterList: function (state, { list }) {
+  /**
+  Update the disaster search list with fresh data
+  @function updateDisasterList
+  @params
+  */
+  updateDisasterList: function (state, list) {
     list.forEach(disaster => {
       var disasterInExtract = findDisaster(state.currentExtract, disaster)
       if (disasterInExtract) disaster.currentExtract = true
     })
     state.disasters = list
   },
+  /**
+  Add or remove a disaster from the currentExtract (selected disaster list)
+  */
   toggleCurrentExtract: function (state, disaster) {
     disaster = _.clone(disaster)
     disaster.currentExtract = !disaster.currentExtract
@@ -129,7 +149,7 @@ export const actions = {
   loadDisasterList: function ({ commit }, qry) {
     commit('setSearchLoading', true)
     axios.get(`/api/disasterquery/${qry}`).then((response) => {
-      commit('updateDisasterList', { list: response.data })
+      commit('updateDisasterList', response.data)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
@@ -170,7 +190,7 @@ const store = new Vuex.Store({
   state: {
     disasters: [],
     currentExtract: [],
-    savedExtracts: getSavedExtracts(),
+    savedExtracts: loadSavedExtracts(),
     newExtract: false,
     status: { type: 'normal', scope: '', message: '' },
     extractLoading: false,

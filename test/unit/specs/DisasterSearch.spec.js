@@ -30,7 +30,7 @@ describe('DisasterSearch.vue', () => {
   it('should render correct list item contents', done => {
     const Constructor = Vue.extend(DisasterSearch)
     const vm = new Constructor({store}).$mount()
-    vm.$store.commit('updateDisasterList', { list: ONE_RECORD })
+    vm.$store.commit('updateDisasterList', ONE_RECORD)
     Vue.nextTick(function () {
       expect(vm.$el.querySelector('.disaster-search-recs').childElementCount).to.be.equal(1)
       done()
@@ -40,7 +40,7 @@ describe('DisasterSearch.vue', () => {
   it('should not populate items if query is empty', done => {
     const Constructor = Vue.extend(DisasterSearch)
     const vm = new Constructor({store}).$mount()
-    vm.$store.commit('updateDisasterList', { list: [] })
+    vm.$store.commit('updateDisasterList', [])
     Vue.nextTick(function () {
       expect(vm.$el.querySelector('.disaster-search-recs').childElementCount).to.be.equal(0)
       done()

@@ -73,7 +73,7 @@ describe('store', function () {
       let state = { currentExtract: _.clone(TWO_RECORDS) }
       state.currentExtract[0].currentExtract = true
       state.currentExtract[1].currentExtract = true
-      updateDisasterList(state, { list: TWO_RECORDS })
+      updateDisasterList(state, TWO_RECORDS)
       expect(_.map(state.disasters, disaster => _.pick(disaster, 'currentExtract')).length).to.be.equal(2)
     })
   })
@@ -89,7 +89,7 @@ describe('store', function () {
       let resetStatus
       var commitStub = sinon.stub().callsFake((name, data) => {
         if (name === 'updateDisasterList' && data) {
-          expect(data).to.have.property('list').that.is.an('array')
+          expect(data).to.be.an('array')
           updateDisasterList = true
         }
         if (name === 'resetStatus') resetStatus = true
