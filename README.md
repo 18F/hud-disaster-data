@@ -48,7 +48,11 @@ Run `npm test` to run the full test suite.
 
 #### Build
 
-Run `npm build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+#### Structure of this project
+
+We started with the scaffolding from vue-cli, and modified it to fit our needs.  Much of the complicated devops structure is from this scaffolding.  Read more about [the scaffolding](./VUE_CLI_INIT.md)
 
 ### Build, Test, and Deploy
 This project includes a [.travis.yml](.travis.yml) file that will facilitate the building, testing, and deploying of the application, following this structure:
@@ -58,6 +62,8 @@ This project includes a [.travis.yml](.travis.yml) file that will facilitate the
 | flexion/hud-disaster-data | sprint-*       | cloud.gov hud-disaster-data dev     |https://hud-disaster-data-dev.app.cloud.gov/#/ |
 | flexion/hud-disaster-data | master         | cloud.gov hud-disaster-data staging |https://hud-disaster-data-staging.app.cloud.gov/#/ |
 | 18F/hud-disaster-data     | master         | cloud.gov hud-disaster-data prod    | TBD  |
+
+For more information about the deploy piece read [CG_DEPLOY](./CG_DEPLOY.md)
 
 #### Initiation of TravisCI
 To include a repo into TravisCI, you must be an admin of that repo.

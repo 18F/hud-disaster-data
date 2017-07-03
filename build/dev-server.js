@@ -1,4 +1,8 @@
 require('./check-versions')()
+/**
+*  Generated from the vue cli tool. We modified it slightly to fit our needs.  This is the part of the devops that runs the dev server.
+* @module build/dev-server
+*/
 
 var config = require('../config')
 if (!process.env.NODE_ENV) {
@@ -24,7 +28,6 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
-
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
