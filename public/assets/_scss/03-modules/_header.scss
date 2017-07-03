@@ -20,13 +20,17 @@
     p {
       margin:0;
     }
+
+    .padding-top {
+      padding-top: 11px;
+    }
   }
 }
 .logo{
   &--block{
     padding:0 0 10px 0;
   /*  @include make-xs-column(6,0); */
-    width:40%;
+    width:41%;
     float:left;
 
     img,.logo-img{
