@@ -35,7 +35,7 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        #burger.hidden-md.hidden-lg.pull-right(@click='toggleBurger')
+        #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger')
           icon(name='fa-bars' classes='ico-lg fill-black')
         #tabs(role="navigation").hidden-sm
           router-link(:to='{name: "disasterSearch"}' href="")
