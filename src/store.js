@@ -87,7 +87,7 @@ export const mutations = {
   /**
   Update the disaster search list with fresh data
   @function updateDisasterList
-  @params
+  @param {Array} list - A list of disasters
   */
   updateDisasterList: function (state, list) {
     list.forEach(disaster => {
@@ -98,6 +98,8 @@ export const mutations = {
   },
   /**
   Add or remove a disaster from the currentExtract (selected disaster list)
+  @function toggleCurrentExtract
+  @param {Object} disaster - The disaster object to toggle
   */
   toggleCurrentExtract: function (state, disaster) {
     disaster = _.clone(disaster)
@@ -120,6 +122,11 @@ export const mutations = {
     }
     state.newExtract = true
   },
+  /**
+  Clear the selected disaster list
+  @function clearCurrentExtract
+  @param {boolean} noemit - Do not emit 'clearCurrentExtract' event from the magic bus
+  */
   clearCurrentExtract: function (state, noemit) {
     if (!noemit) magic.$emit('clearCurrentExtract')
     state.currentExtract = []
@@ -127,17 +134,38 @@ export const mutations = {
     state.disasters = _.map(state.disasters, disaster => _.omit(disaster, 'currentExtract'))
     mutations.resetStatus(state)
   },
+  /**
+  Clear the search list
+  @function clearSearch
+  */
   clearSearch: function (state) {
     state.disasters = []
   },
+  /**
+  Reset message status to normal so messages don't disaply
+  @function resetStatus
+  */
   resetStatus: function (state) {
     state.status = { type: 'normal', message: '' }
     state.searchLoading = false
   },
+  /**
+  Set the status, so a message will display
+  @function setStatus
+  @param status
+  @param {String} status.type normal | info | error
+  @param {String} status.scope app | extract
+  @param {String} status.msg The message to the user
+  */
   setStatus: function (state, {type, scope, msg}) {
     state.status = { type: type, scope: scope, message: msg }
     state.searchLoading = false
   },
+  /**
+  Set the loading status
+  @function setSearchLoading
+  @param {boolean} status - The loading status (true|false)
+  */
   setSearchLoading: function (state, status) {
     state.searchLoading = status
   }
