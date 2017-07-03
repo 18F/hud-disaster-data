@@ -28,7 +28,7 @@ $source-list: "bold","italic","light","regular";
 @each $current-source in $source-list {
     $i: index($source-list, $current-source);
     @font-face{
-      font-family:'sourcesanspro';
+      font-family:'Source Sans Pro';
       src:url('../fonts/sourcesanspro-#{$current-source}-webfont.eot');
       src:url('../fonts/sourcesanspro-#{$current-source}-webfont.eot#iefix') format('embedded-opentype'),
           url('../fonts/sourcesanspro-#{$current-source}-webfont.woff2') format('woff2'),
