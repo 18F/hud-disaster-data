@@ -77,6 +77,10 @@
 
 <script>
 import tour from '../tour'
+/**
+* The standard header for the site.  Contains official logo, government site statement, and tabs for navigation.
+* @module components/Header
+*/
 
 export default {
   data () {

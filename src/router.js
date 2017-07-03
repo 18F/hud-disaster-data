@@ -3,7 +3,17 @@ import VueRouter from 'vue-router'
 import DisasterSearch from './components/DisasterSearch'
 
 Vue.use(VueRouter)
-
+/**
+* Creates the routes for navigation.
+* @module router
+*/
+/**
+* @@function DisasterSearch.beforeRouteEnter
+* Sets focus to first tabbable element on the rendered component
+* @param {to} - the destination route
+* @param {from} - the from route
+* @param {next} - the callback for next
+*/
 const beforeRouteEnter = function (to, from, next) {
   next(vm => {
     let done

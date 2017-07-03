@@ -80,6 +80,10 @@ export default {
     }
   },
   methods: {
+    /**
+    * Will submit query to load disasters if it is a number with a length >= 4 or >= 2 alpha characters
+    * @function update
+    */
     update () {
       if (!this.query) return this.reset()
       if (/^\d+$/.test(this.query) && this.query.length < 4) return
