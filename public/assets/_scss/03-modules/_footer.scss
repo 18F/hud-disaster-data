@@ -1,25 +1,27 @@
 /* Footer styles ----------------------------------- */
 #appFooter {
-  .wrapper {  background:#fff;  }
+  .wrapper {
+    background:#fff;
+  }
   .links {
-        background:#0071bc;
+    background:#0071bc;
     font-size:14px;
     font-weight:bold;
+    padding:0 20%;
 
     div {
-      padding:20px 10%; text-align:center;
+      padding:10px 0;
+      text-align:center;
     }
   }
 
   a {
     color:#fff;
-    margin:0 35px;
     text-decoration:none;
   }
   .signature {
-    padding:20px 0;
+    padding-top:10px;
 
-    div { padding:0 5%; }
     img {
       border:none;
       height:100px;

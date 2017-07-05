@@ -1,26 +1,23 @@
-<template>
-  <div id="appFooter">
-    <div class="wrapper">
-        <div class="links">
-          <div>
-            <a href="https://www.disasterassistance.gov/">Disaster Assistance</a>
-            <a href="https://www.hudexchange.info/programs/cdbg-dr/">DBG-DR Program Resources</a>
-            <a href="https://portal.hud.gov/hudportal/HUD">HUD.gov</a>
-            <a href="https://www.huduser.gov/portal/home.html">HUDUser.gov</a>
-            <a href="#">Web Policies</a>
-            <a href="#">Feedback</a>
-          </div>
-        </div>
-        <div class="signature">
-          <div>
-            <img src="/static/img/logo_global-blue.svg" alt="U.S. Department of Housing and Urban Development Logo"/>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+  #appFooter
+    .wrapper
+      .links.container-fluid
+        div.row
+          div.col-sm-12.col-md-4.col-lg-2
+            a(href='https://www.disasterassistance.gov/') Disaster Assistance
+          div.col-sm-12.col-md-4.col-lg-2
+            a(href='https://portal.hud.gov/hudportal/HUD') HUD.gov
+          div.col-sm-12.col-md-4.col-lg-2
+            a(href='https://www.hudexchange.info/programs/cdbg-dr/') DBG-DR Program Resources
+          div.col-sm-12.col-md-4.col-lg-2
+            a(href='https://www.huduser.gov/portal/home.html') HUDUser.gov
+          div.col-sm-12.col-md-4.col-lg-2
+            a(href='#') Web Policies
+          div.col-sm-12.col-md-4.col-lg-2
+            a(href='#') Feedback
+      .container-block.signature
+        div.row
+            div.col-lg-2
+                img(src='/static/img/logo_global-blue.svg', alt='U.S. Department of Housing and Urban Development Logo')
+            div.col-lg-10
 </template>
-
-<style lang="scss">
-//moved to 03-modules/_footer.scss
-</style>

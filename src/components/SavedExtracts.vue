@@ -1,82 +1,53 @@
-<template>
-  <div class="extracts">
-    <div id="saved_searches">
-      <h4>Saved searches</h4>
-      <div>
-        <select required v-show="!newExtract" @change="loadExtract" v-model="selectedExtractName" title='saved searches'>
-          <option value="" disabled selected>Select a search...</option>
-          <option v-for="extract in savedExtracts" v-bind:value="extract.name">{{extract.name}}</option>
-        </select>
-        <label for="extract-name" class="sr-only">Search Name</label>
-        <input v-show="newExtract" v-model="extractName" name="extract-name" id="extract-name" type="text" placeholder="Enter a name for your search"></input>
-      </div>
-      <div id="cta">
-        <label for="save-button" class="sr-only">Save selected disaster search</label>
-        <button @click="saveExtract" class="usa-button" id="save-button" title="save button" :disabled="!newExtract" style="vertical-align:top;">
-          <icon classes="ico-lg gray" name="fa-save"></icon>
-        </button>
-        <label for="delete-button" class="sr-only">delete saved search: {{ selectedExtractName }}</label>
-        <button @click="deleteExtract" class="usa-button" id="delete-button" title="delete button" :disabled="selectedExtractName === ''">
-          <icon classes="ico-lg gray" name="fa-trash-o"></icon>
-        </button>
-      </div>
-    </div>
-    <h4>Selected disasters area</h4>
-    <div class="message-wrapper">
-      <div class="messages"  v-show="displayMessage" tabindex="0" ref="messages">
-        <div :class="status.type">
-          <div style="padding:10px; overflow:hidden;">
-            <div id="container_03" style="float:left; width:10%; padding:5px;">
-               <icon :classes="`ico-lg status-type ${status.type}`" :name="iconName()"></icon>
-            </div>
-            <div id="container_02" style="float:left; width:80%;">
-              <div style="line-height: 20px; padding:12px 0;">
-                {{status.message}}
-              </div>
-            </div>
-            <div id="container_01" style="float:left;">
-              <label for="extract-message-clear-button" class="sr-only">Close {{ status.type }} message</label>
-              <button @click="hideMessage" class="usa-button clear-message" id="extract-message-clear-button" title="extract message clear button">
-                <icon classes="close-message" name="fa-times"></icon>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="list">
-      <div class="list-loader" v-if="loading">
-        <icon class="fa-spin ico-xl" name="fa-spinner"></icon>
-        <span class="fa-spin-text">
-          Loading ...
-        </span>
-        <span class="sr-only">Loading...</span>
-      </div>
-      <ul>
-        <li v-for="(item, $item) in items">
-          <disaster :prefix="'saved'" :item="item"></disaster>
-        </li>
-      </ul>
-    </div>
-    <div id="action-buttons">
-      <button @click="clear" class="usa-button alt-button" id="clear-button">Clear</button>
-      <a :href="download()" tabindex="-1" download>
-        <button id='export-button' class="usa-button green" :disabled="items.length === 0">Export
-        <icon classes="export" name="fa-sign-out"></icon>
-        </button>
-      </a>
-    </div>
-  </div>
+<template lang="pug">
+  .extracts
+    #saved_searches
+      h3 Saved searches
+      div
+        select(required='', v-show='!newExtract', @change='loadExtract', v-model='selectedExtractName', title='saved searches')
+          option(value='', disabled='', selected='') Select a search...
+          option(v-for='extract in savedExtracts', v-bind:value='extract.name') {{extract.name}}
+        label.sr-only(for='extract-name') Search Name
+        input#extract-name(v-show='newExtract', v-model='extractName', name='extract-name', type='text', placeholder='Enter a name for your search')
+      #cta
+        label.sr-only(for='save-button') Save selected disaster search
+        button#save-button.usa-button(@click='saveExtract', title='save button', :disabled='!newExtract', style='vertical-align:top;')
+          icon(classes='ico-lg gray', name='fa-save')
+        label.sr-only(for='delete-button') delete saved search: {{ selectedExtractName }}
+        button#delete-button.usa-button(@click='deleteExtract', title='delete button', :disabled="selectedExtractName === ''")
+          icon(classes='ico-lg gray', name='fa-trash-o')
+    h3 Selected disasters list
+    .message-wrapper
+      message(:status="status" :locationOfMessage="'extract-message'")
+    #list
+      .list-loader(v-if='loading')
+        icon.fa-spin.ico-xl(name='fa-spinner')
+        span.fa-spin-text
+          | Loading ...
+        span.sr-only Loading...
+      ul
+        li(v-for='(item, $item) in items')
+          disaster(:prefix="'saved'", :item='item')
+    #action-buttons
+      button#clear-button.usa-button.alt-button(@click='clear' title='Clear Button') Clear
+      a(:href='download()', tabindex='-1', download='')
+        button#export-button.usa-button.green(:disabled='items.length === 0' title='Export Button')
+          | Export
+          icon(classes='export', name='fa-sign-out')
 </template>
 
 <script>
 import disaster from './Disaster'
+import message from './Message'
 import magic from '@/bus'
 import moment from 'moment'
 import _ from 'lodash'
 
+/**
+* Component responsible for enabling a user to build and save criteria for data exports.
+* @module components/SavedExtracts
+*/
 export default {
-  components: {disaster},
+  components: {disaster, message},
   created () {
     magic.$on('clearCurrentExtract', () => (this.selectedExtractName = ''))
   },
@@ -101,13 +72,8 @@ export default {
     status () {
       return this.$store.getters.status
     },
-    displayMessage () {
-      if (this.status.type === 'normal' || this.status.scope !== 'extract') return false
-      this.$nextTick(() => this.$refs.messages.focus())
-      return true
-    },
     loading () {
-      return this.$store.getters.loading
+      return this.$store.getters.extractLoading
     }
   },
   methods: {
@@ -136,13 +102,10 @@ export default {
     },
     loadExtract () {
       this.$store.commit('loadExtract', this.selectedExtractName)
-    },
-    hideMessage () {
-      this.$store.commit('resetStatus')
     }
   }
 }
 </script>
 <style lang="scss">
-//moved to 03-modules/_extracts.scss
+  //moved to 03-modules/_extracts.scss
 </style>

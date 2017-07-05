@@ -4,13 +4,14 @@ import Vue from 'vue' // eslint-disable-line
 import '@/vue-mixins'
 import tour from '@/tour'
 import sinon from 'sinon'
-import index from '@/components/Header/index' // eslint-disable-line
+import header from '@/components/Header'
+// eslint-disable-line
 
 Vue.config.productionTip = false
 
-describe('Header index.vue', () => {
+describe('Header.vue', () => {
   it('should render correct header', done => {
-    const Constructor = Vue.extend(index)
+    const Constructor = Vue.extend(header)
     const vm = new Constructor().$mount()
     Vue.nextTick(function () {
       expect(vm.$refs.title.textContent).to.be.equal(vm.title)
@@ -20,7 +21,7 @@ describe('Header index.vue', () => {
   describe('startTour', () => {
     it('should start the tour', () => {
       let startStub = sinon.stub(tour, 'start')
-      const Constructor = Vue.extend(index)
+      const Constructor = Vue.extend(header)
       const vm = new Constructor().$mount()
       vm.startTour()
       expect(startStub.called).to.be.equal(true)

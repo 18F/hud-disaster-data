@@ -1,18 +1,20 @@
 #gov-banner {
-  background:#fff;
+  background:#e2f6fd;
   padding:0 5%;
-  border-bottom:2px solid #0071bd; /*#e8e8e9;*/
+  /* border-bottom:2px solid #0071bd; */
   text-align:center;
 
   .gov-banner-outer {
     margin:0 auto;
     width:80%;
   }
+
   .gov-banner-inner { padding:2.3rem 10%; }
   .gov-banner-img {
     float:left;
     text-align:right;
     padding-right:10px;
+    padding-bottom:10px;
 
     img{
       border:none;
@@ -24,6 +26,7 @@
   .gov-banner-text {
     font-size:14px;
     float:left;
+    padding-bottom:20px;
     text-align:left;
   }
 }
