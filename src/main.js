@@ -9,6 +9,7 @@ import Sprites from './components/Sprites'
 import DisasterSearch from './components/DisasterSearch'
 import AppHeader from './components/Header'
 import AppFooter from './components/Footer'
+import router from './router'
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 
@@ -24,6 +25,7 @@ Vue.prototype.$http = Axios
 new Vue({
   el: '#page',
   store,
+  router,
   components: {
     Sprites,
     AppHeader,

@@ -1,5 +1,8 @@
 <template lang="pug">
   #appHeader.header.--global
+    <!-- REQUIRED for 508 compliancy -->
+    #skiptocontent
+      a(tabindex="0" @click="skipToContent" @keyup.enter="skipToContent") skip to main content
     .header.header--pre
       .container-block
         p
@@ -8,7 +11,7 @@
           button(:class="[showGovBanner ? 'usa-banner-button-alt expanded' : 'usa-banner-button-alt']", @click='showGovBanner=!showGovBanner')
             | Here's how you know
             icon(:name="[showGovBanner ? 'fa-caret-up' : 'fa-caret-down']")
-    #gov-banner(v-show='showGovBanner', tabindex='0')
+    #gov-banner(v-show='showGovBanner')
       .gov-banner-outer
         .container-fluid
           .row.gov-banner-inner
@@ -32,32 +35,52 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        #tabs.hidden-xs
-          a(href="#")
-            .tab.selected(tabindex='0')
+        #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger')
+          icon(name='fa-bars' classes='ico-lg fill-black')
+        #tabs(role="navigation").hidden-sm
+          router-link(:to='{name: "disasterSearch"}' href="")
+            .tab(tabindex='-1')
                 icon.ico-md(name='fa-sign-out')
                 span
                   | Data Export
-          a(href="#")
-            .tab(tabindex='0')
+          router-link(:to='{name: "maps"}'  href="")
+            .tab(tabindex='-1')
                 icon.ico-md(name='fa-globe')
                 span
                   | View Map
-          a(href="3")
-            .tab(tabindex='0')
+          router-link(:to='{name: "reports"}'  href="")
+            .tab(tabindex='-1')
                 icon.ico-md(name='fa-bar-chart')
                 span
                   | Reports
+      #burger-menu.hidden-md.hidden-lg.hidden(ref='burgerMenu')
+        ul
+          li
+            router-link(:to='{name: "disasterSearch"}' href="")
+              icon.ico-md(name='fa-sign-out')
+              | Data Export
+          li
+            router-link(:to='{name: "maps"}'  href="")
+              icon.ico-md(name='fa-globe')
+              | View Map
+          li
+            router-link(:to='{name: "reports"}'  href="")
+              icon.ico-md(name='fa-bar-chart')
+              | Reports
     #ribbon
       div(style="position:relative; top:-5px;")
         span
           | Need Help?
-        button.usa-button.green(@click='startTour' title='Guide Me Button')
+        button.usa-button.green(@click='startTour' title='Guide Me Button' ref="guideMe")
           | Guide Me
 </template>
 
 <script>
 import tour from '../tour'
+/**
+* The standard header for the site.  Contains official logo, government site statement, and tabs for navigation.
+* @module components/Header
+*/
 
 export default {
   data () {
@@ -70,6 +93,12 @@ export default {
   methods: {
     startTour () {
       tour.start(this.$store)
+    },
+    toggleBurger () {
+      this.$refs.burgerMenu.classList.toggle('hidden')
+    },
+    skipToContent () {
+      this.$refs.guideMe.focus()
     }
   }
 }

@@ -13,11 +13,15 @@ body:not(.shepherd-active) #tour-backdrop {
     display: none;
 }
 .shepherd-enabled {
-  z-index: 1042;
+  z-index: 1042 !important;
   position: relative;
   outline: 2px solid yellow;
 }
 .shepherd-step {
+  @include media($large-screen) {
+    font-size: inherit !important;
+  }
+  font-size: .8em !important;
   z-index: 1042;
   outline: none;
   .shepherd-content {

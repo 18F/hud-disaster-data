@@ -14,7 +14,10 @@ const messages = {
 Vue.mixin({
   components: {icon},
   methods: {
-    /** return the correct icon based on status */
+/**
+* return the correct icon based on status
+* @function iconName
+*/
     iconName () {
       return messages[this.$store.getters.status.type]
     }

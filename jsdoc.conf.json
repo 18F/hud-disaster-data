@@ -4,10 +4,15 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "source": {
+        "include": ["lib"],
         "includePattern": "\\.[vue|js]",
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "plugins": ["node_modules/jsdoc-vue"],
+    "opts" : {
+      "template": "node_modules/boxy-jsdoc-template",
+      "readme": "README.md"
+    },
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": false

@@ -20,13 +20,17 @@
     p {
       margin:0;
     }
+
+    .padding-top {
+      padding-top: 11px;
+    }
   }
 }
 .logo{
   &--block{
     padding:0 0 10px 0;
   /*  @include make-xs-column(6,0); */
-    width:40%;
+    width:41%;
     float:left;
 
     img,.logo-img{
@@ -55,6 +59,36 @@
   }
 }
 
+#burger-menu {
+  width: 100%;
+  background-color: #0071bc;
+  clear: left;
+  text-align: center;
+
+  ul {
+    margin: 0 0 0 40rem;
+    text-align: left;
+    padding-top: 15px;
+    li {
+      vertical-align: top;
+      &::before {
+        content: "";
+      }
+
+      a {
+        text-decoration: none;
+        color: #fff;
+        padding: 10px;
+
+        .hdd-icon {
+          margin-bottom: -4px;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
+
 #tabs{
   position:relative;
   top:7px;
@@ -63,17 +97,17 @@
 
   a{
     cursor:pointer;
-
-    .tab{
+    display:inline-block;
     border-style:solid;
     border-width:0 0 5px 0;
     border-color:transparent;
-    border-width:0 0 5px 0;
     color:#0071bc;
-    float:left;
     text-align:left;
     margin-right:50px;
     padding:10px 0;
+
+    .tab{
+    float:left;
 
     .ico-md {
       float:left;
@@ -85,27 +119,28 @@
       color:#0071bc;
       padding-left:30px;
     }
+  }
 
-    &.selected {
-      border-color:#112e51;
-      svg {fill:#112e51;}
-      span {color:#112e51;}
-    }
+  &:hover{
+    border-color:#205493;
+    svg {fill:#205493;}
+    span {color:#205493;}
+  }
 
-    &:hover{
-      border-color:#205493;
-      svg {fill:#205493;}
-      span {color:#205493;}
-    }
+  &:focus{
+    border-color:#112e51;
+    svg {fill:#112e51;}
+    span {color:#112e51;}
+  }
 
-    &:focus{
-      border-color:#112e51;
-      svg {fill:#112e51;}
-      span {color:#112e51;}
-    }
+  &.selected {
+    border-color:#112e51;
+    svg {fill:#112e51;}
+    span {color:#112e51;}
   }
 }
   }
+
 #ribbon {
   height:45px;
   background:#191d22;

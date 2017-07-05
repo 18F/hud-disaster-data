@@ -11,8 +11,8 @@
     "server-unit": "echo 'Run the server side tests' && mocha test/server && mocha test",
     "test": "echo 'Run all tests' && npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
     "lint": "echo 'Run the linter' && eslint --ext .js,.vue src test/unit/specs",
-    "508-test": "echo 'Run the 508 compliance tests' && npm run start & sleep 5 && trap 'kill $(jobs -p)' EXIT && ./node_modules/.bin/pa11y -i notice http://localhost:3000",
-    "doc": "echo 'Run jsdoc and produce documentation' && jsdoc src package.json -r -c jsdoc.conf.json -d docs"
+    "508-test": "echo 'Run the 508 compliance tests' && bash ./508_Test.sh",
+    "doc": "echo 'Run jsdoc and produce documentation' && jsdoc src build package.json -r -c jsdoc.conf.json -d docs"
   },
   "repository": {
     "type": "git",
@@ -75,6 +75,7 @@
     "babel-preset-env": "^1.3.2",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.22.0",
+    "boxy-jsdoc-template": "^1.3.0",
     "chai": "^3.5.0",
     "chalk": "^1.1.3",
     "cheerio": "^0.22.0",
