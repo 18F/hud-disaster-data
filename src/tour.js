@@ -158,7 +158,7 @@ disasterSearchTour.addStep('enter-search', {
       </p>
     </div>
     `,
-  attachTo: '.disaster-list top',
+  attachTo: '.disaster-list bottom',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
@@ -203,7 +203,7 @@ disasterSearchTour.addStep('enter-search', {
   </p>
   `,
   buttons: [back, next],
-  attachTo: '#list left',
+  attachTo: '#list bottom',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
@@ -221,7 +221,7 @@ disasterSearchTour.addStep('enter-search', {
   <p>To get household level data for the disaster selected, click the export button.</p>
   <p>Your computer will download a .csv formatted file.</p>
   `,
-  attachTo: '#export-button top',
+  attachTo: '#export-button bottom',
   buttons: [
     {
       text: 'Back',
@@ -252,7 +252,7 @@ disasterSearchTour.addStep('enter-search', {
   It looks like you entered an invalid 2-letter state code.  Try typing "TX".
   </div>
   `,
-  attachTo: '.search-wrapper right',
+  attachTo: '.search-wrapper bottom',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
@@ -312,7 +312,7 @@ disasterSearchTour.addStep('enter-search', {
       </p>
     </div>
     `,
-  attachTo: '.disaster-list right',
+  attachTo: '.disaster-list bottom',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
@@ -359,7 +359,7 @@ disasterSearchTour.addStep('enter-search', {
   You have encountered an error.  Please enter a different search name and try again.
   </div>
   `,
-  attachTo: '#saved_searches left',
+  attachTo: '#saved_searches bottom',
   buttons: [back,
     {
       text: 'Next',
@@ -391,7 +391,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   `,
-  attachTo: '#saved_searches left',
+  attachTo: '#saved_searches bottom',
   buttons: [back, next]
 })
 .addStep('deselect-disaster', {
@@ -402,7 +402,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   `,
-  attachTo: '#list right',
+  attachTo: '#list bottom',
   buttons: [back, next]
 })
 .addStep('clear-current-extract', {
@@ -413,7 +413,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   `,
-  attachTo: '#clear-button left',
+  attachTo: '#clear-button top',
   buttons: [back,
     {
       text: 'Next',
@@ -432,7 +432,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   `,
-  attachTo: '#saved_searches left',
+  attachTo: '#saved_searches bottom',
   buttons: [back, next]
 })
 .addStep('delete-saved-search', {
@@ -446,7 +446,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   `,
-  attachTo: '#saved_searches right',
+  attachTo: '#saved_searches bottom',
   buttons: [back, next]
 })
 .addStep('end-of-tour', {
