@@ -18,6 +18,9 @@ const disasterSearchTour = new Shepherd.Tour({
           link.textContent = ''
           link.innerHTML = '<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>'
         })
+        _.each(document.querySelectorAll('.shepherd-content'), link => {
+          link.setAttribute('aria-live', 'polite')
+        })
       }
     }
   }

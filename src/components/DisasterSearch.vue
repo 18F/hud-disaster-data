@@ -7,7 +7,7 @@
           .col.DisasterSearch
             #search
               .offset-bg
-                .search-wrapper.input-group
+                .search-wrapper.input-group(aria-live="assertive")
                   label.sr-only(for='search-text') search FEMA disasters
                   input#search-text.DisasterSearch__input(
                     type='text'
