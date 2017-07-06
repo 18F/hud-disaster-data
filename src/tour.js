@@ -14,12 +14,31 @@ const disasterSearchTour = new Shepherd.Tour({
     scrollTo: true,
     when: {
       show: function () {
+        _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
+          elem.tabIndex = -1
+        })
+
         _.each(document.querySelectorAll('.shepherd-cancel-link'), link => {
           link.textContent = ''
           link.innerHTML = '<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>'
+          link.setAttribute('tabindex', 0)
         })
-        _.each(document.querySelectorAll('.shepherd-content'), link => {
-          link.setAttribute('aria-live', 'polite')
+
+        _.each(document.querySelectorAll('.shepherd-button '), button => {
+          button.setAttribute('tabindex', 0)
+        })
+
+        _.each(document.getElementsByClassName('tabbable'), things => {
+          things.tabIndex = 0
+        })
+
+        _.each(document.querySelectorAll('.shepherd-content'), step => {
+          step.setAttribute('aria-live', 'polite')
+        })
+      },
+      cancel: function () {
+        _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
+          elem.tabIndex = 0
         })
       }
     }
@@ -44,7 +63,7 @@ let next = {
 let disasterLink = `
     <p>
     Don’t know the disaster ID?
-    Click here: <a target="_blank" href="https://www.fema.gov/disasters">https://www.fema.gov/disasters</a>
+    Click here: <a target="_blank" href="https://www.fema.gov/disasters" class="tabbable">https://www.fema.gov/disasters</a>
     </p>`
 
 disasterSearchTour.addStep('enter-search', {
@@ -80,8 +99,14 @@ disasterSearchTour.addStep('enter-search', {
       }
       TourObject.showMessage()
       const input = document.getElementById('search-text')
+      const btn = document.getElementById('search-btn')
+      input.setAttribute('tabindex', 0)
+      btn.setAttribute('tabindex', 0)
       input.focus()
       input.select()
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
     }
   },
   buttons: [
@@ -130,6 +155,9 @@ disasterSearchTour.addStep('enter-search', {
         return
       }
       TourObject.showMessage()
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
     }
   },
   buttons: [
@@ -169,7 +197,10 @@ disasterSearchTour.addStep('enter-search', {
       disasterSearchTour.options.defaults.when.show.apply(this)
     },
     'before-show': function () { document.getElementById('list').style['z-index'] = '1' },
-    hide: function () { document.getElementById('list').style['z-index'] = null }
+    hide: function () { document.getElementById('list').style['z-index'] = null },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
+    }
   }
 })
 .addStep('export-data', {
@@ -225,6 +256,9 @@ disasterSearchTour.addStep('enter-search', {
       input.focus()
       input.value = ''
       magic.$emit('clearQuery')
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
     }
   },
   buttons: [
@@ -275,6 +309,9 @@ disasterSearchTour.addStep('enter-search', {
         return
       }
       TourObject.showMessage()
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
     }
   },
   buttons: [
@@ -338,7 +375,7 @@ disasterSearchTour.addStep('enter-search', {
     You have successfully created a saved disaster search!
     </p>
     <p>
-    It can be now be be accessed at any time when selected in the "Saved Searches" dropdown selector."
+    It can be now be be accessed at any time when selected in the "Saved Searches" dropdown selector.
     </p>
   </div>
   `,
