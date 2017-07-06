@@ -42,7 +42,8 @@ const disasterSearchTour = new Shepherd.Tour({
         _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
           elem.tabIndex = 0
         })
-
+      },
+      hide: function () {
         eventTarget.removeEventListener('DOMSubtreeModified', eventListener)
       }
     }
@@ -119,6 +120,9 @@ disasterSearchTour.addStep('enter-search', {
     },
     cancel: function () {
       disasterSearchTour.options.defaults.when.cancel.apply(this)
+    },
+    hide: function () {
+      disasterSearchTour.options.defaults.when.hide.apply(this)
     }
   },
   buttons: [
