@@ -7,6 +7,8 @@ let $store
 * This module is responsible for the implementing all steps of tour.
 * @module tour
 */
+let eventTarget = null
+let eventListener = null
 const disasterSearchTour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-element shepherd-open shepherd-theme-square',
@@ -40,6 +42,8 @@ const disasterSearchTour = new Shepherd.Tour({
         _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
           elem.tabIndex = 0
         })
+
+        eventTarget.removeEventListener('DOMSubtreeModified', eventListener)
       }
     }
   }
@@ -104,6 +108,14 @@ disasterSearchTour.addStep('enter-search', {
       btn.setAttribute('tabindex', 0)
       input.focus()
       input.select()
+      let search = document.querySelectorAll('.disaster-list')[0]
+      eventTarget = search
+      eventListener = search.addEventListener('DOMSubtreeModified', function () {
+        console.log('search: ', search)
+        _.each(search.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
+          elem.tabIndex = -1
+        })
+      }, false)
     },
     cancel: function () {
       disasterSearchTour.options.defaults.when.cancel.apply(this)
