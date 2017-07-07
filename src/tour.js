@@ -2,6 +2,7 @@ import Shepherd from 'tether-shepherd'
 import 'babel-polyfill'
 import magic from '@/bus'
 import _ from 'lodash'
+import bowser from 'bowser'
 import $ from 'jquery'
 let $store
 
@@ -16,6 +17,23 @@ let $store
 // On tour end restore tab index to pre tour state
 let eventTarget
 let observer
+const getTabIndex = function (node) {
+  var index = node.tabIndex
+  if (bowser.msie || bowser.msedge) {
+    var tnode = node.attributes.tabIndex.specified
+    if (!tnode) {
+      var map = {a: true, body: true, button: true, frame: true, iframe: true, img: true, input: true, isindex: true, object: true, select: true, textarea: true}
+      var nodeName = node.nodeName.toLowerCase()
+      return (map[nodeName]) ? 0 : null
+    }
+  } else {
+    if (index === -1) {
+      var attr = node.getAttribute('tabindex')
+      if (attr == null || (attr === '' && !bowser.gecko)) return null
+    }
+  }
+  return index
+}
 const removeObserver = function () {
   restoreTabIndex()
   if (!eventTarget) return
@@ -23,8 +41,9 @@ const removeObserver = function () {
   eventTarget = null
 }
 const clearElementTabIndex = function (el) {
-  if (el.tabIndex < 0 || $(el).closest('.shepherd-step').length > 0) return
-  el.setAttribute('data-tabindex', el.tabIndex)
+  let tabIndex = getTabIndex(el)
+  if (tabIndex < 0 || $(el).closest('.shepherd-step').length > 0) return
+  el.setAttribute('data-tabindex', tabIndex)
   el.tabIndex = -1
 }
 const clearTabIndex = function (target) {
