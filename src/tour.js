@@ -1,14 +1,53 @@
 import Shepherd from 'tether-shepherd'
+import 'babel-polyfill'
 import magic from '@/bus'
 import _ from 'lodash'
+import $ from 'jquery'
 let $store
 
 /**
 * This module is responsible for the implementing all steps of tour.
 * @module tour
 */
-let eventTarget = null
-let eventListener = null
+// When elements dynamically appear set data-tabindex = tabindex and set tabindex = -1
+// On Step start save the current tab index in data-tabindex to be restored later
+// On Step start set tabindex = -1 for all elements with a tabindex
+// On Step start set up tab index for tour step and attached elements
+// On tour end restore tab index to pre tour state
+let eventTarget
+let observer
+
+const clearTabIndex = function () {
+  document.querySelectorAll('*').forEach(el => {
+    if (el.tabIndex < 0 || $(el).closest('.shepherd-step').length > 0) return
+    el.setAttribute('data-tabindex', el.tabIndex)
+    el.tabIndex = -1
+  })
+  if (eventTarget) return
+  eventTarget = document.getElementById('app')
+  observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      console.log(mutation.type)
+    })
+  })
+
+  // configuration of the observer:
+  var config = { attributes: true, childList: true, characterData: true, subtree: true }
+
+  // pass in the target node, as well as the observer options
+  observer.observe(eventTarget, config)
+}
+const restoreTabIndex = function () {
+  document.querySelectorAll('[data-tabindex]').forEach(el => {
+    el.tabIndex = el.getAttribute('data-tabindex')
+    el.removeAttribute('data-tabindex')
+  })
+
+  if (!eventTarget) return
+  observer.disconnect()
+  eventTarget = null
+}
+
 const disasterSearchTour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-element shepherd-open shepherd-theme-square',
@@ -16,39 +55,44 @@ const disasterSearchTour = new Shepherd.Tour({
     scrollTo: true,
     when: {
       show: function () {
-        _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
-          elem.tabIndex = -1
-        })
-
         _.each(document.querySelectorAll('.shepherd-cancel-link'), link => {
           link.textContent = ''
           link.innerHTML = '<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>'
           link.setAttribute('tabindex', 0)
         })
 
-        _.each(document.querySelectorAll('.shepherd-button '), button => {
-          button.setAttribute('tabindex', 0)
-        })
-
-        _.each(document.getElementsByClassName('tabbable'), things => {
-          things.tabIndex = 0
-        })
-
+        // _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
+        //   elem.tabIndex = -1
+        // })
+        //
+        // _.each(document.querySelectorAll('.shepherd-button '), button => {
+        //   button.setAttribute('tabindex', 0)
+        // })
+        //
+        // _.each(document.getElementsByClassName('tabbable'), things => {
+        //   things.tabIndex = 0
+        // })
+        //
         _.each(document.querySelectorAll('.shepherd-content'), step => {
           step.setAttribute('aria-live', 'polite')
         })
       },
       cancel: function () {
-        _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
-          elem.tabIndex = 0
-        })
+        // restoreTabIndex()
+        // _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
+        //   elem.tabIndex = 0
+        // })
       },
       hide: function () {
-        eventTarget.removeEventListener('DOMSubtreeModified', eventListener)
+        // eventTarget.removeEventListener('DOMSubtreeModified', eventListener)
       }
     }
   }
 })
+
+disasterSearchTour.on('show', clearTabIndex)
+disasterSearchTour.on('hide', restoreTabIndex)
+disasterSearchTour.on('cancel', restoreTabIndex)
 
 let back = {
   text: 'Back',
@@ -109,14 +153,14 @@ disasterSearchTour.addStep('enter-search', {
       btn.setAttribute('tabindex', 0)
       input.focus()
       input.select()
-      let search = document.querySelectorAll('.disaster-list')[0]
-      eventTarget = search
-      eventListener = search.addEventListener('DOMSubtreeModified', function () {
-        console.log('search: ', search)
-        _.each(search.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
-          elem.tabIndex = -1
-        })
-      }, false)
+      // let search = document.querySelectorAll('.disaster-list')[0]
+      // eventTarget = search
+      // eventListener = search.addEventListener('DOMSubtreeModified', function () {
+      //   console.log('search: ', search)
+      //   _.each(search.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
+      //     elem.tabIndex = -1
+      //   })
+      // }, false)
     },
     cancel: function () {
       disasterSearchTour.options.defaults.when.cancel.apply(this)
