@@ -22,20 +22,22 @@ const removeObserver = function () {
   observer.disconnect()
   eventTarget = null
 }
+const clearElementTabIndex = function (el) {
+  if (el.tabIndex < 0 || $(el).closest('.shepherd-step').length > 0) return
+  el.setAttribute('data-tabindex', el.tabIndex)
+  el.tabIndex = -1
+}
 const clearTabIndex = function (target) {
+  if (target) clearElementTabIndex(target)
   target = target || document
-  target.querySelectorAll('*').forEach(el => {
-    if (el.tabIndex < 0 || $(el).closest('.shepherd-step').length > 0) return
-    el.setAttribute('data-tabindex', el.tabIndex)
-    el.tabIndex = -1
-  })
+  _.each(target.querySelectorAll('*'), clearElementTabIndex)
   if (eventTarget) return
   eventTarget = document.getElementById('app-container')
   observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
+    _.each(mutations, function (mutation) {
       if (mutation.type === 'childList') {
         console.log(mutation.addedNodes)
-        mutation.addedNodes.forEach(clearTabIndex)
+        _.each(mutation.addedNodes, clearTabIndex)
       }
     })
   })
@@ -44,7 +46,7 @@ const clearTabIndex = function (target) {
 }
 const restoreTabIndex = function (target) {
   target = target || document
-  target.querySelectorAll('[data-tabindex]').forEach(el => {
+  _.each(target.querySelectorAll('[data-tabindex]'), el => {
     el.tabIndex = el.getAttribute('data-tabindex')
     el.removeAttribute('data-tabindex')
   })
