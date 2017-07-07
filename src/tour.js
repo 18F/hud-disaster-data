@@ -16,36 +16,38 @@ let $store
 // On tour end restore tab index to pre tour state
 let eventTarget
 let observer
-
-const clearTabIndex = function () {
-  document.querySelectorAll('*').forEach(el => {
+const removeObserver = function () {
+  restoreTabIndex()
+  if (!eventTarget) return
+  observer.disconnect()
+  eventTarget = null
+}
+const clearTabIndex = function (target) {
+  target = target || document
+  target.querySelectorAll('*').forEach(el => {
     if (el.tabIndex < 0 || $(el).closest('.shepherd-step').length > 0) return
     el.setAttribute('data-tabindex', el.tabIndex)
     el.tabIndex = -1
   })
   if (eventTarget) return
-  eventTarget = document.getElementById('app')
+  eventTarget = document.getElementById('app-container')
   observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
-      console.log(mutation.type)
+      if (mutation.type === 'childList') {
+        console.log(mutation.addedNodes)
+        mutation.addedNodes.forEach(clearTabIndex)
+      }
     })
   })
-
-  // configuration of the observer:
-  var config = { attributes: true, childList: true, characterData: true, subtree: true }
-
-  // pass in the target node, as well as the observer options
+  var config = { attributes: false, childList: true, characterData: false, subtree: true }
   observer.observe(eventTarget, config)
 }
-const restoreTabIndex = function () {
-  document.querySelectorAll('[data-tabindex]').forEach(el => {
+const restoreTabIndex = function (target) {
+  target = target || document
+  target.querySelectorAll('[data-tabindex]').forEach(el => {
     el.tabIndex = el.getAttribute('data-tabindex')
     el.removeAttribute('data-tabindex')
   })
-
-  if (!eventTarget) return
-  observer.disconnect()
-  eventTarget = null
 }
 
 const disasterSearchTour = new Shepherd.Tour({
@@ -60,39 +62,21 @@ const disasterSearchTour = new Shepherd.Tour({
           link.innerHTML = '<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>'
           link.setAttribute('tabindex', 0)
         })
-
-        // _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
-        //   elem.tabIndex = -1
-        // })
-        //
-        // _.each(document.querySelectorAll('.shepherd-button '), button => {
-        //   button.setAttribute('tabindex', 0)
-        // })
-        //
-        // _.each(document.getElementsByClassName('tabbable'), things => {
-        //   things.tabIndex = 0
-        // })
-        //
+        _.each(document.querySelectorAll('.shepherd-button '), button => {
+          button.setAttribute('tabindex', 0)
+        })
         _.each(document.querySelectorAll('.shepherd-content'), step => {
           step.setAttribute('aria-live', 'polite')
         })
-      },
-      cancel: function () {
-        // restoreTabIndex()
-        // _.each(document.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
-        //   elem.tabIndex = 0
-        // })
-      },
-      hide: function () {
-        // eventTarget.removeEventListener('DOMSubtreeModified', eventListener)
+        restoreTabIndex(this.getAttachTo().element)
       }
     }
   }
 })
 
-disasterSearchTour.on('show', clearTabIndex)
-disasterSearchTour.on('hide', restoreTabIndex)
-disasterSearchTour.on('cancel', restoreTabIndex)
+disasterSearchTour.on('show', () => clearTabIndex())
+disasterSearchTour.on('hide', () => removeObserver())
+disasterSearchTour.on('cancel', () => removeObserver())
 
 let back = {
   text: 'Back',
@@ -153,20 +137,6 @@ disasterSearchTour.addStep('enter-search', {
       btn.setAttribute('tabindex', 0)
       input.focus()
       input.select()
-      // let search = document.querySelectorAll('.disaster-list')[0]
-      // eventTarget = search
-      // eventListener = search.addEventListener('DOMSubtreeModified', function () {
-      //   console.log('search: ', search)
-      //   _.each(search.querySelectorAll(['[tabindex]', 'a', 'select', 'button', 'input']), elem => {
-      //     elem.tabIndex = -1
-      //   })
-      // }, false)
-    },
-    cancel: function () {
-      disasterSearchTour.options.defaults.when.cancel.apply(this)
-    },
-    hide: function () {
-      disasterSearchTour.options.defaults.when.hide.apply(this)
     }
   },
   buttons: [
@@ -257,10 +227,7 @@ disasterSearchTour.addStep('enter-search', {
       disasterSearchTour.options.defaults.when.show.apply(this)
     },
     'before-show': function () { document.getElementById('list').style['z-index'] = '1' },
-    hide: function () { document.getElementById('list').style['z-index'] = null },
-    cancel: function () {
-      disasterSearchTour.options.defaults.when.cancel.apply(this)
-    }
+    hide: function () { document.getElementById('list').style['z-index'] = null }
   }
 })
 .addStep('export-data', {
