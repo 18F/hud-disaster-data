@@ -93,7 +93,6 @@ const disasterSearchTour = new Shepherd.Tour({
           button.setAttribute('tabindex', 0)
         })
         _.each(document.querySelectorAll('.shepherd-content'), step => {
-          debugger
           setAccessiblityContent(step)
         })
         restoreTabIndex(this.getAttachTo().element)
