@@ -75,6 +75,8 @@ const setAccessiblityContent = function (el) {
   el.setAttribute('aria-live', 'assertive')
   el.setAttribute('role', 'alert')
   el.innerHTML = el.innerHTML + ' '
+  // the code below seems to cause NVDA to read (somewhat)
+  // document.querySelector('#search-text-label').innerText = el.innerText
 }
 
 const disasterSearchTour = new Shepherd.Tour({

@@ -8,7 +8,7 @@
             #search
               .offset-bg
                 .search-wrapper.input-group(aria-live="assertive")
-                  label.sr-only(for='search-text') search FEMA disasters
+                  label.sr-only(for='search-text' id='search-text-label') search FEMA disasters
                   input#search-text.DisasterSearch__input(
                     type='text'
                     ref='searchText'
