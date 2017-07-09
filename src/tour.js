@@ -20,7 +20,7 @@ let observer
 const getTabIndex = function (node) {
   var index = node.tabIndex
   if (bowser.msie || bowser.msedge) {
-    var tnode = node.attributes.tabIndex.specified
+    var tnode = _.get(node, 'attributes.tabIndex.specified')
     if (!tnode) {
       var map = {a: true, body: true, button: true, frame: true, iframe: true, img: true, input: true, isindex: true, object: true, select: true, textarea: true}
       var nodeName = node.nodeName.toLowerCase()
@@ -71,6 +71,12 @@ const restoreTabIndex = function (target) {
   })
 }
 
+const setAccessiblityContent = function (el) {
+  el.setAttribute('aria-live', 'assertive')
+  el.setAttribute('role', 'alert')
+  el.innerHTML = el.innerHTML + ' '
+}
+
 const disasterSearchTour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-element shepherd-open shepherd-theme-square',
@@ -87,7 +93,8 @@ const disasterSearchTour = new Shepherd.Tour({
           button.setAttribute('tabindex', 0)
         })
         _.each(document.querySelectorAll('.shepherd-content'), step => {
-          step.setAttribute('aria-live', 'polite')
+          debugger
+          setAccessiblityContent(step)
         })
         restoreTabIndex(this.getAttachTo().element)
       }
