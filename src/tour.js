@@ -42,7 +42,8 @@ const removeObserver = function () {
 }
 const clearElementTabIndex = function (el) {
   let tabIndex = getTabIndex(el)
-  if (tabIndex < 0 || $(el).closest('.shepherd-step').length > 0) return
+  let shepherdStep = $(el).closest('.shepherd-step')
+  if (tabIndex === null || shepherdStep.length > 0 || el.hasAttribute('data-tabindex')) return
   el.setAttribute('data-tabindex', tabIndex)
   el.tabIndex = -1
 }
@@ -63,18 +64,22 @@ const clearTabIndex = function (target) {
   var config = { attributes: false, childList: true, characterData: false, subtree: true }
   observer.observe(eventTarget, config)
 }
+const restoreElementTabIndex = function (el) {
+  let tabIndex = parseInt(el.getAttribute('data-tabindex'), 10)
+  el.tabIndex = tabIndex
+  el.removeAttribute('data-tabindex')
+}
 const restoreTabIndex = function (target) {
+  if (target && target.hasAttribute('data-tabindex')) restoreElementTabIndex(target)
   target = target || document
-  _.each(target.querySelectorAll('[data-tabindex]'), el => {
-    el.tabIndex = el.getAttribute('data-tabindex')
-    el.removeAttribute('data-tabindex')
-  })
+  let tabElements = target.querySelectorAll('[data-tabindex]')
+  _.each(tabElements, restoreElementTabIndex)
 }
 
 const setAccessiblityContent = function (el) {
   el.setAttribute('aria-live', 'assertive')
   el.setAttribute('role', 'alert')
-  el.innerHTML = el.innerHTML + ' '
+  // el.innerHTML = el.innerHTML + ' '
   // the code below seems to cause NVDA to read (somewhat)
   // document.querySelector('#search-text-label').innerText = el.innerText
 }
@@ -89,10 +94,10 @@ const disasterSearchTour = new Shepherd.Tour({
         _.each(document.querySelectorAll('.shepherd-cancel-link'), link => {
           link.textContent = ''
           link.innerHTML = '<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>'
-          link.setAttribute('tabindex', 0)
+          link.tabIndex = 0
         })
         _.each(document.querySelectorAll('.shepherd-button '), button => {
-          button.setAttribute('tabindex', 0)
+          button.tabIndex = 0
         })
         _.each(document.querySelectorAll('.shepherd-content'), step => {
           setAccessiblityContent(step)
@@ -127,7 +132,6 @@ let disasterLink = `
     Don’t know the disaster ID?
     Click here: <a target="_blank" href="https://www.fema.gov/disasters" class="tabbable">https://www.fema.gov/disasters</a>
     </p>`
-
 disasterSearchTour.addStep('enter-search', {
   title: 'Search for a disaster',
   text: `
@@ -161,9 +165,6 @@ disasterSearchTour.addStep('enter-search', {
       }
       TourObject.showMessage()
       const input = document.getElementById('search-text')
-      const btn = document.getElementById('search-btn')
-      input.setAttribute('tabindex', 0)
-      btn.setAttribute('tabindex', 0)
       input.focus()
       input.select()
     }
@@ -171,7 +172,7 @@ disasterSearchTour.addStep('enter-search', {
   buttons: [
     {
       text: 'Next',
-      action: function () {
+      action: () => {
         let step = disasterSearchTour.getCurrentStep()
         if ($store.getters.currentSearchResult.length > 0) {
           disasterSearchTour.next()
