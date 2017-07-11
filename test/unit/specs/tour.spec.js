@@ -77,6 +77,32 @@ describe('tour', () => {
       backStub.restore()
       disasterSearchTour.hide() // needed for next test (should start the tour)
     })
+    describe('default show', () => {
+      it('should set the cancel link textContent, innerHTML, and tabIndex', () => {
+        let disasterSearchTour = tour.tour
+        let addEventListenerStub = sinon.stub()
+        let setAttributeStub = sinon.stub()
+        let fakeElement = {
+          textContent: 'something',
+          innerHTML: 'something else',
+          tabIndex: 999,
+          addEventListener: addEventListenerStub,
+          setAttribute: setAttributeStub
+        }
+        let show = disasterSearchTour.options.defaults.when.show
+        querySelectorAll.restore()
+        let querySelectorAllStub = sinon.stub(document, 'querySelectorAll').callsFake((el) => {
+          return [fakeElement]
+        })
+        let restoreTabIndexStub = sinon.stub({}, 'restoreTabIndex')
+        show()
+        expect(fakeElement.textContent).to.equal('')
+        expect(fakeElement.innerHTML).to.equal('<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>')
+        expect(fakeElement.tabIndex).to.equal(0)
+        querySelectorAllStub.restore()
+        restoreTabIndexStub.restore()
+      })
+    })
   })
 
   describe('start', () => {
