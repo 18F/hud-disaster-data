@@ -140,7 +140,7 @@ disasterSearchTour.addStep('enter-search', {
   text: `
     <div class="tour-message">
       <p>
-      Start here by typing in a FEMA disaster ID.
+      Start here by typing in a FEMA disaster ID and clicking the magnifying glass.
       </p>
       <p>
       These IDs follow the format "DR‐4272‐TX" But you can also type "4272".
@@ -426,7 +426,7 @@ disasterSearchTour.addStep('enter-search', {
   ]
 })
 .addStep('use-saved-search', {
-  title: 'Access saved search',
+  title: 'Access saved disaster list',
   text: `
     <p>
     Congratulations!
@@ -435,7 +435,7 @@ disasterSearchTour.addStep('enter-search', {
     You have successfully created a saved disaster search!
     </p>
     <p>
-    It can be now be be accessed at any time when selected in the "Saved Searches" dropdown selector.
+    It can be now be be accessed at any time when selected in the "Saved Disaster Lists" dropdown selector.
     </p>
   </div>
   `,
