@@ -267,7 +267,7 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Export data',
   text: `
   <p>To get household level data for the disaster selected, click the export button.</p>
-  <p>Your computer will download a .csv formatted file.</p>
+  <p>Your computer will download a CSV-formatted file.</p>
   `,
   attachTo: '#export-button bottom',
   buttons: [
