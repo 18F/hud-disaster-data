@@ -8,13 +8,20 @@ let $store
 
 /**
 * This module is responsible for the implementing all steps of tour.
+*
+* In order to keep tabbing confined to the items of interest in the current tour step, we maintane and
+* modify the tabindex of all tabbable elemnts in the DOM.  Unfortunately Internet Explorer doesn't respect
+* our tabindex settings.
+*
+* 1. On Tour start setup a MutationObserver to watch for DOM changes that cause tabindexes to be maintaned
+* 2. On Step start
+*   - save the current tab index in data-tabindex to be restored later
+*   - set tabindex = -1 for all elements with a tabindex
+*   - set up tab index for tour step and attached elements
+* 3. On Tour End
+*   - restore page tab index
 * @module tour
 */
-// When elements dynamically appear set data-tabindex = tabindex and set tabindex = -1
-// On Step start save the current tab index in data-tabindex to be restored later
-// On Step start set tabindex = -1 for all elements with a tabindex
-// On Step start set up tab index for tour step and attached elements
-// On tour end restore tab index to pre tour state
 let eventTarget
 let observer
 const getTabIndex = function (node) {
@@ -34,6 +41,10 @@ const getTabIndex = function (node) {
   }
   return index
 }
+/**
+* Removes the MutationObserver that listens for changes to the DOM in order to maintane tabIndex
+* @function removeObserver
+*/
 const removeObserver = function () {
   restoreTabIndex()
   if (!eventTarget) return
@@ -47,11 +58,17 @@ const clearElementTabIndex = function (el) {
   el.setAttribute('data-tabindex', tabIndex)
   el.tabIndex = -1
 }
+/**
+* This function sets up a MutationObserver to watch over the 'app-container' for dynamic HTML that
+* needs to be maintaned and removed from the current tabIndex
+* @function clearTabIndex
+* @param {HTMLElement} target - Clear the tabIndex for all descendents of target (default. document)
+*/
 const clearTabIndex = function (target) {
   if (target) clearElementTabIndex(target)
   target = target || document
   _.each(target.querySelectorAll('*'), clearElementTabIndex)
-  if (eventTarget) return
+  if (eventTarget || target !== document) return
   eventTarget = document.getElementById('app-container')
   if (!eventTarget) return
   observer = new MutationObserver(function (mutations) {
@@ -70,6 +87,11 @@ const restoreElementTabIndex = function (el) {
   el.tabIndex = tabIndex
   el.removeAttribute('data-tabindex')
 }
+/**
+* Restore the page tabIndex from data-tabindex attribute
+* @function restoreTabIndex
+* @param {HTMLElement} target - Restore the tabIndex of target and it's descendents
+*/
 const restoreTabIndex = function (target) {
   if (target && target.hasAttribute('data-tabindex')) restoreElementTabIndex(target)
   target = target || document
@@ -141,7 +163,7 @@ disasterSearchTour.addStep('enter-search', {
   text: `
     <div class="tour-message">
       <p>
-      Start here by typing in a FEMA disaster ID and clicking the magnifying glass.
+      Start here by typing in a FEMA disaster ID and clicking the magnifying glass icon.
       </p>
       <p>
       These IDs follow the format "DR‐4272‐TX" But you can also type "4272".
@@ -153,8 +175,7 @@ disasterSearchTour.addStep('enter-search', {
     </div>
     <div class="tour-error" style="display:none;">
       <p>
-      It looks like you typed an invalid disaster ID.
-      Try typing just the four‐digit number (example, "4272").
+      Please enter a valid state code or disaster ID, for example "4272". Then click the magnifying glass icon.
       </p>
       ${disasterLink}
     </div>
