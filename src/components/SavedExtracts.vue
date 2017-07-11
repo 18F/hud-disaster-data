@@ -7,7 +7,7 @@
           option(value='', disabled='', selected='') Select a search...
           option(v-for='extract in savedExtracts', v-bind:value='extract.name') {{extract.name}}
         label.sr-only(for='extract-name') Search Name
-        input#extract-name(v-show='newExtract', v-model='extractName', name='extract-name', type='text', placeholder='Enter a name for your search')
+        input#extract-name(v-show='newExtract', v-model='extractName', @keydown.enter='saveExtract' name='extract-name', type='text', placeholder='Enter a name for your search')
       #cta
         label.sr-only(for='save-button') Save selected disaster search
         button#save-button.usa-button(@click='saveExtract', title='save button', :disabled='!newExtract', style='vertical-align:top;')
