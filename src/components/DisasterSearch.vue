@@ -22,7 +22,7 @@
                     button#clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
                       icon(classes='clear-text' name='fa-times')
                   span.input-group-btn
-                    button#search-btn.usa-button.btn.btn-default(type="button" @click="update" title="Search Disasters")
+                    button#search-btn.usa-button.btn.btn-default(type="button" @click="update" title="Search Disasters Magnifying Glass Icon")
                       icon(name='fa-search')
                 .message-wrapper
                   message(:status="status" :locationOfMessage="'app-message'")
