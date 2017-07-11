@@ -319,7 +319,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   <div class="tour-error" style="display:none;">
-  It looks like you entered an invalid 2-letter state code.  Try typing "TX".
+    Please enter a valid 2-letter state code, such as "TX", and click the magnifying glass icon.
   </div>
   `,
   attachTo: '.search-wrapper bottom',
@@ -426,7 +426,7 @@ disasterSearchTour.addStep('enter-search', {
   </p>
   </div>
   <div class="tour-error" style="display:none;">
-  You have encountered an error.  Please enter a different search name and try again.
+    Please enter a unique name for your disaster list and click the save button.
   </div>
   `,
   attachTo: '#saved_searches bottom',
