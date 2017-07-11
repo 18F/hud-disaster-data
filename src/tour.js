@@ -52,11 +52,13 @@ const removeObserver = function () {
   eventTarget = null
 }
 const clearElementTabIndex = function (el) {
-  let tabIndex = getTabIndex(el)
-  let shepherdStep = $(el).closest('.shepherd-step')
-  if (tabIndex === null || shepherdStep.length > 0 || el.hasAttribute('data-tabindex')) return
-  el.setAttribute('data-tabindex', tabIndex)
-  el.tabIndex = -1
+  if (el.setAttribute) {
+    let tabIndex = getTabIndex(el)
+    let shepherdStep = $(el).closest('.shepherd-step')
+    if (tabIndex === null || shepherdStep.length > 0 || el.hasAttribute('data-tabindex')) return
+    el.setAttribute('data-tabindex', tabIndex)
+    el.tabIndex = -1
+  }
 }
 /**
 * This function sets up a MutationObserver to watch over the 'app-container' for dynamic HTML that
@@ -65,7 +67,11 @@ const clearElementTabIndex = function (el) {
 * @param {HTMLElement} target - Clear the tabIndex for all descendents of target (default. document)
 */
 const clearTabIndex = function (target) {
-  if (target) clearElementTabIndex(target)
+  // if target is comment node, return out
+  if (target) {
+    if (target.nodeType === 8) return
+    else clearElementTabIndex(target)
+  }
   target = target || document
   _.each(target.querySelectorAll('*'), clearElementTabIndex)
   if (eventTarget || target !== document) return
@@ -74,7 +80,6 @@ const clearTabIndex = function (target) {
   observer = new MutationObserver(function (mutations) {
     _.each(mutations, function (mutation) {
       if (mutation.type === 'childList') {
-        console.log(mutation.addedNodes)
         _.each(mutation.addedNodes, clearTabIndex)
       }
     })
