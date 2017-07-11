@@ -140,7 +140,7 @@ disasterSearchTour.addStep('enter-search', {
   text: `
     <div class="tour-message">
       <p>
-      Start here by typing in a FEMA disaster ID and clicking the magnifying glass.
+      Start here by typing in a FEMA disaster ID and clicking the magnifying glass icon.
       </p>
       <p>
       These IDs follow the format "DR‐4272‐TX" But you can also type "4272".
@@ -152,8 +152,7 @@ disasterSearchTour.addStep('enter-search', {
     </div>
     <div class="tour-error" style="display:none;">
       <p>
-      It looks like you typed an invalid disaster ID.
-      Try typing just the four‐digit number (example, "4272").
+      Please enter a valid state code or disaster ID, for example "4272". Then click the magnifying glass icon.
       </p>
       ${disasterLink}
     </div>
