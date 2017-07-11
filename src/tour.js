@@ -97,6 +97,9 @@ const disasterSearchTour = new Shepherd.Tour({
           link.tabIndex = 0
         })
         _.each(document.querySelectorAll('.shepherd-button '), button => {
+          button.addEventListener('keypress', e => {
+            e.target.dispatchEvent(new Event('click'))
+          })
           button.tabIndex = 0
         })
         _.each(document.querySelectorAll('.shepherd-content'), step => {
