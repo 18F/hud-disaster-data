@@ -213,6 +213,28 @@ describe('tour', () => {
     })
   })
 
+  describe('selected-export-data', () => {
+    describe('before-show', () => {
+      it('should set the z-index to 1 for list', () => {
+        getters.currentSearchResult = function () { return [1] }
+        store = new Vuex.Store({state: {}, mutations, getters})
+        tour.setStore(store)
+        let disasterSearchTour = tour.tour
+        let element
+        let fakeElement = {style: {'z-index': -100}}
+        let beforeShow = disasterSearchTour.getById('selected-export-data').options.when['before-show']
+        let getElementByIdStub = sinon.stub(document, 'getElementById').callsFake((el) => {
+          element = el
+          return fakeElement
+        })
+        beforeShow()
+        expect(element).to.equal('list')
+        expect(fakeElement.style['z-index']).to.equal('1')
+        getElementByIdStub.restore()
+      })
+    })
+  })
+
   describe('export-data', () => {
     describe('Back button action', () => {
       it('should go back if there are search results', () => {
