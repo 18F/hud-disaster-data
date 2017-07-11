@@ -381,8 +381,6 @@ disasterSearchTour.addStep('enter-search', {
     <div class="tour-error" style="display:none;">
       <p>
       Less than 2 disasters selected.
-      </p>
-      <p>
       Please select multiple disasters.
       </p>
     </div>
@@ -459,7 +457,7 @@ disasterSearchTour.addStep('enter-search', {
     Congratulations!
     </p>
     <p>
-    You have successfully created a saved disaster search!
+    You have successfully created a saved disaster list!
     </p>
     <p>
     It can be now be be accessed at any time when selected in the "Saved Disaster Lists" dropdown selector.
