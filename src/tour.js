@@ -53,6 +53,7 @@ const clearTabIndex = function (target) {
   _.each(target.querySelectorAll('*'), clearElementTabIndex)
   if (eventTarget) return
   eventTarget = document.getElementById('app-container')
+  if (!eventTarget) return
   observer = new MutationObserver(function (mutations) {
     _.each(mutations, function (mutation) {
       if (mutation.type === 'childList') {
@@ -105,7 +106,7 @@ const disasterSearchTour = new Shepherd.Tour({
         _.each(document.querySelectorAll('.shepherd-content'), step => {
           setAccessiblityContent(step)
         })
-        restoreTabIndex(this.getAttachTo().element)
+        if (typeof this.getAttachTo !== 'undefined') restoreTabIndex(this.getAttachTo().element)
       }
     }
   }
