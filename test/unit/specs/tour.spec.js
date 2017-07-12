@@ -1,4 +1,4 @@
-import tour from '@/tour'
+import tour, {clearTabIndex, clearElementTabIndex} from '@/tour'
 import sinon from 'sinon'
 import Vuex from 'vuex'
 import _ from 'lodash'
@@ -102,6 +102,47 @@ describe('tour', () => {
         querySelectorAllStub.restore()
         restoreTabIndexStub.restore()
       })
+    })
+  })
+
+  describe('clearElementTabIndex', () => {
+    it('should reset the tab indexes for all the elements to -1', () => {
+      const testElement = document.createElement('div')
+      testElement.setAttribute('tabIndex', 0)
+      clearElementTabIndex(testElement)
+      expect(testElement.getAttribute('data-tabindex')).to.equal('0')
+      expect(testElement.getAttribute('tabIndex')).to.equal('-1')
+    })
+  })
+
+  describe('clearTabIndex', () => {
+    it('do nothing if the nodeType === 8', () => {
+      let fakeTarget = {
+        nodeType: 8
+      }
+      let returnedValue = 'something'
+      expect(returnedValue).to.equal('something')
+      returnedValue = clearTabIndex(fakeTarget)
+      expect(returnedValue).to.equal(undefined)
+    })
+    it('should run clearElementTabIndex on target and elements under target', () => {
+      const testElement = document.createElement('div')
+      testElement.setAttribute('tabIndex', 0)
+      clearTabIndex(testElement)
+      expect(testElement.getAttribute('data-tabindex')).to.equal('0')
+      expect(testElement.getAttribute('tabIndex')).to.equal('-1')
+    })
+    it('should run clearElementTabIndex on document elements if no target', () => {
+      const lodashEachStub = sinon.stub(_, 'each')
+      querySelectorAll.restore()
+      const querySelectorAllStub = sinon.stub(document, 'querySelectorAll').callsFake(() => {
+        return ['something']
+      })
+      clearTabIndex()
+      expect(lodashEachStub.called).to.equal(true)
+      expect(querySelectorAllStub.called).to.equal(true)
+      lodashEachStub.restore()
+      querySelectorAllStub.restore()
     })
   })
 
