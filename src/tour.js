@@ -133,7 +133,7 @@ const disasterSearchTour = new Shepherd.Tour({
         _.each(document.querySelectorAll('.shepherd-content'), step => {
           setAccessiblityContent(step)
         })
-        if (typeof this.getAttachTo !== 'undefined') restoreTabIndex(this.getAttachTo().element)
+        if (this && typeof this.getAttachTo !== 'undefined') restoreTabIndex(this.getAttachTo().element)
       }
     }
   }
