@@ -2,7 +2,7 @@ import Shepherd from 'tether-shepherd'
 import 'babel-polyfill'
 import magic from '@/bus'
 import _ from 'lodash'
-import bowser from 'bowser'
+import util from '@/util'
 import $ from 'jquery'
 let $store
 
@@ -24,9 +24,9 @@ let $store
 */
 let eventTarget
 let observer
-export const getTabIndex = function (node) {
+const getTabIndex = function (node) {
   var index = node.tabIndex
-  if (bowser.msie || bowser.msedge) {
+  if (util.isIE()) {
     var tnode = _.get(node, 'attributes.tabIndex.specified')
     if (!tnode) {
       var map = {a: true, body: true, button: true, frame: true, iframe: true, img: true, input: true, isindex: true, object: true, select: true, textarea: true}
@@ -36,7 +36,7 @@ export const getTabIndex = function (node) {
   } else {
     if (index === -1) {
       var attr = node.getAttribute('tabindex')
-      if (attr == null || (attr === '' && !bowser.gecko)) return null
+      if (attr == null || (attr === '' && !util.isGecko())) return null
     }
   }
   return index
@@ -548,8 +548,8 @@ const TourObject = {
     disasterSearchTour.start()
   },
   tour: disasterSearchTour,
-  next: next,
-  back: back,
+  next,
+  back,
   setStore (store) {
     if (store) $store = store
   },
@@ -560,6 +560,7 @@ const TourObject = {
   showMessage () {
     _.each(document.querySelectorAll('.tour-error'), $el => ($el.style.display = 'none'))
     _.each(document.querySelectorAll('.tour-message'), $el => ($el.style.display = 'block'))
-  }
+  },
+  getTabIndex
 }
 export default TourObject

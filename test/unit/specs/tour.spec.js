@@ -1,4 +1,5 @@
 import tour from '@/tour'
+import util from '@/util'
 import sinon from 'sinon'
 import Vuex from 'vuex'
 import _ from 'lodash'
@@ -401,6 +402,42 @@ describe('tour', () => {
         expect(nextStub.called).to.equal(true)
         nextStub.restore()
       })
+    })
+  })
+  describe('getTabIndex', function () {
+    it(`should return the tabIndex property of a node if the browser isn't msie and the node.tabIndex is not equal to -1`, function () {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => false)
+      let node = { tabIndex: 0 }
+      expect(tour.getTabIndex(node)).to.be.equal(node.tabIndex)
+      fakeIsIE.restore()
+    })
+    it(`should return null if browser isn't IE, node.tabIndex is -1 and tabindex attribute is null`, () => {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => false)
+      let node = { tabIndex: -1, getAttribute: () => null }
+      expect(tour.getTabIndex(node)).to.be.equal(null)
+      fakeIsIE.restore()
+    })
+    it(`should return null if browser isn't IE or gecko, node.tabIndex is -1 and tabindex attribute is ''`, () => {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => false)
+      let fakeIsGecko = sinon.stub(util, 'isGecko').callsFake(() => false)
+      let node = { tabIndex: -1, getAttribute: () => '' }
+      expect(tour.getTabIndex(node)).to.be.equal(null)
+      fakeIsIE.restore()
+      fakeIsGecko.restore()
+    })
+    it(`should return 0 if browser is IE and node.attributes.tabIndex.specified is not present and element should be tabbable`, () => {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => true)
+      let node = { nodeName: 'a' }
+      _.set(node, 'attributes.tabIndex.specified', false)
+      expect(tour.getTabIndex(node)).to.be.equal(0)
+      fakeIsIE.restore()
+    })
+    it(`should return null if browser is IE and node.attributes.tabIndex.specified is not present and element should not be tabbable`, () => {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => true)
+      let node = { nodeName: 'p' }
+      _.set(node, 'attributes.tabIndex.specified', false)
+      expect(tour.getTabIndex(node)).to.be.equal(null)
+      fakeIsIE.restore()
     })
   })
 })
