@@ -17,7 +17,7 @@ Vue.use(VueRouter)
 * @param {from} - the from route
 * @param {next} - the callback for next
 */
-const beforeRouteEnter = function (to, from, next) {
+export const beforeRouteEnter = function (to, from, next) {
   next(vm => {
     let done
     _.each(vm.$el.querySelectorAll('*'), el => {
