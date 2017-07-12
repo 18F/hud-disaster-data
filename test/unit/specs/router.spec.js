@@ -1,7 +1,7 @@
 import {beforeRouteEnter} from '@/router'
 import sinon from 'sinon'
 
-describe('rounter', function () {
+describe('router', function () {
   describe('beforeRouteEnter', function () {
     it('should give focus to the first element in the component with a tabIndex', function () {
       const elements = [{

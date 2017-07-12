@@ -24,7 +24,7 @@ let $store
 */
 let eventTarget
 let observer
-const getTabIndex = function (node) {
+export const getTabIndex = function (node) {
   var index = node.tabIndex
   if (bowser.msie || bowser.msedge) {
     var tnode = _.get(node, 'attributes.tabIndex.specified')
@@ -45,13 +45,13 @@ const getTabIndex = function (node) {
 * Removes the MutationObserver that listens for changes to the DOM in order to maintane tabIndex
 * @function removeObserver
 */
-const removeObserver = function () {
+export const removeObserver = function () {
   restoreTabIndex()
   if (!eventTarget) return
   observer.disconnect()
   eventTarget = null
 }
-const clearElementTabIndex = function (el) {
+export const clearElementTabIndex = function (el) {
   if (el.setAttribute) {
     let tabIndex = getTabIndex(el)
     let shepherdStep = $(el).closest('.shepherd-step')
@@ -66,7 +66,7 @@ const clearElementTabIndex = function (el) {
 * @function clearTabIndex
 * @param {HTMLElement} target - Clear the tabIndex for all descendents of target (default. document)
 */
-const clearTabIndex = function (target) {
+export const clearTabIndex = function (target) {
   // if target is comment node, return out
   if (target) {
     if (target.nodeType === 8) return
@@ -87,7 +87,7 @@ const clearTabIndex = function (target) {
   var config = { attributes: false, childList: true, characterData: false, subtree: true }
   observer.observe(eventTarget, config)
 }
-const restoreElementTabIndex = function (el) {
+export const restoreElementTabIndex = function (el) {
   let tabIndex = parseInt(el.getAttribute('data-tabindex'), 10)
   el.tabIndex = tabIndex
   el.removeAttribute('data-tabindex')
@@ -97,14 +97,14 @@ const restoreElementTabIndex = function (el) {
 * @function restoreTabIndex
 * @param {HTMLElement} target - Restore the tabIndex of target and it's descendents
 */
-const restoreTabIndex = function (target) {
+export const restoreTabIndex = function (target) {
   if (target && target.hasAttribute('data-tabindex')) restoreElementTabIndex(target)
   target = target || document
   let tabElements = target.querySelectorAll('[data-tabindex]')
   _.each(tabElements, restoreElementTabIndex)
 }
 
-const setAccessiblityContent = function (el) {
+export const setAccessiblityContent = function (el) {
   el.setAttribute('aria-live', 'assertive')
   el.setAttribute('role', 'alert')
   // el.innerHTML = el.innerHTML + ' '
