@@ -94,13 +94,11 @@ describe('tour', () => {
         let querySelectorAllStub = sinon.stub(document, 'querySelectorAll').callsFake((el) => {
           return [fakeElement]
         })
-        let restoreTabIndexStub = sinon.stub({}, 'restoreTabIndex')
         show()
         expect(fakeElement.textContent).to.equal('')
         expect(fakeElement.innerHTML).to.equal('<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>')
         expect(fakeElement.tabIndex).to.equal(0)
         querySelectorAllStub.restore()
-        restoreTabIndexStub.restore()
       })
     })
   })
