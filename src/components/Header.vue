@@ -37,7 +37,7 @@
           h1(ref='title') {{title}}
         #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger')
           icon(name='fa-bars' classes='ico-lg fill-black')
-        #tabs(role="navigation").hidden-sm
+        #tabs(role="navigation").hidden-sm.hidden-xs
           router-link(:to='{name: "disasterSearch"}' href="")
             .tab(tabindex='-1')
                 icon.ico-md(name='fa-sign-out')

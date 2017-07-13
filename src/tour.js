@@ -1,12 +1,117 @@
 import Shepherd from 'tether-shepherd'
+import 'babel-polyfill'
 import magic from '@/bus'
 import _ from 'lodash'
+import util from '@/util'
+import $ from 'jquery'
 let $store
 
 /**
 * This module is responsible for the implementing all steps of tour.
+*
+* In order to keep tabbing confined to the items of interest in the current tour step, we maintane and
+* modify the tabindex of all tabbable elemnts in the DOM.  Unfortunately Internet Explorer doesn't respect
+* our tabindex settings.
+*
+* 1. On Tour start setup a MutationObserver to watch for DOM changes that cause tabindexes to be maintaned
+* 2. On Step start
+*   - save the current tab index in data-tabindex to be restored later
+*   - set tabindex = -1 for all elements with a tabindex
+*   - set up tab index for tour step and attached elements
+* 3. On Tour End
+*   - restore page tab index
 * @module tour
 */
+let eventTarget
+let observer
+const getTabIndex = function (node) {
+  var index = node.tabIndex
+  if (util.isIE()) {
+    var tnode = _.get(node, 'attributes.tabIndex.specified')
+    if (!tnode) {
+      var map = {a: true, body: true, button: true, frame: true, iframe: true, img: true, input: true, isindex: true, object: true, select: true, textarea: true}
+      var nodeName = node.nodeName.toLowerCase()
+      return (map[nodeName]) ? 0 : null
+    }
+  } else {
+    if (index === -1) {
+      var attr = node.getAttribute('tabindex')
+      if (attr == null || (attr === '' && !util.isGecko())) return null
+    }
+  }
+  return index
+}
+/**
+* Removes the MutationObserver that listens for changes to the DOM in order to maintane tabIndex
+* @function removeObserver
+*/
+export const removeObserver = function () {
+  restoreTabIndex()
+  if (!eventTarget) return
+  observer.disconnect()
+  eventTarget = null
+}
+export const clearElementTabIndex = function (el) {
+  if (el.setAttribute) {
+    let tabIndex = getTabIndex(el)
+    let shepherdStep = $(el).closest('.shepherd-step')
+    if (tabIndex === null || shepherdStep.length > 0 || el.hasAttribute('data-tabindex')) return
+    el.setAttribute('data-tabindex', tabIndex)
+    el.tabIndex = -1
+  }
+}
+/**
+* This function sets up a MutationObserver to watch over the 'app-container' for dynamic HTML that
+* needs to be maintaned and removed from the current tabIndex
+* @function clearTabIndex
+* @param {HTMLElement} target - Clear the tabIndex for all descendents of target (default. document)
+*/
+export const clearTabIndex = function (target) {
+  // if target is comment node, return out
+  if (target) {
+    if (target.nodeType === 8) return
+    else clearElementTabIndex(target)
+  }
+  target = target || document
+  _.each(target.querySelectorAll('*'), clearElementTabIndex)
+  if (eventTarget || target !== document) return
+  eventTarget = document.getElementById('app-container')
+  if (!eventTarget) return
+  observer = new MutationObserver(function (mutations) {
+    _.each(mutations, function (mutation) {
+      if (mutation.type === 'childList') {
+        _.each(mutation.addedNodes, clearTabIndex)
+      }
+    })
+  })
+  var config = { attributes: false, childList: true, characterData: false, subtree: true }
+  observer.observe(eventTarget, config)
+}
+export const restoreElementTabIndex = function (el) {
+  let tabIndex = parseInt(el.getAttribute('data-tabindex'), 10)
+  el.tabIndex = tabIndex
+  el.removeAttribute('data-tabindex')
+}
+/**
+* Restore the page tabIndex from data-tabindex attribute
+* @function restoreTabIndex
+* @param {HTMLElement} target - Restore the tabIndex of target and it's descendents
+*/
+export const restoreTabIndex = function (target) {
+  if (target && target.hasAttribute('data-tabindex')) restoreElementTabIndex(target)
+  target = target || document
+  let tabElements = target.querySelectorAll('[data-tabindex]')
+  _.each(tabElements, restoreElementTabIndex)
+}
+
+export const setAccessiblityContent = function (el) {
+  el.setAttribute('aria-live', 'assertive')
+  el.setAttribute('role', 'alert')
+  // el.innerHTML = el.innerHTML + ' '
+  // the code below seems to cause NVDA to read (somewhat)
+  // document.querySelector('#search-text-label').innerText = el.innerText
+}
+
 const disasterSearchTour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-element shepherd-open shepherd-theme-square',
@@ -17,11 +122,26 @@ const disasterSearchTour = new Shepherd.Tour({
         _.each(document.querySelectorAll('.shepherd-cancel-link'), link => {
           link.textContent = ''
           link.innerHTML = '<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>'
+          link.tabIndex = 0
         })
+        _.each(document.querySelectorAll('.shepherd-button '), button => {
+          button.addEventListener('keypress', e => {
+            e.target.dispatchEvent(new Event('click'))
+          })
+          button.tabIndex = 0
+        })
+        _.each(document.querySelectorAll('.shepherd-content'), step => {
+          setAccessiblityContent(step)
+        })
+        if (this && typeof this.getAttachTo !== 'undefined') restoreTabIndex(this.getAttachTo().element)
       }
     }
   }
 })
+
+disasterSearchTour.on('show', () => clearTabIndex())
+disasterSearchTour.on('hide', () => removeObserver())
+disasterSearchTour.on('cancel', () => removeObserver())
 
 let back = {
   text: 'Back',
@@ -41,15 +161,14 @@ let next = {
 let disasterLink = `
     <p>
     Don’t know the disaster ID?
-    Click here: <a target="_blank" href="https://www.fema.gov/disasters">https://www.fema.gov/disasters</a>
+    Click here: <a target="_blank" href="https://www.fema.gov/disasters" class="tabbable">https://www.fema.gov/disasters</a>
     </p>`
-
 disasterSearchTour.addStep('enter-search', {
   title: 'Search for a disaster',
   text: `
     <div class="tour-message">
       <p>
-      Start here by typing in a FEMA disaster ID.
+      Start here by typing in a FEMA disaster ID and clicking the magnifying glass icon.
       </p>
       <p>
       These IDs follow the format "DR‐4272‐TX" But you can also type "4272".
@@ -61,8 +180,7 @@ disasterSearchTour.addStep('enter-search', {
     </div>
     <div class="tour-error" style="display:none;">
       <p>
-      It looks like you typed an invalid disaster ID.
-      Try typing just the four‐digit number (example, "4272").
+      Please enter a valid state code or disaster ID, for example "4272". Then click the magnifying glass icon.
       </p>
       ${disasterLink}
     </div>
@@ -84,7 +202,7 @@ disasterSearchTour.addStep('enter-search', {
   buttons: [
     {
       text: 'Next',
-      action: function () {
+      action: () => {
         let step = disasterSearchTour.getCurrentStep()
         if ($store.getters.currentSearchResult.length > 0) {
           disasterSearchTour.next()
@@ -118,7 +236,7 @@ disasterSearchTour.addStep('enter-search', {
       </p>
     </div>
     `,
-  attachTo: '.disaster-list top',
+  attachTo: '.disaster-list bottom',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
@@ -127,6 +245,9 @@ disasterSearchTour.addStep('enter-search', {
         return
       }
       TourObject.showMessage()
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
     }
   },
   buttons: [
@@ -160,7 +281,7 @@ disasterSearchTour.addStep('enter-search', {
   </p>
   `,
   buttons: [back, next],
-  attachTo: '#list left',
+  attachTo: '#list bottom',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
@@ -173,9 +294,9 @@ disasterSearchTour.addStep('enter-search', {
   title: 'Export data',
   text: `
   <p>To get household level data for the disaster selected, click the export button.</p>
-  <p>Your computer will download a .csv formatted file.</p>
+  <p>Your computer will download a CSV-formatted file.</p>
   `,
-  attachTo: '#export-button top',
+  attachTo: '#export-button bottom',
   buttons: [
     {
       text: 'Back',
@@ -203,10 +324,10 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   <div class="tour-error" style="display:none;">
-  It looks like you entered an invalid 2-letter state code.  Try typing "TX".
+    Please enter a valid 2-letter state code, such as "TX", and click the magnifying glass icon.
   </div>
   `,
-  attachTo: '.search-wrapper right',
+  attachTo: '.search-wrapper bottom',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
@@ -222,6 +343,9 @@ disasterSearchTour.addStep('enter-search', {
       input.focus()
       input.value = ''
       magic.$emit('clearQuery')
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
     }
   },
   buttons: [
@@ -257,13 +381,11 @@ disasterSearchTour.addStep('enter-search', {
     <div class="tour-error" style="display:none;">
       <p>
       Less than 2 disasters selected.
-      </p>
-      <p>
       Please select multiple disasters.
       </p>
     </div>
     `,
-  attachTo: '.disaster-list right',
+  attachTo: '.disaster-list bottom',
   when: {
     show: function () {
       disasterSearchTour.options.defaults.when.show.apply(this)
@@ -272,6 +394,9 @@ disasterSearchTour.addStep('enter-search', {
         return
       }
       TourObject.showMessage()
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
     }
   },
   buttons: [
@@ -304,10 +429,10 @@ disasterSearchTour.addStep('enter-search', {
   </p>
   </div>
   <div class="tour-error" style="display:none;">
-  You have encountered an error.  Please enter a different search name and try again.
+    Please enter a unique name for your disaster list and click the save button.
   </div>
   `,
-  attachTo: '#saved_searches left',
+  attachTo: '#saved_searches bottom',
   buttons: [back,
     {
       text: 'Next',
@@ -326,20 +451,20 @@ disasterSearchTour.addStep('enter-search', {
   ]
 })
 .addStep('use-saved-search', {
-  title: 'Access saved search',
+  title: 'Access saved disaster list',
   text: `
     <p>
     Congratulations!
     </p>
     <p>
-    You have successfully created a saved disaster search!
+    You have successfully created a saved disaster list!
     </p>
     <p>
-    It can be now be be accessed at any time when selected in the "Saved Searches" dropdown selector."
+    It can be now be be accessed at any time when selected in the "Saved Disaster Lists" dropdown selector.
     </p>
   </div>
   `,
-  attachTo: '#saved_searches left',
+  attachTo: '#saved_searches bottom',
   buttons: [back, next]
 })
 .addStep('deselect-disaster', {
@@ -350,7 +475,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   `,
-  attachTo: '#list right',
+  attachTo: '#list bottom',
   buttons: [back, next]
 })
 .addStep('clear-current-extract', {
@@ -361,7 +486,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   `,
-  attachTo: '#clear-button left',
+  attachTo: '#clear-button top',
   buttons: [back,
     {
       text: 'Next',
@@ -380,7 +505,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   `,
-  attachTo: '#saved_searches left',
+  attachTo: '#saved_searches bottom',
   buttons: [back, next]
 })
 .addStep('delete-saved-search', {
@@ -394,7 +519,7 @@ disasterSearchTour.addStep('enter-search', {
     </p>
   </div>
   `,
-  attachTo: '#saved_searches right',
+  attachTo: '#saved_searches bottom',
   buttons: [back, next]
 })
 .addStep('end-of-tour', {
@@ -423,8 +548,8 @@ const TourObject = {
     disasterSearchTour.start()
   },
   tour: disasterSearchTour,
-  next: next,
-  back: back,
+  next,
+  back,
   setStore (store) {
     if (store) $store = store
   },
@@ -435,6 +560,7 @@ const TourObject = {
   showMessage () {
     _.each(document.querySelectorAll('.tour-error'), $el => ($el.style.display = 'none'))
     _.each(document.querySelectorAll('.tour-message'), $el => ($el.style.display = 'block'))
-  }
+  },
+  getTabIndex
 }
 export default TourObject

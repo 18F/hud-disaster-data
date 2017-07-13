@@ -1,4 +1,5 @@
-import tour from '@/tour'
+import tour, {clearTabIndex, clearElementTabIndex} from '@/tour'
+import util from '@/util'
 import sinon from 'sinon'
 import Vuex from 'vuex'
 import _ from 'lodash'
@@ -76,6 +77,71 @@ describe('tour', () => {
       nextStub.restore()
       backStub.restore()
       disasterSearchTour.hide() // needed for next test (should start the tour)
+    })
+    describe('default show', () => {
+      it('should set the cancel link textContent, innerHTML, and tabIndex', () => {
+        let disasterSearchTour = tour.tour
+        let addEventListenerStub = sinon.stub()
+        let setAttributeStub = sinon.stub()
+        let fakeElement = {
+          textContent: 'something',
+          innerHTML: 'something else',
+          tabIndex: 999,
+          addEventListener: addEventListenerStub,
+          setAttribute: setAttributeStub
+        }
+        let show = disasterSearchTour.options.defaults.when.show
+        querySelectorAll.restore()
+        let querySelectorAllStub = sinon.stub(document, 'querySelectorAll').callsFake((el) => {
+          return [fakeElement]
+        })
+        show()
+        expect(fakeElement.textContent).to.equal('')
+        expect(fakeElement.innerHTML).to.equal('<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>')
+        expect(fakeElement.tabIndex).to.equal(0)
+        querySelectorAllStub.restore()
+      })
+    })
+  })
+
+  describe('clearElementTabIndex', () => {
+    it('should reset the tab indexes for all the elements to -1', () => {
+      const testElement = document.createElement('div')
+      testElement.setAttribute('tabIndex', 0)
+      clearElementTabIndex(testElement)
+      expect(testElement.getAttribute('data-tabindex')).to.equal('0')
+      expect(testElement.getAttribute('tabIndex')).to.equal('-1')
+    })
+  })
+
+  describe('clearTabIndex', () => {
+    it('do nothing if the nodeType === 8', () => {
+      let fakeTarget = {
+        nodeType: 8
+      }
+      let returnedValue = 'something'
+      expect(returnedValue).to.equal('something')
+      returnedValue = clearTabIndex(fakeTarget)
+      expect(returnedValue).to.equal(undefined)
+    })
+    it('should run clearElementTabIndex on target and elements under target', () => {
+      const testElement = document.createElement('div')
+      testElement.setAttribute('tabIndex', 0)
+      clearTabIndex(testElement)
+      expect(testElement.getAttribute('data-tabindex')).to.equal('0')
+      expect(testElement.getAttribute('tabIndex')).to.equal('-1')
+    })
+    it('should run clearElementTabIndex on document elements if no target', () => {
+      const lodashEachStub = sinon.stub(_, 'each')
+      querySelectorAll.restore()
+      const querySelectorAllStub = sinon.stub(document, 'querySelectorAll').callsFake(() => {
+        return ['something']
+      })
+      clearTabIndex()
+      expect(lodashEachStub.called).to.equal(true)
+      expect(querySelectorAllStub.called).to.equal(true)
+      lodashEachStub.restore()
+      querySelectorAllStub.restore()
     })
   })
 
@@ -209,6 +275,28 @@ describe('tour', () => {
         action()
         expect(nextStub.called).to.equal(true)
         nextStub.restore()
+      })
+    })
+  })
+
+  describe('selected-export-data', () => {
+    describe('before-show', () => {
+      it('should set the z-index to 1 for list', () => {
+        getters.currentSearchResult = function () { return [1] }
+        store = new Vuex.Store({state: {}, mutations, getters})
+        tour.setStore(store)
+        let disasterSearchTour = tour.tour
+        let element
+        let fakeElement = {style: {'z-index': -100}}
+        let beforeShow = disasterSearchTour.getById('selected-export-data').options.when['before-show']
+        let getElementByIdStub = sinon.stub(document, 'getElementById').callsFake((el) => {
+          element = el
+          return fakeElement
+        })
+        beforeShow()
+        expect(element).to.equal('list')
+        expect(fakeElement.style['z-index']).to.equal('1')
+        getElementByIdStub.restore()
       })
     })
   })
@@ -355,6 +443,42 @@ describe('tour', () => {
         expect(nextStub.called).to.equal(true)
         nextStub.restore()
       })
+    })
+  })
+  describe('getTabIndex', function () {
+    it(`should return the tabIndex property of a node if the browser isn't msie and the node.tabIndex is not equal to -1`, function () {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => false)
+      let node = { tabIndex: 0 }
+      expect(tour.getTabIndex(node)).to.be.equal(node.tabIndex)
+      fakeIsIE.restore()
+    })
+    it(`should return null if browser isn't IE, node.tabIndex is -1 and tabindex attribute is null`, () => {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => false)
+      let node = { tabIndex: -1, getAttribute: () => null }
+      expect(tour.getTabIndex(node)).to.be.equal(null)
+      fakeIsIE.restore()
+    })
+    it(`should return null if browser isn't IE or gecko, node.tabIndex is -1 and tabindex attribute is ''`, () => {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => false)
+      let fakeIsGecko = sinon.stub(util, 'isGecko').callsFake(() => false)
+      let node = { tabIndex: -1, getAttribute: () => '' }
+      expect(tour.getTabIndex(node)).to.be.equal(null)
+      fakeIsIE.restore()
+      fakeIsGecko.restore()
+    })
+    it(`should return 0 if browser is IE and node.attributes.tabIndex.specified is not present and element should be tabbable`, () => {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => true)
+      let node = { nodeName: 'a' }
+      _.set(node, 'attributes.tabIndex.specified', false)
+      expect(tour.getTabIndex(node)).to.be.equal(0)
+      fakeIsIE.restore()
+    })
+    it(`should return null if browser is IE and node.attributes.tabIndex.specified is not present and element should not be tabbable`, () => {
+      let fakeIsIE = sinon.stub(util, 'isIE').callsFake(() => true)
+      let node = { nodeName: 'p' }
+      _.set(node, 'attributes.tabIndex.specified', false)
+      expect(tour.getTabIndex(node)).to.be.equal(null)
+      fakeIsIE.restore()
     })
   })
 })
