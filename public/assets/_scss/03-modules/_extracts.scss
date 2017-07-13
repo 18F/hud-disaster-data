@@ -7,6 +7,9 @@
   border-radius:10px;
   padding:20px;
   position:relative;
+  @media (max-width: $screen-xs-max) {
+    padding-bottom: 60px;
+  }
 
   h3 {
     color:#fff;

@@ -8,7 +8,7 @@
         "includePattern": "\\.[vue|js]",
         "excludePattern": "(^|\\/|\\\\)_"
     },
-    "plugins": ["node_modules/jsdoc-vue"],
+    "plugins": ["node_modules/jsdoc-vue", "plugins/markdown"],
     "opts" : {
       "template": "node_modules/boxy-jsdoc-template",
       "readme": "README.md"

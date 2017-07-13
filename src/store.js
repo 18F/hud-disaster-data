@@ -90,7 +90,7 @@ export const mutations = {
   @param {Array} list - A list of disasters
   */
   updateDisasterList: function (state, list) {
-    list.forEach(disaster => {
+    _.each(list, disaster => {
       var disasterInExtract = findDisaster(state.currentExtract, disaster)
       if (disasterInExtract) disaster.currentExtract = true
     })

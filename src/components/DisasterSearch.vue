@@ -7,8 +7,8 @@
           .col.DisasterSearch
             #search
               .offset-bg
-                .search-wrapper.input-group
-                  label.sr-only(for='search-text') search FEMA disasters
+                .search-wrapper.input-group(aria-live="assertive")
+                  label.sr-only(for='search-text' id='search-text-label') search FEMA disasters
                   input#search-text.DisasterSearch__input(
                     type='text'
                     ref='searchText'
@@ -22,7 +22,7 @@
                     button#clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
                       icon(classes='clear-text' name='fa-times')
                   span.input-group-btn
-                    button#search-btn.usa-button.btn.btn-default(type="button" @click="update" title="Search Disasters")
+                    button#search-btn.usa-button.btn.btn-default(type="button" @click="update" title="Search Disasters Magnifying Glass Icon")
                       icon(name='fa-search')
                 .message-wrapper
                   message(:status="status" :locationOfMessage="'app-message'")
