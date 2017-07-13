@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import DisasterSearch from './components/DisasterSearch'
 import Report from './components/Report'
 import Map from './components/Map'
+import _ from 'lodash'
 
 Vue.use(VueRouter)
 /**
@@ -16,10 +17,10 @@ Vue.use(VueRouter)
 * @param {from} - the from route
 * @param {next} - the callback for next
 */
-const beforeRouteEnter = function (to, from, next) {
+export const beforeRouteEnter = function (to, from, next) {
   next(vm => {
     let done
-    vm.$el.querySelectorAll('*').forEach(el => {
+    _.each(vm.$el.querySelectorAll('*'), el => {
       if (done || el.tabIndex < 0) return
       el.focus()
       done = true

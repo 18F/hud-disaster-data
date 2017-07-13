@@ -1,18 +1,18 @@
 <template lang="pug">
   .extracts
     #saved_searches
-      h3 Saved searches
+      h3 Saved disaster lists
       div
-        select(required='', v-show='!newExtract', @change='loadExtract', v-model='selectedExtractName', title='saved searches')
-          option(value='', disabled='', selected='') Select a search...
+        select(required='', v-show='!newExtract', @change='loadExtract', v-model='selectedExtractName', title='saved disaster lists')
+          option(value='', disabled='', selected='') Select a list...
           option(v-for='extract in savedExtracts', v-bind:value='extract.name') {{extract.name}}
         label.sr-only(for='extract-name') Search Name
-        input#extract-name(v-show='newExtract', v-model='extractName', name='extract-name', type='text', placeholder='Enter a name for your search')
+        input#extract-name(v-show='newExtract', v-model='extractName', @keydown.enter='saveExtract' name='extract-name', type='text', placeholder='Enter a name for your list')
       #cta
-        label.sr-only(for='save-button') Save selected disaster search
+        label.sr-only(for='save-button') Save selected disaster list
         button#save-button.usa-button(@click='saveExtract', title='save button', :disabled='!newExtract', style='vertical-align:top;')
           icon(classes='ico-lg gray', name='fa-save')
-        label.sr-only(for='delete-button') delete saved search: {{ selectedExtractName }}
+        label.sr-only(for='delete-button') delete saved disaster list: {{ selectedExtractName }}
         button#delete-button.usa-button(@click='deleteExtract', title='delete button', :disabled="selectedExtractName === ''")
           icon(classes='ico-lg gray', name='fa-trash-o')
     h3 Selected disasters list

@@ -16,7 +16,6 @@ es6Promise.polyfill()
 Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.prototype.$http = Axios
-
 /**
 * The main vue component.  All other components are children of this one.
 * @module components/App
