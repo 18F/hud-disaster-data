@@ -62,6 +62,7 @@
     "request": "^2.81.0",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
+    "vue-select": "github:sagalbot/vue-select",
     "vuex": "^2.3.1"
   },
   "devDependencies": {
