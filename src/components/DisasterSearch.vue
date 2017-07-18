@@ -61,6 +61,7 @@ export default {
   },
   computed: {
     items () {
+      console.log('items')
       return this.$store.getters.currentSearchResult
     },
     hasItems () {
