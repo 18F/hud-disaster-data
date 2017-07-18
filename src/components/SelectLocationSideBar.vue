@@ -29,11 +29,23 @@ export default {
       stateDisasters: []
     }
   },
+
+  computed: {
+    disasterIds () {
+      console.log('computed disasters')
+      this.stateDisasters = this.$store.getters.disasterNumberResults
+    },
+
+    localeNames () {
+      return this.$store.getters.localeResults
+    }
+  },
+
   methods: {
     getLocale (val) {
       this.stateSelected = val
-      this.$store.dispatch('loadLocales', val.code)
-      this.$store.dispatch('loadDisasterList', val.code)
+      // this.$store.dispatch('loadLocales', val.code)
+      this.$store.dispatch('loadDisasterNumbers', val.code)
     },
 
     setLocale (val) {
