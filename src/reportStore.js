@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-// import _ from 'lodash'
+import _ from 'lodash'
 import es6Promise from 'es6-promise'
 // import magic from '@/bus'
 es6Promise.polyfill()
@@ -56,7 +56,7 @@ export const actions = {
 
 export const getters = {
   disasterNumberResults: state => {
-    return state.disasterNumbers
+    return _.map(state.disasterNumbers, disaster => `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`)
   },
   localeResults: state => {
     return state.localeList

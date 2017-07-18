@@ -3,7 +3,7 @@ import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
 import axios from 'axios' // eslint-disable-line
 import moxios from 'moxios' // eslint-disable-line
-import { mutations, actions } from '../../../src/store' // eslint-disable-line
+import { mutations, actions } from '../../../src/searchStore' // eslint-disable-line
 import sinon from 'sinon'
 const { toggleCurrentExtract, clearCurrentExtract, updateDisasterList, saveExtract,
         loadExtract, deleteExtract, resetStatus, setStatus } = mutations

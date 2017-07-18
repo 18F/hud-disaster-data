@@ -4,9 +4,9 @@
     div(id="stateSelect" class="vueSelectContainer")
       v-select(:on-change="getLocale" :options="states", label="name" class="vueSelectCustom")
     div(id="localeSelect" class="vueSelectContainer")
-      v-select(:value="localeSelected" :options="locales", label="localName" class="vueSelectCustom")
+      v-select(multiple :value="localeSelected" :options="localeNames", label="localeName" class="vueSelectCustom" :on-change="setLocales")
     div(id="disasterIdInput" class="vueSelectContainer")
-      v-select(:value="disasterSelected" :options="stateDisasters", label="disasterNumber" class="vueSelectCustom")
+      v-select(:value="disasterSelected" :options="disasterIds", label="disasterNumber" class="vueSelectCustom" :on-change="setDisaster")
 </template>
 
 <script>
@@ -32,8 +32,7 @@ export default {
 
   computed: {
     disasterIds () {
-      console.log('computed disasters')
-      this.stateDisasters = this.$store.getters.disasterNumberResults
+      return this.$store.getters.disasterNumberResults
     },
 
     localeNames () {
@@ -44,12 +43,16 @@ export default {
   methods: {
     getLocale (val) {
       this.stateSelected = val
-      // this.$store.dispatch('loadLocales', val.code)
+      this.$store.dispatch('loadLocales', val.code)
       this.$store.dispatch('loadDisasterNumbers', val.code)
     },
 
-    setLocale (val) {
+    setLocales (val) {
       this.localeSelected = val
+    },
+
+    setDisaster (val) {
+      this.disasterSelected = val
     },
 
     reset () {
