@@ -61,7 +61,7 @@ export default {
     reset () {
       this.localeSelected = null
       this.disasterSelected = null
-      this.$store.commit({type: 'clearSearch'})
+      this.$store.commit({type: 'clearState'})
     }
   }
 }

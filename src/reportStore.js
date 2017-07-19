@@ -23,6 +23,11 @@ export const mutations = {
 
   updateLocaleList: function (state, list) {
     state.localeList = list
+  },
+
+  clearState: function (state, list) {
+    state.disasterNumbers = []
+    state.localeList = []
   }
 }
 /**
