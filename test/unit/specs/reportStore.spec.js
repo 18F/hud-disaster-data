@@ -3,7 +3,7 @@ import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
 import axios from 'axios' // eslint-disable-line
 import moxios from 'moxios' // eslint-disable-line
-import { mutations, actions } from '../../../src/reportStore' // eslint-disable-line
+import { mutations, actions, getters } from '../../../src/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 const { updateDisasterNumberList, updateLocaleList } = mutations
 const { loadDisasterNumbers, loadLocales } = actions
@@ -36,15 +36,19 @@ describe('reportStore', function () {
   describe('updateDisasterNumberList', function () {
     it('should set disasterNumbers', function () {
       let state = { disasterNumbers: [] }
+      let disasterNumberResults = getters.disasterNumberResults
       updateDisasterNumberList(state, TWO_RECORDS)
       expect(state.disasterNumbers.length).to.be.equal(2)
+      expect(disasterNumberResults(state).length).to.be.equal(2)
     })
   })
   describe('updateLocaleList', function () {
     it('should set localeList', function () {
       let state = { localeList: [] }
+      let localeResults = getters.localeResults
       updateLocaleList(state, TWO_LOCALES)
       expect(state.localeList.length).to.be.equal(2)
+      expect(localeResults(state).length).to.be.equal(2)
     })
   })
 
