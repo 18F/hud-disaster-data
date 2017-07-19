@@ -31,7 +31,6 @@ describe('DisasterSearch.vue', () => {
   it('should render correct list item contents', done => {
     const Constructor = Vue.extend(DisasterSearch)
     const vm = new Constructor({store}).$mount()
-    debugger
     vm.$store.commit('updateDisasterList', ONE_RECORD)
     Vue.nextTick(function () {
       expect(vm.$el.querySelector('.disaster-search-recs').childElementCount).to.be.equal(1)
