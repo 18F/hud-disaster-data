@@ -2,7 +2,7 @@
   div(id="sideBar")
 
     div(id="stateSelect" class="vueSelectContainer")
-      v-select(:on-change="getLocale" :options="states", label="name" class="vueSelectCustom")
+      v-select(:on-change="changeState" :options="states", label="name" class="vueSelectCustom")
     div(id="localeSelect" class="vueSelectContainer")
       v-select(multiple :value="localeSelected" :options="localeNames", label="localeName" class="vueSelectCustom" :on-change="setLocales")
     div(id="disasterIdInput" class="vueSelectContainer")
@@ -41,10 +41,13 @@ export default {
   },
 
   methods: {
-    getLocale (val) {
-      this.stateSelected = val
-      this.$store.dispatch('loadLocales', val.code)
-      this.$store.dispatch('loadDisasterNumbers', val.code)
+    changeState (val) {
+      this.reset()
+      if (val && val.code && val.code.length > 1) {
+        this.stateSelected = val
+        this.$store.dispatch('loadLocales', val.code)
+        this.$store.dispatch('loadDisasterNumbers', val.code)
+      }
     },
 
     setLocales (val) {
@@ -56,7 +59,8 @@ export default {
     },
 
     reset () {
-      this.stateSelected = ''
+      this.localeSelected = null
+      this.disasterSelected = null
       this.$store.commit({type: 'clearSearch'})
     }
   }
