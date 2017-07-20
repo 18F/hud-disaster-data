@@ -3,7 +3,8 @@ import Vue from 'vue' // eslint-disable-line
 import '@/vue-mixins'
 import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
-import store, {actions, getters, mutations} from '../../../src/store' // eslint-disable-line
+import store from '../../../src/store' // eslint-disable-line
+import {actions, getters, mutations} from '../../../src/searchStore' // eslint-disable-line
 import DisasterSearch from '@/components/DisasterSearch' // eslint-disable-line
 import Message from '@/components/Message' // eslint-disable-line
 import magic from '@/bus'
