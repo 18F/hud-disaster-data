@@ -25,7 +25,7 @@ export const mutations = {
     state.localeList = list
   },
 
-  clearState: function (state, list) {
+  clearState: function (state) {
     state.disasterNumbers = []
     state.localeList = []
   }

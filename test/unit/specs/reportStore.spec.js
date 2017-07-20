@@ -5,7 +5,8 @@ import axios from 'axios' // eslint-disable-line
 import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions, getters } from '../../../src/reportStore' // eslint-disable-line
 import sinon from 'sinon'
-const { updateDisasterNumberList, updateLocaleList } = mutations
+import should from 'should'
+const { updateDisasterNumberList, updateLocaleList, clearState } = mutations
 const { loadDisasterNumbers, loadLocales } = actions
 
 const TWO_RECORDS = [
@@ -90,13 +91,47 @@ describe('reportStore', function () {
         if (name === 'updateLocaleList') updateLocaleListCalled = true
         if (name === 'setSearchLoading') setSearchLoadingCalled = true
       })
-      debugger
       loadLocales({ commit: commitStub }, 'TX')
       moxios.wait(() => {
         expect(updateLocaleListCalled).to.be.equal(true)
         expect(setSearchLoadingCalled).to.be.equal(true)
         done()
       })
+    })
+
+    it('should setStatus to No results found if data returned is empty', function (done) {
+      moxios.install()
+      moxios.stubRequest(/TZ/, {
+        status: 200,
+        response: []
+      })
+      let updateLocaleListCalled
+      let setSearchLoadingCalled
+      let setStatusCalled
+      var commitStub = sinon.stub().callsFake((name, data) => {
+        if (name === 'updateLocaleList') updateLocaleListCalled = true
+        if (name === 'setSearchLoading') setSearchLoadingCalled = true
+        if (name === 'setStatus') {
+          should(data).be.an.Object().and.have.properties({msg: 'No results found!'})
+          setStatusCalled = true
+        }
+      })
+      loadLocales({ commit: commitStub }, 'TZ')
+      moxios.wait(() => {
+        expect(updateLocaleListCalled).to.be.equal(true)
+        expect(setSearchLoadingCalled).to.be.equal(true)
+        expect(setStatusCalled).to.be.equal(true)
+        done()
+      })
+    })
+  })
+
+  describe('clearState', function () {
+    it('should set state.disasterNumbers and state.localeList to empty arrays', function () {
+      let state = {}
+      clearState(state)
+      should(state.disasterNumbers).be.an.Array().and.have.length(0)
+      should(state.localeList).be.an.Array().and.have.length(0)
     })
   })
 })
