@@ -28,4 +28,24 @@ describe('Header.vue', () => {
       startStub.restore()
     })
   })
+  describe('toggleBurger', () => {
+    it('should set burgerMenu attribute hidden if it is not set, or unset it, if it is set', () => {
+      const Constructor = Vue.extend(header)
+      const vm = new Constructor().$mount()
+      expect(vm.$el.querySelector('#burger-menu.hidden')).to.not.be.null
+      vm.toggleBurger()
+      expect(vm.$el.querySelector('#burger-menu.hidden')).to.be.null
+    })
+  })
+  describe('skipToContent', () => {
+    it('should set focus on Guide Me button', () => {
+      const Constructor = Vue.extend(header)
+      const vm = new Constructor().$mount()
+      expect(document.activeElement.nodeName).to.be.equal('BODY')
+      const focusStub = sinon.stub(vm.$refs.guideMe, 'focus')
+      vm.skipToContent()
+      expect(focusStub.called).to.be.equal(true)
+      focusStub.restore()
+    })
+  })
 })
