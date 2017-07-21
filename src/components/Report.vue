@@ -6,13 +6,13 @@
         table.usa-table-borderless.report-summary(style="color: #fff;")
           tr
             th State:
-            td {{ selectedState }}
+            td {{ stateName }}
           tr
             th Disaster(s):
             td {{ selectedDisasters }}
           tr
             th Geographic Level:
-            td City
+            td {{ selectedGeographicLevel }}
           tr
             th Selected Locations:
             td {{ selectedLocales }}
@@ -39,6 +39,7 @@
 <script>
 import selectLocationSideBar from './SelectLocationSideBar'
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
 /**
 * Component responsible for displaying a report or reports.  This is just a stub, at this time.
 * @module components/Report
@@ -50,8 +51,12 @@ export default {
     ...mapGetters([
       'selectedState',
       'selectedLocales',
-      'selectedDisasters'
-    ])
+      'selectedDisasters',
+      'selectedGeographicLevel'
+    ]),
+    stateName () {
+      return _.get(this.selectedState, 'name') || ''
+    }
   }
 }
 </script>
