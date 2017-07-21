@@ -8,7 +8,7 @@
             div(style="margin-top:20px;")
               | State
               #stateSelect.vueSelectContainer
-                v-select(:on-change="changeState" :value.sync="stateSelected" :options="states", label="name" class="vueSelectCustom" style="background:#fff;")
+                v-select(:on-change="changeState" :value="stateSelected" :options="states", label="name" class="vueSelectCustom" style="background:#fff;")
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
               #geographicLevelSelect.vueSelectContainer
@@ -98,15 +98,18 @@ export default {
         this.stateSelected = val
         this.$store.dispatch('loadLocales', val.code)
         this.$store.dispatch('loadDisasterNumbers', val.code)
+        this.$store.commit('setSelectedState', val)
       }
     },
 
     setLocales (val) {
-      this.localeSelected = val
+      // this.localeSelected.push(val)
+      // this.$store.commit('setSelectedLocales', val) // needs to be moved to add button callback
     },
 
     setDisaster (val) {
-      this.disasterSelected = val
+      // this.disasterSelected.push(val)
+      // this.$store.commit('setSelectedDisasters', val) // needs to be moved to add button callback
     },
 
     reset () {
