@@ -49,7 +49,7 @@ export const mutations = {
     })
     storeSavedExtracts(state.savedExtracts)
     state.newExtract = false
-    state.status = { type: 'success', scope: 'extract', message: 'The list ' + name + ' has successfully saved' }
+    state.status = { type: 'success', scope: 'extract', message: 'The list “' + name + '” has been saved' }
   },
   /**
   Delete a saved disaster list from storage
@@ -64,7 +64,7 @@ export const mutations = {
     mutations.clearCurrentExtract(state)
     state.newExtract = (extracts.length < 1)
     state.currentExtract = []
-    state.status = { type: 'success', scope: 'extract', message: 'The list ' + name + ' has been successfully deleted' }
+    state.status = { type: 'success', scope: 'extract', message: 'The list “' + name + '” has been deleted' }
   },
   /**
   Load a saved disaster list into the currentExtract (selected disaster list)
