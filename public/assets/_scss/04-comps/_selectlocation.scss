@@ -3,11 +3,38 @@
 }
 
 .vueSelectContainer {
-	width: 350px;
 	background-color: #fff;
 	margin-bottom: 2em;
 }
 
 .vueSelectCustom {
 	font-size: initial;
+	ul {
+		height: 200px !important;
+	}
+/*
+	.selected-tag {
+			position:absolute;
+			background: transparent !important;
+			border:none !important;
+	}
+	*/
+}
+
+#sideBar {
+	.selected-tag {
+	position:absolute;
+	background: transparent;
+	border:none;
+	}
+	.vueSelectContainer {
+		margin:0;
+	}
+	#disasterIdInput {
+		margin-top:10px;
+	}
+
+	input.form-control {
+		
+	}
 }
