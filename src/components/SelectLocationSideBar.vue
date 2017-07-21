@@ -2,7 +2,7 @@
   div(id="sideBar")
       div(style='color: #fff; font-size: xx-large;', tabindex='0')
         div(style="font-size:17px;")
-          div.col-sm-6.col-md-4.col-lg-3(style="padding:0 20px; min-height:700px; background:url('../../static/img/bg_50_opacity.png')")
+          div.col-sm-6.col-md-4.col-lg-4(style="padding:0 20px; min-height:700px; background:url('../../static/img/bg_50_opacity.png')")
             div(style="border:1px solid #fff; border-top:none; border-right:none; border-left:none; margin-top:20px; padding-bottom:10px;")
               | Report Parameters
             div(style="margin-top:20px;")
@@ -11,16 +11,16 @@
                 v-select(:on-change="changeState" :value.sync="stateSelected" :options="states", label="name" class="vueSelectCustom" style="background:#fff;")
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
-
+              #stateSelect.vueSelectContainer
+                v-select(:on-change="changeState" :value.sync="stateSelected" :options="states", label="name" class="vueSelectCustom" style="background:#fff;")
               div.col-lg-12(name="lsGeographicLevels" style="background-color:#000; overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect.vueSelectContainer
-                    v-select(:value="localeSelected" :options="localeNames", label="localeName" class="vueSelectCustom" :on-change="setLocales" style="position:absolute; padding-left:35px;")
-                  icon(name='fa-search' style="position:relative; fill:#ccc; position:relative; top:15px; left:10px;")
-                  span(class="input-group-btn" style="top:4px;")
-                    button(type="button" style="border-radius:0px; margin:0; padding:14px 20px;")
+                    v-select(:value="localeSelected" :options="localeNames", label="localeName" class="vueSelectCustom" :on-change="setLocales")
+                  span(class="input-group-btn")
+                    button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;")
                       | Add
-                div(style="clear:left; border:1px solid #ccc; border-top:0px;overflow-y:scroll; height:100px; margin-top:5px;")
+                div(style="clear:left; border:1px solid #ccc; border-top:0px; overflow-y:scroll; height:100px;")
             div(style="margin-top:20px; overflow:hidden;")
               | Disasters
               div
@@ -28,10 +28,10 @@
                   div(class="input-group")
                     div(id="disasterIdInput" class="vueSelectContainer")
                       v-select(:value="disasterSelected" :options="disasterIds", label="disasterNumber" class="vueSelectCustom" :on-change="setDisaster")
-                    span(class="input-group-btn" style="top:4px;")
-                      button(type="button" style="border-radius:0px; margin:0; padding:14px 20px;")
+                    span(class="input-group-btn")
+                      button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;")
                         | Add
-                  div(style="clear:left; border:1px solid #ccc; border-top:0px;overflow-y:scroll; height:100px; margin-top:5px;")
+                  div(style="clear:left; border:1px solid #ccc; border-top:0px; overflow-y:scroll; height:100px;")
             div(style="margin-top:20px; text-align:center; padding-bottom:10px;")
               button.usa-button.alt-button(type="button" style="margin-right:20px;")
                 | Clear
