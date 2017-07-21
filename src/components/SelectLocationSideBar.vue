@@ -1,15 +1,47 @@
 <template lang="pug">
   div(id="sideBar")
+      div(style='color: #fff; font-size: xx-large;', tabindex='0')
+        div(style="font-size:17px;")
+          div.col-sm-6.col-md-4.col-lg-3(style="padding:0 20px; min-height:700px; background:url('../../static/img/bg_50_opacity.png')")
+            div(style="border:1px solid #fff; border-top:none; border-right:none; border-left:none; margin-top:20px; padding-bottom:10px;")
+              | Report Parameters
+            div(style="margin-top:20px;")
+              | State
+              #stateSelect.vueSelectContainer
+                v-select(:on-change="changeState" :value.sync="stateSelected" :options="states", label="name" class="vueSelectCustom" style="background:#fff;")
+            div(style="margin-top:20px; overflow:hidden;")
+              | Geographic Level
 
-    div(id="stateSelect" class="vueSelectContainer")
-      v-select(:on-change="changeState" :options="states", label="name" class="vueSelectCustom")
-    div(id="localeSelect" class="vueSelectContainer")
-      v-select(multiple :value="localeSelected" :options="localeNames", label="localeName" class="vueSelectCustom" :on-change="setLocales")
-    div(id="disasterIdInput" class="vueSelectContainer")
-      v-select(:value="disasterSelected" :options="disasterIds", label="disasterNumber" class="vueSelectCustom" :on-change="setDisaster")
+              div.col-lg-12(name="lsGeographicLevels" style="background-color:#000; overflow:hidden; padding:10px;")
+                div(class="input-group")
+                  #localeSelect.vueSelectContainer
+                    v-select(:value="localeSelected" :options="localeNames", label="localeName" class="vueSelectCustom" :on-change="setLocales" style="position:absolute; padding-left:35px;")
+                  icon(name='fa-search' style="position:relative; fill:#ccc; position:relative; top:15px; left:10px;")
+                  span(class="input-group-btn" style="top:4px;")
+                    button(type="button" style="border-radius:0px; margin:0; padding:14px 20px;")
+                      | Add
+                div(style="clear:left; border:1px solid #ccc; border-top:0px;overflow-y:scroll; height:100px; margin-top:5px;")
+            div(style="margin-top:20px; overflow:hidden;")
+              | Disasters
+              div
+                div.col-lg-12(style="padding:0px;")
+                  div(class="input-group")
+                    div(id="disasterIdInput" class="vueSelectContainer")
+                      v-select(:value="disasterSelected" :options="disasterIds", label="disasterNumber" class="vueSelectCustom" :on-change="setDisaster")
+                    span(class="input-group-btn" style="top:4px;")
+                      button(type="button" style="border-radius:0px; margin:0; padding:14px 20px;")
+                        | Add
+                  div(style="clear:left; border:1px solid #ccc; border-top:0px;overflow-y:scroll; height:100px; margin-top:5px;")
+            div(style="margin-top:20px; text-align:center; padding-bottom:10px;")
+              button.usa-button.alt-button(type="button" style="margin-right:20px;")
+                | Clear
+              button.usa-button.green(type="button")
+                | Create
 </template>
 
 <script>
+// input(type="text" placeholder="search ..." style="position:absolute; padding-left:35px;")
+// icon(name='fa-search' style="position:relative; fill:#ccc; position:relative; top:15px; left:10px;")
 import vSelect from 'vue-select'
 
 export default {
