@@ -80,6 +80,15 @@ export const getters = {
   },
   localeResults: state => {
     return state.localeList
+  },
+  selectedState: state => {
+    return state.selectedState
+  },
+  selectedLocales: state => {
+    return state.selectedLocales
+  },
+  selectedDisasters: state => {
+    return state.selectedDisasters
   }
 }
 
