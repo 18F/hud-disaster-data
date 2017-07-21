@@ -103,12 +103,12 @@ export default {
     },
 
     setLocales (val) {
-      this.localeSelected.push(val)
+      // this.localeSelected.push(val)
       // this.$store.commit('setSelectedLocales', val) // needs to be moved to add button callback
     },
 
     setDisaster (val) {
-      this.disasterSelected.push(val)
+      // this.disasterSelected.push(val)
       // this.$store.commit('setSelectedDisasters', val) // needs to be moved to add button callback
     },
 
