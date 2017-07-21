@@ -47,15 +47,18 @@ export default {
         this.stateSelected = val
         this.$store.dispatch('loadLocales', val.code)
         this.$store.dispatch('loadDisasterNumbers', val.code)
+        this.$store.commit('setSelectedState', val)
       }
     },
 
     setLocales (val) {
       this.localeSelected = val
+      this.$store.commit('setSelectedLocales', val)
     },
 
     setDisaster (val) {
       this.disasterSelected = val
+      this.$store.commit('setSelectedDisasters', val)
     },
 
     reset () {
