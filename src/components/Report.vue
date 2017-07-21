@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     selectLocationSideBar
-    div.col-lg-9(style="padding:0 20px; border:1px solid #ff0000;min-height:700px;")
+    div.col-lg-8(style="padding:0 20px; border:1px solid #ff0000;min-height:700px;")
 </template>
 
 <script>
