@@ -11,8 +11,8 @@
                 v-select(:on-change="changeState" :value.sync="stateSelected" :options="states", label="name" class="vueSelectCustom" style="background:#fff;")
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
-              #stateSelect.vueSelectContainer
-                v-select(:on-change="changeState" :value.sync="stateSelected" :options="states", label="name" class="vueSelectCustom" style="background:#fff;")
+              #geographicLevelSelect.vueSelectContainer
+                v-select(:value="geographicLevelSelected" :options="geographicLevels", label="geographicLevels" class="vueSelectCustom" :on-change="setLevel" style="padding-left:35px; background:#fff;")
               div.col-lg-12(name="lsGeographicLevels" style="background-color:#000; overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect.vueSelectContainer
@@ -53,9 +53,11 @@ export default {
       stateSelected: null,
       localeSelected: null,
       disasterSelected: null,
+      geographicLevelSelected: null,
       states: [
         { name: 'Alabama', code: 'AL' }, { name: 'Alaska', code: 'AK' }, { name: 'American Samoa', code: 'AS' }, { name: 'Arizona', code: 'AZ' }, { name: 'Arkansas', code: 'AR' }, { name: 'California', code: 'CA' }, { name: 'Colorado', code: 'CO' }, { name: 'Connecticut', code: 'CT' }, { name: 'Delaware', code: 'DE' }, { name: 'District Of Columbia', code: 'DC' }, { name: 'Federated States Of Micronesia', code: 'FM' }, { name: 'Florida', code: 'FL' }, { name: 'Georgia', code: 'GA' }, { name: 'Guam', code: 'GU' }, { name: 'Hawaii', code: 'HI' }, { name: 'Idaho', code: 'ID' }, { name: 'Illinois', code: 'IL' }, { name: 'Indiana', code: 'IN' }, { name: 'Iowa', code: 'IA' }, { name: 'Kansas', code: 'KS' }, { name: 'Kentucky', code: 'KY' }, { name: 'Louisiana', code: 'LA' }, { name: 'Maine', code: 'ME' }, { name: 'Marshall Islands', code: 'MH' }, { name: 'Maryland', code: 'MD' }, { name: 'Massachusetts', code: 'MA' }, { name: 'Michigan', code: 'MI' }, { name: 'Minnesota', code: 'MN' }, { name: 'Mississippi', code: 'MS' }, { name: 'Missouri', code: 'MO' }, { name: 'Montana', code: 'MT' }, { name: 'Nebraska', code: 'NE' }, { name: 'Nevada', code: 'NV' }, { name: 'New Hampshire', code: 'NH' }, { name: 'New Jersey', code: 'NJ' }, { name: 'New Mexico', code: 'NM' }, { name: 'New York', code: 'NY' }, { name: 'North Carolina', code: 'NC' }, { name: 'North Dakota', code: 'ND' }, { name: 'Northern Mariana Islands', code: 'MP' }, { name: 'Ohio', code: 'OH' }, { name: 'Oklahoma', code: 'OK' }, { name: 'Oregon', code: 'OR' }, { name: 'Palau', code: 'PW' }, { name: 'Pennsylvania', code: 'PA' }, { name: 'Puerto Rico', code: 'PR' }, { name: 'Rhode Island', code: 'RI' }, { name: 'South Carolina', code: 'SC' }, { name: 'South Dakota', code: 'SD' }, { name: 'Tennessee', code: 'TN' }, { name: 'Texas', code: 'TX' }, { name: 'Utah', code: 'UT' }, { name: 'Vermont', code: 'VT' }, { name: 'Virgin Islands', code: 'VI' }, { name: 'Virginia', code: 'VA' }, { name: 'Washington', code: 'WA' }, { name: 'West Virginia', code: 'WV' }, { name: 'Wisconsin', code: 'WI' }, { name: 'Wyoming', code: 'WY' }
       ],
+      geographicLevels: ['City', 'County', 'Congressional District'],
       query: '',
       locales: [],
       stateDisasters: []
@@ -69,6 +71,23 @@ export default {
 
     localeNames () {
       return this.$store.getters.localeResults
+    },
+
+    disabled () {
+      debugger
+      switch (this.id) {
+        case 'geographicLevel':
+          if (this.stateSelected) return false
+          break
+        case 'localeSelect':
+          if (this.geographicLevelSelected && this.stateSelected) return false
+          break
+        case 'disasterIdInput':
+          if (this.stateSelected) return false
+          break
+        default:
+          return true
+      }
     }
   },
 
@@ -94,6 +113,10 @@ export default {
       this.localeSelected = null
       this.disasterSelected = null
       this.$store.commit({type: 'clearState'})
+    },
+
+    setLevel (val) {
+
     }
   }
 }
