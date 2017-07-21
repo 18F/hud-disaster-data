@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     selectLocationSideBar
-    div.col-lg-9(style="padding:0 20px; border:1px solid #ff0000;min-height:700px;")
+    div.col-lg-8(style="padding:0 20px; border:1px solid #ff0000;min-height:700px;")
       .col-lg-6
         table.usa-table-borderless.report-summary(style="color: #fff;")
           tr
@@ -16,7 +16,6 @@
           tr
             th Selected Locations:
             td {{ selectedLocales }}
-
 </template>
 
 <style lang="scss">

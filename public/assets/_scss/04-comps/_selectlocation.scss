@@ -28,13 +28,21 @@
 	border:none;
 	}
 	.vueSelectContainer {
+		background-color:#fff;
+		min-height:45px;
 		margin:0;
 	}
 	#disasterIdInput {
-		margin-top:10px;
+
 	}
 
-	input.form-control {
-		
+	input[type="search"].form-control {
+		// height:43px;
+	}
+
+	.dropdown-toggle {
+		border-radius:0;
+		border:none;
+		padding-top:5px;
 	}
 }
