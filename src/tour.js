@@ -161,7 +161,7 @@ let next = {
 let disasterLink = `
     <p>
     Don’t know the disaster ID?
-    Click here: <a target="_blank" href="https://www.fema.gov/disasters" class="tabbable">https://www.fema.gov/disasters</a>
+    Look it up in <a target="_blank" href="https://www.fema.gov/disasters" class="tabbable">FEMA’s disaster database</a>.
     </p>`
 disasterSearchTour.addStep('enter-search', {
   title: 'Search for a disaster',
