@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "echo 'Run the client side hot reloading dev server' && node build/dev-server.js",
-    "start": "echo 'Start the server' && node index",
+    "start": "echo 'Start the server' && pm2 start index.js --name=\"DRDP\" -i max",
+    "stop": "echo 'Stop the server' && pm2 stop DRDP",
     "build": "echo 'Run the tests, build the webpack bundle, and test for 508 compliance.' && npm test && node build/build.js && npm run 508-test",
     "unit": "echo 'Run the client side tests' && cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "server-unit": "echo 'Run the server side tests' && mocha test/server && mocha test",
@@ -58,6 +59,7 @@
     "moment": "^2.18.1",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
+    "pm2": "^2.6.1",
     "pug": "^2.0.0-rc.1",
     "request": "^2.81.0",
     "vue": "^2.2.6",
