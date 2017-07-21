@@ -13,14 +13,14 @@
               | Geographic Level
               #geographicLevelSelect.vueSelectContainer
                 v-select(:value="geographicLevelSelected" :options="geographicLevels", label="geographicLevels" class="vueSelectCustom" :on-change="setLevel" style="padding-left:35px; background:#fff;")
-              div.col-lg-12(name="lsGeographicLevels" style="background-color:#000; overflow:hidden; padding:10px;")
+              div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect.vueSelectContainer
                     v-select(:value="localeSelected" :options="localeNames", label="localeName" class="vueSelectCustom" :on-change="setLocales")
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;")
                       | Add
-                div(style="clear:left; border:1px solid #ccc; border-top:0px; overflow-y:scroll; height:100px;")
+                div(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px;")
             div(style="margin-top:20px; overflow:hidden;")
               | Disasters
               div
@@ -31,12 +31,12 @@
                     span(class="input-group-btn")
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;")
                         | Add
-                  div(style="clear:left; border:1px solid #ccc; border-top:0px; overflow-y:scroll; height:100px;")
-            div(style="margin-top:20px; text-align:center; padding-bottom:10px;")
-              button.usa-button.alt-button(type="button" style="margin-right:20px;")
+                  div(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
+            div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
+              button.usa-button.alt-button(type="button" style="margin-right:10px;")
                 | Clear
               button.usa-button.green(type="button")
-                | Create
+                | Create Report
 </template>
 
 <script>
