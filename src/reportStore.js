@@ -29,6 +29,7 @@ export const mutations = {
     state.disasterNumbers = []
     state.localeList = []
     state.selectedState = null
+    state.selectedGeographicLevel = null
     state.selectedLocales = []
     state.selectedDisasters = []
   },
@@ -43,6 +44,10 @@ export const mutations = {
 
   setSelectedLocales: function (state, selectedLocales) {
     state.selectedLocales = selectedLocales
+  },
+
+  setSelectedGeographicLevel: function (state, selectedGeographicLevel) {
+    state.geographicLevel = selectedGeographicLevel
   }
 }
 /**
@@ -89,12 +94,16 @@ export const getters = {
   },
   selectedDisasters: state => {
     return state.selectedDisasters
+  },
+  selectedGeographicLevel: state => {
+    return state.geographicLevel
   }
 }
 
 const reportStore = {
   state: {
     disasterNumbers: [],
+    geographicLevel: null,
     localeList: [],
     selectedState: null,
     selectedLocales: [],

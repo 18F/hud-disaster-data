@@ -12,7 +12,7 @@
             td {{ selectedDisasters }}
           tr
             th Geographic Level:
-            td City
+            td {{ selectedGeographicLevel }}
           tr
             th Selected Locations:
             td {{ selectedLocales }}
@@ -51,7 +51,8 @@ export default {
     ...mapGetters([
       'selectedState',
       'selectedLocales',
-      'selectedDisasters'
+      'selectedDisasters',
+      'selectedGeographicLevel'
     ]),
     stateName () {
       return _.get(this.selectedState, 'name') || ''
