@@ -10,7 +10,8 @@
           v-model='query'
           @keydown.esc='reset'
           @keydown.enter='update'
-          @click='toggleDropdown')
+          @click='toggleDropdown'
+          @focus='checkForReset')
         button#clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
           icon(classes='clear-text' name='fa-times')
         span.input-group-btn
@@ -69,6 +70,9 @@ export default {
     reset () {
       this.query = ''
       this.matchingItems = _.clone(this.items)
+    },
+    checkForReset () {
+      if (this.query === '' && this.items.length > 0) this.reset()
     },
     toggleDropdown () {
       this.showDropdown = !this.showDropdown
