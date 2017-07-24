@@ -9,6 +9,7 @@ import Sprites from './components/Sprites'
 import DisasterSearch from './components/DisasterSearch'
 import AppHeader from './components/Header'
 import AppFooter from './components/Footer'
+import InputSelect from './components/InputSelect'
 import router from './router'
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
@@ -29,6 +30,7 @@ new Vue({
     Sprites,
     AppHeader,
     DisasterSearch,
-    AppFooter
+    AppFooter,
+    InputSelect
   }
 })
