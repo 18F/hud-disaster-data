@@ -105,7 +105,7 @@ export const getters = {
 const reportStore = {
   state: {
     disasterNumbers: [],
-    geographicLevel: 'City',
+    geographicLevel: { code: 'City', name: 'City' },
     localeList: [],
     stateFilter: null,
     localeFilter: [],

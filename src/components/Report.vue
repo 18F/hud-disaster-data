@@ -14,13 +14,13 @@
               |Created on: {{ new Date() }}
           tr
             td(colspan="2" style="text-align:left;")
-              |Disaster(s): {{ disasterFilter }}
+              |Disaster(s): {{ disasters }}
           tr
             td(colspan="2")
-              |Geographic Level: {{ geographicLevel }}
+              |Geographic Level: {{ level }}
           tr
             td(colspan="2")
-              |Selected Locations: {{ localeFilter }}
+              |Selected Locations: {{ locales }}
         div.col-lg-12(style="text-align:right; padding:0; margin:0;")
           button(type="button" name="Export" style="height:39.5px; margin-right:10px;")
             |Export
@@ -103,6 +103,15 @@ export default {
     ]),
     stateName () {
       return _.get(this.$store.getters.stateFilter, 'name') || ''
+    },
+    disasters () {
+      return _.map(this.$store.getters.disasterFilter, disaster => disaster.name).join(', ')
+    },
+    locales () {
+      return _.map(this.$store.getters.localeFilter, locale => locale.name).join(', ')
+    },
+    level () {
+      return this.$store.getters.geographicLevel.name
     }
   },
   data () {
