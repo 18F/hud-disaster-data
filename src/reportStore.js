@@ -14,11 +14,14 @@ Vue.use(Vuex)
 export const mutations = {
 /**
   Update the disaster number list with fresh data
-  @function updateDisasterNumberList
+  @function updateDisasterList
   @param {Array} list - A list of disasters
   */
-  updateDisasterNumberList: function (state, list) {
-    state.disasterNumbers = list
+  updateDisasterList: function (state, list) {
+    state.disasterList = _.map(list, disaster => {
+      let name = `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`
+      return {name, code: name, data: disaster}
+    })
   },
 
   updateLocaleList: function (state, list) {
@@ -26,24 +29,26 @@ export const mutations = {
   },
 
   clearState: function (state) {
-    state.disasterNumbers = []
+    state.disasterList = []
     state.localeList = []
     state.stateFilter = null
     state.geographicLevel = 'City'
-    state.localeFilter = []
-    state.disasterFilter = []
   },
 
   setSelectedState: function (state, chosenState) {
     state.stateFilter = chosenState
   },
 
-  setDisasterFilter: function (state, chosenDisaster) {
-    state.disasterFilter.push(chosenDisaster)
+  addDisasterFilter: function (state, chosenDisaster) {
+    chosenDisaster.selected = true
+    let index = state.disasterList.indexOf(chosenDisaster)
+    state.disasterList.splice(index, 1, chosenDisaster)
   },
 
-  setLocaleFilter: function (state, chosenLocale) {
-    state.localeFilter.push(chosenLocale)
+  addLocaleFilter: function (state, chosenLocale) {
+    chosenLocale.selected = true
+    let index = state.localeList.indexOf(chosenLocale)
+    state.localeList.splice(index, 1, chosenLocale)
   },
 
   setSelectedGeographicLevel: function (state, selectedGeographicLevel) {
@@ -54,10 +59,10 @@ export const mutations = {
 These are the vuex actions
 */
 export const actions = {
-  loadDisasterNumbers: function ({ commit }, qry) {
+  loaddisasterList: function ({ commit }, qry) {
     commit('setSearchLoading', true)
     axios.get(`/api/disasterquery/${qry}`).then((response) => {
-      commit('updateDisasterNumberList', response.data)
+      commit('updateDisasterList', response.data)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
@@ -83,7 +88,7 @@ export const actions = {
 
 export const getters = {
   disasterNumberResults: state => {
-    return _.map(state.disasterNumbers, disaster => `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`)
+    return state.disasterList
   },
   localeResults: state => {
     return state.localeList
@@ -92,10 +97,10 @@ export const getters = {
     return state.stateFilter
   },
   localeFilter: state => {
-    return state.localeFilter
+    return _.filter(state.localeList, 'selected')
   },
   disasterFilter: state => {
-    return state.disasterFilter
+    return _.filter(state.disasterList, 'selected')
   },
   geographicLevel: state => {
     return state.geographicLevel
@@ -104,12 +109,10 @@ export const getters = {
 
 const reportStore = {
   state: {
-    disasterNumbers: [],
+    disasterList: [],
     geographicLevel: { code: 'City', name: 'City' },
     localeList: [],
-    stateFilter: null,
-    localeFilter: [],
-    disasterFilter: []
+    stateFilter: null
   },
   actions,
   mutations,

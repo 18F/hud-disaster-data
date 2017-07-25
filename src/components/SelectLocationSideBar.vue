@@ -16,9 +16,9 @@
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect
-                    inputselect(:value.sync="localeSelected" :items="localeNames", label="localeName")
+                    inputselect(:value.sync="localeSelected" :items="localeNames", label="localeName", ref="localeSelect")
                   span(class="input-group-btn")
-                    button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="setLocales")
+                    button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="addLocale")
                       | Add
                 div.localeList(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px;")
                   div.selectedLocale(v-for="locale in $store.getters.localeFilter")
@@ -31,7 +31,7 @@
                     div(id="disasterIdInput")
                       inputselect(:value.sync="disasterSelected" :items="disasterIds", label="disasterNumber" :dropdownMenuStyle="'max-height:350px; overflow:true;'")
                     span(class="input-group-btn")
-                      button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="setDisaster")
+                      button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="addDisaster")
                         | Add
                   div(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
                     div.selectedDisasters(v-for="disaster in $store.getters.disasterFilter")
@@ -47,7 +47,6 @@
 // input(type="text" placeholder="search ..." style="position:absolute; padding-left:35px;")
 // icon(name='fa-search' style="position:relative; fill:#ccc; position:relative; top:15px; left:10px;")
 import inputselect from '@/components/InputSelect'
-import _ from 'lodash'
 
 export default {
   name: 'selectLocationSideBar',
@@ -85,11 +84,11 @@ export default {
 
   computed: {
     disasterIds () {
-      return _.map(this.$store.getters.disasterNumberResults, (disaster) => { return { name: disaster, code: disaster } })
+      return this.$store.getters.disasterNumberResults
     },
 
     localeNames () {
-      return _.map(this.$store.getters.localeResults, (locale) => { return { name: locale, code: locale } })
+      return this.$store.getters.localeResults
     }
   },
 
@@ -99,18 +98,19 @@ export default {
       this.$store.commit('setSelectedState', val)
       if (val && val.code && val.code.length > 1) {
         this.$store.dispatch('loadLocales', val.code)
-        this.$store.dispatch('loadDisasterNumbers', val.code)
+        this.$store.dispatch('loadDisasterList', val.code)
       }
     },
 
-    setLocales (val) {
+    addLocale (val) {
       if (!this.localeSelected) return
-      this.$store.commit('setLocaleFilter', this.localeSelected)
+      this.$store.commit('addLocaleFilter', this.localeSelected)
+      this.$refs.localeSelect.reset()
     },
 
-    setDisaster () {
+    addDisaster () {
       if (!this.disasterSelected) return
-      this.$store.commit('setDisasterFilter', this.disasterSelected)
+      this.$store.commit('addDisasterFilter', this.disasterSelected)
     },
 
     reset () {

@@ -28,7 +28,7 @@ import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'value', 'dropdownMenuStyle'],
+  props: ['items', 'onChange', 'value'],
   data () {
     return {
       query: _.get(this, 'value.name'),
@@ -50,7 +50,7 @@ export default {
       return !!this.query
     },
     matchingItems () {
-      return this.getMatchingItems(this.query)
+      return _.reject(this.getMatchingItems(this.query), 'selected')
     }
   },
   methods: {
