@@ -20,7 +20,7 @@ describe('SelectLocationSideBar component', function () {
       localeResults: function () { return [] }
     }
     mutations = {
-      updateDisasterNumberList: sinon.stub(),
+      updateDisasterList: sinon.stub(),
       updateLocaleList: sinon.stub()
     }
 
@@ -60,8 +60,8 @@ describe('SelectLocationSideBar component', function () {
       const vm = new Constructor({store}).$mount()
       vm.localeSelected = ['this place', 'that other place']
       vm.disasterSelected = ['this disaster', 'the next disaster']
-      vm.setLocales(['our house'])
-      vm.setDisaster(['our mess'])
+      vm.addLocale(['our house'])
+      vm.addDisaster(['our mess'])
       Vue.nextTick(() => {
         expect(vm.localeSelected[0]).to.be.equal('our house')
         expect(vm.disasterSelected[0]).to.be.equal('our mess')

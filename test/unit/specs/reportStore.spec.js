@@ -6,8 +6,8 @@ import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions, getters } from '../../../src/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
-const { updateDisasterNumberList, updateLocaleList, clearState } = mutations
-const { loadDisasterNumbers, loadLocales } = actions
+const { updateDisasterList, updateLocaleList, clearState } = mutations
+const { loadReportDisasterList, loadLocales } = actions
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -34,12 +34,12 @@ const TWO_RECORDS = [
 const TWO_LOCALES = ['Morley', 'Anamosa']
 
 describe('reportStore', function () {
-  describe('updateDisasterNumberList', function () {
+  describe('updateDisasterList', function () {
     it('should set disasterNumbers', function () {
-      let state = { disasterNumbers: [] }
+      let state = { disasterList: [] }
       let disasterNumberResults = getters.disasterNumberResults
-      updateDisasterNumberList(state, TWO_RECORDS)
-      expect(state.disasterNumbers.length).to.be.equal(2)
+      updateDisasterList(state, TWO_RECORDS)
+      expect(state.disasterList.length).to.be.equal(2)
       expect(disasterNumberResults(state).length).to.be.equal(2)
     })
   })
@@ -53,25 +53,25 @@ describe('reportStore', function () {
     })
   })
 
-  describe('loadDisasterNumbers', function () {
-    it('should call commit for setSearchLoading and updateDisasterNumberList when the data is loaded', function (done) {
+  describe('loadReportDisasterList', function () {
+    it('should call commit for setSearchLoading and updateDisasterList when the data is loaded', function (done) {
       moxios.install()
       moxios.stubRequest(/WI/, {
         status: 200,
         response: _.clone(TWO_RECORDS)
       })
-      let updateDisasterNumberListCalled
+      let updateDisasterListCalled
       let resetStatus
       var commitStub = sinon.stub().callsFake((name, data) => {
-        if (name === 'updateDisasterNumberList' && data) {
+        if (name === 'updateDisasterList' && data) {
           expect(data).to.be.an('array')
-          updateDisasterNumberListCalled = true
+          updateDisasterListCalled = true
         }
         if (name === 'resetStatus') resetStatus = true
       })
-      loadDisasterNumbers({ commit: commitStub }, 'WI')
+      loadReportDisasterList({ commit: commitStub }, 'WI')
       moxios.wait(() => {
-        expect(updateDisasterNumberListCalled).to.be.equal(true)
+        expect(updateDisasterListCalled).to.be.equal(true)
         expect(resetStatus).to.be.equal(true)
         done()
       })
@@ -79,22 +79,19 @@ describe('reportStore', function () {
   })
 
   describe('loadLocales', function () {
-    it('should call commit for setSearchLoading and updateDisasterNumberList when the data is loaded', function (done) {
+    it('should call commit for setSearchLoading and updateLocaleList when the data is loaded', function (done) {
       moxios.install()
       moxios.stubRequest(/TX/, {
         status: 200,
         response: _.clone(TWO_LOCALES)
       })
       let updateLocaleListCalled
-      let setSearchLoadingCalled
       var commitStub = sinon.stub().callsFake((name, data) => {
         if (name === 'updateLocaleList') updateLocaleListCalled = true
-        if (name === 'setSearchLoading') setSearchLoadingCalled = true
       })
-      loadLocales({ commit: commitStub }, 'TX')
+      loadLocales({ commit: commitStub, state: { geographicLevel: { name: 'City' } } }, 'TX')
       moxios.wait(() => {
         expect(updateLocaleListCalled).to.be.equal(true)
-        expect(setSearchLoadingCalled).to.be.equal(true)
         done()
       })
     })
@@ -116,7 +113,7 @@ describe('reportStore', function () {
           setStatusCalled = true
         }
       })
-      loadLocales({ commit: commitStub }, 'TZ')
+      loadLocales({ commit: commitStub, state: { geographicLevel: { name: 'City' } } }, 'TZ')
       moxios.wait(() => {
         expect(updateLocaleListCalled).to.be.equal(true)
         expect(setSearchLoadingCalled).to.be.equal(true)
@@ -130,7 +127,7 @@ describe('reportStore', function () {
     it('should set state.disasterNumbers and state.localeList to empty arrays', function () {
       let state = {}
       clearState(state)
-      should(state.disasterNumbers).be.an.Array().and.have.length(0)
+      should(state.disasterList).be.an.Array().and.have.length(0)
       should(state.localeList).be.an.Array().and.have.length(0)
     })
   })
