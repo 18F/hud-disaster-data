@@ -102,6 +102,8 @@ export default {
 
   .search-text {
     margin: 0;
+    border: 1px solid #fff;
+    border-bottom: 1px solid #5b616b;
   }
   .results-list {
     color: black;
