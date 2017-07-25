@@ -9,7 +9,7 @@
         v-model='query'
         @keydown.esc='reset'
         @keydown.enter='update'
-        @click='toggleDropdown'
+        @click='showDropdown = true'
         @focus='checkForReset')
       button.clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
         icon(classes='clear-text' name='fa-times')
@@ -28,16 +28,15 @@ import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'multiple'],
+  props: ['items', 'onChange', 'multiple', 'value'],
   data () {
     return {
-      query: '',
+      query: this.value,
       showDropdown: false,
       ref: 'inputSelectText',
       placeholder: 'type here',
       searchButtonTitle: 'Search Magnifying Glass Icon',
-      searchInputLabel: 'search for something',
-      matchingItems: _.clone(this.items)
+      searchInputLabel: 'search for something'
     }
   },
   computed: {
@@ -49,6 +48,9 @@ export default {
     },
     isDirty () {
       return !!this.query
+    },
+    matchingItems () {
+      return this.getMatchingItems(this.query)
     }
   },
   methods: {
@@ -57,14 +59,8 @@ export default {
     * @function update
     */
     update () {
-      let query = this.query
       if (!this.query) return this.reset()
-      this.matchingItems = _.clone(this.items)
-      _.remove(this.matchingItems, (i) => {
-        if (i.name.includes(query)) { return false }
-        return true
-      })
-      if (this.matchingItems.length > 0) this.showDropdown = true
+      if (this.matchingItems && this.matchingItems.length > 0) this.showDropdown = true
     },
     reset () {
       this.query = ''
@@ -84,6 +80,20 @@ export default {
       }
       this.query = item.name
       if (this.onChange) this.onChange(item)
+      this.showDropdown = false
+    },
+    getMatchingItems (query) {
+      let matchingItems = []
+      if (!query) {
+        matchingItems = this.items
+      } else {
+        _.clone(this.items).forEach(function (i) {
+          if (i.name.toUpperCase().includes(query.toUpperCase())) {
+            matchingItems.push(i)
+          }
+        })
+      }
+      return matchingItems
     }
   }
 }
