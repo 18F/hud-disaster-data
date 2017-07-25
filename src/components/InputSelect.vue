@@ -28,7 +28,7 @@ import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'multiple', 'value', 'dropdownMenuStyle'],
+  props: ['items', 'onChange', 'value', 'dropdownMenuStyle'],
   data () {
     return {
       query: _.get(this, 'value.name'),
@@ -76,11 +76,7 @@ export default {
       this.contentVisible = false
     },
     select (item) {
-      if (this.multiple) {
-        this.matchingItems.push(item)
-      } else {
-        this.matchingItems = [item]
-      }
+      this.matchingItems = [item]
       this.query = item.name
       if (this.onChange) this.onChange(item)
       this.contentVisible = false

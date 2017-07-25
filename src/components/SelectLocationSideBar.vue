@@ -16,11 +16,13 @@
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect
-                    inputselect(:multiple="true" :value.sync="localeSelected" :items="localeNames", label="localeName")
+                    inputselect(:value.sync="localeSelected" :items="localeNames", label="localeName")
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="setLocales")
                       | Add
-                div(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px;")
+                div.localeList(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px;")
+                  div.selectedLocale(v-for="locale in $store.getters.localeFilter")
+                    | {{ locale.name }}
             div(style="margin-top:20px; overflow:hidden;")
               | Disasters
               div(style="min-height:400px;")
@@ -32,6 +34,8 @@
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="setDisaster")
                         | Add
                   div(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
+                    div.selectedDisasters(v-for="disaster in $store.getters.disasterFilter")
+                      | {{ disaster.name }}
             div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
               button.usa-button.alt-button(type="button" style="margin-right:10px;")
                 | Clear
