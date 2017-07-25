@@ -7,16 +7,16 @@
               | Report Parameters
             div(style="margin-top:20px;")
               | State
-              #stateSelect.vueSelectContainer
-                inputselect(:on-change="changeState" :value="stateSelected" :items="states", label="name" class="vueSelectCustom" style="background:#fff;")
+              #stateSelect
+                inputselect(:on-change="changeState" :value="stateSelected" :items="states", label="name" style="background:#fff;")
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
-              #geographicLevelSelect.vueSelectContainer
-                inputselect(:value="geographicLevelSelected" :items="geographicLevels", label="geographicLevels" class="vueSelectCustom" :on-change="setLevel" style="padding-left:35px; background:#fff;")
+              #geographicLevelSelect
+                inputselect(:value="geographicLevelSelected" :items="geographicLevels", label="geographicLevels" :on-change="setLevel" style="background:#fff;")
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
-                  #localeSelect.vueSelectContainer
-                    inputselect(:multiple="true" :value="localeSelected" :items="localeNames", label="localeName" class="vueSelectCustom" :on-change="setLocales")
+                  #localeSelect
+                    inputselect(:multiple="true" :value="localeSelected" :items="localeNames", label="localeName" :on-change="setLocales")
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;")
                       | Add
@@ -26,8 +26,8 @@
               div
                 div.col-lg-12(style="padding:0px;")
                   div(class="input-group")
-                    div(id="disasterIdInput" class="vueSelectContainer")
-                      inputselect(:value="disasterSelected" :items="disasterIds", label="disasterNumber" class="vueSelectCustom" :on-change="setDisaster")
+                    div(id="disasterIdInput")
+                      inputselect(:value="disasterSelected" :items="disasterIds", label="disasterNumber" :on-change="setDisaster")
                     span(class="input-group-btn")
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;")
                         | Add

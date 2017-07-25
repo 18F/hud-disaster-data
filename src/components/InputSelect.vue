@@ -1,32 +1,31 @@
 <template lang="pug">
-  #search
-    .offset-bg
-      .search-wrapper.input-group(aria-live="assertive")
-        label.sr-only(for='search-text' id='search-text-label') {{ searchInputLabel }}
-        input#search-text.DisasterSearch__input(
-          type='search'
-          :placeholder='searchInputLabel'
-          autocomplete='off'
-          v-model='query'
-          @keydown.esc='reset'
-          @keydown.enter='update'
-          @click='toggleDropdown'
-          @focus='checkForReset')
-        button#clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
-          icon(classes='clear-text' name='fa-times')
-        span.input-group-btn
-          button#search-btn.usa-button.btn.btn-default(type="button" @click="toggleDropdown" :title="searchButtonTitle")
-            icon(v-show="showDropdown" name='fa-caret-up')
-            icon(v-show="!showDropdown" name='fa-caret-down')
-      .results-list( style="max-height: 400px; overflow: auto;")
-        template(ref="dropdownMenu" v-if="showDropdown")
-          ul(v-for='(item, $item) in matchingItems')
-            li
-              span(@mousedown.prevent="select(item)")
-                | {{ item.name }}
+  .input-select
+    .search-wrapper.input-group(aria-live="assertive")
+      label.sr-only(for='search-text' id='search-text-label') {{ searchInputLabel }}
+      input.search-text(
+        type='search'
+        :placeholder='searchInputLabel'
+        autocomplete='off'
+        v-model='query'
+        @keydown.esc='reset'
+        @keydown.enter='update'
+        @click='toggleDropdown'
+        @focus='checkForReset')
+      button.clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
+        icon(classes='clear-text' name='fa-times')
+      span.input-group-btn
+        button.usa-button.btn.btn-default.toggle-btn(type="button" @click="toggleDropdown")
+          icon(v-show="showDropdown" name='fa-caret-up')
+          icon(v-show="!showDropdown" name='fa-caret-down')
+    .results-list( style="max-height: 400px; overflow: auto;")
+      ul.dropdown-content(ref="dropdownMenu" v-if="showDropdown")
+        li(v-for='(item, $item) in matchingItems')
+          span(@mousedown.prevent="select(item)")
+            | {{ item.name }}
 </template>
 <script>
 import _ from 'lodash'
+
 export default {
   name: 'input-select',
   props: ['items', 'onChange', 'multiple'],
@@ -89,9 +88,28 @@ export default {
   }
 }
 </script>
-<style>
-.results-list {
-  color: black;
-  list-style: none;
+<style lang="scss">
+.input-select {
+  border-radius: 0 5px 5px 0;
+  li:before {
+    content: "";
+  }
+
+  .toggle-btn, .search-text {
+    margin: 0;
+    height: 46px;
+  }
+
+  .search-text {
+    margin: 0;
+  }
+  .results-list {
+    color: black;
+    list-style: none;
+    position: absolute;
+    z-index: 5;
+    background: #fff;
+    width: 349px;
+  }
 }
 </style>
