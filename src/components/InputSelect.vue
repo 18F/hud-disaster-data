@@ -9,16 +9,16 @@
         v-model='query'
         @keydown.esc='reset'
         @keydown.enter='update'
-        @click='showDropdown = true'
+        @click='contentVisible = true'
         @focus='checkForReset')
       button.clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
         icon(classes='clear-text' name='fa-times')
       span.input-group-btn
-        button.usa-button.btn.toggle-btn(type="button" @click="toggleDropdown")
-          icon(v-show="showDropdown" name='fa-caret-up')
-          icon(v-show="!showDropdown" name='fa-caret-down')
+        button.usa-button.btn.toggle-btn(type="button" @click="toggleDropdown" @blur="close")
+          icon(v-show="isContentVisible" name='fa-caret-up')
+          icon(v-show="!isContentVisible" name='fa-caret-down')
     .results-list
-      ul.dropdown-content(ref="dropdownMenu" v-if="showDropdown")
+      ul.dropdown-content(ref="dropdownMenu" v-if="isContentVisible")
         li(v-for='(item, $item) in matchingItems')
           span(@mousedown.prevent="select(item)")
             | {{ item.name }}
@@ -31,8 +31,8 @@ export default {
   props: ['items', 'onChange', 'multiple', 'value', 'dropdownMenuStyle'],
   data () {
     return {
-      query: '',
-      showDropdown: false,
+      query: this.value,
+      contentVisible: false,
       ref: 'inputSelectText',
       placeholder: 'type here',
       searchButtonTitle: 'Search Magnifying Glass Icon',
@@ -40,6 +40,9 @@ export default {
     }
   },
   computed: {
+    isContentVisible () {
+      return this.contentVisible
+    },
     hasItems () {
       return this.items && this.items.length > 0
     },
@@ -60,7 +63,7 @@ export default {
     */
     update () {
       if (!this.query) return this.reset()
-      if (this.matchingItems && this.matchingItems.length > 0) this.showDropdown = true
+      if (this.matchingItems && this.matchingItems.length > 0) this.contentVisible = true
     },
     reset () {
       this.query = ''
@@ -70,7 +73,10 @@ export default {
       if (this.query === '' && this.items.length > 0) this.reset()
     },
     toggleDropdown () {
-      this.showDropdown = !this.showDropdown
+      this.contentVisible = !this.contentVisible
+    },
+    close () {
+      this.contentVisible = false
     },
     select (item) {
       if (this.multiple) {
@@ -80,7 +86,7 @@ export default {
       }
       this.query = item.name
       if (this.onChange) this.onChange(item)
-      this.showDropdown = false
+      this.contentVisible = false
       this.$emit('update:value', item)
     },
     getMatchingItems (query) {
