@@ -45,9 +45,11 @@ describe('SelectLocationSideBar component', function () {
       vm.localeSelected = ['this place', 'that other place']
       vm.disasterSelected = ['this disaster', 'the next disaster']
       vm.changeState({code: 'IA', name: 'Iowa'})
-      expect(vm.stateSelected.code).to.be.equal('IA')
-      expect(vm.localeSelected).to.be.null
-      expect(vm.disasterSelected).to.be.null
+      Vue.nextTick(() => {
+        expect(vm.stateSelected.code).to.be.equal('IA')
+        expect(vm.localeSelected).to.be.null
+        expect(vm.disasterSelected).to.be.null
+      })
     })
   })
 
@@ -60,8 +62,10 @@ describe('SelectLocationSideBar component', function () {
       vm.disasterSelected = ['this disaster', 'the next disaster']
       vm.setLocales(['our house'])
       vm.setDisaster(['our mess'])
-      expect(vm.localeSelected[0]).to.be.equal('our house')
-      expect(vm.disasterSelected[0]).to.be.equal('our mess')
+      Vue.nextTick(() => {
+        expect(vm.localeSelected[0]).to.be.equal('our house')
+        expect(vm.disasterSelected[0]).to.be.equal('our mess')
+      })
     })
   })
 })

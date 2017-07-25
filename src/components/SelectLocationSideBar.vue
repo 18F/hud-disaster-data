@@ -98,7 +98,6 @@ export default {
       if (val && val.code && val.code.length > 1) {
         this.$store.dispatch('loadLocales', val.code)
         this.$store.dispatch('loadDisasterNumbers', val.code)
-        this.$store.commit('setSelectedState', val)
       }
     },
 
