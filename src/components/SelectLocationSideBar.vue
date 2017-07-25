@@ -52,7 +52,7 @@ export default {
   data () {
     return {
       stateSelected: null,
-      geographicLevelSelected: null,
+      geographicLevelSelected: this.$store.getters.geographicLevel,
       localeSelected: null,
       disasterSelected: null,
       states: [

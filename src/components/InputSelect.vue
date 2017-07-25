@@ -31,7 +31,7 @@ export default {
   props: ['items', 'onChange', 'multiple', 'value', 'dropdownMenuStyle'],
   data () {
     return {
-      query: '',
+      query: this.value,
       showDropdown: false,
       ref: 'inputSelectText',
       placeholder: 'type here',
