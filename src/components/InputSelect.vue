@@ -15,10 +15,10 @@
         icon(classes='clear-text' name='fa-times')
       span.input-group-btn
         button.usa-button.btn.toggle-btn(type="button" @click="toggleDropdown" @blur="close")
-          icon(v-show="isContentVisible" name='fa-caret-up')
-          icon(v-show="!isContentVisible" name='fa-caret-down')
+          icon(v-show="contentVisible" name='fa-caret-up')
+          icon(v-show="!contentVisible" name='fa-caret-down')
     .results-list
-      ul.dropdown-content(ref="dropdownMenu" v-if="isContentVisible")
+      ul.dropdown-content(ref="dropdownMenu" v-if="contentVisible")
         li(v-for='(item, $item) in matchingItems')
           span(@mousedown.prevent="select(item)")
             | {{ item.name }}
@@ -31,7 +31,7 @@ export default {
   props: ['items', 'onChange', 'multiple', 'value', 'dropdownMenuStyle'],
   data () {
     return {
-      query: this.value,
+      query: _.get(this, 'value.name'),
       contentVisible: false,
       ref: 'inputSelectText',
       placeholder: 'type here',
@@ -40,9 +40,6 @@ export default {
     }
   },
   computed: {
-    isContentVisible () {
-      return this.contentVisible
-    },
     hasItems () {
       return this.items && this.items.length > 0
     },

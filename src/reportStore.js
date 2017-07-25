@@ -29,7 +29,7 @@ export const mutations = {
     state.disasterNumbers = []
     state.localeList = []
     state.stateFilter = null
-    state.geographicLevel = null
+    state.geographicLevel = 'City'
     state.localeFilter = []
     state.disasterFilter = []
   },
@@ -68,10 +68,10 @@ export const actions = {
     })
   },
 
-  loadLocales: function ({ commit }, qry) {
+  loadLocales: function ({ commit, state }, qry) {
     commit('setSearchLoading', true)
     let querystring = `/api/localequery/${qry}`
-    if (getters.geographicLevel) querystring += `?level=${getters.geographicLevel.name.toLowerCase()}`
+    if (state.geographicLevel) querystring += `?level=${state.geographicLevel.name.toLowerCase()}`
     axios.get(querystring).then((response) => {
       commit('updateLocaleList', response.data)
       if (response.data && response.data.length === 0) {
@@ -105,7 +105,7 @@ export const getters = {
 const reportStore = {
   state: {
     disasterNumbers: [],
-    geographicLevel: null,
+    geographicLevel: 'City',
     localeList: [],
     stateFilter: null,
     localeFilter: [],
