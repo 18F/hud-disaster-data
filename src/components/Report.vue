@@ -11,16 +11,16 @@
             td
               |State: {{ stateName }}
             td(style="text-align:right;")
-              |Created on: {{ stateName }}
+              |Created on: {{ new Date() }}
           tr
             td(colspan="2" style="text-align:left;")
-              |Disaster(s): {{ selectedDisasters }}
+              |Disaster(s): {{ disasterFilter }}
           tr
             td(colspan="2")
-              |Geographic Level: {{ selectedGeographicLevel }}
+              |Geographic Level: {{ geographicLevel }}
           tr
             td(colspan="2")
-              |Selected Locations: {{ selectedLocales }}
+              |Selected Locations: {{ localeFilter }}
         div.col-lg-12(style="text-align:right; padding:0; margin:0;")
           button(type="button" name="Export" style="height:39.5px; margin-right:10px;")
             |Export
@@ -83,6 +83,35 @@
                 td Total Households
                 td 999,999,999
 </template>
+<script>
+import selectLocationSideBar from './SelectLocationSideBar'
+import { mapGetters } from 'vuex'
+import _ from 'lodash'
+/**
+* Component responsible for displaying a report or reports.  This is just a stub, at this time.
+* @module components/Report
+*/
+export default {
+  name: 'report',
+  components: {selectLocationSideBar},
+  computed: {
+    ...mapGetters([
+      'stateFilter',
+      'localeFilter',
+      'disasterFilter',
+      'geographicLevel'
+    ]),
+    stateName () {
+      return _.get(this.$store.getters.stateFilter, 'name') || ''
+    }
+  },
+  data () {
+    return {
+      showSummarySelections: false
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 .report-summary{
@@ -176,33 +205,3 @@
   }
 }
 </style>
-
-<script>
-import selectLocationSideBar from './SelectLocationSideBar'
-import { mapGetters } from 'vuex'
-import _ from 'lodash'
-/**
-* Component responsible for displaying a report or reports.  This is just a stub, at this time.
-* @module components/Report
-*/
-export default {
-  name: 'report',
-  components: {selectLocationSideBar},
-  computed: {
-    ...mapGetters([
-      'selectedState',
-      'selectedLocales',
-      'selectedDisasters',
-      'selectedGeographicLevel'
-    ]),
-    stateName () {
-      return _.get(this.selectedState, 'name') || ''
-    }
-  },
-  data () {
-    return {
-      showSummarySelections: false
-    }
-  }
-}
-</script>

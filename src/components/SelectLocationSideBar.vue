@@ -8,26 +8,26 @@
             div(style="margin-top:20px;")
               | State
               #stateSelect
-                inputselect(:value="stateSelected" :items="states", label="name" style="background:#fff;" :on-change="changeState")
+                inputselect(:value.sync="stateSelected" :items="states", label="name" style="background:#fff;" :on-change="changeState")
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
               #geographicLevelSelect
-                inputselect(:value="geographicLevelSelected" :items="geographicLevels", label="geographicLevels" :on-change="setLevel" style="background:#fff;")
+                inputselect(:value.sync="geographicLevelSelected" :items="geographicLevels", label="geographicLevels" :on-change="setLevel" style="background:#fff;")
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect
-                    inputselect(:multiple="true" :value="localeSelected" :items="localeNames", label="localeName" :on-change="setLocales")
+                    inputselect(:multiple="true" :value.sync="localeSelected" :items="localeNames", label="localeName")
                   span(class="input-group-btn")
-                    button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;")
+                    button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="setLocales")
                       | Add
                 div(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px;")
             div(style="margin-top:20px; overflow:hidden;")
               | Disasters
-              div
+              div(style="min-height:400px;")
                 div.col-lg-12(style="padding:0px;")
                   div(class="input-group")
                     div(id="disasterIdInput")
-                      inputselect(:value="disasterSelected" :items="disasterIds", label="disasterNumber" :on-change="setDisaster")
+                      inputselect(:value.sync="disasterSelected" :items="disasterIds", label="disasterNumber" :dropdownMenuStyle="'max-height:350px; overflow:true;'")
                     span(class="input-group-btn")
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="setDisaster")
                         | Add
@@ -56,7 +56,7 @@ export default {
       localeSelected: null,
       disasterSelected: null,
       states: [
-        { name: ' ', code: '' }, { name: 'Alabama', code: 'AL' }, { name: 'Alaska', code: 'AK' }, { name: 'American Samoa', code: 'AS' },
+        { name: 'Alabama', code: 'AL' }, { name: 'Alaska', code: 'AK' }, { name: 'American Samoa', code: 'AS' },
         { name: 'Arizona', code: 'AZ' }, { name: 'Arkansas', code: 'AR' }, { name: 'California', code: 'CA' }, { name: 'Colorado', code: 'CO' },
         { name: 'Connecticut', code: 'CT' }, { name: 'Delaware', code: 'DE' }, { name: 'District Of Columbia', code: 'DC' },
         { name: 'Federated States Of Micronesia', code: 'FM' }, { name: 'Florida', code: 'FL' }, { name: 'Georgia', code: 'GA' },
@@ -74,10 +74,8 @@ export default {
         { name: 'Virgin Islands', code: 'VI' }, { name: 'Virginia', code: 'VA' }, { name: 'Washington', code: 'WA' }, { name: 'West Virginia', code: 'WV' },
         { name: 'Wisconsin', code: 'WI' }, { name: 'Wyoming', code: 'WY' }
       ],
-      geographicLevels: [{name: '-', code: '-'}, {name: 'City', code: 'City'}, {name: 'County', code: 'County'}, {name: 'Congressional District', code: 'Congressional District'}],
-      query: '',
-      locales: null,
-      stateDisasters: null
+      geographicLevels: [{name: 'City', code: 'City'}, {name: 'County', code: 'County'}, {name: 'Congressional District', code: 'Congressional District'}],
+      query: ''
     }
   },
 
@@ -102,25 +100,24 @@ export default {
     },
 
     setLocales (val) {
-      this.localeSelected.push(val)
-      this.$store.commit('setSelectedLocales', val)
+      if (!this.localeSelected) return
+      this.$store.commit('setLocaleFilter', this.localeSelected)
     },
 
-    setDisaster (val) {
-      this.disasterSelected.push(val)
-      this.$store.commit('setSelectedDisasters', val)
+    setDisaster () {
+      if (!this.disasterSelected) return
+      this.$store.commit('setDisasterFilter', this.disasterSelected)
     },
 
     reset () {
-      this.localeSelected = []
-      this.disasterSelected = []
-      this.stateSelected = []
-      this.locales = []
-      this.stateDisasters = []
+      this.localeSelected = null
+      this.disasterSelected = null
+      this.stateSelected = null
     },
 
     setLevel (val) {
-
+      if (!val) return
+      this.$store.commit('setSelectedGeographicLevel', val)
     }
   }
 }

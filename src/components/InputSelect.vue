@@ -17,7 +17,7 @@
         button.usa-button.btn.btn-default.toggle-btn(type="button" @click="toggleDropdown")
           icon(v-show="showDropdown" name='fa-caret-up')
           icon(v-show="!showDropdown" name='fa-caret-down')
-    .results-list( style="max-height: 400px; overflow: auto;")
+    .results-list
       ul.dropdown-content(ref="dropdownMenu" v-if="showDropdown")
         li(v-for='(item, $item) in matchingItems')
           span(@mousedown.prevent="select(item)")
@@ -28,10 +28,10 @@ import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'multiple', 'value'],
+  props: ['items', 'onChange', 'multiple', 'value', 'dropdownMenuStyle'],
   data () {
     return {
-      query: this.value,
+      query: '',
       showDropdown: false,
       ref: 'inputSelectText',
       placeholder: 'type here',
@@ -81,6 +81,7 @@ export default {
       this.query = item.name
       if (this.onChange) this.onChange(item)
       this.showDropdown = false
+      this.$emit('update:value', item)
     },
     getMatchingItems (query) {
       let matchingItems = []
@@ -122,6 +123,8 @@ export default {
     z-index: 5;
     background: #fff;
     width: 349px;
+    overflow: auto;
+    max-height: 350px;
   }
 }
 </style>
