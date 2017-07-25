@@ -14,7 +14,7 @@
       button.clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
         icon(classes='clear-text' name='fa-times')
       span.input-group-btn
-        button.usa-button.btn.btn-default.toggle-btn(type="button" @click="toggleDropdown")
+        button.usa-button.btn.toggle-btn(type="button" @click="toggleDropdown")
           icon(v-show="showDropdown" name='fa-caret-up')
           icon(v-show="!showDropdown" name='fa-caret-down')
     .results-list
@@ -115,6 +115,17 @@ export default {
     margin: 0;
     border: 1px solid #fff;
     border-bottom: 1px solid #5b616b;
+  }
+  button.clear-text {
+    background: none;
+    position: relative;
+    float: right;
+    margin: -32px 25px 0 0;
+    max-width: 24px;
+    padding: 0;
+    .hdd-icon {
+      fill: #000;
+    }
   }
   .results-list {
     color: black;
