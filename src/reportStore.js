@@ -70,7 +70,9 @@ export const actions = {
 
   loadLocales: function ({ commit }, qry) {
     commit('setSearchLoading', true)
-    axios.get(`/api/localequery/${qry}`).then((response) => {
+    let querystring = `/api/localequery/${qry}`
+    if (getters.geographicLevel) querystring += `?level=${getters.geographicLevel.name.toLowerCase()}`
+    axios.get(querystring).then((response) => {
       commit('updateLocaleList', response.data)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
