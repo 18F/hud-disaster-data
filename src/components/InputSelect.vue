@@ -119,41 +119,78 @@ export default {
 </script>
 <style lang="scss">
 .input-select {
-  border-radius: 0 5px 5px 0;
-  li:before {
-    content: "";
+  /* -- default styles ------------------- */
+  width:100%;
+  border:0px;
+
+  ul {
+    margin-top:10px;
+    padding-top:0;
+    li:before { content: ""; }
   }
+
+  .toggle-btn {
+    background: #fff;
+    border:none;
+    border-top-right-radius:0px;
+    border-bottom-right-radius:0px;
+    svg { fill:#000; }
+  }
+
+  .search-text { margin: 0; }
 
   .toggle-btn, .search-text {
-    margin: 0;
+    border:none;
+    border-radius:0px;
     height: 46px;
+    margin: 0;
   }
 
-  .search-text {
-    margin: 0;
-    border: 1px solid #fff;
-    border-bottom: 1px solid #5b616b;
+  .search-wrapper.input-group {
+    border-bottom:1px solid #ccc;
+    overflow:hidden;
   }
-  button.clear-text {
-    background: none;
-    position: relative;
-    float: right;
-    margin: -32px 25px 0 0;
-    max-width: 24px;
-    padding: 0;
-    .hdd-icon {
-      fill: #000;
+
+  button {
+    &.clear-text {
+      background: none;
+      cursor:pointer;
+      float: right;
+      margin-top:-32px;
+      max-width: 24px;
+      padding: 0;
+      position: relative;
+      .hdd-icon { fill: #ccc; }
+      &:hover {
+        .hdd-icon { fill: #000; }
+      }
     }
   }
+
   .results-list {
-    color: black;
-    list-style: none;
-    position: absolute;
-    z-index: 5;
     background: #fff;
-    width: 349px;
+    color: black;
+    cursor:pointer;
+    list-style: none;
+    margin-right:20px;
+    max-height: 315px;
     overflow: auto;
-    max-height: 350px;
+    position: absolute;
+    width: 89.5%;
+    z-index: 5;
   }
+
+  /* -- disabled styles ------------------ */
+  &.disabled{
+    input, button {
+      background-color:#f0f0f0;
+      border:0px;
+      color:#808080;
+      cursor: default;
+    }
+    .search-wrapper.input-group { border-bottom:1px solid transparent; }
+    .toggle-btn svg { fill:#ccc; }
+  }
+
 }
 </style>
