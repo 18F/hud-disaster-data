@@ -8,7 +8,7 @@
             div(style="margin-top:20px;")
               | State
               #stateSelect
-                inputselect(:value.sync="stateSelected" :items="states", label="name" style="background:#fff;" :on-change="changeState")
+                inputselect(:value.sync="stateSelected" :items="states", label="name" :on-change="changeState")
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
               #geographicLevelSelect
@@ -17,7 +17,7 @@
                 div(class="input-group")
                   #localeSelect
                     inputselect(:value.sync="localeSelected" :items="localeNames", label="localeName", ref="localeSelect")
-                  span(class="input-group-btn")
+                  span(class="input-group-btn" style="display:none;")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="addLocale")
                       | Add
                 div.localeList(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px;")
