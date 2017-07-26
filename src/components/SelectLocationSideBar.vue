@@ -8,7 +8,13 @@
             div(style="margin-top:20px;")
               | State
               #stateSelect
-                inputselect(:value.sync="stateSelected" :items="states", label="name" style="background:#fff;" :on-change="changeState")
+                inputselect(
+                  :value.sync="stateSelected"
+                  :items="states"
+                  label="name"
+                  componentDescription="State Select"
+                  style="background:#fff;"
+                  :on-change="changeState")
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
               #geographicLevelSelect
