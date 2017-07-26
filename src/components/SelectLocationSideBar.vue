@@ -122,6 +122,7 @@ export default {
     setLevel (val) {
       if (!val) return
       this.$store.commit('setSelectedGeographicLevel', val)
+      this.changeState(this.stateSelected)
     }
   }
 }

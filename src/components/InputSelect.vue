@@ -9,7 +9,7 @@
         v-model='query'
         @keydown.esc='reset'
         @keydown.enter='update'
-        @click='contentVisible = true'
+        @click='inputReaction'
         @focus='checkForReset')
       button.clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
         icon(classes='clear-text' name='fa-times')
@@ -94,6 +94,10 @@ export default {
         })
       }
       return matchingItems
+    },
+    inputReaction () {
+      this.contentVisible = true
+      if (this.query) this.query = ''
     }
   }
 }
