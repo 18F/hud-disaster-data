@@ -10,11 +10,13 @@
         @keydown.esc='reset'
         @keydown.enter='update'
         @click='inputReaction'
-        @focus='checkForReset')
-      button.clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
+        @focus='checkForReset'
+        :class="isDisabled"
+        :disabled="isDisabled")
+      button.clear-text(@click='reset' v-if='isDirty' title='Clear Search Text'  :class="isDisabled" :disabled="isDisabled")
         icon(classes='clear-text' name='fa-times')
       span.input-group-btn
-        button.usa-button.btn.toggle-btn(type="button" @click="toggleDropdown" @blur="close")
+        button.usa-button.btn.toggle-btn(type="button" @click="toggleDropdown" @blur="close" :class="isDisabled" :disabled="isDisabled")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
     .results-list
@@ -28,7 +30,7 @@ import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'value'],
+  props: ['items', 'onChange', 'value', 'disabled'],
   data () {
     return {
       query: _.get(this, 'value.name'),
@@ -51,6 +53,9 @@ export default {
     },
     matchingItems () {
       return _.reject(this.getMatchingItems(this.query), 'selected')
+    },
+    isDisabled () {
+      return this.disabled ? 'disabled' : ''
     }
   },
   methods: {
