@@ -5,15 +5,19 @@ RED=`echo -e '\033[0;31m'`
 GREEN=`echo -e '\033[0;32m'`
 NC=`echo -e '\033[0m'` # No Color
 
-node index & 
+node index &
 node_id=$!
-sleep 5 
+sleep 5
 
-./node_modules/.bin/pa11y -i notice 'http://localhost:3000' 
-retCode=$?
-if [[ $retCode = 0 ]]
+./node_modules/.bin/pa11y -i notice 'http://localhost:3000/#/'
+retCodeSearch=$?
+./node_modules/.bin/pa11y -i notice 'http://localhost:3000/#/reports'
+retCodeReports=$?
+./node_modules/.bin/pa11y -i notice 'http://localhost:3000/#/maps'
+retCodeMaps=$?
+if [[ $retCodeSearch = 0 && $retCodeReports = 0 && $retCodeMaps = 0 ]]
 then
-  echo $GREEN 
+  echo $GREEN
   echo "==========================================="
   echo "==========================================="
   echo "=========  pa11y run SUCESSFUL ============"
@@ -30,5 +34,5 @@ else
   echo $NC
 fi
 
-kill -9 $node_id 
+kill -9 $node_id
 exit $retCode
