@@ -16,8 +16,8 @@
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect
-                    inputselect(:value.sync="localeSelected" :items="localeNames", label="localeName", ref="localeSelect")
-                  span(class="input-group-btn" style="display:none;")
+                    inputselect(:disabled="!stateSelected" :value.sync="localeSelected" :items="localeNames", label="localeName", ref="localeSelect")
+                  span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="addLocale")
                       | Add
                 div.localeList(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px;")
@@ -29,7 +29,7 @@
                 div.col-lg-12(style="padding:0px;")
                   div(class="input-group")
                     div(id="disasterIdInput")
-                      inputselect(:value.sync="disasterSelected" :items="disasterIds", label="disasterNumber" :dropdownMenuStyle="'max-height:350px; overflow:true;'")
+                      inputselect(:disabled="!stateSelected" :value.sync="disasterSelected" :items="disasterIds", label="disasterNumber" :dropdownMenuStyle="'max-height:350px; overflow:true;'")
                     span(class="input-group-btn")
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="addDisaster")
                         | Add
