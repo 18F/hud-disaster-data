@@ -55,7 +55,7 @@ export default {
       return _.reject(this.getMatchingItems(this.query), 'selected')
     },
     isDisabled () {
-      return this.disabled ? 'disabled' : ''
+      return this.disabled ? 'disabled' : false
     }
   },
   methods: {
@@ -69,6 +69,7 @@ export default {
     },
     reset () {
       this.query = ''
+      this.$emit('update:value', null)
       this.matchingItems = _.clone(this.items)
     },
     checkForReset () {
