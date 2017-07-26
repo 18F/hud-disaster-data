@@ -22,7 +22,7 @@
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect
-                    inputselect(:disabled="!stateSelected" :value.sync="localeSelected" :items="localeNames", label="localeName", ref="localeSelect")
+                    inputselect(:disabled="!stateSelected || !geographicLevelSelected" :value.sync="localeSelected" :items="localeNames", label="localeName", ref="localeSelect")
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="addLocale")
                       | Add
@@ -101,6 +101,7 @@ export default {
   methods: {
     changeState (val) {
       this.reset()
+      this.stateSelected = val
       this.$store.commit('setSelectedState', val)
       if (val && val.code && val.code.length > 1) {
         this.$store.dispatch('loadLocales', val.code)

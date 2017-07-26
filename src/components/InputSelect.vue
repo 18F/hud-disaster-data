@@ -11,6 +11,7 @@
         @keydown.enter='update'
         @click='inputReaction'
         @focus='checkForReset'
+        @blur="close"
         :class="isDisabled"
         :disabled="isDisabled")
       button.clear-text(@click='reset'
