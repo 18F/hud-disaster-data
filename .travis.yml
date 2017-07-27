@@ -9,7 +9,7 @@ before_script:
 - npm install
 script:
 - npm run build
-- if [[ -n "$SONAR_TOKEN" ]]; then sonar-scanner -X; else echo "skipping SonarQube upload"; fi
+- if [[ -n "$SONAR_TOKEN" ]]; then cd ..; sonar-scanner -X; else echo "skipping SonarQube upload"; fi
 addons:
   sonarcloud:
     organization: flexion
