@@ -25,7 +25,7 @@
           button(type="button" name="Export" style="height:39.5px; margin-right:10px;")
             |Export
           div.btn-group
-            button(type="button" @click="showSummarySelections=!showSummarySelections" title="Select summary values" style="margin-right:0;")
+            button(type="button" @click="showSummarySelections=!showSummarySelections" @blur="close" title="Select summary values" style="margin-right:0;")
               icon(name='fa-columns' style="padding:0; margin-right:5px;")
               icon(name="fa-caret-down")
             div(v-show="showSummarySelections" id="SummarySelections")
@@ -117,6 +117,11 @@ export default {
   data () {
     return {
       showSummarySelections: false
+    }
+  },
+  methods: {
+    close () {
+      this.showSummarySelections = false
     }
   }
 }

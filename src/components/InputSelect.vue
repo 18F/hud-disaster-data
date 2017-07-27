@@ -19,7 +19,7 @@
         button.usa-button.btn.toggle-btn(type="button" @click="toggleDropdown" @blur="close" :class="isDisabled" :disabled="isDisabled")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
-    .results-list
+    .results-list(:class="hasSubList")
       ul.dropdown-content(ref="dropdownMenu" v-if="contentVisible")
         li(v-for='(item, $item) in matchingItems')
           span(@mousedown.prevent="select(item)")
@@ -30,7 +30,7 @@ import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'value', 'disabled'],
+  props: ['items', 'onChange', 'value', 'disabled', 'hassublist'],
   data () {
     return {
       query: _.get(this, 'value.name'),
@@ -56,6 +56,9 @@ export default {
     },
     isDisabled () {
       return this.disabled ? 'disabled' : false
+    },
+    hasSubList () {
+      return this.hassublist ? 'sub-list' : false
     }
   },
   methods: {
@@ -129,7 +132,6 @@ export default {
   }
 
   .search-text { margin: 0; }
-
   .toggle-btn, .search-text {
     border:none;
     border-radius:0px;
@@ -169,6 +171,10 @@ export default {
     position: absolute;
     width: 89.5%;
     z-index: 5;
+
+    &.sub-list {
+       width:100%;
+    }
   }
 
   /* -- disabled styles ------------------ */
@@ -182,6 +188,6 @@ export default {
     .search-wrapper.input-group { border-bottom:1px solid transparent; }
     .toggle-btn svg { fill:#ccc; }
   }
-
 }
+
 </style>
