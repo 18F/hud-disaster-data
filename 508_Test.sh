@@ -9,11 +9,11 @@ node index &
 node_id=$!
 sleep 5
 
-./node_modules/.bin/pa11y -i notice 'http://localhost:3000/#/'
+./node_modules/.bin/pa11y -i 'notice;warning' 'http://localhost:3000/#/'
 retCodeSearch=$?
-./node_modules/.bin/pa11y -i notice 'http://localhost:3000/#/reports'
+./node_modules/.bin/pa11y -i 'notice;warning' 'http://localhost:3000/#/reports'
 retCodeReports=$?
-./node_modules/.bin/pa11y -i notice 'http://localhost:3000/#/maps'
+./node_modules/.bin/pa11y -i 'notice;warning' 'http://localhost:3000/#/maps'
 retCodeMaps=$?
 if [[ $retCodeSearch = 0 && $retCodeReports = 0 && $retCodeMaps = 0 ]]
 then

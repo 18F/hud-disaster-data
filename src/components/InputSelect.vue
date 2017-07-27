@@ -1,7 +1,7 @@
 <template lang="pug">
   .input-select
     .search-wrapper.input-group(aria-live="assertive")
-      label.sr-only(for='search-text' id='search-text-label') {{ searchInputLabel }}
+      label.sr-only(for='search-text') {{ searchInputLabel }}
       input.search-text(
         type='search'
         :placeholder='searchInputLabel'
@@ -11,12 +11,22 @@
         @keydown.enter='update'
         @click='inputReaction'
         @focus='checkForReset'
+        @blur="close"
         :class="isDisabled"
         :disabled="isDisabled")
-      button.clear-text(@click='reset' v-if='isDirty' title='Clear Search Text'  :class="isDisabled" :disabled="isDisabled")
+      button.clear-text(@click='reset'
+       v-if='isDirty'
+        :title='`Clear Search Text for ${componentDescription}`'
+        :class="isDisabled"
+        :disabled="isDisabled")
         icon(classes='clear-text' name='fa-times')
       span.input-group-btn
-        button.usa-button.btn.toggle-btn(type="button" @click="toggleDropdown" @blur="close" :class="isDisabled" :disabled="isDisabled")
+        button.usa-button.btn.toggle-btn(type="button"
+          :title='`Toggle Drop Down List for ${componentDescription}`'
+          @click="toggleDropdown"
+          @blur="close"
+          :class="isDisabled"
+          :disabled="isDisabled")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
     .results-list(:class="hasSubList")
@@ -30,7 +40,7 @@ import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'value', 'disabled', 'hassublist'],
+  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription', 'hassublist'],
   data () {
     return {
       query: _.get(this, 'value.name'),
@@ -123,6 +133,7 @@ export default {
     li:before { content: ""; }
   }
 
+  .sr-only { color: #767676; }
   .toggle-btn {
     background: #fff;
     border:none;

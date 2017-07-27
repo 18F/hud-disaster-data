@@ -31,32 +31,33 @@
             div(v-show="showSummarySelections" id="SummarySelections")
               span(style="padding-bottom:10px; font-weight:bold;")
                 |Summary Values
-              div(id="lsSummaryValues")
-                table
-                  tr.table-header
-                    td
-                      button(type="button")
-                        icon.ico-lg(name="fa-square-o")
-                    td
-                      |All
-                  tr
-                    td
-                      button(type="button")
-                        icon.ico-lg(name="fa-check-square-o")
-                    td
-                      |Unmet Need
-                  tr
-                    td
-                      button(type="button")
-                        icon.ico-lg(name="fa-square-o")
-                    td
-                      |FEMA County Funding Average
-                  tr
-                    td
-                      button(type="button")
-                        icon.ico-lg(name="fa-square-o")
-                    td
-                      |FEMA Household Funding Average
+              //- TODO  REWORK THIS AS A COMPONENT AND MAKE 508 COMPLIANT!!
+              //- div(id="lsSummaryValues")
+              //-   table
+              //-     tr.table-header
+              //-       td
+              //-         button(type="button")
+              //-           icon.ico-lg(name="fa-square-o")
+              //-       td
+              //-         |All
+              //-     tr
+              //-       td
+              //-         button(type="button")
+              //-           icon.ico-lg(name="fa-check-square-o")
+              //-       td
+              //-         |Unmet Need
+              //-     tr
+              //-       td
+              //-         button(type="button")
+              //-           icon.ico-lg(name="fa-square-o")
+              //-       td
+              //-         |FEMA County Funding Average
+              //-     tr
+              //-       td
+              //-         button(type="button")
+              //-           icon.ico-lg(name="fa-square-o")
+              //-       td
+              //-         |FEMA Household Funding Average
         div
           table
             thead

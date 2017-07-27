@@ -8,7 +8,13 @@
             div(style="margin-top:20px;")
               | State
               #stateSelect
-                inputselect(:value.sync="stateSelected" :items="states", label="name" :on-change="changeState")
+                inputselect(
+                  :value.sync="stateSelected"
+                  :items="states"
+                  label="name"
+                  componentDescription="State Select"
+                  style="background:#fff;"
+                  :on-change="changeState")
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
               #geographicLevelSelect
@@ -16,7 +22,14 @@
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect
-                    inputselect(:disabled="!stateSelected" :value.sync="localeSelected" :items="localeNames" :hassublist="true", label="localeName", ref="localeSelect")
+                    inputselect(
+                      :disabled="!stateSelected || !geographicLevelSelected"
+                      :value.sync="localeSelected"
+                      :items="localeNames"
+                      :hassublist="true"
+                      label="localeName"
+                      ref="localeSelect"
+                    )
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addLocale")
                       | Add
@@ -100,6 +113,7 @@ export default {
   methods: {
     changeState (val) {
       this.reset()
+      this.stateSelected = val
       this.$store.commit('setSelectedState', val)
       if (val && val.code && val.code.length > 1) {
         this.$store.dispatch('loadLocales', val.code)
@@ -167,7 +181,7 @@ export default {
           position: relative;
           top:5px;
           right:10px;
-          
+
           .hdd-icon { fill: #b0b0b0; }
             &:hover {
               .hdd-icon { fill: #000; }
