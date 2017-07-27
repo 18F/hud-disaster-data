@@ -31,11 +31,11 @@
                     li.selected-locale(v-for="locale in $store.getters.localeFilter")
                       span
                         | {{ locale.name }}
-                      button.clear-text(@click='' title='xxxx')
+                      button.clear-text(@click='' :title='`Remove ${locale.name}`')
                         icon(name='fa-times')
             div(style="margin-top:20px; overflow:hidden;")
               | Disasters
-              div(style="min-height:400px;")
+              div
                 div.col-lg-12(style="padding:0px;")
                   div(class="input-group")
                     div(id="disasterIdInput")
@@ -43,11 +43,15 @@
                     span(class="input-group-btn")
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addDisaster")
                         | Add
-                  div(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
-                    div.selectedDisasters(v-for="disaster in $store.getters.disasterFilter")
-                      | {{ disaster.name }}
+                  div.disaster-list(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:170px; background:url('/static/img/bg_25_opacity.png')")
+                    ul(id="SelectedDisasterList")
+                      li.selected-disaster(v-for="disaster in $store.getters.disasterFilter")
+                        span
+                          | {{ disaster.name }}
+                        button.clear-text(@click='' :title='`Remove ${disaster.name}`')
+                          icon(name='fa-times')
             div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
-              button.usa-button.alt-button(type="button" style="margin-right:10px;")
+              button.usa-button.alt-button(type="button" style="margin-right:20px;")
                 | Clear
               button.usa-button.green(type="button")
                 | Create Report
@@ -139,7 +143,7 @@ export default {
 </script>
 
 <style lang="scss">
-.locale-list {
+.locale-list, .disaster-list {
   ul {
     width:100%;
     margin:0px;

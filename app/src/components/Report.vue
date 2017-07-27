@@ -1,19 +1,19 @@
 <template lang="pug">
   div
     selectLocationSideBar
-    div.col-lg-8(style="padding:10px 20px; min-height:700px;")
-      div.col-lg-12(style="height:60px; padding:0;")
-        h1(style="color:#fff; margin-top:0;")
+    div.col-lg-8.reports
+      div.col-lg-12
+        h1
           |Summary Report
-      div.col-lg-12(style="padding:0;")
-        table.usa-table-borderless.report-summary(style="color: #fff;")
+      div.col-lg-12.report-summary
+        table.usa-table-borderless
           tr
             td
               |State: {{ stateName }}
-            td(style="text-align:right;")
+            td(id="creationDate")
               |Created on: {{ new Date() }}
           tr
-            td(colspan="2" style="text-align:left;")
+            td(colspan="2")
               |Disaster(s): {{ disasters }}
           tr
             td(colspan="2")
@@ -21,15 +21,15 @@
           tr
             td(colspan="2")
               |Selected Locations: {{ locales }}
-        div.col-lg-12(style="text-align:right; padding:0; margin:0;")
-          button(type="button" name="Export" style="height:39.5px; margin-right:10px;")
+        div.col-lg-12.report-actions
+          button.usa-button.green(type="button" name="Export")
             |Export
           div.btn-group
-            button(type="button" @click="showSummarySelections=!showSummarySelections" @blur="close" title="Select summary values" style="margin-right:0;")
+            button.summary-selections(type="button" @click="showSummarySelections=!showSummarySelections" @blur="close" title="Select summary values" )
               icon(name='fa-columns' style="padding:0; margin-right:5px;")
               icon(name="fa-caret-down")
-            div(v-show="showSummarySelections" id="SummarySelections")
-              span(style="padding-bottom:10px; font-weight:bold;")
+            div(v-show="showSummarySelections" id="SummarySelectionList")
+              span
                 |Summary Values
               //- TODO  REWORK THIS AS A COMPONENT AND MAKE 508 COMPLIANT!!
               //- div(id="lsSummaryValues")
@@ -74,6 +74,12 @@
               tr
                 td Average Household Income
                 td $999,999,999
+              tr
+                td &nbsp;
+                td
+              tr
+                td &nbsp;
+                td
               tr
                 td &nbsp;
                 td
@@ -129,27 +135,73 @@ export default {
 </script>
 
 <style lang="scss">
-.report-summary{
-  td{
-    border:none;
+.reports{
+  padding:10px 20px;
+  min-height:700px;
+
+  div:first-child {
+    height:60px;
     padding:0;
+
+    h1 {
+      color:#fff;
+      margin-top:0;
+    }
   }
-  .btn-group {
-    vertical-align: inherit;
+  .report-summary {
+    padding:0;
+
+    table {
+      color: #fff;
+
+      td{
+        text-align:left;
+        border:none;
+        padding:0;
+
+        &#creationDate { text-align:right;}
+      }
+      .btn-group {
+        vertical-align: inherit;
+      }
+    }
+  }
+
+  .report-actions {
+    margin:10px 0;
+    padding:0;
+    text-align:right;
+
+    button {
+      height:39.5px;
+      margin-right:0;
+
+      &.summary-selections{ margin-left:20px;}
+    }
+    /*
+    #SummarySelections{
+      text-align:left;
+      font-size:15px;
+      border:1px solid #ccc;
+      position:absolute;
+      top:100%;
+      right:5px;
+      border-radius:4px;
+      background-color:#fff;
+      padding:20px;
+      background:#fff;
+    }
+    */
+    div#SummarySelectionList {
+      span {
+        font-weight:bold;
+        padding-bottom:10px;
+      }
+    }
   }
 }
-#SummarySelections{
-  text-align:left;
-  font-size:15px;
-  border:1px solid #ccc;
-  position:absolute;
-  top:100%;
-  right:5px;
-  border-radius:4px;
-  background-color:#fff;
-  padding:20px;
-  background:#fff;
-}
+
+
 #lsSummaryValues{
   height:300px;
   width:375px;

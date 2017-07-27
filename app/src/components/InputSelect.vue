@@ -159,6 +159,7 @@ export default {
     &.clear-text {
       background: none;
       cursor:pointer;
+      display:none;
       float: right;
       margin-top:-32px;
       max-width: 24px;
@@ -182,7 +183,6 @@ export default {
     position: absolute;
     width: 89.5%;
     z-index: 5;
-
     &.sub-list {
        width:100%;
     }
