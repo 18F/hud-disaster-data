@@ -59,7 +59,7 @@
               //-       td
               //-         |FEMA Household Funding Average
         div
-          table
+          table#report-display
             thead
               tr
                 th(style="width:65%;") Type
@@ -192,6 +192,7 @@ export default {
       background:#fff;
     }
     */
+
     div#SummarySelectionList {
       span {
         font-weight:bold;
@@ -201,6 +202,9 @@ export default {
   }
 }
 
+#report-display {
+  color: #000;
+}
 
 #lsSummaryValues{
   height:300px;
