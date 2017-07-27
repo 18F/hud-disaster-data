@@ -8,7 +8,13 @@
             div(style="margin-top:20px;")
               | State
               #stateSelect
-                inputselect(:value.sync="stateSelected" :items="states", label="name" style="background:#fff;" :on-change="changeState")
+                inputselect(
+                  :value.sync="stateSelected"
+                  :items="states"
+                  label="name"
+                  componentDescription="State Select"
+                  style="background:#fff;"
+                  :on-change="changeState")
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
               #geographicLevelSelect
@@ -18,11 +24,15 @@
                   #localeSelect
                     inputselect(:value.sync="localeSelected" :items="localeItems", label="localeName", ref="localeSelect")
                   span(class="input-group-btn")
-                    button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="addLocale")
+                    button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addLocale")
                       | Add
-                div.localeList(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px;")
-                  div.selectedLocale(v-for="locale in $store.getters.localeFilter")
-                    | {{ locale.name }}
+                div.locale-list(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:170px;")
+                  ul(id="SelectedLocaleList")
+                    li.selected-locale(v-for="locale in $store.getters.localeFilter")
+                      span
+                        | {{ locale.name }}
+                      button.clear-text(@click='' title='xxxx')
+                        icon(name='fa-times')
             div(style="margin-top:20px; overflow:hidden;")
               | Disasters
               div(style="min-height:400px;")
@@ -31,7 +41,7 @@
                     div(id="disasterIdInput")
                       inputselect(:value.sync="disasterSelected" :items="disasterItems", label="disasterNumber" :dropdownMenuStyle="'max-height:350px; overflow:true;'")
                     span(class="input-group-btn")
-                      button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:14px 20px;" @click="addDisaster")
+                      button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addDisaster")
                         | Add
                   div(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
                     div.selectedDisasters(v-for="disaster in $store.getters.disasterFilter")
@@ -122,7 +132,66 @@ export default {
     setLevel (val) {
       if (!val) return
       this.$store.commit('setSelectedGeographicLevel', val)
+      this.changeState(this.stateSelected)
     }
   }
 }
 </script>
+
+<style lang="scss">
+.locale-list {
+  ul {
+    width:100%;
+    margin:0px;
+    padding:10px 10px 0 10px;
+    color:#000;
+
+    li:before { content: ""; display:block; }
+    li{
+      display:block;
+      border-radius:8px;
+      background-color:#dbdbdb;
+      margin-top:0px;
+      margin-bottom:0px;
+
+      span {
+        display:inline-block;
+        width:88%;
+        padding:10px;
+        padding-right:0px;
+      }
+
+      button {
+        &.clear-text {
+          background: transparent;
+          cursor:pointer;
+          float: right;
+        //  margin-top:-32px;
+          max-width: 24px;
+          padding: 0;
+          position: relative;
+          top:5px;
+          right:10px;
+
+          .hdd-icon { fill: #b0b0b0; }
+            &:hover {
+              .hdd-icon { fill: #000; }
+          }
+        }
+      }
+
+      .hdd-icon {
+        //position:relative;
+      //  top:35%;
+        fill:#b0b0b0;
+        &:hover {
+          cursor:pointer;
+          fill: #000;
+        }
+      }
+    }
+  }
+
+
+  }
+</style>

@@ -1,7 +1,7 @@
 <template lang="pug">
   .input-select
     .search-wrapper.input-group(aria-live="assertive")
-      label.sr-only(for='search-text' id='search-text-label') {{ searchInputLabel }}
+      label.sr-only(for='search-text') {{ searchInputLabel }}
       input.search-text(
         type='search'
         :placeholder='searchInputLabel'
@@ -9,15 +9,27 @@
         v-model='query'
         @keydown.esc='reset'
         @keydown.enter='update'
-        @click='contentVisible = true'
-        @focus='checkForReset')
-      button.clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
+        @click='inputReaction'
+        @focus='checkForReset'
+        @blur="close"
+        :class="isDisabled"
+        :disabled="isDisabled")
+      button.clear-text(@click='reset'
+       v-if='isDirty'
+        :title='`Clear Search Text for ${componentDescription}`'
+        :class="isDisabled"
+        :disabled="isDisabled")
         icon(classes='clear-text' name='fa-times')
       span.input-group-btn
-        button.usa-button.btn.toggle-btn(type="button" @click="toggleDropdown" @blur="close")
+        button.usa-button.btn.toggle-btn(type="button"
+          :title='`Toggle Drop Down List for ${componentDescription}`'
+          @click="toggleDropdown"
+          @blur="close"
+          :class="isDisabled"
+          :disabled="isDisabled")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
-    .results-list
+    .results-list(:class="hasSubList")
       ul.dropdown-content(ref="dropdownMenu" v-if="contentVisible")
         li(v-for='(item, $item) in matchingItems')
           span(@mousedown.prevent="select(item)")
@@ -28,7 +40,7 @@ import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'value'],
+  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription', 'hassublist'],
   data () {
     return {
       query: _.get(this, 'value.name'),
@@ -51,6 +63,12 @@ export default {
     },
     matchingItems () {
       return _.reject(this.getMatchingItems(this.query), 'selected')
+    },
+    isDisabled () {
+      return this.disabled ? 'disabled' : false
+    },
+    hasSubList () {
+      return this.hassublist ? 'sub-list' : false
     }
   },
   methods: {
@@ -64,6 +82,7 @@ export default {
     },
     reset () {
       this.query = ''
+      this.$emit('update:value', null)
       this.matchingItems = _.clone(this.items)
     },
     checkForReset () {
@@ -94,47 +113,92 @@ export default {
         })
       }
       return matchingItems
+    },
+    inputReaction () {
+      this.contentVisible = true
+      if (this.query) this.query = ''
     }
   }
 }
 </script>
 <style lang="scss">
 .input-select {
-  border-radius: 0 5px 5px 0;
-  li:before {
-    content: "";
+  /* -- default styles ------------------- */
+  width:100%;
+  border:0px;
+
+  ul {
+    margin-top:10px;
+    padding-top:0;
+    li:before { content: ""; }
   }
 
+  .sr-only { color: #767676; }
+  .toggle-btn {
+    background: #fff;
+    border:none;
+    border-top-right-radius:0px;
+    border-bottom-right-radius:0px;
+    svg { fill:#000; }
+  }
+
+  .search-text { margin: 0; }
   .toggle-btn, .search-text {
-    margin: 0;
+    border:none;
+    border-radius:0px;
     height: 46px;
+    margin: 0;
   }
 
-  .search-text {
-    margin: 0;
-    border: 1px solid #fff;
-    border-bottom: 1px solid #5b616b;
+  .search-wrapper.input-group {
+    border-bottom:1px solid #ccc;
+    overflow:hidden;
   }
-  button.clear-text {
-    background: none;
-    position: relative;
-    float: right;
-    margin: -32px 25px 0 0;
-    max-width: 24px;
-    padding: 0;
-    .hdd-icon {
-      fill: #000;
+
+  button {
+    &.clear-text {
+      background: none;
+      cursor:pointer;
+      float: right;
+      margin-top:-32px;
+      max-width: 24px;
+      padding: 0;
+      position: relative;
+      .hdd-icon { fill: #ccc; }
+      &:hover {
+        .hdd-icon { fill: #000; }
+      }
     }
   }
+
   .results-list {
-    color: black;
-    list-style: none;
-    position: absolute;
-    z-index: 5;
     background: #fff;
-    width: 349px;
+    color: black;
+    cursor:pointer;
+    list-style: none;
+    margin-right:20px;
+    max-height: 315px;
     overflow: auto;
-    max-height: 350px;
+    position: absolute;
+    width: 89.5%;
+    z-index: 5;
+
+    &.sub-list {
+       width:100%;
+    }
+  }
+
+  /* -- disabled styles ------------------ */
+  &.disabled{
+    input, button {
+      background-color:#f0f0f0;
+      border:0px;
+      color:#808080;
+      cursor: default;
+    }
+    .search-wrapper.input-group { border-bottom:1px solid transparent; }
+    .toggle-btn svg { fill:#ccc; }
   }
 }
+
 </style>

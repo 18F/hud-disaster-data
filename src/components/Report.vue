@@ -25,38 +25,39 @@
           button(type="button" name="Export" style="height:39.5px; margin-right:10px;")
             |Export
           div.btn-group
-            button(type="button" @click="showSummarySelections=!showSummarySelections" title="Select summary values" style="margin-right:0;")
+            button(type="button" @click="showSummarySelections=!showSummarySelections" @blur="close" title="Select summary values" style="margin-right:0;")
               icon(name='fa-columns' style="padding:0; margin-right:5px;")
               icon(name="fa-caret-down")
             div(v-show="showSummarySelections" id="SummarySelections")
               span(style="padding-bottom:10px; font-weight:bold;")
                 |Summary Values
-              div(id="lsSummaryValues")
-                table
-                  tr.table-header
-                    td
-                      button(type="button")
-                        icon.ico-lg(name="fa-square-o")
-                    td
-                      |All
-                  tr
-                    td
-                      button(type="button")
-                        icon.ico-lg(name="fa-check-square-o")
-                    td
-                      |Unmet Need
-                  tr
-                    td
-                      button(type="button")
-                        icon.ico-lg(name="fa-square-o")
-                    td
-                      |FEMA County Funding Average
-                  tr
-                    td
-                      button(type="button")
-                        icon.ico-lg(name="fa-square-o")
-                    td
-                      |FEMA Household Funding Average
+              //- TODO  REWORK THIS AS A COMPONENT AND MAKE 508 COMPLIANT!!
+              //- div(id="lsSummaryValues")
+              //-   table
+              //-     tr.table-header
+              //-       td
+              //-         button(type="button")
+              //-           icon.ico-lg(name="fa-square-o")
+              //-       td
+              //-         |All
+              //-     tr
+              //-       td
+              //-         button(type="button")
+              //-           icon.ico-lg(name="fa-check-square-o")
+              //-       td
+              //-         |Unmet Need
+              //-     tr
+              //-       td
+              //-         button(type="button")
+              //-           icon.ico-lg(name="fa-square-o")
+              //-       td
+              //-         |FEMA County Funding Average
+              //-     tr
+              //-       td
+              //-         button(type="button")
+              //-           icon.ico-lg(name="fa-square-o")
+              //-       td
+              //-         |FEMA Household Funding Average
         div
           table
             thead
@@ -117,6 +118,11 @@ export default {
   data () {
     return {
       showSummarySelections: false
+    }
+  },
+  methods: {
+    close () {
+      this.showSummarySelections = false
     }
   }
 }

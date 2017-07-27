@@ -22,8 +22,7 @@ describe('SelectLocationSideBar component', function () {
     }
     mutations = {
       updateDisasterNumberList: sinon.stub(),
-      updateLocaleList: sinon.stub(),
-      addLocaleFilter: sinon.stub()
+      updateLocaleList: sinon.stub()
     }
 
     store = new Vuex.Store({state: {}, mutations, getters})
