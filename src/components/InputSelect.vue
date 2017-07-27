@@ -130,6 +130,10 @@ export default {
     li:before { content: ""; }
   }
 
+  .sr-only {
+    color: #767676;
+  }
+
   .toggle-btn {
     background: #fff;
     border:none;
@@ -138,7 +142,9 @@ export default {
     svg { fill:#000; }
   }
 
-  .search-text { margin: 0; }
+  .search-text {
+    margin: 0;
+  }
 
   .toggle-btn, .search-text {
     border:none;
