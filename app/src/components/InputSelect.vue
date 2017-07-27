@@ -9,6 +9,8 @@
         v-model='query'
         @keydown.esc='reset'
         @keydown.enter='update'
+        @keydown.down.prevent="selectDown"
+        @keydown.up.prevent="selectUp"
         @click='inputReaction'
         @focus='checkForReset'
         @blur="close"
@@ -31,7 +33,7 @@
           icon(v-show="!contentVisible" name='fa-caret-down')
     .results-list(:class="hasSubList")
       ul.dropdown-content(ref="dropdownMenu" v-if="contentVisible")
-        li(v-for='(item, $item) in matchingItems')
+        li(v-for='(item, index) in matchingItems' :class="{ active: isSelected(item), highlight: index === listIndex }" @mouseover="listIndex = index")
           span(@mousedown.prevent="select(item)")
             | {{ item.name }}
 </template>
@@ -43,6 +45,7 @@ export default {
   props: ['items', 'onChange', 'value', 'disabled', 'componentDescription', 'hassublist'],
   data () {
     return {
+      listIndex: -1,
       query: _.get(this, 'value.name'),
       contentVisible: false,
       ref: 'inputSelectText',
@@ -95,11 +98,38 @@ export default {
       this.contentVisible = false
     },
     select (item) {
-      this.matchingItems = [item]
-      this.query = item.name
-      if (this.onChange) this.onChange(item)
-      this.contentVisible = false
-      this.$emit('update:value', item)
+      console.log('getting error in this function')
+      if (this.isSelected(item)) {
+        this.deselect(item)
+      } else {
+        this.matchingItems = [item]
+        this.query = item.name
+        if (this.onChange) this.onChange(item)
+        this.contentVisible = false
+        this.$emit('update:value', item)
+      }
+    },
+    selectDown () {
+      console.log('select down')
+      if (this.listIndex < this.items.length - 1) {
+        this.listIndex++
+        // probably need to adjust scroll location
+      }
+    },
+    selectUp () {
+      if (this.listIndex > 0) {
+        this.listIndex--
+        // probably need to adjust scroll location
+      }
+    },
+    isSelected (item) {
+      if (item) {
+        return item.selected
+      }
+      return false
+    },
+    deselect (item) {
+      item.select = false
     },
     getMatchingItems (query) {
       let matchingItems = []
@@ -183,6 +213,17 @@ export default {
     position: absolute;
     width: 89.5%;
     z-index: 5;
+
+    &.selected {
+      color: #333;
+      background: rgba(50, 50, 50, .1);
+    }
+
+    &.highlight {
+      background: #5897fb;
+      color: #fff;
+    }
+
     &.sub-list {
        width:100%;
     }
