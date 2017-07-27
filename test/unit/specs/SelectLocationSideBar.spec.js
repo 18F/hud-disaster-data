@@ -5,6 +5,7 @@ import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
 import SelectLocationSideBar from '@/components/SelectLocationSideBar' // eslint-disable-line
 import _ from 'lodash' // eslint-disable-line
+import should from 'should'
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
@@ -21,7 +22,8 @@ describe('SelectLocationSideBar component', function () {
     }
     mutations = {
       updateDisasterNumberList: sinon.stub(),
-      updateLocaleList: sinon.stub()
+      updateLocaleList: sinon.stub(),
+      addLocaleFilter: sinon.stub()
     }
 
     store = new Vuex.Store({state: {}, mutations, getters})
@@ -53,18 +55,29 @@ describe('SelectLocationSideBar component', function () {
     })
   })
 
-  describe('setLocales and setDisaster', function () {
-    it('should set locales and disaster, respectively', function () {
+  describe('addLocale', function () {
+    it('should add the locale', function (done) {
       store = new Vuex.Store({state: {}, mutations, getters})
       const Constructor = Vue.extend(SelectLocationSideBar)
       const vm = new Constructor({store}).$mount()
-      vm.localeSelected = ['this place', 'that other place']
-      vm.disasterSelected = ['this disaster', 'the next disaster']
-      vm.setLocales(['our house'])
-      vm.setDisaster(['our mess'])
+      vm.localeSelected = {name: 'Alexandria', code: 'Alexandria'}
+      let commitSpy = sinon.spy(store, 'commit')
+      vm.addLocale()
       Vue.nextTick(() => {
-        expect(vm.localeSelected[0]).to.be.equal('our house')
-        expect(vm.disasterSelected[0]).to.be.equal('our mess')
+        should(commitSpy.calledWith('addLocaleFilter')).be.true()
+        done()
+      })
+    })
+    it('should do nothing if no locale is selected', function (done) {
+      store = new Vuex.Store({state: {}, mutations, getters})
+      const Constructor = Vue.extend(SelectLocationSideBar)
+      const vm = new Constructor({store}).$mount()
+      vm.localeSelected = null
+      let commitSpy = sinon.spy(store, 'commit')
+      vm.addLocale()
+      Vue.nextTick(() => {
+        should(commitSpy.calledWith('addLocaleFilter')).be.false()
+        done()
       })
     })
   })

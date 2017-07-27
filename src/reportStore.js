@@ -59,7 +59,7 @@ export const mutations = {
 These are the vuex actions
 */
 export const actions = {
-  loaddisasterList: function ({ commit }, qry) {
+  loadDisasterList: function ({ commit }, qry) {
     commit('setSearchLoading', true)
     axios.get(`/api/disasterquery/${qry}`).then((response) => {
       commit('updateDisasterList', response.data)
