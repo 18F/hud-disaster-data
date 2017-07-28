@@ -154,7 +154,6 @@ export default {
 <style lang="scss">
 .input-select {
   /* -- default styles ------------------- */
-  width:100%;
   border:0px;
 
   ul {
@@ -172,7 +171,10 @@ export default {
     svg { fill:#000; }
   }
 
-  .search-text { margin: 0; }
+  .search-text {
+    margin: 0;
+    max-width:100%;
+  }
   .toggle-btn, .search-text {
     border:none;
     border-radius:0px;
