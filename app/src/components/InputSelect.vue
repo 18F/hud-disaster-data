@@ -12,6 +12,7 @@
         @keydown.down.prevent="selectDown"
         @keydown.up.prevent="selectUp"
         @click='inputReaction'
+        @keydown='inputReaction'
         @focus='checkForReset'
         @blur="close"
         :class="isDisabled"
@@ -31,20 +32,21 @@
           :disabled="isDisabled")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
-    .results-list(:class="hasSubList")
+    .results-list
       ul.dropdown-content(ref="dropdownMenu" v-if="contentVisible")
         li(v-for='(item, index) in unMatchedItems' :class="{ active: item.selected, highlight: index === listIndex }" @mouseover="listIndex = index")
           span(@mousedown.prevent="select(item)")
-            | {{ item.name }} {{ index }} {{ listIndex }}
+            | {{ item.name }}
 </template>
 <script>
 import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription', 'hassublist'],
+  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription'],
   data () {
     return {
+      matchingItems: [],
       listIndex: -1,
       query: _.get(this, 'value.name'),
       contentVisible: false,
@@ -69,9 +71,6 @@ export default {
     },
     isDisabled () {
       return this.disabled ? 'disabled' : false
-    },
-    hasSubList () {
-      return this.hassublist ? 'sub-list' : false
     }
   },
   methods: {
@@ -80,11 +79,22 @@ export default {
     * @function update
     */
     update () {
-      if (!this.query) return this.reset()
-      if (this.matchingItems && this.matchingItems.length > 0) this.contentVisible = true
+      if (this.listIndex > -1) {
+        if (this.query && this.query.length > 0) {
+          if (this.matchingItems && this.matchingItems.length > 0) {
+            // use matchingItems if there is a query text, and matching options
+            this.select(this.matchingItems[this.listIndex])
+          }
+        } else {
+          // use items array, as there is no query text
+          this.select(this.items[this.listIndex])
+        }
+        this.close()
+      }
     },
     reset () {
       this.query = ''
+      this.listIndex = -1
       this.$emit('update:value', null)
       this.matchingItems = _.clone(this.items)
     },
@@ -109,8 +119,8 @@ export default {
       }
     },
     selectDown () {
-      console.log('select down')
-      if (this.listIndex < this.items.length - 1) {
+      let checkItemsLength = this.matchingItems.length || this.items.length
+      if (this.listIndex < checkItemsLength - 1) {
         this.listIndex++
         // probably need to adjust scroll location
       }
@@ -122,7 +132,6 @@ export default {
       }
     },
     isSelected (item) {
-      console.log('selected: ', item)
       if (item) {
         return item.selected
       }
@@ -132,20 +141,41 @@ export default {
       item.select = false
     },
     getMatchingItems (query) {
-      let matchingItems = []
       if (!query) {
-        matchingItems = this.items
+        this.matchingItems = this.items
+        this.listIndex = -1
       } else {
-        _.clone(this.items).forEach(function (i) {
+        this.matchingItems = []
+        this.items.forEach((i) => {
           if (i.name.toUpperCase().includes(query.toUpperCase())) {
-            matchingItems.push(i)
+            this.matchingItems.push(i)
           }
         })
       }
-      return matchingItems
+      return this.matchingItems
     },
-    inputReaction () {
-      this.contentVisible = true
+    inputReaction (event) {
+      if (event.type === 'keydown') {
+        if (this.filterInput(event)) {
+          if (event.which === 13 || event.keyCode === 13) {
+            this.contentVisible = false
+          }
+          this.contentVisible = true
+          return true
+        } else {
+          event.preventDefault()
+          return false
+        }
+      }
+      return true
+    },
+    filterInput (event) {
+      let keyCode = ('which' in event) ? event.which : event.keyCode
+      let isNumeric = (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105)
+      let alpha = (keyCode >= 65 && keyCode <= 90)
+      let specialCodes = [ 17, 32, 13, 189, 8, 9, 35, 36, 37, 38, 39, 40, 46, 27, 91, 93 ]
+      let isSpecial = (specialCodes.indexOf(keyCode) > -1)
+      return isNumeric || alpha || isSpecial
     }
   }
 }
@@ -154,10 +184,11 @@ export default {
 .input-select {
   /* -- default styles ------------------- */
   border:0px;
+  position:relative;
 
   ul {
     margin-top:10px;
-    padding-top:0;
+    padding:0;
     li:before { content: ""; }
   }
 
@@ -207,27 +238,37 @@ export default {
     color: black;
     cursor:pointer;
     list-style: none;
-    margin-right:20px;
     max-height: 315px;
     overflow: auto;
     position: absolute;
-    width: 89.5%;
+    /* width: 89.5%; */
+    width:100%;
     z-index: 5;
 
-    li.selected {
-      color: #333;
-      background: rgba(50, 50, 50, .1);
-    }
+    .dropdown-content {
+      width:100%;
+      padding:0;
+      margin:0;
+      li {
+        &:before { display:none;}
 
-    li.highlight {
-      background: #5897fb;
-      span {
-        color: #fff;
+        span {
+          padding:10px;
+          margin-top:5px;
+          width:100%;
+        }
+
+        &.selected {
+          color: #333;
+          background: rgba(50, 50, 50, .1);
+        }
+        &.highlight {
+          background: #5897fb;
+          span {
+            color: #fff;
+          }
+        }
       }
-    }
-
-    &.sub-list {
-       width:100%;
     }
   }
 
