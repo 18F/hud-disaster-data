@@ -146,7 +146,6 @@ export default {
     },
     inputReaction () {
       this.contentVisible = true
-      if (this.query) this.query = ''
     }
   }
 }
@@ -189,7 +188,6 @@ export default {
     &.clear-text {
       background: none;
       cursor:pointer;
-      display:none;
       float: right;
       margin-top:-32px;
       max-width: 24px;
