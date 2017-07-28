@@ -13,12 +13,20 @@
                   :items="states"
                   label="name"
                   componentDescription="State Select"
+                  :on-change="changeState"
                   style="background:#fff;"
-                  :on-change="changeState")
+                )
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
               #geographicLevelSelect
-                inputselect(:value.sync="geographicLevelSelected" :items="geographicLevels", label="geographicLevels" :on-change="setLevel" style="background:#fff;")
+                inputselect(
+                  :value.sync="geographicLevelSelected"
+                  :items="geographicLevels"
+                  label="geographicLevels"
+                  :on-change="setLevel"
+                  style="background:#fff;"
+                  :hassubList="true"
+                )
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect
@@ -26,7 +34,7 @@
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addLocale")
                       | Add
-                div.locale-list(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:170px;")
+                div.locale-list(style="border:1px solid #353434; border-top:0px; overflow-y:scroll; height:170px;")
                   ul(id="SelectedLocaleList")
                     li.selected-locale(v-for="locale in $store.getters.localeFilter")
                       span
@@ -159,6 +167,7 @@ export default {
       margin-bottom:0px;
 
       span {
+        font-size:15px;
         display:inline-block;
         width:88%;
         padding:10px;
@@ -178,8 +187,8 @@ export default {
           right:10px;
 
           .hdd-icon { fill: #b0b0b0; }
-            &:hover {
-              .hdd-icon { fill: #000; }
+          &:hover {
+            .hdd-icon { fill: #000; }
           }
         }
       }
@@ -195,7 +204,5 @@ export default {
       }
     }
   }
-
-
-  }
+}
 </style>

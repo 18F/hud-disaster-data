@@ -31,7 +31,7 @@
           :disabled="isDisabled")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
-    .results-list(:class="hasSubList")
+    .results-list
       ul.dropdown-content(ref="dropdownMenu" v-if="contentVisible")
         li(v-for='(item, index) in unMatchedItems' :class="{ active: item.selected, highlight: index === listIndex }" @mouseover="listIndex = index")
           span(@mousedown.prevent="select(item)")
@@ -42,7 +42,7 @@ import _ from 'lodash'
 
 export default {
   name: 'input-select',
-  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription', 'hassublist'],
+  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription'],
   data () {
     return {
       listIndex: -1,
@@ -69,9 +69,6 @@ export default {
     },
     isDisabled () {
       return this.disabled ? 'disabled' : false
-    },
-    hasSubList () {
-      return this.hassublist ? 'sub-list' : false
     }
   },
   methods: {
@@ -154,10 +151,11 @@ export default {
 .input-select {
   /* -- default styles ------------------- */
   border:0px;
+  position:relative;
 
   ul {
     margin-top:10px;
-    padding-top:0;
+    padding:0;
     li:before { content: ""; }
   }
 
@@ -207,27 +205,37 @@ export default {
     color: black;
     cursor:pointer;
     list-style: none;
-    margin-right:20px;
     max-height: 315px;
     overflow: auto;
     position: absolute;
-    width: 89.5%;
+    /* width: 89.5%; */
+    width:100%;
     z-index: 5;
 
-    li.selected {
-      color: #333;
-      background: rgba(50, 50, 50, .1);
-    }
+    .dropdown-content {
+      width:100%;
+      padding:0;
+      margin:0;
+      li {
+        &:before { display:none;}
 
-    li.highlight {
-      background: #5897fb;
-      span {
-        color: #fff;
+        span {
+          padding:10px;
+          margin-top:5px;
+          width:100%;
+        }
+
+        &.selected {
+          color: #333;
+          background: rgba(50, 50, 50, .1);
+        }
+        &.highlight {
+          background: #5897fb;
+          span {
+            color: #fff;
+          }
+        }
       }
-    }
-
-    &.sub-list {
-       width:100%;
     }
   }
 
