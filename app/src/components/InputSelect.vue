@@ -33,9 +33,9 @@
           icon(v-show="!contentVisible" name='fa-caret-down')
     .results-list(:class="hasSubList")
       ul.dropdown-content(ref="dropdownMenu" v-if="contentVisible")
-        li(v-for='(item, index) in matchingItems' :class="{ active: isSelected(item), highlight: index === listIndex }" @mouseover="listIndex = index")
+        li(v-for='(item, index) in unMatchedItems' :class="{ active: item.selected, highlight: index === listIndex }" @mouseover="listIndex = index")
           span(@mousedown.prevent="select(item)")
-            | {{ item.name }}
+            | {{ item.name }} {{ index }} {{ listIndex }}
 </template>
 <script>
 import _ from 'lodash'
@@ -64,7 +64,7 @@ export default {
     isDirty () {
       return !!this.query
     },
-    matchingItems () {
+    unMatchedItems () {
       return _.reject(this.getMatchingItems(this.query), 'selected')
     },
     isDisabled () {
@@ -98,7 +98,6 @@ export default {
       this.contentVisible = false
     },
     select (item) {
-      console.log('getting error in this function')
       if (this.isSelected(item)) {
         this.deselect(item)
       } else {
@@ -123,6 +122,7 @@ export default {
       }
     },
     isSelected (item) {
+      console.log('selected: ', item)
       if (item) {
         return item.selected
       }
@@ -214,14 +214,16 @@ export default {
     width: 89.5%;
     z-index: 5;
 
-    &.selected {
+    li.selected {
       color: #333;
       background: rgba(50, 50, 50, .1);
     }
 
-    &.highlight {
+    li.highlight {
       background: #5897fb;
-      color: #fff;
+      span {
+        color: #fff;
+      }
     }
 
     &.sub-list {
