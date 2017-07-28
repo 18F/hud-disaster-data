@@ -133,6 +133,10 @@ router.get('/db', (req, res) => {
   const dbApi = require('./dbApi')
   var disasterId = _.get(req.query, 'disasterId')
   var stateId = _.get(req.query, 'stateId')
+  var columns = _.get(req.query, 'columns')
+  columns = columns ? columns.split(',') : null
+  var summarize
+  if (_.get(req.query, 'summarize') === 'true') summarize = true
   var queryObj
   if (disasterId) {
     queryObj = ['disaster_id', disasterId.toString()]
@@ -142,7 +146,7 @@ router.get('/db', (req, res) => {
     res.status(406).send('No query parameters sent. Not Acceptable.')
     return
   }
-  var results = dbApi.getData(queryObj)
+  var results = dbApi.getData(queryObj, summarize, columns)
   res.json(results)
 })
 
