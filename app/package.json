@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "echo 'Run the client side hot reloading dev server' && node build/dev-server.js",
     "start": "echo 'Start the server' && node index",
-    "start-cluster": "echo 'Start the server with pm2 cluster' && pm2 start index.js --name=\"DRDP\" -i max",
-    "stop-cluster": "echo 'Stop the pm2 server cluster' && pm2 stop DRDP",
+    "start-cluster": "echo 'Start the server with pm2 cluster' && pm2 start index.js --name=\"DRDP\" -i max --no-daemon",
     "build": "echo 'Run the tests, build the webpack bundle, and test for 508 compliance.' && npm test && node build/build.js && npm run 508-test",
     "unit": "echo 'Run the client side tests' && cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "server-unit": "echo 'Run the server side tests' && mocha test/server && mocha test",
