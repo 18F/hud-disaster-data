@@ -2,7 +2,7 @@
   div(id="sideBar")
       div(style='color: #fff; font-size: xx-large;', tabindex='0')
         div(style="font-size:17px;")
-          div.col-sm-6.col-md-4.col-lg-4(style="padding:0 20px; min-height:700px; background:url('../../static/img/bg_50_opacity.png')")
+          div.col-xs-12.col-sm-12.col-md-4.col-lg-4(style="padding:0 20px; min-height:700px; background:url('../../static/img/bg_50_opacity.png')")
             div(style="border:1px solid #fff; border-top:none; border-right:none; border-left:none; margin-top:20px; padding-bottom:10px;")
               | Report Parameters
             div(style="margin-top:20px;")
@@ -13,12 +13,20 @@
                   :items="states"
                   label="name"
                   componentDescription="State Select"
+                  :on-change="changeState"
                   style="background:#fff;"
-                  :on-change="changeState")
+                )
             div(style="margin-top:20px; overflow:hidden;")
               | Geographic Level
               #geographicLevelSelect
-                inputselect(:value.sync="geographicLevelSelected" :items="geographicLevels", label="geographicLevels" :on-change="setLevel" style="background:#fff;")
+                inputselect(
+                  :value.sync="geographicLevelSelected"
+                  :items="geographicLevels"
+                  label="geographicLevels"
+                  :on-change="setLevel"
+                  style="background:#fff;"
+                  :hassubList="true"
+                )
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect
@@ -26,16 +34,16 @@
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addLocale")
                       | Add
-                div.locale-list(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:170px;")
+                div.locale-list(style="border:1px solid #353434; border-top:0px; overflow-y:scroll; height:170px;")
                   ul(id="SelectedLocaleList")
                     li.selected-locale(v-for="locale in $store.getters.localeFilter")
                       span
                         | {{ locale.name }}
-                      button.clear-text(@click='' title='xxxx')
+                      button.clear-text(@click='' :title='`Remove ${locale.name}`')
                         icon(name='fa-times')
             div(style="margin-top:20px; overflow:hidden;")
               | Disasters
-              div(style="min-height:400px;")
+              div
                 div.col-lg-12(style="padding:0px;")
                   div(class="input-group")
                     div(id="disasterIdInput")
@@ -43,11 +51,15 @@
                     span(class="input-group-btn")
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addDisaster")
                         | Add
-                  div(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
-                    div.selectedDisasters(v-for="disaster in $store.getters.disasterFilter")
-                      | {{ disaster.name }}
+                  div.disaster-list(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
+                    ul(id="SelectedDisasterList")
+                      li.selected-disaster(v-for="disaster in $store.getters.disasterFilter")
+                        span
+                          | {{ disaster.name }}
+                        button.clear-text(@click='' :title='`Remove ${disaster.name}`')
+                          icon(name='fa-times')
             div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
-              button.usa-button.alt-button(type="button" style="margin-right:10px;")
+              button.usa-button.alt-button(type="button" style="margin-right:20px;")
                 | Clear
               button.usa-button.green(type="button")
                 | Create Report
@@ -139,7 +151,7 @@ export default {
 </script>
 
 <style lang="scss">
-.locale-list {
+.locale-list, .disaster-list {
   ul {
     width:100%;
     margin:0px;
@@ -155,6 +167,7 @@ export default {
       margin-bottom:0px;
 
       span {
+        font-size:15px;
         display:inline-block;
         width:88%;
         padding:10px;
@@ -174,8 +187,8 @@ export default {
           right:10px;
 
           .hdd-icon { fill: #b0b0b0; }
-            &:hover {
-              .hdd-icon { fill: #000; }
+          &:hover {
+            .hdd-icon { fill: #000; }
           }
         }
       }
@@ -191,7 +204,5 @@ export default {
       }
     }
   }
-
-
-  }
+}
 </style>
