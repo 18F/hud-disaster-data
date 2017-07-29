@@ -8,9 +8,10 @@ const db = low('mock-data/FEMA_Test_Data.json', {
   storage: fileAsync
 })
 
-const getData = function (queryObj, summarize, columns) {
+const getData = function (queryObj, summaryCols, columns) {
+  console.log(JSON.stringify(queryObj))
   var result = db.get('disasterRecs').filter(queryObj).value()
-  if (summarize) return summarizeCols(result, ['total_damages', 'total_asst_amt', 'unmet_need'])
+  if (summaryCols) return summarizeCols(result, summaryCols)
   if (columns) {
     result = _.map(result, rec => {
       var retValue = {}
