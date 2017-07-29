@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     selectLocationSideBar
-    div.col-lg-8.reports
+    div.col-xs-12.col-sm-12.col-md-8.col-lg-8.reports
       div.col-lg-12
         h1
           |Summary Report
@@ -21,74 +21,98 @@
           tr
             td(colspan="2")
               |Selected Locations: {{ locales }}
-        div.col-lg-12.report-actions
+        div.report-actions
           button.usa-button.green(type="button" name="Export")
             |Export
           div.btn-group
             button.summary-selections(type="button" @click="showSummarySelections=!showSummarySelections" @blur="close" title="Select summary values" )
               icon(name='fa-columns' style="padding:0; margin-right:5px;")
               icon(name="fa-caret-down")
-            div(v-show="showSummarySelections" id="SummarySelectionList")
-              span
-                |Summary Values
-              //- TODO  REWORK THIS AS A COMPONENT AND MAKE 508 COMPLIANT!!
-              //- div(id="lsSummaryValues")
-              //-   table
-              //-     tr.table-header
-              //-       td
-              //-         button(type="button")
-              //-           icon.ico-lg(name="fa-square-o")
-              //-       td
-              //-         |All
-              //-     tr
-              //-       td
-              //-         button(type="button")
-              //-           icon.ico-lg(name="fa-check-square-o")
-              //-       td
-              //-         |Unmet Need
-              //-     tr
-              //-       td
-              //-         button(type="button")
-              //-           icon.ico-lg(name="fa-square-o")
-              //-       td
-              //-         |FEMA County Funding Average
-              //-     tr
-              //-       td
-              //-         button(type="button")
-              //-           icon.ico-lg(name="fa-square-o")
-              //-       td
-              //-         |FEMA Household Funding Average
-        div
-          table#report-display
+              div(v-show="showSummarySelections" id="SummarySelectionList")
+                span
+                  |Summary Values
+                //- TODO  REWORK THIS AS A COMPONENT AND MAKE 508 COMPLIANT!!
+                //- div(id="lsSummaryValues")
+                //-   table
+                //-     tr.table-header
+                //-       td
+                //-         button(type="button")
+                //-           icon.ico-lg(name="fa-square-o")
+                //-       td
+                //-         |All
+                //-     tr
+                //-       td
+                //-         button(type="button")
+                //-           icon.ico-lg(name="fa-check-square-o")
+                //-       td
+                //-         |Unmet Need
+                //-     tr
+                //-       td
+                //-         button(type="button")
+                //-           icon.ico-lg(name="fa-square-o")
+                //-       td
+                //-         |FEMA County Funding Average
+                //-     tr
+                //-       td
+                //-         button(type="button")
+                //-           icon.ico-lg(name="fa-square-o")
+                //-       td
+                //-         |FEMA Household Funding Average
+          table.report-values-header
             thead
               tr
-                th(style="width:65%;") Type
+                th Type
                 th Amount
-            tbody(style="background:#fff; text-align:left;")
-              tr
-                td Unmet Need
-                td $999,999,999
-              tr
-                td Total Damages
-                td $999,999,999
-              tr
-                td Average Household Income
-                td $999,999,999
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td Total Households
-                td 999,999,999
+          div.report-values
+            table
+                tr
+                  td Unmet Need
+                  td $999,999,999
+                tr
+                  td Total Damages
+                  td $999,999,999
+                tr
+                  td Average Household Income
+                  td $999,999,999
+                tr
+                  td &nbsp;
+                  td
+                tr
+                  td Unmet Need
+                  td $999,999,999
+                tr
+                  td Total Damages
+                  td $999,999,999
+                tr
+                  td Average Household Income
+                  td $999,999,999
+                tr
+                  td &nbsp;
+                  td
+                tr
+                  td Unmet Need
+                  td $999,999,999
+                tr
+                  td Total Damages
+                  td $999,999,999
+                tr
+                  td Average Household Income
+                  td $999,999,999
+                tr
+                  td &nbsp;
+                  td
+                tr
+                  td BBBBBBBBBBBB
+                  td
+                tr
+                  td AAAAAAAAAAAA
+                  td
+                tr
+                  td &nbsp;
+                  td
+                tr
+                  td Total Households
+                  td 999,999,999
 </template>
 <script>
 import selectLocationSideBar from './SelectLocationSideBar'
@@ -135,10 +159,11 @@ export default {
 </script>
 
 <style lang="scss">
+table { margin:0; }
 .reports{
   padding:10px 20px;
   min-height:700px;
-
+//  .usa-table-borderless { margin:0; }
   div:first-child {
     height:60px;
     padding:0;
@@ -150,33 +175,31 @@ export default {
   }
   .report-summary {
     padding:0;
-
     table {
-      color: #fff;
+      color:#fff;
+    //  margin-top:10px;
+      text-align:left;
+        tr{
+          min-height:30px;
+          td{
+            border:none;
+            padding: 0;
 
-      td{
-        text-align:left;
-        border:none;
-        padding:0;
-
-        &#creationDate { text-align:right;}
+            &#creationDate { text-align:right;}
+          }
       }
-      .btn-group {
-        vertical-align: inherit;
-      }
+      .btn-group { vertical-align: inherit; }
     }
   }
 
   .report-actions {
-    margin:10px 0;
-    padding:0;
+    /* margin-top:10px; */
     text-align:right;
 
+    .btn-group { padding-left:20px; }
     button {
       height:39.5px;
       margin-right:0;
-
-      &.summary-selections{ margin-left:20px;}
     }
     /*
     #SummarySelections{
@@ -192,7 +215,6 @@ export default {
       background:#fff;
     }
     */
-
     div#SummarySelectionList {
       span {
         font-weight:bold;
@@ -200,11 +222,52 @@ export default {
       }
     }
   }
+
+  table.report-values-header {
+    margin-top:10px;
+    th {
+      color:#000;
+      padding:10px;
+      border-bottom:none;
+
+      &:first-child { width:65%; }
+    }
+  }
+
+  .report-values {
+    height: 480px;
+    background: #fff;
+    overflow:auto;
+    overflow-x:auto;
+    border:1px solid #5b616b;
+
+    table {
+      color:#000;
+      tr {
+        td {
+          &:first-child { width:65%; }
+          padding:5px 0 0 10px;
+        }
+      }
+    }
+  }
 }
 
-#report-display {
-  color: #000;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #lsSummaryValues{
   height:300px;
@@ -241,7 +304,6 @@ export default {
           background:transparent;
           padding:10px;
           margin:0;
-
           .hdd-icon { fill:#000; }
         }
       }
