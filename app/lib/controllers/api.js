@@ -127,6 +127,37 @@ router.get('/disasternumber/:qry', function (req, res) {
   })
 })
 
+// Routes
+// GET /disaster_id/:id
+router.get('/db', (req, res) => {
+  const dbApi = require('./dbApi')
+  var disasterId = _.get(req.query, 'disasterId')
+  disasterId = disasterId ? disasterId.split(',') : null
+  var stateId = _.get(req.query, 'stateId')
+  if (stateId) stateId = stateId.toUpperCase()
+  else {
+    res.status(406).send('No query parameters sent. You must provide at least a stateId. Not Acceptable.')
+    return
+  }
+  var selectCols = _.get(req.query, 'selectCols')
+  selectCols = selectCols ? selectCols.split(',') : null
+  var geoArea = _.get(req.query, 'geoArea')
+  geoArea = geoArea ? geoArea.split(',') : null
+  var geoName = _.get(req.query, 'geoName')
+  if ((geoName && !geoArea) || (!geoName && geoArea)) {
+    res.status(406).send('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
+    return
+  }
+  var summaryCols = _.get(req.query, 'summaryCols')
+  summaryCols = summaryCols ? summaryCols.split(',') : null
+  var queryObj = []
+  if (disasterId) queryObj.push({'disaster_id': disasterId})
+  if (stateId) queryObj.push({'damaged_state': stateId})
+  if (geoName && geoArea) queryObj.push({geoName: geoArea})
+  var results = dbApi.getData(queryObj, summaryCols, selectCols)
+  res.json(results)
+})
+
 const rollUpData = (data) => {
   var rolledUpData = []
   if (_.get(data, 'DisasterDeclarationsSummaries')) {
