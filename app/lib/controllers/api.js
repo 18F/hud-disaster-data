@@ -136,7 +136,7 @@ router.get('/db', (req, res) => {
   var stateId = _.get(req.query, 'stateId')
   if (stateId) stateId = stateId.toUpperCase()
   else {
-    res.status(406).send('No query parameters sent. You must provide at least a stateId. Not Acceptable.')
+    res.status(406).send('Invalid parameters sent. You must provide at least a stateId. Not Acceptable.')
     return
   }
   var selectCols = _.get(req.query, 'selectCols')
