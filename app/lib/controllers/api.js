@@ -127,22 +127,33 @@ router.get('/disasternumber/:qry', function (req, res) {
   })
 })
 
-// Routes
-// GET /disaster_id/:id
+/**
+* router.get('/db') <br/>
+* @function get
+* @param {disasterId}- a comma separated list of disaster id's
+* @param {stateId}- a comma separated list of state id's
+* @param {geoArea}- a comma separated list of geographic area's, requires specifying geoName
+* @param {selectCols}- a comma separated list of columns to be returned
+* @param {summaryCols}- a comma separated list of columns to be returned with the summed values
+**/
 router.get('/db', (req, res) => {
   const dbApi = require('./dbApi')
   var disasterId = _.get(req.query, 'disasterId')
-  disasterId = disasterId ? disasterId.split(',') : null
+  if (disasterId) disasterId = disasterId.split(',')
   var stateId = _.get(req.query, 'stateId')
-  if (stateId) stateId = stateId.toUpperCase()
+  if (stateId) stateId = stateId.toUpperCase().split(',')
   else {
     res.status(406).send('Invalid parameters sent. You must provide at least a stateId. Not Acceptable.')
     return
   }
   var selectCols = _.get(req.query, 'selectCols')
-  selectCols = selectCols ? selectCols.split(',') : null
+  if (selectCols) selectCols = selectCols.split(',')
   var geoArea = _.get(req.query, 'geoArea')
-  geoArea = geoArea ? geoArea.split(',') : null
+  if (geoArea) {
+    geoArea = _.map(geoArea.split(','), area => {
+      return _.isString(area) ? area.toUpperCase() : area
+    })
+  }
   var geoName = _.get(req.query, 'geoName')
   if ((geoName && !geoArea) || (!geoName && geoArea)) {
     res.status(406).send('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
@@ -153,7 +164,11 @@ router.get('/db', (req, res) => {
   var queryObj = []
   if (disasterId) queryObj.push({'disaster_id': disasterId})
   if (stateId) queryObj.push({'damaged_state': stateId})
-  if (geoName && geoArea) queryObj.push({geoName: geoArea})
+  if (geoName && geoArea) {
+    var arg = {}
+    arg[geoName] = geoArea
+    queryObj.push(arg)
+  }
   var results = dbApi.getData(queryObj, summaryCols, selectCols)
   res.json(results)
 })

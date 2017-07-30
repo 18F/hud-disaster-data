@@ -9,37 +9,28 @@ const db = low('mock-data/FEMA_Test_Data.json', {
 })
 
 const getData = function (queryObj, summaryCols, selectCols) {
-  // console.log(JSON.stringify(queryObj))
-  // console.log(JSON.stringify(summaryCols))
-  // console.log(JSON.stringify(selectCols))
+  console.log(JSON.stringify(queryObj))
+  console.log(JSON.stringify(summaryCols))
+  console.log(JSON.stringify(selectCols))
   var result = db.get('disasterRecs').value()
-  // debugger
-  // console.log(`result[0]: ${result[0]}`)
-  for (var i in queryObj) {
-    var query = queryObj[i]
+  for (var phrase in queryObj) {
+    var query = queryObj[phrase]
     var column = _.keys(query)[0]
-    // console.log(JSON.stringify('column: ' + column))
+    console.log(`column: ${JSON.stringify(column)}`)
     var argument = query[column]
-    // console.log(JSON.stringify('argument: ' + argument))
-    var queryIteration
-    if (_.isString(argument)) {
+    console.log(`argument: ${JSON.stringify(argument)}`)
+    console.log(`before applying arguments, result length: ${result.length}`)
+    var compositeResult = []
+    _.each(argument, val => {
       var arg = {}
-      arg[column] = argument
-      queryIteration = [arg]
-    } else {
-      queryIteration = _.map(argument, val => {
-        var arg = {}
-        arg[column] = val
-        return arg
-      })
-    }
-    // console.log(JSON.stringify('queryIteration: ' + JSON.stringify(queryIteration)))
-    for (var argNbr in queryIteration) {
-      // debugger
-      // console.log(`queryIteration[${argNbr}]: ${JSON.stringify(queryIteration[argNbr])}`)
-      result = _.filter(result, queryIteration[argNbr])
-      // console.log(`result[0]: ${result[0]}`)
-    }
+      arg[column] = val
+      console.log(`applying arg: ${JSON.stringify(arg)}`)
+      compositeResult = _.concat(compositeResult, _.filter(result, arg))
+      console.log(`compositeResult length after applying: ${compositeResult.length}`)
+    })
+    result = compositeResult
+    console.log(`compositeResult length: ${compositeResult.length}`)
+    console.log(`result length: ${result.length}`)
   }
   if (summaryCols) return summarizeCols(result, summaryCols)
   if (selectCols) {
