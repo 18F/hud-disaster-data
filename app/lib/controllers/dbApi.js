@@ -8,10 +8,10 @@ const db = low('mock-data/FEMA_Test_Data.json', {
   storage: fileAsync
 })
 
-const getData = function (queryObj, summaryCols, columns) {
+const getData = function (queryObj, summaryCols, selectCols) {
   // console.log(JSON.stringify(queryObj))
   // console.log(JSON.stringify(summaryCols))
-  // console.log(JSON.stringify(columns))
+  // console.log(JSON.stringify(selectCols))
   var result = db.get('disasterRecs').value()
   // debugger
   // console.log(`result[0]: ${result[0]}`)
@@ -42,20 +42,20 @@ const getData = function (queryObj, summaryCols, columns) {
     }
   }
   if (summaryCols) return summarizeCols(result, summaryCols)
-  if (columns) {
+  if (selectCols) {
     result = _.map(result, rec => {
       var retValue = {}
-      _.forEach(columns, col => { retValue[col] = rec[col] })
+      _.forEach(selectCols, col => { retValue[col] = rec[col] })
       return retValue
     })
   }
   return result
 }
 
-const summarizeCols = function (data, summaryColumns) {
-  if (!data || summaryColumns.length === 0) return false
+const summarizeCols = function (data, summaryCols) {
+  if (!data || summaryCols.length === 0) return false
   var summary = {}
-  _.forEach(summaryColumns, (col) => {
+  _.forEach(summaryCols, (col) => {
     summary[col] = _.sumBy(data, rec => _.toNumber(rec[col]))
   })
   return summary

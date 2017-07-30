@@ -1,19 +1,19 @@
 <template lang="pug">
   div
     selectLocationSideBar
-    div.col-lg-8(style="padding:10px 20px; min-height:700px;")
-      div.col-lg-12(style="height:60px; padding:0;")
-        h1(style="color:#fff; margin-top:0;")
+    div.col-xs-12.col-sm-12.col-md-8.col-lg-8.reports
+      div.col-lg-12
+        h1
           |Summary Report
-      div.col-lg-12(style="padding:0;")
-        table.usa-table-borderless.report-summary(style="color: #fff;")
+      div.col-lg-12.report-summary
+        table.usa-table-borderless
           tr
             td
               |State: {{ stateName }}
-            td(style="text-align:right;")
+            td(id="creationDate")
               |Created on: {{ new Date() }}
           tr
-            td(colspan="2" style="text-align:left;")
+            td(colspan="2")
               |Disaster(s): {{ disasters }}
           tr
             td(colspan="2")
@@ -21,68 +21,98 @@
           tr
             td(colspan="2")
               |Selected Locations: {{ locales }}
-        div.col-lg-12(style="text-align:right; padding:0; margin:0;")
-          button(type="button" name="Export" style="height:39.5px; margin-right:10px;")
+        div.report-actions
+          button.usa-button.green(type="button" name="Export")
             |Export
           div.btn-group
-            button(type="button" @click="showSummarySelections=!showSummarySelections" @blur="close" title="Select summary values" style="margin-right:0;")
+            button.summary-selections(type="button" @click="showSummarySelections=!showSummarySelections" @blur="close" title="Select summary values" )
               icon(name='fa-columns' style="padding:0; margin-right:5px;")
               icon(name="fa-caret-down")
-            div(v-show="showSummarySelections" id="SummarySelections")
-              span(style="padding-bottom:10px; font-weight:bold;")
-                |Summary Values
-              //- TODO  REWORK THIS AS A COMPONENT AND MAKE 508 COMPLIANT!!
-              //- div(id="lsSummaryValues")
-              //-   table
-              //-     tr.table-header
-              //-       td
-              //-         button(type="button")
-              //-           icon.ico-lg(name="fa-square-o")
-              //-       td
-              //-         |All
-              //-     tr
-              //-       td
-              //-         button(type="button")
-              //-           icon.ico-lg(name="fa-check-square-o")
-              //-       td
-              //-         |Unmet Need
-              //-     tr
-              //-       td
-              //-         button(type="button")
-              //-           icon.ico-lg(name="fa-square-o")
-              //-       td
-              //-         |FEMA County Funding Average
-              //-     tr
-              //-       td
-              //-         button(type="button")
-              //-           icon.ico-lg(name="fa-square-o")
-              //-       td
-              //-         |FEMA Household Funding Average
-        div
-          table
+              div(v-show="showSummarySelections" id="SummarySelectionList")
+                span
+                  |Summary Values
+                //- TODO  REWORK THIS AS A COMPONENT AND MAKE 508 COMPLIANT!!
+                //- div(id="lsSummaryValues")
+                //-   table
+                //-     tr.table-header
+                //-       td
+                //-         button(type="button")
+                //-           icon.ico-lg(name="fa-square-o")
+                //-       td
+                //-         |All
+                //-     tr
+                //-       td
+                //-         button(type="button")
+                //-           icon.ico-lg(name="fa-check-square-o")
+                //-       td
+                //-         |Unmet Need
+                //-     tr
+                //-       td
+                //-         button(type="button")
+                //-           icon.ico-lg(name="fa-square-o")
+                //-       td
+                //-         |FEMA County Funding Average
+                //-     tr
+                //-       td
+                //-         button(type="button")
+                //-           icon.ico-lg(name="fa-square-o")
+                //-       td
+                //-         |FEMA Household Funding Average
+          table.report-values-header
             thead
               tr
-                th(style="width:65%;") Type
+                th Type
                 th Amount
-            tbody(style="background:#fff; text-align:left;")
-              tr
-                td Unmet Need
-                td $999,999,999
-              tr
-                td Total Damages
-                td $999,999,999
-              tr
-                td Average Household Income
-                td $999,999,999
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td Total Households
-                td 999,999,999
+          div.report-values
+            table
+                tr
+                  td Unmet Need
+                  td $999,999,999
+                tr
+                  td Total Damages
+                  td $999,999,999
+                tr
+                  td Average Household Income
+                  td $999,999,999
+                tr
+                  td &nbsp;
+                  td
+                tr
+                  td Unmet Need
+                  td $999,999,999
+                tr
+                  td Total Damages
+                  td $999,999,999
+                tr
+                  td Average Household Income
+                  td $999,999,999
+                tr
+                  td &nbsp;
+                  td
+                tr
+                  td Unmet Need
+                  td $999,999,999
+                tr
+                  td Total Damages
+                  td $999,999,999
+                tr
+                  td Average Household Income
+                  td $999,999,999
+                tr
+                  td &nbsp;
+                  td
+                tr
+                  td BBBBBBBBBBBB
+                  td
+                tr
+                  td AAAAAAAAAAAA
+                  td
+                tr
+                  td &nbsp;
+                  td
+                tr
+                  td Total Households
+                  td 999,999,999
 </template>
 <script>
 import selectLocationSideBar from './SelectLocationSideBar'
@@ -129,27 +159,116 @@ export default {
 </script>
 
 <style lang="scss">
-.report-summary{
-  td{
-    border:none;
+table { margin:0; }
+.reports{
+  padding:10px 20px;
+  min-height:700px;
+//  .usa-table-borderless { margin:0; }
+  div:first-child {
+    height:60px;
     padding:0;
+
+    h1 {
+      color:#fff;
+      margin-top:0;
+    }
   }
-  .btn-group {
-    vertical-align: inherit;
+  .report-summary {
+    padding:0;
+    table {
+      color:#fff;
+    //  margin-top:10px;
+      text-align:left;
+        tr{
+          min-height:30px;
+          td{
+            border:none;
+            padding: 0;
+
+            &#creationDate { text-align:right;}
+          }
+      }
+      .btn-group { vertical-align: inherit; }
+    }
+  }
+
+  .report-actions {
+    /* margin-top:10px; */
+    text-align:right;
+
+    .btn-group { padding-left:20px; }
+    button {
+      height:39.5px;
+      margin-right:0;
+    }
+    /*
+    #SummarySelections{
+      text-align:left;
+      font-size:15px;
+      border:1px solid #ccc;
+      position:absolute;
+      top:100%;
+      right:5px;
+      border-radius:4px;
+      background-color:#fff;
+      padding:20px;
+      background:#fff;
+    }
+    */
+    div#SummarySelectionList {
+      span {
+        font-weight:bold;
+        padding-bottom:10px;
+      }
+    }
+  }
+
+  table.report-values-header {
+    margin-top:10px;
+    th {
+      color:#000;
+      padding:10px;
+      border-bottom:none;
+
+      &:first-child { width:65%; }
+    }
+  }
+
+  .report-values {
+    height: 480px;
+    background: #fff;
+    overflow:auto;
+    overflow-x:auto;
+    border:1px solid #5b616b;
+
+    table {
+      color:#000;
+      tr {
+        td {
+          &:first-child { width:65%; }
+          padding:5px 0 0 10px;
+        }
+      }
+    }
   }
 }
-#SummarySelections{
-  text-align:left;
-  font-size:15px;
-  border:1px solid #ccc;
-  position:absolute;
-  top:100%;
-  right:5px;
-  border-radius:4px;
-  background-color:#fff;
-  padding:20px;
-  background:#fff;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #lsSummaryValues{
   height:300px;
   width:375px;
@@ -185,7 +304,6 @@ export default {
           background:transparent;
           padding:10px;
           margin:0;
-
           .hdd-icon { fill:#000; }
         }
       }
