@@ -8,16 +8,57 @@ import should from 'should'
 
 Vue.config.productionTip = false
 
-describe('InputSelect', function () {
+describe.only('InputSelect', function () {
   let Constructor
   let vm
   beforeEach(function () {
     Constructor = Vue.extend(InputSelect)
     vm = new Constructor().$mount()
   })
+
+  describe('hasItems', function (done) {
+    it('should return true if there are items', function (done) {
+      vm.items = ['a', 'b']
+      Vue.nextTick(() => {
+        should(vm.hasItems).be.equal(true)
+        done()
+      })
+    })
+  })
+
+  describe('isEmpty', function (done) {
+    it('should return true if there are no items', function (done) {
+      vm.items = []
+      Vue.nextTick(() => {
+        should(vm.isEmpty).be.equal(true)
+        done()
+      })
+    })
+  })
+
+  describe('unMatchedItems', function (done) {
+    it('should return items that match the query and selected is not true', function (done) {
+      vm.items = [{code: 'alpha', name: 'alpha', selected: false}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}]
+      vm.query = 'lph'
+      Vue.nextTick(() => {
+        should(vm.unMatchedItems[0].code).be.equal('alpha')
+        done()
+      })
+    })
+
+    it('should return items that match the query and selected is true', function (done) {
+      vm.items = [{code: 'alpha', name: 'alpha', selected: true}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}]
+      vm.query = 'lph'
+      Vue.nextTick(() => {
+        should(vm.unMatchedItems).be.empty()
+        done()
+      })
+    })
+  })
+
   describe('getMatchingItems', function () {
     it('should return items if query is null', function () {
-      vm.items = [1, 2]
+      vm.items = ['a', 'b']
       should(vm.getMatchingItems()).be.equal(vm.items)
     })
     it('should include items that contain query ignoring case', function () {
