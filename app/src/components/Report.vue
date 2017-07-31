@@ -117,12 +117,11 @@ table { margin:0; }
   min-height:700px;
 
   div:first-child {
-    height:60px;
     padding:0;
 
     h1 {
       color:#fff;
-      margin:0 0 10px 0;
+      margin:0 0 20px 0;
     }
   }
   .report-summary {
@@ -137,7 +136,7 @@ table { margin:0; }
     //  margin-top:10px;
       text-align:left;
         tr {
-          min-height:50px;
+          /* min-height:50px; */
           td {
             border:none;
             padding: 0;
@@ -161,7 +160,7 @@ table { margin:0; }
   }
 
   .report-values {
-    height:450px;
+    height:455px;
     background:#fff;
     overflow:auto;
     overflow-x:auto;
