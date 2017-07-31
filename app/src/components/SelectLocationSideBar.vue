@@ -153,7 +153,7 @@ export default {
       this.localeSelected = null
       this.disasterSelected = null
       this.stateSelected = null
-      this.$store.commit('clearStore')
+      this.$store.commit('clearState')
     },
 
     setLevel (val) {
