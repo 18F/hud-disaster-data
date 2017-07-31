@@ -185,6 +185,7 @@ export default {
   /* -- default styles ------------------- */
   border:0px;
   position:relative;
+  width:100%;
 
   ul {
     margin-top:10px;

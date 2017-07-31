@@ -151,55 +151,57 @@ export default {
 </script>
 
 <style lang="scss">
-.locale-list, .disaster-list {
-  ul {
-    width:100%;
-    margin:0px;
-    padding:10px 10px 0 10px;
-    color:#000;
+#sidebar {
+  .locale-list, .disaster-list {
+    ul {
+      width:100%;
+      margin:0px;
+      padding:10px 10px 0 10px;
+      color:#000;
 
-    li:before { content: ""; display:block; }
-    li{
-      display:block;
-      border-radius:8px;
-      background-color:#dbdbdb;
-      margin-top:0px;
-      margin-bottom:0px;
+      li:before { content: ""; display:block; }
+      li{
+        display:block;
+        border-radius:8px;
+        background-color:#dbdbdb;
+        margin-top:0px;
+        margin-bottom:0px;
 
-      span {
-        font-size:15px;
-        display:inline-block;
-        width:88%;
-        padding:10px;
-        padding-right:0px;
-      }
+        span {
+          font-size:15px;
+          display:inline-block;
+          width:88%;
+          padding:10px;
+          padding-right:0px;
+        }
 
-      button {
-        &.clear-text {
-          background: transparent;
-          cursor:pointer;
-          float: right;
-        //  margin-top:-32px;
-          max-width: 24px;
-          padding: 0;
-          position: relative;
-          top:5px;
-          right:10px;
+        button {
+          &.clear-text {
+            background: transparent;
+            cursor:pointer;
+            float: right;
+          //  margin-top:-32px;
+            max-width: 24px;
+            padding: 0;
+            position: relative;
+            top:5px;
+            right:10px;
 
-          .hdd-icon { fill: #b0b0b0; }
-          &:hover {
-            .hdd-icon { fill: #000; }
+            .hdd-icon { fill: #b0b0b0; }
+            &:hover {
+              .hdd-icon { fill: #000; }
+            }
           }
         }
-      }
 
-      .hdd-icon {
-        //position:relative;
-      //  top:35%;
-        fill:#b0b0b0;
-        &:hover {
-          cursor:pointer;
-          fill: #000;
+        .hdd-icon {
+          //position:relative;
+        //  top:35%;
+          fill:#b0b0b0;
+          &:hover {
+            cursor:pointer;
+            fill: #000;
+          }
         }
       }
     }
