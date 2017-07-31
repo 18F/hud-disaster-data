@@ -95,7 +95,7 @@ export default {
     reset () {
       this.query = ''
       this.listIndex = -1
-      this.$emit('update:value', null)
+      this.$emit('clear', null)
       this.matchingItems = _.clone(this.items)
     },
     checkForReset () {
@@ -183,6 +183,7 @@ export default {
   /* -- default styles ------------------- */
   border:0px;
   position:relative;
+  width:100%;
 
   ul {
     margin-top:10px;

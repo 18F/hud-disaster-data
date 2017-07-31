@@ -8,7 +8,7 @@ import should from 'should'
 
 Vue.config.productionTip = false
 
-describe.only('InputSelect', function () {
+describe('InputSelect', function () {
   let Constructor
   let vm
   beforeEach(function () {

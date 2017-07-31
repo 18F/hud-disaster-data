@@ -21,101 +21,63 @@
           tr
             td(colspan="2")
               |Selected Locations: {{ locales }}
-        div.report-actions
-          button.usa-button.green(type="button" name="Export")
-            |Export
-          div.btn-group
-            button.summary-selections(type="button" @click="showSummarySelections=!showSummarySelections" @blur="close" title="Select summary values" )
-              icon(name='fa-columns' style="padding:0; margin-right:5px;")
-              icon(name="fa-caret-down")
-              div(v-show="showSummarySelections" id="SummarySelectionList")
-                span
-                  |Summary Values
-                //- TODO  REWORK THIS AS A COMPONENT AND MAKE 508 COMPLIANT!!
-                //- div(id="lsSummaryValues")
-                //-   table
-                //-     tr.table-header
-                //-       td
-                //-         button(type="button")
-                //-           icon.ico-lg(name="fa-square-o")
-                //-       td
-                //-         |All
-                //-     tr
-                //-       td
-                //-         button(type="button")
-                //-           icon.ico-lg(name="fa-check-square-o")
-                //-       td
-                //-         |Unmet Need
-                //-     tr
-                //-       td
-                //-         button(type="button")
-                //-           icon.ico-lg(name="fa-square-o")
-                //-       td
-                //-         |FEMA County Funding Average
-                //-     tr
-                //-       td
-                //-         button(type="button")
-                //-           icon.ico-lg(name="fa-square-o")
-                //-       td
-                //-         |FEMA Household Funding Average
-          table.report-values-header
-            thead
+        value-selector
+        table.report-values-header
+          thead
+            tr
+              th Type
+              th Amount
+        div.report-values
+          table
               tr
-                th Type
-                th Amount
-          div.report-values
-            table
-                tr
-                  td Unmet Need
-                  td $999,999,999
-                tr
-                  td Total Damages
-                  td $999,999,999
-                tr
-                  td Average Household Income
-                  td $999,999,999
-                tr
-                  td &nbsp;
-                  td
-                tr
-                  td Unmet Need
-                  td $999,999,999
-                tr
-                  td Total Damages
-                  td $999,999,999
-                tr
-                  td Average Household Income
-                  td $999,999,999
-                tr
-                  td &nbsp;
-                  td
-                tr
-                  td Unmet Need
-                  td $999,999,999
-                tr
-                  td Total Damages
-                  td $999,999,999
-                tr
-                  td Average Household Income
-                  td $999,999,999
-                tr
-                  td &nbsp;
-                  td
-                tr
-                  td BBBBBBBBBBBB
-                  td
-                tr
-                  td AAAAAAAAAAAA
-                  td
-                tr
-                  td &nbsp;
-                  td
-                tr
-                  td Total Households
-                  td 999,999,999
+                td Unmet Need
+                td $999,999,999
+              tr
+                td Total Damages
+                td $999,999,999
+              tr
+                td Average Household Income
+                td $999,999,999
+              tr
+                td &nbsp;
+                td
+              tr
+                td Unmet Need
+                td $999,999,999
+              tr
+                td Total Damages
+                td $999,999,999
+              tr
+                td Average Household Income
+                td $999,999,999
+              tr
+                td &nbsp;
+                td
+              tr
+                td Unmet Need
+                td $999,999,999
+              tr
+                td Total Damages
+                td $999,999,999
+              tr
+                td Average Household Income
+                td $999,999,999
+              tr
+                td &nbsp;
+                td
+              tr
+                td BBBBBBBBBBBB
+                td
+              tr
+                td &nbsp;
+                td
+              tr
+                td Total Households
+                td 999,999,999
 </template>
 <script>
 import selectLocationSideBar from './SelectLocationSideBar'
+import valueSelector from './ValueSelector'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
 /**
@@ -124,7 +86,7 @@ import _ from 'lodash'
 */
 export default {
   name: 'report',
-  components: {selectLocationSideBar},
+  components: {selectLocationSideBar, valueSelector},
   computed: {
     ...mapGetters([
       'stateFilter',
@@ -144,82 +106,45 @@ export default {
     level () {
       return this.$store.getters.geographicLevel.name
     }
-  },
-  data () {
-    return {
-      showSummarySelections: false
-    }
-  },
-  methods: {
-    close () {
-      this.showSummarySelections = false
-    }
   }
 }
 </script>
 
 <style lang="scss">
 table { margin:0; }
-.reports{
+.reports {
   padding:10px 20px;
   min-height:700px;
-//  .usa-table-borderless { margin:0; }
+
   div:first-child {
-    height:60px;
     padding:0;
 
     h1 {
       color:#fff;
-      margin-top:0;
+      margin:0 0 20px 0;
     }
   }
   .report-summary {
     padding:0;
+    table.usa-table-borderless {
+      tr {
+        td { min-height:40px; }
+      }
+    }
     table {
       color:#fff;
     //  margin-top:10px;
       text-align:left;
-        tr{
-          min-height:30px;
-          td{
+        tr {
+          /* min-height:50px; */
+          td {
             border:none;
             padding: 0;
 
-            &#creationDate { text-align:right;}
+            &#creationDate { text-align:right; }
           }
       }
-      .btn-group { vertical-align: inherit; }
-    }
-  }
-
-  .report-actions {
-    /* margin-top:10px; */
-    text-align:right;
-
-    .btn-group { padding-left:20px; }
-    button {
-      height:39.5px;
-      margin-right:0;
-    }
-    /*
-    #SummarySelections{
-      text-align:left;
-      font-size:15px;
-      border:1px solid #ccc;
-      position:absolute;
-      top:100%;
-      right:5px;
-      border-radius:4px;
-      background-color:#fff;
-      padding:20px;
-      background:#fff;
-    }
-    */
-    div#SummarySelectionList {
-      span {
-        font-weight:bold;
-        padding-bottom:10px;
-      }
+      .btn-group { vertical-align:inherit; }
     }
   }
 
@@ -235,8 +160,8 @@ table { margin:0; }
   }
 
   .report-values {
-    height: 480px;
-    background: #fff;
+    height:455px;
+    background:#fff;
     overflow:auto;
     overflow-x:auto;
     border:1px solid #5b616b;
@@ -248,91 +173,6 @@ table { margin:0; }
           &:first-child { width:65%; }
           padding:5px 0 0 10px;
         }
-      }
-    }
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#lsSummaryValues{
-  height:300px;
-  width:375px;
-  overflow:scroll;
-  overflow-x:hidden;
-  border:1px solid #ccc;
-
-  table {
-    margin:0;
-    border:none;
-
-    tr {
-      border:none;
-      border-bottom:1px solid #ccc;
-
-      &.table-header{
-        background:#000;
-        color:#fff;
-        .hdd-icon { fill:#fff !important; }
-      }
-      td {
-        margin:0;
-        border:none;
-        padding:0;
-
-        &:first-child {
-          width:40px;
-          padding:0;
-          border:none;
-        }
-
-        button{
-          background:transparent;
-          padding:10px;
-          margin:0;
-          .hdd-icon { fill:#000; }
-        }
-      }
-    }
-  }
-  ul {
-    width:300px;
-    font-size:initial;
-    padding:0;
-    margin:0;
-
-    li:before { content: ""; }
-    li {
-      padding-top:10px;
-      border-bottom:1px solid #ccc;
-
-      &:hover{
-        cursor:pointer;
-        background:#ff0000;
-      }
-
-      button {
-        background: transparent;
-        padding:15px 0;
-        margin:0 0 0 10px;
-      }
-
-      span{
-        display:inline-block;
       }
     }
   }
