@@ -6,6 +6,8 @@ import es6Promise from 'es6-promise'
 // import magic from '@/bus'
 es6Promise.polyfill()
 Vue.use(Vuex)
+
+export const DEFAULT_GEOGRAPHIC_LEVEL = { code: 'City', name: 'City' }
 /**
 * Manages the state for client functions.
 * @module reportStore
@@ -32,7 +34,7 @@ export const mutations = {
     state.disasterList = []
     state.localeList = []
     state.stateFilter = null
-    state.geographicLevel = 'City'
+    state.geographicLevel = DEFAULT_GEOGRAPHIC_LEVEL
   },
 
   setSelectedState: function (state, chosenState) {
@@ -60,28 +62,30 @@ These are the vuex actions
 */
 export const actions = {
   loadDisasterList: function ({ commit }, qry) {
-    commit('setSearchLoading', true)
-    axios.get(`/api/disasterquery/${qry}`).then((response) => {
+    axios.get(`/api/disasterquery/${qry}`).then(response => {
       commit('updateDisasterList', response.data)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
       commit('resetStatus')
-    }, (err) => {
+    }).catch(err => {
       console.log(`Error fetching disaster list: ${err}`)
       commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
     })
   },
 
   loadLocales: function ({ commit, state }, qry) {
-    commit('setSearchLoading', true)
     let querystring = `/api/localequery/${qry}`
     if (state.geographicLevel) querystring += `?level=${state.geographicLevel.name.toLowerCase()}`
-    axios.get(querystring).then((response) => {
+    axios.get(querystring).then(response => {
       commit('updateLocaleList', response.data)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
+      commit('resetStatus')
+    }).catch(err => {
+      console.log(`Error fetching locale list: ${err}`)
+      commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD locale data is unavailable at this time.  Try again later or contact your administrator.'})
     })
   }
 }
@@ -110,7 +114,7 @@ export const getters = {
 const reportStore = {
   state: {
     disasterList: [],
-    geographicLevel: { code: 'City', name: 'City' },
+    geographicLevel: DEFAULT_GEOGRAPHIC_LEVEL,
     localeList: [],
     stateFilter: null
   },

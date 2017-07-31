@@ -132,13 +132,10 @@ export default {
       }
     },
     isSelected (item) {
-      if (item) {
-        return item.selected
-      }
-      return false
+      return item && item.selected
     },
     deselect (item) {
-      item.select = false
+      delete item.selected
     },
     getMatchingItems (query) {
       if (!query) {
@@ -159,8 +156,9 @@ export default {
         if (this.filterInput(event)) {
           if (event.which === 13 || event.keyCode === 13) {
             this.contentVisible = false
+          } else {
+            this.contentVisible = true
           }
-          this.contentVisible = true
           return true
         } else {
           event.preventDefault()
