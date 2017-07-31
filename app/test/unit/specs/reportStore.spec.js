@@ -1,14 +1,13 @@
 /* global describe, it, expect, beforeEach */
 import 'es6-promise/auto' // eslint-disable-line
-// import _ from 'lodash'
-// import axios from 'axios' // eslint-disable-line
-// import moxios from 'moxios' // eslint-disable-line
+import _ from 'lodash'
+import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions, getters } from '../../../src/reportStore' // eslint-disable-line
-// import sinon from 'sinon'
-// import should from 'should'
+import sinon from 'sinon'
+import should from 'should'
 const { updateDisasterList, updateLocaleList } = mutations
 // const { updateDisasterList, updateLocaleList, clearState } = mutations
-// const { loadDisasterList, loadLocales } = actions
+const { loadDisasterList, loadLocales } = actions
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -54,70 +53,66 @@ describe('reportStore', function () {
     })
   })
 
-  // describe('loadDisasterList', function () {
-  //   it('should call commit for setSearchLoading and updateDisasterNumberList when the data is loaded', function (done) {
-  //     moxios.install()
-  //     moxios.stubRequest(/WI/, {
-  //       status: 200,
-  //       response: _.clone(TWO_RECORDS)
-  //     })
-  //     const commit = sinon.spy()
-  //     loadDisasterList({ commit }, 'WI')
-  //     moxios.wait(() => {
-  //       should(commit.calledWith('updateDisasterList')).to.be.true()
-  //       should(commit.calledWith('resetStatus')).to.be.true()
-  //       done()
-  //     })
-  //   })
-  // })
+  describe('loadDisasterList', function () {
+    it('should call commit for updateDisasterList when the data is loaded', function (done) {
+      moxios.install()
+      moxios.stubRequest(/WI/, {
+        status: 200,
+        response: _.clone(TWO_RECORDS)
+      })
+      const commit = sinon.spy()
+      loadDisasterList({commit}, 'WI')
+      moxios.wait(() => {
+        should(commit.calledWith('updateDisasterList')).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
+  })
 
-  // describe('loadLocales', function () {
-  //   it('should call commit for setSearchLoading and updateDisasterNumberList when the data is loaded', function (done) {
-  //     moxios.install()
-  //     moxios.stubRequest(/TX/, {
-  //       status: 200,
-  //       response: _.clone(TWO_LOCALES)
-  //     })
-  //     let updateLocaleListCalled
-  //     let setSearchLoadingCalled
-  //     var commitStub = sinon.stub().callsFake((name, data) => {
-  //       if (name === 'updateLocaleList') updateLocaleListCalled = true
-  //       if (name === 'setSearchLoading') setSearchLoadingCalled = true
-  //     })
-  //     loadLocales({ commit: commitStub }, 'TX')
-  //     moxios.wait(() => {
-  //       expect(updateLocaleListCalled).to.be.equal(true)
-  //       expect(setSearchLoadingCalled).to.be.equal(true)
-  //       done()
-  //     })
-  //   })
-  //
-  //   it('should setStatus to No results found if data returned is empty', function (done) {
-  //     moxios.install()
-  //     moxios.stubRequest(/TZ/, {
-  //       status: 200,
-  //       response: []
-  //     })
-  //     let updateLocaleListCalled
-  //     let setSearchLoadingCalled
-  //     let setStatusCalled
-  //     var commitStub = sinon.stub().callsFake((name, data) => {
-  //       if (name === 'updateLocaleList') updateLocaleListCalled = true
-  //       if (name === 'setSearchLoading') setSearchLoadingCalled = true
-  //       if (name === 'setStatus') {
-  //         should(data).be.an.Object().and.have.properties({msg: 'No results found!'})
-  //         setStatusCalled = true
-  //       }
-  //     })
-  //     loadLocales({ commit: commitStub }, 'TZ')
-  //     moxios.wait(() => {
-  //       expect(updateLocaleListCalled).to.be.equal(true)
-  //       expect(setSearchLoadingCalled).to.be.equal(true)
-  //       expect(setStatusCalled).to.be.equal(true)
-  //       done()
-  //     })
-  //   })
-  // })
+  describe('loadLocales', function () {
+    it('should call commit for updateLocaleList when the data is loaded', function (done) {
+      moxios.install()
+      moxios.stubRequest(/TX/, {
+        status: 200,
+        response: _.clone(TWO_LOCALES)
+      })
+      const commit = sinon.spy()
+      const state = {geographicLevel: {code: 'City', name: 'City'}}
+      loadLocales({commit, state}, 'TX')
+      moxios.wait(() => {
+        should(commit.calledWith('updateLocaleList')).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
+
+    // it('should setStatus to No results found if data returned is empty', function (done) {
+    //   moxios.install()
+    //   moxios.stubRequest(/TZ/, {
+    //     status: 200,
+    //     response: []
+    //   })
+    //   let updateLocaleListCalled
+    //   let setSearchLoadingCalled
+    //   let setStatusCalled
+    //   var commitStub = sinon.stub().callsFake((name, data) => {
+    //     if (name === 'updateLocaleList') updateLocaleListCalled = true
+    //     if (name === 'setSearchLoading') setSearchLoadingCalled = true
+    //     if (name === 'setStatus') {
+    //       should(data).be.an.Object().and.have.properties({msg: 'No results found!'})
+    //       setStatusCalled = true
+    //     }
+    //   })
+    //   loadLocales({ commit: commitStub }, 'TZ')
+    //   moxios.wait(() => {
+    //     expect(updateLocaleListCalled).to.be.equal(true)
+    //     expect(setSearchLoadingCalled).to.be.equal(true)
+    //     expect(setStatusCalled).to.be.equal(true)
+    //     done()
+    //   })
+    // })
+  })
 
   // describe('clearState', function () {
   //   it('should set state.disasterNumbers and state.localeList to empty arrays', function () {
