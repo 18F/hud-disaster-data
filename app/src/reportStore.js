@@ -6,6 +6,8 @@ import es6Promise from 'es6-promise'
 // import magic from '@/bus'
 es6Promise.polyfill()
 Vue.use(Vuex)
+
+export const DEFAULT_GEOGRAPHIC_LEVEL = { code: 'City', name: 'City' }
 /**
 * Manages the state for client functions.
 * @module reportStore
@@ -32,7 +34,7 @@ export const mutations = {
     state.disasterList = []
     state.localeList = []
     state.stateFilter = null
-    state.geographicLevel = 'City'
+    state.geographicLevel = DEFAULT_GEOGRAPHIC_LEVEL
   },
 
   setSelectedState: function (state, chosenState) {
@@ -112,7 +114,7 @@ export const getters = {
 const reportStore = {
   state: {
     disasterList: [],
-    geographicLevel: { code: 'City', name: 'City' },
+    geographicLevel: DEFAULT_GEOGRAPHIC_LEVEL,
     localeList: [],
     stateFilter: null
   },
