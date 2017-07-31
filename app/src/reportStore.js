@@ -28,14 +28,14 @@ export const mutations = {
     state.localeList = list
   },
 
-  clearState: function (state) {
+  clearStore: function (state) {
     state.disasterList = []
     state.localeList = []
     state.stateFilter = null
-    state.geographicLevel = 'City'
+    state.geographicLevel = {name: 'City', code: 'City'}
   },
 
-  setSelectedState: function (state, chosenState) {
+  setState: function (state, chosenState) {
     state.stateFilter = chosenState
   },
 
@@ -83,6 +83,11 @@ export const actions = {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
     })
+  },
+
+  setSelectedState: function ({commit}, qry) {
+    commit('clearStore')
+    commit('setState', qry)
   }
 }
 
