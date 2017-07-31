@@ -95,7 +95,7 @@ export default {
     reset () {
       this.query = ''
       this.listIndex = -1
-      this.$emit('update:value', null)
+      this.$emit('clear', null)
       this.matchingItems = _.clone(this.items)
     },
     checkForReset () {

@@ -30,14 +30,14 @@ export const mutations = {
     state.localeList = list
   },
 
-  clearState: function (state) {
+  clearStore: function (state) {
     state.disasterList = []
     state.localeList = []
     state.stateFilter = null
     state.geographicLevel = DEFAULT_GEOGRAPHIC_LEVEL
   },
 
-  setSelectedState: function (state, chosenState) {
+  setState: function (state, chosenState) {
     state.stateFilter = chosenState
   },
 
@@ -87,6 +87,11 @@ export const actions = {
       console.log(`Error fetching locale list: ${err}`)
       commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD locale data is unavailable at this time.  Try again later or contact your administrator.'})
     })
+  },
+
+  setSelectedState: function ({commit}, qry) {
+    commit('clearStore')
+    commit('setState', qry)
   }
 }
 

@@ -14,6 +14,7 @@
                   label="name"
                   componentDescription="State Select"
                   :on-change="changeState"
+                  v-on:clear="clearState"
                   style="background:#fff;"
                 )
             div(style="margin-top:20px; overflow:hidden;")
@@ -30,7 +31,12 @@
               div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
                 div(class="input-group")
                   #localeSelect
-                    inputselect(:value.sync="localeSelected" :items="localeItems", label="localeName", ref="localeSelect")
+                    inputselect(
+                      :value.sync="localeSelected"
+                      :items="localeItems",
+                      label="localeName",
+                      ref="localeSelect"
+                    )
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addLocale")
                       | Add
@@ -47,7 +53,12 @@
                 div.col-lg-12(style="padding:0px;")
                   div(class="input-group")
                     div(id="disasterIdInput")
-                      inputselect(:value.sync="disasterSelected" :items="disasterItems", label="disasterNumber" :dropdownMenuStyle="'max-height:350px; overflow:true;'")
+                      inputselect(
+                        :value.sync="disasterSelected"
+                        :items="disasterItems",
+                        label="disasterNumber"
+                        :dropdownMenuStyle="'max-height:350px; overflow:true;'"
+                      )
                     span(class="input-group-btn")
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addDisaster")
                         | Add
@@ -59,7 +70,7 @@
                         button.clear-text(@click='' :title='`Remove ${disaster.name}`')
                           icon(name='fa-times')
             div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
-              button.usa-button.alt-button(type="button" style="margin-right:20px;")
+              button.usa-button.alt-button(type="button" style="margin-right:20px;" @click="clearState")
                 | Clear
               button.usa-button.green(type="button")
                 | Create Report
@@ -116,11 +127,14 @@ export default {
 
   methods: {
     changeState (val) {
-      this.reset()
-      this.$store.commit('setSelectedState', val)
       if (val && val.code && val.code.length > 1) {
-        this.$store.dispatch('loadLocales', val.code)
-        this.$store.dispatch('loadDisasterList', val.code)
+        if (!this.stateSelected || val.code !== this.stateSelected.code) {
+          this.localeSelected = null
+          this.disasterSelected = null
+          this.$store.dispatch('setSelectedState', val)
+          this.$store.dispatch('loadLocales', val.code)
+          this.$store.dispatch('loadDisasterList', val.code)
+        }
       }
     },
 
@@ -139,12 +153,17 @@ export default {
       this.localeSelected = null
       this.disasterSelected = null
       this.stateSelected = null
+      this.$store.commit('clearStore')
     },
 
     setLevel (val) {
       if (!val) return
       this.$store.commit('setSelectedGeographicLevel', val)
       this.changeState(this.stateSelected)
+    },
+
+    clearState (val) {
+      this.reset()
     }
   }
 }
