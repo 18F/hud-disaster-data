@@ -156,8 +156,9 @@ export default {
         if (this.filterInput(event)) {
           if (event.which === 13 || event.keyCode === 13) {
             this.contentVisible = false
+          } else {
+            this.contentVisible = true
           }
-          this.contentVisible = true
           return true
         } else {
           event.preventDefault()
