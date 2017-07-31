@@ -132,13 +132,10 @@ export default {
       }
     },
     isSelected (item) {
-      if (item) {
-        return item.selected
-      }
-      return false
+      return item && item.selected
     },
     deselect (item) {
-      item.select = false
+      delete item.selected
     },
     getMatchingItems (query) {
       if (!query) {
