@@ -40,7 +40,7 @@
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addLocale")
                       | Add
-                div.locale-list(style="border:1px solid #353434; border-top:0px; overflow-y:scroll; height:170px;")
+                div.locale-selection-list(style="border:1px solid #353434; border-top:0px; overflow-y:scroll; height:170px;")
                   ul(id="SelectedLocaleList")
                     li.selected-locale(v-for="locale in $store.getters.localeFilter")
                       span
@@ -62,7 +62,7 @@
                     span(class="input-group-btn")
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addDisaster")
                         | Add
-                  div.disaster-list(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
+                  div.disaster-selection-list(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
                     ul(id="SelectedDisasterList")
                       li.selected-disaster(v-for="disaster in $store.getters.disasterFilter")
                         span
@@ -170,19 +170,19 @@ export default {
 </script>
 
 <style lang="scss">
-#sidebar {
-  .locale-list, .disaster-list {
+  .locale-selection-list, .disaster-selection-list {
     ul {
       width:100%;
       margin:0px;
       padding:10px 10px 0 10px;
       color:#000;
 
-      li:before { content: ""; display:block; }
+      li:before { content: ""; display:none; }
       li{
         display:block;
         border-radius:8px;
-        background-color:#dbdbdb;
+        /* background-color:#e2f6fd; */
+        background-color:#eaffee;
         margin-top:0px;
         margin-bottom:0px;
 
@@ -214,16 +214,13 @@ export default {
         }
 
         .hdd-icon {
-          //position:relative;
-        //  top:35%;
-          fill:#b0b0b0;
+          fill:#000;
           &:hover {
             cursor:pointer;
-            fill: #000;
+            fill: #b0b0b0;
           }
         }
       }
     }
   }
-}
 </style>

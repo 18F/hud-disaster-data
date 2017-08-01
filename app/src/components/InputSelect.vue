@@ -225,7 +225,7 @@ export default {
       max-width: 24px;
       padding: 0;
       position: relative;
-      .hdd-icon { fill: #ccc; }
+      .hdd-icon { fill: #b0b0b0; }
       &:hover {
         .hdd-icon { fill: #000; }
       }
@@ -243,6 +243,7 @@ export default {
     /* width: 89.5%; */
     width:100%;
     z-index: 5;
+    box-shadow:5px 5px 5px rgba(0,0,0,0.5);
 
     .dropdown-content {
       width:100%;
@@ -252,20 +253,17 @@ export default {
         &:before { display:none;}
 
         span {
-          padding:10px;
+          padding:5px;
           margin-top:5px;
           width:100%;
         }
 
         &.selected {
-          color: #333;
-          background: rgba(50, 50, 50, .1);
+          color: #000;
+          background-color: #ccc;
         }
         &.highlight {
-          background: #5897fb;
-          span {
-            color: #fff;
-          }
+          background-color: #E2F6FD;
         }
       }
     }
