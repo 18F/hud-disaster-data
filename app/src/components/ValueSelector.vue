@@ -4,7 +4,7 @@
       label.sr-only(for='Export') Export report
       button.usa-button.green(type="button" name="Export" title="Export report")
         |Export
-      div.btn-group
+      div.btn-group( style='display:none;')
         label.sr-only(for='SummariesSelector') Show summary values selector
         button(type="button" @click="toggleSummarySelection" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded")
           icon(name='fa-columns' classes="columns")
