@@ -13,7 +13,7 @@
                   :items="states"
                   label="name"
                   componentDescription="State Select"
-                  :on-change="changeState"
+                  :on-change="changeStore"
                   v-on:clear="clearState"
                   style="background:#fff;"
                 )
@@ -126,7 +126,7 @@ export default {
   },
 
   methods: {
-    changeState (val) {
+    changeStore (val) {
       if (val && val.code && val.code.length > 1) {
         if (!this.stateSelected || val.code !== this.stateSelected.code) {
           this.localeSelected = null
@@ -159,7 +159,7 @@ export default {
     setLevel (val) {
       if (!val) return
       this.$store.commit('setSelectedGeographicLevel', val)
-      this.changeState(this.stateSelected)
+      this.changeStore(this.stateSelected)
     },
 
     clearState (val) {
