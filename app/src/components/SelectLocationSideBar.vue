@@ -40,7 +40,7 @@
                   span(class="input-group-btn")
                     button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addLocale")
                       | Add
-                div.locale-selection-list(style="border:1px solid #353434; border-top:0px; overflow-y:scroll; height:170px;")
+                div.locale-selection-list(style="border:1px solid #353434; border-top:0px; overflow-y:scroll; height:162px;")
                   ul(id="SelectedLocaleList")
                     li.selected-locale(v-for="locale in $store.getters.localeFilter")
                       span
@@ -62,7 +62,7 @@
                     span(class="input-group-btn")
                       button(type="button" style="min-width:70px; border-radius:0px; margin:0; padding:15px 20px;" @click="addDisaster")
                         | Add
-                  div.disaster-selection-list(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:120px; background:url('/static/img/bg_25_opacity.png')")
+                  div.disaster-selection-list(style="clear:left; border:1px solid #353434; border-top:0px; overflow-y:scroll; height:110px; background:url('/static/img/bg_25_opacity.png')")
                     ul(id="SelectedDisasterList")
                       li.selected-disaster(v-for="disaster in $store.getters.disasterFilter")
                         span

@@ -65,18 +65,6 @@
                 td &nbsp;
                 td
               tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
                 td Total Households
                 td 999,999,999
 </template>
@@ -184,7 +172,7 @@ table { margin:0; }
 
   .report-values {
     &.hidden { display:none; }
-    height:455px;
+    height:435px;
     background:#fff;
     overflow:auto;
     overflow-x:auto;
