@@ -1,11 +1,13 @@
 <template lang="pug">
   .value-selector
     div.report-actions
+      label.sr-only(for='Export') Export report
       button.usa-button.green(type="button" name="Export" title="Export report")
         |Export
       div.btn-group
+        label.sr-only(for='SummariesSelector') Show summary values selector
         button(type="button" @click="showSummarySelections=!showSummarySelections" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded")
-          icon(name='fa-columns' style="padding:0; margin-right:5px;")
+          icon(name='fa-columns' classes="columns")
           icon(name="fa-caret-up" v-show="showSummarySelections")
           icon(name="fa-caret-down" v-show="!showSummarySelections")
       div.summary-selection-list(v-show="showSummarySelections")
@@ -14,23 +16,33 @@
         table
           tr.table-header
             td
-              button(type="button" name="SelectAllSummaryValues" title="Select all summary values for report")
-                icon.ico-lg(name="fa-square-o")
+              label.sr-only(for='SelectAllSummaryValues') Select all summary values
+              button(type="button" name="SelectAllSummaryValues" title="Select all summary values")
+                icon.ico-lg(name="fa-check-square-o")
             td
               |All
         .summary-values
           ul
             li
+              label.sr-only(for='UnmetNeeds') Select unmet needs summary
               button(type="button" name="UnmetNeeds" title="Unmet needs summary")
-                icon.ico-lg(name="fa-square-o")
+                icon.ico-lg(name="fa-check-square-o")
               span
                 |Unmet Need
             li
+              label.sr-only(for='TotalDamages') Select total damages summary
+              button(type="button" name="TotalDamages" title="Total damages summary")
+                icon.ico-lg(name="fa-check-square-o")
+              span
+                |Total Damages
+            li
+              label.sr-only(for='FEMACityFundingAverage') Select FEMA city funding average summary
               button(type="button" name="FEMACityFundingAverage" title="FEMA city funding average summary")
                 icon.ico-lg(name="fa-square-o")
               span
                 |FEMA City Funding Average
             li
+              label.sr-only(for='FEMAAverageLoss') Select FEMA average loss summary
               button(type="button" name="FEMAAverageLoss" title="FEMA average loss summary")
                 icon.ico-lg(name="fa-square-o")
               span
@@ -68,6 +80,11 @@ export default {
     .btn-group {
       padding-left:20px;
 
+      .hdd-icon.columns {
+        padding:0;
+        margin-right:5px;
+      }
+
       button {
         background-color:#0071bc;
         .hdd-icon { fill:#fff; }
@@ -85,7 +102,8 @@ export default {
     }
 
     .summary-selection-list {
-      background-color:#000;
+      //background-color:#000;
+      background: url("/static/img/bg_90_opacity.png");
       box-shadow:5px 5px 10px #000;
       position: absolute;
       right:0;
@@ -98,13 +116,17 @@ export default {
       }
 
       table {
-        background-color:#205493;
+        background-color:#0071bc;
+        /* background-color:#ccc; */
         margin:0;
         border:none;
         text-align:left;
 
         tr {
-          &.table-header { color:#fff; }
+          &.table-header {
+            color:#fff;
+            font-weight:bold;
+          } /* color:#000; */
 
           td {
             margin:0;
@@ -121,7 +143,7 @@ export default {
               background:transparent;
               padding:10px;
               margin:0;
-              .hdd-icon { fill:#fff; }
+              .hdd-icon { fill:#fff; } /* fill:#000; */
             }
           }
         }

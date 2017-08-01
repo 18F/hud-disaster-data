@@ -27,7 +27,12 @@
             tr
               th Type
               th Amount
-        div.report-values
+        .report-loading.hidden
+          icon.fa-spin(name='fa-spinner')
+          span.fa-spin-text
+            | Generating Report ...
+          span.sr-only Loading...
+        .report-values
           table
               tr
                 td Unmet Need
@@ -42,31 +47,31 @@
                 td &nbsp;
                 td
               tr
-                td Unmet Need
-                td $999,999,999
-              tr
-                td Total Damages
-                td $999,999,999
-              tr
-                td Average Household Income
-                td $999,999,999
+                td &nbsp;
+                td
               tr
                 td &nbsp;
                 td
               tr
-                td Unmet Need
-                td $999,999,999
-              tr
-                td Total Damages
-                td $999,999,999
-              tr
-                td Average Household Income
-                td $999,999,999
+                td &nbsp;
+                td
               tr
                 td &nbsp;
                 td
               tr
-                td BBBBBBBBBBBB
+                td &nbsp;
+                td
+              tr
+                td &nbsp;
+                td
+              tr
+                td &nbsp;
+                td
+              tr
+                td &nbsp;
+                td
+              tr
+                td &nbsp;
                 td
               tr
                 td &nbsp;
@@ -111,6 +116,7 @@ export default {
 </script>
 
 <style lang="scss">
+.hidden { display:none; }
 table { margin:0; }
 .reports {
   padding:10px 20px;
@@ -128,7 +134,7 @@ table { margin:0; }
     padding:0;
     table.usa-table-borderless {
       tr {
-        td { min-height:40px; }
+        td { min-height:24px; }
       }
     }
     table {
@@ -159,7 +165,25 @@ table { margin:0; }
     }
   }
 
+  .report-loading {
+    background: url('/static/img/bg_50_opacity.png');
+    border:1px solid #5b616b;
+    height:455px;
+    padding-top:18%;
+    text-align:center;
+
+    .hdd-icon {
+      fill:#fff;
+      height:80px;
+      margin-bottom:20px;
+      width:80px;
+    }
+
+    span { color:#fff; }
+  }
+
   .report-values {
+    &.hidden { display:none; }
     height:455px;
     background:#fff;
     overflow:auto;
