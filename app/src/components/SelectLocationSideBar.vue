@@ -14,7 +14,7 @@
                   label="name"
                   componentDescription="State Select"
                   :on-change="changeState"
-                  v-on:clear="reset"
+                  v-on:clear="clearStore"
                   style="background:#fff;"
                 )
             div(style="margin-top:20px; overflow:hidden;")
@@ -70,9 +70,9 @@
                         button.clear-text(@click='' :title='`Remove ${disaster.name}`')
                           icon(name='fa-times')
             div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
-              button.usa-button.alt-button(type="button" style="margin-right:20px;" @click="reset")
+              button.usa-button.alt-button(type="button" style="margin-right:20px;" @click="clearStore")
                 | Clear
-              button.usa-button.green(type="button")
+              button.usa-button.green(type="button" @click="createReport")
                 | Create Report
 </template>
 
@@ -80,6 +80,7 @@
 // input(type="text" placeholder="search ..." style="position:absolute; padding-left:35px;")
 // icon(name='fa-search' style="position:relative; fill:#ccc; position:relative; top:15px; left:10px;")
 import inputselect from '@/components/InputSelect'
+import _ from 'lodash'
 
 export default {
   name: 'selectLocationSideBar',
@@ -160,6 +161,32 @@ export default {
       if (!val) return
       this.$store.commit('setSelectedGeographicLevel', val)
       this.changeState(this.stateSelected)
+    },
+
+    clearStore (val) {
+      this.reset()
+    },
+
+    createReport () {
+      var allFilters = {}
+      if (this.$store.getters.stateFilter) allFilters.stateId = this.$store.getters.stateFilter.code
+      if (this.$store.getters.disasterFilter.length > 0) allFilters.disasterId = _.flatMap(this.$store.getters.disasterFilter, dstr => dstr.code)
+      if (this.$store.getters.geographicLevel && this.$store.getters.localeFilter.length > 0) {
+        switch (this.$store.getters.geographicLevel.code.toLowerCase()) {
+          case 'city':
+            allFilters.geoName = 'damaged_city'
+            break
+          case 'county':
+            allFilters.geoName = 'damaged_county'
+            break
+        }
+        allFilters.geoArea = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
+      }
+
+      this.$store.dispatch('loadReportData',
+        { summaryCols: 'total_damages,unmet_need',
+          allFilters
+        })
     }
   }
 }

@@ -55,6 +55,10 @@ export const mutations = {
 
   setSelectedGeographicLevel: function (state, selectedGeographicLevel) {
     state.geographicLevel = selectedGeographicLevel
+  },
+
+  updateReportData: function (state, list) {
+    state.summaryRecords = list
   }
 }
 /**
@@ -89,6 +93,24 @@ export const actions = {
     })
   },
 
+  loadReportData: function ({ commit }, {summaryCols, allFilters}) {
+    let formattedQuery
+    _.forIn(allFilters, (value, key) => {
+      if (formattedQuery) formattedQuery += `&${key}=${value.toString()}`
+      else formattedQuery = `${key}=${value.toString()}`
+    })
+    axios.get(`/api/db?${formattedQuery}&summaryCols=${summaryCols}`).then(response => {
+      commit('updateReportData', response.data)
+      if (response.data && response.data.length === 0) {
+        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+      }
+      commit('resetStatus')
+    }).catch(err => {
+      console.log(`Error fetching FEMA data: ${err}`)
+      commit('setStatus', {type: 'error', scope: 'app', msg: 'FEMA report data is unavailable at this time.  Try again later or contact your administrator.'})
+    })
+  },
+
   setSelectedState: function ({commit}, qry) {
     commit('clearStore')
     commit('setState', qry)
@@ -113,6 +135,9 @@ export const getters = {
   },
   geographicLevel: state => {
     return state.geographicLevel
+  },
+  summaryRecords: state => {
+    return state.summaryRecords
   }
 }
 
@@ -121,7 +146,8 @@ const reportStore = {
     disasterList: [],
     geographicLevel: DEFAULT_GEOGRAPHIC_LEVEL,
     localeList: [],
-    stateFilter: null
+    stateFilter: null,
+    summaryRecords: []
   },
   actions,
   mutations,

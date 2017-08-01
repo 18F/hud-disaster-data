@@ -45,7 +45,8 @@ const getData = function (queryObj, summaryCols, selectCols) {
 
 const summarizeCols = function (data, summaryCols) {
   if (!data || summaryCols.length === 0) return false
-  var summary = {}
+  var numberOfRecords = data.length
+  var summary = {numberOfRecords}
   _.forEach(summaryCols, (col) => {
     summary[col] = _.sumBy(data, rec => _.toNumber(rec[col]))
   })

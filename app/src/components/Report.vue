@@ -21,7 +21,7 @@
           tr
             td(colspan="2")
               |Selected Locations: {{ locales }}
-        value-selector
+        value-selector(:showSummarySelections="false")
         table.report-values-header
           thead
             tr
@@ -34,39 +34,12 @@
           span.sr-only Loading...
         .report-values
           table
-              tr
-                td Unmet Need
-                td $999,999,999
-              tr
-                td Total Damages
-                td $999,999,999
-              tr
-                td Average Household Income
-                td $999,999,999
-              tr
-                td &nbsp;
+              tr(v-for='(amount, desc) in summaryRecords')
                 td
-              tr
-                td &nbsp;
+                  | {{ desc }}
                 td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td Total Households
-                td 999,999,999
+                  | {{ Math.round(amount * 100) / 100 }}
+
 </template>
 <script>
 import selectLocationSideBar from './SelectLocationSideBar'
@@ -98,6 +71,9 @@ export default {
     },
     level () {
       return this.$store.getters.geographicLevel.name
+    },
+    summaryRecords () {
+      return this.$store.getters.summaryRecords
     }
   }
 }
