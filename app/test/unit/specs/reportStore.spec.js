@@ -2,7 +2,7 @@
 import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
 import moxios from 'moxios' // eslint-disable-line
-import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '../../../src/reportStore' // eslint-disable-line
+import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '@/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
 const { updateDisasterList, updateLocaleList, clearStore, addDisasterFilter, addLocaleFilter } = mutations

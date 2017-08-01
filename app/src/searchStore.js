@@ -201,7 +201,7 @@ export const getters = {
     return state.savedExtracts
   },
   newExtract: state => {
-    if (state.currentExtract.length === 0) state.newExtract = false
+    if (state.currentExtract && state.currentExtract.length === 0) state.newExtract = false
     return state.newExtract
   },
   status: state => {

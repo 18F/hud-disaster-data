@@ -3,8 +3,9 @@ import Vue from 'vue' // eslint-disable-line
 import '@/vue-mixins'
 import Vuex from 'vuex' // eslint-disable-line
 import sinon from 'sinon'
-import store from '../../../src/store' // eslint-disable-line
-import {actions, getters, mutations} from '../../../src/searchStore' // eslint-disable-line
+import store from '@/store' // eslint-disable-line
+import router from '@/router'
+import {actions, getters, mutations} from '@/searchStore' // eslint-disable-line
 import DisasterSearch from '@/components/DisasterSearch' // eslint-disable-line
 import Message from '@/components/Message' // eslint-disable-line
 import magic from '@/bus'
@@ -30,7 +31,7 @@ const ONE_RECORD = [
 describe('DisasterSearch.vue', () => {
   it('should render correct list item contents', done => {
     const Constructor = Vue.extend(DisasterSearch)
-    const vm = new Constructor({store}).$mount()
+    const vm = new Constructor({store, router}).$mount()
     vm.$store.commit('updateDisasterList', ONE_RECORD)
     Vue.nextTick(function () {
       expect(vm.$el.querySelector('.disaster-search-recs').childElementCount).to.be.equal(1)
@@ -40,7 +41,7 @@ describe('DisasterSearch.vue', () => {
 
   it('should not populate items if query is empty', done => {
     const Constructor = Vue.extend(DisasterSearch)
-    const vm = new Constructor({store}).$mount()
+    const vm = new Constructor({store, router}).$mount()
     vm.$store.commit('updateDisasterList', [])
     Vue.nextTick(function () {
       expect(vm.$el.querySelector('.disaster-search-recs').childElementCount).to.be.equal(0)
@@ -51,7 +52,7 @@ describe('DisasterSearch.vue', () => {
   describe('update', () => {
     it('should force a reset if query is undefined', () => {
       const Constructor = Vue.extend(DisasterSearch)
-      const vm = new Constructor({store}).$mount()
+      const vm = new Constructor({store, router}).$mount()
       expect(vm.query).to.be.equal('')
       vm.query = undefined
       expect(vm.query).to.be.equal(undefined)
@@ -64,7 +65,7 @@ describe('DisasterSearch.vue', () => {
     it('should return before loading if query is shorter than 2', () => {
       const Constructor = Vue.extend(DisasterSearch)
       let stub = sinon.stub(mutations, 'updateDisasterList')
-      const vm = new Constructor({store}).$mount()
+      const vm = new Constructor({store, router}).$mount()
       expect(vm.query).to.be.equal('')
       vm.query = 'A'
       vm.update()
@@ -75,7 +76,7 @@ describe('DisasterSearch.vue', () => {
       let loadDisasterListStub = sinon.stub()
       const myStore = new Vuex.Store({state: store.state, actions: {loadDisasterList: loadDisasterListStub}, getters})
       const Constructor = Vue.extend(DisasterSearch)
-      const vm = new Constructor({store: myStore}).$mount()
+      const vm = new Constructor({store: myStore, router}).$mount()
       expect(vm.query).to.be.equal('')
       vm.query = 'DR1'
       vm.update()
@@ -87,7 +88,7 @@ describe('DisasterSearch.vue', () => {
   describe('isEmpty', () => {
     it('should return true if query is empty', () => {
       const Constructor = Vue.extend(DisasterSearch)
-      const vm = new Constructor({store}).$mount()
+      const vm = new Constructor({store, router}).$mount()
       expect(vm.query).to.be.equal('')
       vm.query = undefined
       expect(vm.query).to.be.equal(undefined)
@@ -128,14 +129,14 @@ describe('DisasterSearch.vue', () => {
       }
       store = new Vuex.Store({state: {}, mutations, getters})
       const Constructor = Vue.extend(Message)
-      const vm = new Constructor({store}).$mount()
+      const vm = new Constructor({store, router}).$mount()
       expect(vm.displayMessage).to.be.equal(false)
     })
 
     describe('mounted', () => {
       it('magic should listen for clearQuery and set query to blank if searchText is blank', () => {
         const Constructor = Vue.extend(DisasterSearch)
-        const vm = new Constructor({store}).$mount()
+        const vm = new Constructor({store, router}).$mount()
         vm.$refs.searchText.value = ''
         vm.query = 'something'
         magic.$emit('clearQuery')
@@ -144,7 +145,7 @@ describe('DisasterSearch.vue', () => {
 
       it('magic should listen for clearQuery and not set query to blank if searchText is not blank', () => {
         const Constructor = Vue.extend(DisasterSearch)
-        const vm = new Constructor({store}).$mount()
+        const vm = new Constructor({store, router}).$mount()
         vm.$refs.searchText.value = 'somethingelse'
         vm.query = 'something'
         magic.$emit('clearQuery')
