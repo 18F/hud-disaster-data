@@ -21,7 +21,7 @@
           tr
             td(colspan="2")
               |Selected Locations: {{ locales }}
-        value-selector
+        value-selector(:showSummarySelections="false")
         table.report-values-header
           thead
             tr
@@ -110,6 +110,9 @@ export default {
     },
     level () {
       return this.$store.getters.geographicLevel.name
+    },
+    summaryRecords () {
+      return this.$store.getters.summaryRecords
     }
   }
 }

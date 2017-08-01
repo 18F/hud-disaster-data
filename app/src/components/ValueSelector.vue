@@ -6,11 +6,11 @@
         |Export
       div.btn-group
         label.sr-only(for='SummariesSelector') Show summary values selector
-        button(type="button" @click="showSummarySelections=!showSummarySelections" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded")
+        button(type="button" @click="toggleSummarySelection" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded")
           icon(name='fa-columns' classes="columns")
-          icon(name="fa-caret-up" v-show="showSummarySelections")
-          icon(name="fa-caret-down" v-show="!showSummarySelections")
-      div.summary-selection-list(v-show="showSummarySelections")
+          icon(name="fa-caret-up" v-show="showSelectionList")
+          icon(name="fa-caret-down" v-show="!showSelectionList")
+      div.summary-selection-list(v-show="showSelectionList")
         span
           |Summary Values
         table
@@ -53,18 +53,18 @@ export default {
   name: 'value-selector',
   data () {
     return {
-      showSummarySelections: false
+      showSelectionList: false
     }
   },
   props: ['showSummarySelections'],
   methods: {
-    close () {
-      this.showSummarySelections = false
+    toggleSummarySelection () {
+      this.showSelectionList = !this.showSelectionList
     }
   },
   computed: {
     selectionListExpanded () {
-      return this.showSummarySelections ? 'expanded' : false
+      return this.showSelectionList ? 'expanded' : false
     }
   }
 }

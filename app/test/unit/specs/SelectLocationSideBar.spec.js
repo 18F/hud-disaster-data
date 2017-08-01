@@ -37,7 +37,7 @@ describe('SelectLocationSideBar component', function () {
     })
   })
 
-  describe('changeStore', function () {
+  describe('changeState', function () {
     it('should reset locales and disaster numbers if state has changed', function () {
       store = new Vuex.Store({state: {}, mutations, getters})
       const Constructor = Vue.extend(SelectLocationSideBar)
@@ -45,7 +45,7 @@ describe('SelectLocationSideBar component', function () {
       vm.stateSelected = {code: 'WI', name: 'Wisconsin'}
       vm.localeSelected = ['this place', 'that other place']
       vm.disasterSelected = ['this disaster', 'the next disaster']
-      vm.changeStore({code: 'IA', name: 'Iowa'})
+      vm.changeState({code: 'IA', name: 'Iowa'})
       Vue.nextTick(() => {
         expect(vm.stateSelected.code).to.be.equal('IA')
         expect(vm.localeSelected).to.be.null

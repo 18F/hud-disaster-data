@@ -5,7 +5,7 @@ import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '../../../src/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
-const { updateDisasterList, updateLocaleList, clearState } = mutations
+const { updateDisasterList, updateLocaleList, clearStore } = mutations
 const { loadDisasterList, loadLocales } = actions
 
 const TWO_RECORDS = [
@@ -147,10 +147,10 @@ describe('reportStore', function () {
     })
   })
 
-  describe('clearState', function () {
+  describe('clearStore', function () {
     it('should reset state to defaults', function () {
       let state = {}
-      clearState(state)
+      clearStore(state)
       should(state.disasterList).be.an.Array().and.have.length(0)
       should(state.localeList).be.an.Array().and.have.length(0)
       should(state.stateFilter).be.null()
