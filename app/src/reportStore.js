@@ -53,6 +53,18 @@ export const mutations = {
     state.localeList.splice(index, 1, chosenLocale)
   },
 
+  removeDisasterFilter: function (state, disaster) {
+    disaster.selected = false
+    let index = _.findIndex(state.disasterList, {code: disaster.code})
+    state.disasterList.splice(index, 1, disaster)
+  },
+
+  removeLocaleFilter: function (state, locale) {
+    locale.selected = false
+    let index = _.findIndex(state.localeList, {code: locale.code})
+    state.localeList.splice(index, 1, locale)
+  },
+
   setSelectedGeographicLevel: function (state, selectedGeographicLevel) {
     state.geographicLevel = selectedGeographicLevel
   },

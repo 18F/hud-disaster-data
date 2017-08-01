@@ -45,7 +45,7 @@
                     li.selected-locale(v-for="locale in $store.getters.localeFilter")
                       span
                         | {{ locale.name }}
-                      button.clear-text(@click='' :title='`Remove ${locale.name}`')
+                      button.clear-text(@click='removeLocale(locale)' :title='`Remove ${locale.name}`')
                         icon(name='fa-times')
             div(style="margin-top:20px; overflow:hidden;")
               | Disasters
@@ -67,7 +67,7 @@
                       li.selected-disaster(v-for="disaster in $store.getters.disasterFilter")
                         span
                           | {{ disaster.name }}
-                        button.clear-text(@click='' :title='`Remove ${disaster.name}`')
+                        button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                           icon(name='fa-times')
             div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
               button.usa-button.alt-button(type="button" style="margin-right:20px;" @click="clearStore")
@@ -187,6 +187,14 @@ export default {
         { summaryCols: 'total_damages,unmet_need',
           allFilters
         })
+    },
+
+    removeDisaster (disaster) {
+      this.$store.commit('removeDisasterFilter', disaster)
+    },
+
+    removeLocale (locale) {
+      this.$store.commit('removeLocaleFilter', locale)
     }
   }
 }
