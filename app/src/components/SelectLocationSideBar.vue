@@ -13,8 +13,8 @@
                   :items="states"
                   label="name"
                   componentDescription="State Select"
-                  :on-change="changeStore"
-                  v-on:clear="clearStore"
+                  :on-change="changeState"
+                  v-on:clear="reset"
                   style="background:#fff;"
                 )
             div(style="margin-top:20px; overflow:hidden;")
@@ -70,7 +70,7 @@
                         button.clear-text(@click='' :title='`Remove ${disaster.name}`')
                           icon(name='fa-times')
             div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
-              button.usa-button.alt-button(type="button" style="margin-right:20px;" @click="clearStore")
+              button.usa-button.alt-button(type="button" style="margin-right:20px;" @click="reset")
                 | Clear
               button.usa-button.green(type="button")
                 | Create Report
@@ -126,7 +126,7 @@ export default {
   },
 
   methods: {
-    changeStore (val) {
+    changeState (val) {
       if (val && val.code && val.code.length > 1) {
         if (!this.stateSelected || val.code !== this.stateSelected.code) {
           this.localeSelected = null
@@ -159,11 +159,7 @@ export default {
     setLevel (val) {
       if (!val) return
       this.$store.commit('setSelectedGeographicLevel', val)
-      this.changeStore(this.stateSelected)
-    },
-
-    clearStore (val) {
-      this.reset()
+      this.changeState(this.stateSelected)
     }
   }
 }
