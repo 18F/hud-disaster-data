@@ -34,51 +34,12 @@
           span.sr-only Loading...
         .report-values
           table
-              tr
-                td Unmet Need
-                td $999,999,999
-              tr
-                td Total Damages
-                td $999,999,999
-              tr
-                td Average Household Income
-                td $999,999,999
-              tr
-                td &nbsp;
+              tr(v-for='(amount, desc) in summaryRecords')
                 td
-              tr
-                td &nbsp;
+                  | {{ desc }}
                 td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td &nbsp;
-                td
-              tr
-                td Total Households
-                td 999,999,999
+                  | {{ Math.round(amount * 100) / 100 }}
+
 </template>
 <script>
 import selectLocationSideBar from './SelectLocationSideBar'
