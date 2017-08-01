@@ -2,11 +2,12 @@
 import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
 import moxios from 'moxios' // eslint-disable-line
-import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '../../../src/reportStore' // eslint-disable-line
+import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '@/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
-const { updateDisasterList, updateLocaleList, clearStore } = mutations
-const { loadDisasterList, loadLocales } = actions
+const { updateDisasterList, updateLocaleList, clearStore, addDisasterFilter, addLocaleFilter } = mutations
+const { loadDisasterList, loadLocales, setSelectedState } = actions
+const { localeFilter, disasterFilter } = getters
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -155,6 +156,74 @@ describe('reportStore', function () {
       should(state.localeList).be.an.Array().and.have.length(0)
       should(state.stateFilter).be.null()
       should(state.geographicLevel).be.an.Object().and.be.equal(DEFAULT_GEOGRAPHIC_LEVEL)
+    })
+  })
+
+  describe('setSelectedState', function () {
+    it('should set the selected state', function () {
+      const commit = sinon.spy()
+      const qry = 'Some query'
+      setSelectedState({commit}, qry)
+      should(commit.calledWith('clearStore')).be.true()
+      should(commit.calledWith('setState', qry)).be.true()
+    })
+  })
+
+  describe('addDisasterFilter', function () {
+    it('Should set the selected attribute of the chosen disaster to true', function () {
+      let state = {
+        disasterList: [
+          {name: 'one'},
+          {name: 'two'},
+          {name: 'three'}
+        ]
+      }
+      addDisasterFilter(state, state.disasterList[1])
+      should(state.disasterList[1]).have.property('selected').which.is.true()
+    })
+  })
+
+  describe('addLocaleFilter', function () {
+    it('Should set the selected attribute of the chosen locale to true', function () {
+      let state = {
+        localeList: [
+          {name: 'one'},
+          {name: 'two'},
+          {name: 'three'}
+        ]
+      }
+      addLocaleFilter(state, state.localeList[1])
+      should(state.localeList[1]).have.property('selected').which.is.true()
+    })
+  })
+
+  describe('localeFilter', function () {
+    it('should only return the selected locales', function () {
+      let state = {
+        localeList: [
+          {name: 'one'},
+          {name: 'two', selected: true},
+          {name: 'three', selected: true}
+        ]
+      }
+      const selected = localeFilter(state)
+      should(selected).be.an.Array().and.have.length(2)
+      should(selected).not.containEql(state.localeList[0])
+    })
+  })
+
+  describe('disasterFilter', function () {
+    it('should only return the selected disasters', function () {
+      let state = {
+        disasterList: [
+          {name: 'one'},
+          {name: 'two', selected: true},
+          {name: 'three', selected: true}
+        ]
+      }
+      const selected = disasterFilter(state)
+      should(selected).be.an.Array().and.have.length(2)
+      should(selected).not.containEql(state.disasterList[0])
     })
   })
 })
