@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     items () {
-      return this.$store.getters.currentExtract
+      return this.$store.getters.currentExtract || []
     },
     savedExtracts () {
       return this.$store.getters.savedExtracts
@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     download () {
-      if (this.items.length === 0) return
+      if (!this.items || this.items.length === 0) return
       const timeStamp = moment().format('YYYY-MM-DD-kk:mm:ss')
       const url = this.selectedExtractName ? `/api/export/${this.selectedExtractName}-${timeStamp}` : `/api/export/${timeStamp}`
       const data = _.map(this.$store.getters.currentExtract, disaster => {

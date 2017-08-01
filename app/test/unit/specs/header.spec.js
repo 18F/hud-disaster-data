@@ -5,6 +5,7 @@ import '@/vue-mixins'
 import tour from '@/tour'
 import sinon from 'sinon'
 import header from '@/components/Header'
+import router from '@/router'
 // eslint-disable-line
 
 Vue.config.productionTip = false
@@ -12,7 +13,7 @@ Vue.config.productionTip = false
 describe('Header.vue', () => {
   it('should render correct header', done => {
     const Constructor = Vue.extend(header)
-    const vm = new Constructor().$mount()
+    const vm = new Constructor({router}).$mount()
     Vue.nextTick(function () {
       expect(vm.$refs.title.textContent).to.be.equal(vm.title)
       done()
@@ -22,7 +23,7 @@ describe('Header.vue', () => {
     it('should start the tour', () => {
       let startStub = sinon.stub(tour, 'start')
       const Constructor = Vue.extend(header)
-      const vm = new Constructor().$mount()
+      const vm = new Constructor({router}).$mount()
       vm.startTour()
       expect(startStub.called).to.be.equal(true)
       startStub.restore()
@@ -31,7 +32,7 @@ describe('Header.vue', () => {
   describe('toggleBurger', () => {
     it('should set burgerMenu attribute hidden if it is not set, or unset it, if it is set', () => {
       const Constructor = Vue.extend(header)
-      const vm = new Constructor().$mount()
+      const vm = new Constructor({router}).$mount()
       expect(vm.$el.querySelector('#burger-menu.hidden')).to.not.be.null
       vm.toggleBurger()
       expect(vm.$el.querySelector('#burger-menu.hidden')).to.be.null
@@ -40,7 +41,7 @@ describe('Header.vue', () => {
   describe('skipToContent', () => {
     it('should set focus on Guide Me button', () => {
       const Constructor = Vue.extend(header)
-      const vm = new Constructor().$mount()
+      const vm = new Constructor({router}).$mount()
       expect(document.activeElement.nodeName).to.be.equal('BODY')
       const focusStub = sinon.stub(vm.$refs.guideMe, 'focus')
       vm.skipToContent()

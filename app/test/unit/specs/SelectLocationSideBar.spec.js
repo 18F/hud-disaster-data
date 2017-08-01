@@ -13,7 +13,10 @@ Vue.config.productionTip = false
 describe('SelectLocationSideBar component', function () {
   let store
   let mutations
+  let actions
   let getters
+  let Constructor
+  let vm
 
   beforeEach(function () {
     getters = {
@@ -22,43 +25,87 @@ describe('SelectLocationSideBar component', function () {
     }
     mutations = {
       updateDisasterNumberList: sinon.stub(),
-      updateLocaleList: sinon.stub()
+      updateLocaleList: sinon.stub(),
+      addDisasterFilter: sinon.stub(),
+      addLocaleFilter: sinon.stub(),
+      setSelectedGeographicLevel: sinon.stub(),
+      clearStore: sinon.stub()
+    }
+    actions = {
+      setSelectedState: sinon.stub(),
+      loadLocales: sinon.stub(),
+      loadDisasterList: sinon.stub()
     }
 
-    store = new Vuex.Store({state: {}, mutations, getters})
+    store = new Vuex.Store({state: {}, mutations, getters, actions})
+    Constructor = Vue.extend(SelectLocationSideBar)
+    vm = new Constructor({store}).$mount()
   })
 
   it('should start with populated state dropdown', function (done) {
-    const Constructor = Vue.extend(SelectLocationSideBar)
-    const vm = new Constructor({store}).$mount()
     Vue.nextTick(() => {
       expect(vm.states.length).to.greaterThan(0)
       done()
     })
   })
 
-  describe('changeStore', function () {
-    it('should reset locales and disaster numbers if state has changed', function () {
-      store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(SelectLocationSideBar)
-      const vm = new Constructor({store}).$mount()
+  describe('changeState', function () {
+    it('should reset locales and disaster numbers if state has changed', function (done) {
       vm.stateSelected = {code: 'WI', name: 'Wisconsin'}
       vm.localeSelected = ['this place', 'that other place']
       vm.disasterSelected = ['this disaster', 'the next disaster']
-      vm.changeStore({code: 'IA', name: 'Iowa'})
+      const dispatchSpy = sinon.spy(store, 'dispatch')
+      const iowa = {code: 'IA', name: 'Iowa'}
+      vm.changeState(iowa)
       Vue.nextTick(() => {
-        expect(vm.stateSelected.code).to.be.equal('IA')
         expect(vm.localeSelected).to.be.null
         expect(vm.disasterSelected).to.be.null
+        expect(dispatchSpy.calledWith('setSelectedState', iowa))
+        expect(dispatchSpy.calledWith('loadLocales', iowa.code))
+        expect(dispatchSpy.calledWith('loadDisasterList', iowa.code))
+        done()
       })
     })
   })
 
+  describe('reset', function () {
+    it('should reset all the selected values to null and clear the store\'s state', function (done) {
+      vm.localeSelected = 1
+      vm.disasterSelected = 1
+      vm.stateSelected = 1
+      let commitSpy = sinon.spy(store, 'commit')
+      vm.reset()
+      Vue.nextTick(() => {
+        should(vm.localeSelected).be.null()
+        should(vm.disasterSelected).be.null()
+        should(vm.stateSelected).be.null()
+        should(commitSpy.calledWith('clearStore')).be.true()
+        done()
+      })
+    })
+  })
+  describe('addDisaster', function () {
+    it('should add the disaster', function (done) {
+      vm.disasterSelected = {name: 'big disaster', code: 'BAD'}
+      let commitSpy = sinon.spy(store, 'commit')
+      vm.addDisaster()
+      Vue.nextTick(() => {
+        should(commitSpy.calledWith('addDisasterFilter')).be.true()
+        done()
+      })
+    })
+    it('should do nothing if no disaster is selected', function (done) {
+      vm.disasterSelected = null
+      let commitSpy = sinon.spy(store, 'commit')
+      vm.addDisaster()
+      Vue.nextTick(() => {
+        should(commitSpy.calledWith('addDisasterFilter')).be.false()
+        done()
+      })
+    })
+  })
   describe('addLocale', function () {
     it('should add the locale', function (done) {
-      store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(SelectLocationSideBar)
-      const vm = new Constructor({store}).$mount()
       vm.localeSelected = {name: 'Alexandria', code: 'Alexandria'}
       let commitSpy = sinon.spy(store, 'commit')
       vm.addLocale()
@@ -68,14 +115,30 @@ describe('SelectLocationSideBar component', function () {
       })
     })
     it('should do nothing if no locale is selected', function (done) {
-      store = new Vuex.Store({state: {}, mutations, getters})
-      const Constructor = Vue.extend(SelectLocationSideBar)
-      const vm = new Constructor({store}).$mount()
       vm.localeSelected = null
       let commitSpy = sinon.spy(store, 'commit')
       vm.addLocale()
       Vue.nextTick(() => {
         should(commitSpy.calledWith('addLocaleFilter')).be.false()
+        done()
+      })
+    })
+  })
+  describe('setLevel', function () {
+    it('should set the geographicLevel', function (done) {
+      const level = {name: 'City', code: 'City'}
+      let commitSpy = sinon.spy(store, 'commit')
+      vm.setLevel(level)
+      Vue.nextTick(() => {
+        should(commitSpy.calledWith('setSelectedGeographicLevel', level)).be.true()
+        done()
+      })
+    })
+    it('should do nothing if val is null or undefined', function (done) {
+      let commitSpy = sinon.spy(store, 'commit')
+      vm.setLevel()
+      Vue.nextTick(() => {
+        should(commitSpy.calledWith('setSelectedGeographicLevel')).be.false()
         done()
       })
     })

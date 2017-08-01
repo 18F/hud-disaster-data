@@ -30,7 +30,7 @@ export const mutations = {
     state.localeList = list
   },
 
-  clearState: function (state) {
+  clearStore: function (state) {
     state.disasterList = []
     state.localeList = []
     state.stateFilter = null
@@ -90,7 +90,7 @@ export const actions = {
   },
 
   setSelectedState: function ({commit}, qry) {
-    commit('clearState')
+    commit('clearStore')
     commit('setState', qry)
   }
 }
