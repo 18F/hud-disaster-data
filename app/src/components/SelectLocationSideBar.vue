@@ -14,7 +14,7 @@
                   label="name"
                   componentDescription="State Select"
                   :on-change="changeStore"
-                  v-on:clear="clearState"
+                  v-on:clear="clearStore"
                   style="background:#fff;"
                 )
             div(style="margin-top:20px; overflow:hidden;")
@@ -70,7 +70,7 @@
                         button.clear-text(@click='' :title='`Remove ${disaster.name}`')
                           icon(name='fa-times')
             div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
-              button.usa-button.alt-button(type="button" style="margin-right:20px;" @click="clearState")
+              button.usa-button.alt-button(type="button" style="margin-right:20px;" @click="clearStore")
                 | Clear
               button.usa-button.green(type="button")
                 | Create Report
@@ -153,7 +153,7 @@ export default {
       this.localeSelected = null
       this.disasterSelected = null
       this.stateSelected = null
-      this.$store.commit('clearState')
+      this.$store.commit('clearStore')
     },
 
     setLevel (val) {
@@ -162,7 +162,7 @@ export default {
       this.changeStore(this.stateSelected)
     },
 
-    clearState (val) {
+    clearStore (val) {
       this.reset()
     }
   }
