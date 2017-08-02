@@ -57,6 +57,7 @@
                         :value.sync="disasterSelected"
                         :items="disasterItems",
                         label="disasterNumber"
+                        ref="disasterSelect"
                         :dropdownMenuStyle="'max-height:350px; overflow:true;'"
                       )
                     span(class="input-group-btn")
@@ -148,6 +149,7 @@ export default {
     addDisaster () {
       if (!this.disasterSelected) return
       this.$store.commit('addDisasterFilter', this.disasterSelected)
+      this.$refs.disasterSelect.reset()
     },
 
     reset () {
