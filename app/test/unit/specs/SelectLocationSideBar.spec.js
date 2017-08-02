@@ -34,7 +34,8 @@ describe('SelectLocationSideBar component', function () {
     actions = {
       setSelectedState: sinon.stub(),
       loadLocales: sinon.stub(),
-      loadDisasterList: sinon.stub()
+      loadDisasterList: sinon.stub(),
+      loadReportData: sinon.stub()
     }
 
     store = new Vuex.Store({state: {}, mutations, getters, actions})
@@ -63,6 +64,46 @@ describe('SelectLocationSideBar component', function () {
         expect(dispatchSpy.calledWith('setSelectedState', iowa))
         expect(dispatchSpy.calledWith('loadLocales', iowa.code))
         expect(dispatchSpy.calledWith('loadDisasterList', iowa.code))
+        done()
+      })
+    })
+  })
+
+  describe('createReport', function () {
+    it('should set parameters using geographicLevel "city" to proper values and pass them to loadReportData action', function (done) {
+      let getters = {}
+      let stateFilter = {code: 'TX', name: 'Texas'}
+      let localeFilter = [{ code: 'HOUSTON', name: 'Houston' }]
+      let disasterFilter = [{ code: 'DR-4272-TX', name: 'DR-4272-TX', selected: true }]
+      let geographicLevel = { code: 'city', name: 'city' }
+      getters.stateFilter = () => { return stateFilter }
+      getters.localeFilter = () => { return localeFilter }
+      getters.disasterFilter = () => { return disasterFilter }
+      getters.geographicLevel = () => { return geographicLevel }
+      store = new Vuex.Store({state: {}, mutations, getters, actions})
+      Constructor = Vue.extend(SelectLocationSideBar)
+      vm = new Constructor({store}).$mount()
+      const dispatchSpy = sinon.spy(store, 'dispatch')
+      vm.createReport()
+      Vue.nextTick(() => {
+        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,unmet_need', 'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'damaged_city', 'geoArea': ['HOUSTON']}}))
+        done()
+      })
+    })
+
+    it('should set parameters, using geographicLevel "county" and nulls for all else but localeFilter, to proper values and pass them to loadReportData action', function (done) {
+      let getters = {}
+      getters.stateFilter = () => { return null }
+      getters.localeFilter = () => { return [{ code: 'HOUSTON', name: 'Houston' }] }
+      getters.disasterFilter = () => { return [] }
+      getters.geographicLevel = () => { return { code: 'county', name: 'county' } }
+      store = new Vuex.Store({state: {}, mutations, getters, actions})
+      Constructor = Vue.extend(SelectLocationSideBar)
+      vm = new Constructor({store}).$mount()
+      const dispatchSpy = sinon.spy(store, 'dispatch')
+      vm.createReport()
+      Vue.nextTick(() => {
+        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,unmet_need', 'allFilters': {'stateId': null, 'disasterId': [], 'geoName': 'county_name', 'geoArea': [{ code: 'HOUSTON', name: 'Houston' }]}}))
         done()
       })
     })
@@ -143,6 +184,42 @@ describe('SelectLocationSideBar component', function () {
       vm.setLevel()
       Vue.nextTick(() => {
         should(commitSpy.calledWith('setSelectedGeographicLevel')).be.false()
+        done()
+      })
+    })
+  })
+
+  describe('clearStore', function () {
+    it('should call reset', function (done) {
+      let val = 'something'
+      let commitSpy = sinon.spy(vm, 'reset')
+      vm.clearStore(val)
+      Vue.nextTick(() => {
+        should(commitSpy.called).be.true()
+        done()
+      })
+    })
+  })
+
+  describe('removeDisaster', function () {
+    it('should call commit to remove the disaster', function (done) {
+      let disaster = 'something'
+      let commitSpy = sinon.spy(store, 'commit')
+      vm.removeDisaster(disaster)
+      Vue.nextTick(() => {
+        should(commitSpy.calledWith('removeDisasterFilter')).be.true()
+        done()
+      })
+    })
+  })
+
+  describe('removeLocale', function () {
+    it('should call commit to remove the locale', function (done) {
+      let locale = 'something'
+      let commitSpy = sinon.spy(store, 'commit')
+      vm.removeLocale(locale)
+      Vue.nextTick(() => {
+        should(commitSpy.calledWith('removeLocaleFilter')).be.true()
         done()
       })
     })
