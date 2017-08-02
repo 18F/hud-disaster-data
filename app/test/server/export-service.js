@@ -7,7 +7,7 @@ describe('/api/export/:fileNamePart', function () {
   this.timeout(10000)
 
   it('should return a document with a csv attachment', (done) => {
-    request(app).get('/api/export/My_Document_Name?disasters=DR-4311-UT')
+    request(app).get('/api/export/My_Document_Name?disasters=DR-4269-TX')
     .expect(function (res) {
       const headers = res.headers
       headers['content-type'].should.be.equal('text/csv; charset=utf-8')

@@ -5,6 +5,7 @@ const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
 const csv = require('express-csv')
+const dbApi = require('./dbApi')
 
 /**
 * Creates the routes for the backend functionality.
@@ -52,8 +53,7 @@ router.get('/disasterquery/:qry', function (req, res) {
 
 /**
 * router.get('/export/:fileNamePart') <br/>
-*  Generates a CSV file with the columns: 'Requested Disaster Type', 'Requested Disaster Number', and 'Requested Disaster State Abbr'<br/>
-*  The records will contain the individual disaster type, disaster number, and disaster state abbreviation for each disaster passed in.
+*  Generates a CSV file with all the columns from the database<br/>
 * @function get
 * @param {qry} - a comma separated list of disaster id's
 */
@@ -61,10 +61,15 @@ router.get('/export/:fileNamePart', function (req, res) {
   var fileName = `hud-fema-data-${req.params.fileNamePart}`
   var disasterNumbers = _.get(req, 'query.disasters').split(',')
   if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
-  var resultSet = [['Requested Disaster Type', 'Requested Disaster Number', 'Requested Disaster State Abbr']]
-  _.map(disasterNumbers, disasterNumber => {
-    var disasterNumberPieces = disasterNumber.split('-')
-    resultSet.push([disasterNumberPieces[0], disasterNumberPieces[1], disasterNumberPieces[2]])
+  var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
+  var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
+  var results = dbApi.getData([{damaged_state: states}, {disaster_id: numbers}])
+  if (!results || results.length === 0) return res.status(204).send('No data found.')
+  var columns = []
+  for (var key in results[0]) columns.push(key)
+  var resultSet = [ columns ]
+  _.map(results, rec => {
+    resultSet.push(_.map(columns, col => { return rec[col] }))
   })
   res.setHeader('Content-disposition', `attachment; filename="${fileName}.csv"`)
   res.csv(resultSet)
@@ -77,7 +82,6 @@ router.get('/export/:fileNamePart', function (req, res) {
 * @param {qry} - a 2 character state abbreviation
 */
 router.get('/localequery/:state', function (req, res) {
-  const dbApi = require('./dbApi')
   var state = req.params.state.toUpperCase()
   var level = _.get(req.query, 'level').toLowerCase()
   var desiredLocaleName
@@ -144,7 +148,6 @@ router.get('/disasternumber/:qry', function (req, res) {
 * @param {summaryCols}- a comma separated list of columns to be returned with the summed values
 **/
 router.get('/db', (req, res) => {
-  const dbApi = require('./dbApi')
   var disasterId = _.get(req.query, 'disasterId')
   if (disasterId) disasterId = disasterId.split(',')
   var stateId = _.get(req.query, 'stateId')
