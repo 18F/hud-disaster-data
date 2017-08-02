@@ -27,11 +27,6 @@ describe('Report component', function () {
     Constructor = Vue.extend(Report)
     vm = new Constructor({store}).$mount()
   })
-  // stateName: function () { return 'Wisconsin' },
-  // disasters: function () { return 'DR-4272-TX, DR-4277-TX' },
-  // locales: function () { return 'Houston, Alamo' },
-  // level: function () { return 'city' },
-  // summaryRecords: function () { return { numberOfRecords: 1, total_damages: 100, unmet_need: 50 } }
 
   describe('stateName', function () {
     it('should return the state name', function (done) {
