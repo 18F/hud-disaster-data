@@ -6,7 +6,7 @@ import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '@/reportS
 import sinon from 'sinon'
 import should from 'should'
 const { updateDisasterList, updateLocaleList, clearStore, addDisasterFilter, addLocaleFilter } = mutations
-const { loadDisasterList, loadLocales, setSelectedState } = actions
+const { loadDisasterList, loadLocales, setSelectedState, loadReportData } = actions
 const { localeFilter, disasterFilter } = getters
 
 const TWO_RECORDS = [
@@ -224,6 +224,52 @@ describe('reportStore', function () {
       const selected = disasterFilter(state)
       should(selected).be.an.Array().and.have.length(2)
       should(selected).not.containEql(state.disasterList[0])
+    })
+  })
+
+  describe('loadReportData', function () {
+    const REPORT_SUMMARY = {numberOfRecords: 200, total_damages: 22000.50, unmet_need: 10000.50}
+    const filterParameter = {'summaryCols': 'total_damages,unmet_need', 'allFilters': {'stateId': 'TX'}}
+
+    it('should call commit for updateReportData when the data is loaded', function (done) {
+      moxios.stubRequest(/db/, {
+        status: 200,
+        response: _.clone(REPORT_SUMMARY)
+      })
+      const commit = sinon.spy()
+      loadReportData({commit}, filterParameter)
+      moxios.wait(() => {
+        should(commit.calledWith('updateReportData')).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
+    it('should set status to "no results found" if result is empty', function (done) {
+      moxios.stubRequest(/db/, {
+        status: 200,
+        response: []
+      })
+      const commit = sinon.spy()
+      loadReportData({commit}, filterParameter)
+      moxios.wait(() => {
+        should(commit.calledWith('updateReportData')).be.true()
+        should(commit.calledWith('resetStatus')).be.false()
+        should(commit.calledWith('setStatus')).be.true()
+        done()
+      })
+    })
+    it('should set status to error if server responds with error', function (done) {
+      moxios.stubRequest(/TX/, {
+        status: 500
+      })
+      const commit = sinon.spy()
+      loadReportData({commit}, filterParameter)
+      moxios.wait(() => {
+        should(commit.calledWith('updateLocaleList')).be.false()
+        should(commit.calledWith('resetStatus')).be.false()
+        should(commit.calledWith('setStatus')).be.true()
+        done()
+      })
     })
   })
 })
