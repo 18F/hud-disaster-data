@@ -18,12 +18,12 @@ describe('/api/db', function () {
   })
 
   it('should return data when specifying a stateId/disasterId combination', (done) => {
-    request(app).get('/api/db?stateId=Tx&disasterId=4269')
+    request(app).get('/api/db?stateId=IA&disasterId=4187')
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.be.an.Object().and.have.property('disaster_id').which.is.equal('4269')
-      body[0].should.be.an.Object().and.have.property('damaged_state').which.is.equal('TX')
+      body[0].should.be.an.Object().and.have.property('disaster_id').which.is.equal('4187')
+      body[0].should.be.an.Object().and.have.property('damaged_state').which.is.equal('IA')
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
