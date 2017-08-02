@@ -53,4 +53,4 @@ const summarizeCols = function (data, summaryCols) {
   return summary
 }
 
-module.exports = { getData }
+module.exports = { getData, summarizeCols }

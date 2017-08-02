@@ -2,6 +2,7 @@
 const request = require('supertest')
 const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
+const dbApi = require('../../lib/controllers/dbApi')
 
 describe('/api/db', function () {
   this.timeout(10000)
@@ -59,5 +60,45 @@ describe('/api/db', function () {
     })
     .expect(406)
     .expect('Content-Type', /text/, done)
+  })
+})
+
+describe('/api/db summarizeCols', function () {
+  this.timeout(10000)
+
+  it('should return JSON with summarized column values', (done) => {
+    let data = [{
+      disaster_id: '4269',
+      damaged_city: 'HOUSTON',
+      damaged_state: 'TX',
+      total_damages: 3789.92,
+      unmet_need: 1624.76
+    },
+    {
+      disaster_id: '4269',
+      damaged_city: 'HOUSTON',
+      damaged_state: 'TX',
+      total_damages: 3930.31,
+      unmet_need: 0
+    },
+    {
+      disaster_id: '4269',
+      damaged_city: 'HOUSTON',
+      damaged_state: 'TX',
+      total_damages: 270.65,
+      unmet_need: 270.65
+    }]
+    let summaryCols = ['total_damages', 'unmet_need']
+    let summarizedCols = dbApi.summarizeCols(data, summaryCols)
+    summarizedCols.total_damages.should.be.equal(3789.92 + 3930.31 + 270.65)
+    summarizedCols.unmet_need.should.be.equal(1624.76 + 0 + 270.65)
+    done()
+  })
+  it('should return false no data is passed in', (done) => {
+    let data = null
+    let summaryCols = ['total_damages', 'unmet_need']
+    let summarizedCols = dbApi.summarizeCols(data, summaryCols)
+    summarizedCols.should.be.equal(false)
+    done()
   })
 })
