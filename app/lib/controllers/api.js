@@ -6,9 +6,6 @@ const _ = require('lodash')
 const querystring = require('querystring')
 const csv = require('express-csv')
 
-const txDummyCityData = ['Houston', 'San Antonio', 'Dallas', 'Austin', 'Fort Worth', 'El Paso', 'Arlington', 'Corpus Christi', 'Plano', 'Laredo', 'Lubbock', 'Garland', 'Irving', 'Amarillo', 'Grand Prairie', 'Brownsville', 'Pasadena', 'Mesquite', 'McKinney', 'McAllen', 'Killeen', 'Waco', 'Carrollton', 'Beaumont', 'Abilene', 'Frisco', 'Denton', 'Midland', 'Wichita Falls', 'Odessa', 'Round Rock', 'Richardson', 'Tyler', 'Lewisville', 'College Station', 'The Woodlands CDP', 'San Angelo', 'Pearland', 'Allen', 'League City', 'Longview', 'Sugar Land', 'Edinburg', 'Mission', 'Bryan', 'Baytown', 'Pharr', 'Missouri City', 'Temple', 'Atascocita CDP', 'Harlingen', 'Flower Mound town', 'North Richland Hills', 'Victoria', 'New Braunfels', 'Mansfield', 'Conroe', 'Rowlett', 'Spring CDP', 'Port Arthur', 'Euless', 'DeSoto', 'Cedar Park', 'Galveston', 'Georgetown', 'Bedford', 'Pflugerville', 'Grapevine', 'Texas City', 'Cedar Hill', 'San Marcos', 'Haltom City', 'Wylie', 'Keller', 'Coppell', 'Huntsville', 'Duncanville', 'Sherman', 'Channelview CDP', 'Rockwall', 'Hurst', 'Burleson', 'Mission Bend CDP', 'Texarkana', 'Lancaster', 'The Colony', 'Friendswood', 'Weslaco', 'Del Rio', 'Lufkin', 'San Juan', 'La Porte', 'Nacogdoches', 'Copperas Cove', 'Socorro', 'Deer Park', 'Schertz', 'Rosenberg', 'Waxahachie', 'Fort Hood CDP', 'Cleburne', 'Farmers Branch', 'Kyle', 'Big Spring', 'Lake Jackson', 'Harker Heights', 'Southlake', 'Leander', 'Eagle Pass', 'Kingsville', 'Little Elm', 'Greenville', 'Weatherford', 'Seguin', 'Paris', 'San Benito', 'Alvin', 'Corsicana', 'Balch Springs', 'Marshall', 'Watauga', 'University Park', 'Cloverleaf CDP', 'Colleyville', 'West Odessa CDP', 'Denison', 'Kerrville', 'Plainview', 'Brushy Creek CDP', 'Canyon Lake CDP', 'Benbrook', 'Sachse', 'Corinth', 'Saginaw', 'Brownwood', 'Alice', 'Fresno CDP', 'Angleton', 'Palestine', 'Dickinson', 'Orange', 'Universal City', 'Ennis', 'Alamo', 'Cinco Ranch CDP', 'Belton', 'Converse', 'Midlothian', 'Pampa', 'Murphy', 'Stafford', 'Bay City', 'Nederland', 'Stephenville', 'South Houston', 'Bellaire', 'Mineral Wells', 'Horizon City', 'Jollyville CDP', 'Groves', 'White Settlement', 'Gainesville', 'Pecan Grove CDP', 'Aldine CDP', 'Terrell', 'Donna', 'Gatesville', 'Uvalde', 'Brenham', 'Mercedes', 'Mount Pleasant', 'Sulphur Springs', 'Hereford', 'Cibolo', 'Taylor', 'New Territory CDP', 'Humble', 'Portland', 'Highland Village', 'Seagoville', 'West University Place', 'Hutto', 'Dumas', 'Forney', 'Jacksonville', 'La Marque', 'Katy', 'Rio Grande City', 'Sienna Plantation CDP', 'Henderson', 'San Elizario CDP', 'Hewitt', 'Levelland', 'Timberwood Park CDP', 'Canyon', 'Borger', 'Live Oak', 'Addison town', 'Port Neches', 'Kilgore', 'Beeville', 'Crowley', 'Athens', 'Lockhart', 'Rendon CDP', 'Four Corners CDP', 'Forest Hill', 'Alton', 'Port Lavaca', 'Santa Fe', 'Wells Branch CDP', 'Freeport', 'La Homa CDP', 'Seabrook', 'Lumberton', 'Richmond', 'El Campo', 'Greatwood CDP', 'Robstown', 'Lakeway', 'Raymondville', 'Glenn Heights', 'Clute', 'Snyder', 'Hidalgo', 'Andrews', 'Vernon', 'Azle', 'Sweetwater', 'Galena Park', 'Burkburnett', 'Red Oak', 'Tomball', 'Vidor', 'Jacinto City', 'Fredericksburg', 'Robinson', 'Boerne', 'Webster']
-const wiDummyCityData = ['Milwaukee', 'Madison', 'Green Bay', 'Kenosha', 'Racine', 'Appleton', 'Waukesha', 'Oshkosh', 'Eau Claire', 'Janesville', 'West Allis', 'La Crosse', 'Sheboygan', 'Wauwatosa', 'Fond du Lac', 'New Berlin', 'Wausau', 'Brookfield', 'Beloit', 'Greenfield', 'Menomonee Falls village', 'Franklin', 'Oak Creek', 'Manitowoc', 'West Bend', 'Sun Prairie', 'Superior', 'Stevens Point', 'Mount Pleasant village', 'Neenah', 'Fitchburg', 'Caledonia village', 'Muskego', 'Watertown', 'De Pere', 'Mequon', 'South Milwaukee', 'Germantown village', 'Pleasant Prairie village', 'Marshfield', 'Wisconsin Rapids', 'Cudahy', 'Onalaska', 'Middleton', 'Howard village', 'Menasha', 'Ashwaubenon village', 'Menomonie', 'Beaver Dam', 'Oconomowoc', 'Kaukauna', 'River Falls']
-const iaDummyCountyData = ['Polk County', 'Linn County', 'Scott County', 'Black Hawk County', 'Johnson County', 'Woodbury County', 'Dubuque County', 'Pottawattamie County', 'Story County', 'Dallas County', 'Clinton County', 'Cerro Gordo County', 'Warren County', 'Muscatine County', 'Des Moines County', 'Marshall County', 'Webster County', 'Jasper County', 'Lee County', 'Wapello County', 'Marion County', 'Sioux County', 'Benton County', 'Boone County', 'Plymouth County', 'Bremer County', 'Mahaska County', 'Washington County', 'Winneshiek County', 'Buchanan County', 'Fayette County', 'Carroll County', 'Henry County', 'Jones County', 'Jackson County', 'Buena Vista County', 'Poweshiek County', 'Clayton County', 'Cedar County', 'Delaware County', 'Hardin County', 'Tama County', 'Clay County', 'Dickinson County', 'Crawford County', 'Floyd County', 'Iowa County', 'Hamilton County', 'Page County', 'Kossuth County', 'Harrison County', 'Jefferson County', 'Madison County', 'Butler County', 'Mills County', 'Allamakee County', 'O Brien County', 'Cass County', 'Wright County', 'Appanoose County', 'Chickasaw County', 'Shelby County', 'Grundy County', 'Cherokee County', 'Union County', 'Louisa County', 'Hancock County', 'Guthrie County', 'Lyon County', 'Winnebago County', 'Montgomery County', 'Keokuk County', 'Mitchell County', 'Sac County', 'Emmet County', 'Calhoun County', 'Franklin County', 'Humboldt County', 'Greene County', 'Palo Alto County', 'Howard County', 'Monona County', 'Lucas County', 'Clarke County', 'Davis County', 'Decatur County', 'Adair County', 'Pocahontas County', 'Van Buren County', 'Monroe County', 'Fremont County', 'Worth County', 'Ida County', 'Osceola County', 'Taylor County', 'Audubon County', 'Wayne County', 'Ringgold County', 'Adams County']
 /**
 * Creates the routes for the backend functionality.
 * @module lib/controllers/api
@@ -80,17 +77,26 @@ router.get('/export/:fileNamePart', function (req, res) {
 * @param {qry} - a 2 character state abbreviation
 */
 router.get('/localequery/:state', function (req, res) {
+  const dbApi = require('./dbApi')
   var state = req.params.state.toUpperCase()
   var level = _.get(req.query, 'level').toLowerCase()
-  if (state === 'TX' && level === 'city') {
-    res.json(_.map(txDummyCityData, data => { return {code: data, name: data} }))
-  } else if (state === 'WI' && level === 'city') {
-    res.json(_.map(wiDummyCityData, data => { return {code: data, name: data} }))
-  } else if (state === 'IA' && level === 'county') {
-    res.json(_.map(iaDummyCountyData, data => { return {code: data, name: data} }))
-  } else {
+  var desiredLocaleName
+  if (level === 'city') desiredLocaleName = 'damaged_city'
+  else if (level === 'county') desiredLocaleName = 'county_name'
+  else {
     res.json(['no data found'])
+    return
   }
+  var queryObj = [{damaged_state: [state]}]
+  var selectCols = [desiredLocaleName]
+  var summaryCols
+  var data = dbApi.getData(queryObj, summaryCols, selectCols)
+  var returnValue = ['no data found']
+  if (data.length > 0) {
+    var values = _.uniq(_.map(data, rec => rec[desiredLocaleName]))
+    returnValue = _.sortBy(_.map(values, rec => { return {code: rec, name: rec} }), 'code')
+  }
+  res.json(returnValue)
 })
 
 /**
@@ -110,6 +116,7 @@ router.get('/disasternumber/:qry', function (req, res) {
   const qs = querystring.stringify({
     $filter: `${filter}`
   })
+  res.json(results)
   const url = `https://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries?${qs}`
   console.log(url)
   request(url, function (err, response, body) {
@@ -151,7 +158,7 @@ router.get('/db', (req, res) => {
   var geoArea = _.get(req.query, 'geoArea')
   if (geoArea) {
     geoArea = _.map(geoArea.split(','), area => {
-      return _.isString(area) ? area.toUpperCase() : area
+      return area
     })
   }
   var geoName = _.get(req.query, 'geoName')
