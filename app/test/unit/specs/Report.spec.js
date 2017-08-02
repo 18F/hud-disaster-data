@@ -34,6 +34,16 @@ describe('Report component', function () {
       done()
     })
   })
+  describe('stateName', function () {
+    it('should return an empty string if state is not set', function (done) {
+      store = new Vuex.Store({state: {}, getters: {stateFilter: function () { return null }}})
+      Constructor = Vue.extend(Report)
+      vm = new Constructor({store}).$mount()
+      expect(vm.stateName).to.be.equal('')
+      done()
+    })
+  })
+
   describe('disasters', function () {
     it('should return the disasters', function (done) {
       expect(vm.disasters).to.be.equal('DR-4272-TX, DR-4277-TX')
