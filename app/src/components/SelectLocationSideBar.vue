@@ -17,7 +17,7 @@
                   v-on:clear="clearStore"
                   style="background:#fff;"
                 )
-            div(style="margin-top:20px; overflow:hidden;")
+            div(style="margin-top:20px; min-height:300px;")
               | Geographic Level
               #geographicLevelSelect
                 inputselect(
@@ -28,7 +28,7 @@
                   style="background:#fff;"
                   :hassubList="true"
                 )
-              div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); overflow:hidden; padding:10px;")
+              div.col-lg-12(name="lsGeographicLevels" style="background:url('/static/img/bg_25_opacity.png'); padding:10px;")
                 div(class="input-group")
                   #localeSelect
                     inputselect(
@@ -47,7 +47,7 @@
                         | {{ locale.name }}
                       button.clear-text(@click='removeLocale(locale)' :title='`Remove ${locale.name}`')
                         icon(name='fa-times')
-            div(style="margin-top:20px; overflow:hidden;")
+            div(style="margin-top:20px; min-height:190px;")
               | Disasters
               div
                 div.col-lg-12(style="padding:0px;")
@@ -70,7 +70,7 @@
                           | {{ disaster.name }}
                         button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                           icon(name='fa-times')
-            div(style="margin-top:10px; text-align:center; padding-bottom:10px;")
+            div(style="text-align:center; padding-bottom:10px;")
               button.usa-button.alt-button(type="button" style="margin-right:20px;" @click="clearStore")
                 | Clear
               button.usa-button.green(type="button" @click="createReport")

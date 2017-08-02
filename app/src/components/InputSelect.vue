@@ -27,13 +27,12 @@
         button.usa-button.btn.toggle-btn(type="button"
           :title='`Toggle Drop Down List for ${componentDescription}`'
           @click="toggleDropdown"
-          @blur="close"
           :class="isDisabled"
           :disabled="isDisabled")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
     .results-list(v-if="contentVisible")
-      ul.dropdown-content(ref="dropdownMenu")
+      ul.dropdown-content(ref="dropdownMenu" @blur="close")
         li(v-for='(item, index) in unMatchedItems' :class="{ active: item.selected, highlight: index === listIndex }" @mouseover="listIndex = index")
           span(@mousedown.prevent="select(item)")
             | {{ item.name }}
@@ -237,12 +236,12 @@ export default {
     color: black;
     cursor:pointer;
     list-style: none;
-    max-height: 315px;
+    max-height: 195px;
     overflow: auto;
     position: absolute;
     /* width: 89.5%; */
     width:100%;
-    z-index: 5;
+    z-index: 100;
     box-shadow:5px 5px 5px rgba(0,0,0,0.5);
 
     .dropdown-content {
