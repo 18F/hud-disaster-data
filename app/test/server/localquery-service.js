@@ -7,7 +7,7 @@ describe('/api/localequery/:state', function () {
   this.timeout(10000)
 
   it('should return a JSON document with locale data', (done) => {
-    request(app).get('/api/localequery/WI?level=city')
+    request(app).get('/api/localequery/TX?level=city')
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()

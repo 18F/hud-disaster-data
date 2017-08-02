@@ -126,11 +126,15 @@ describe('SelectLocationSideBar component', function () {
   })
   describe('setLevel', function () {
     it('should set the geographicLevel', function (done) {
-      const level = {name: 'City', code: 'City'}
+      const level = {name: 'City', code: 'city'}
+      const stateId = 'TX'
       let commitSpy = sinon.spy(store, 'commit')
+      let dispatchSpy = sinon.spy(store, 'dispatch')
+      vm.stateSelected = {code: stateId, name: stateId}
       vm.setLevel(level)
       Vue.nextTick(() => {
         should(commitSpy.calledWith('setSelectedGeographicLevel', level)).be.true()
+        should(dispatchSpy.calledWith('loadLocales', stateId)).be.true()
         done()
       })
     })

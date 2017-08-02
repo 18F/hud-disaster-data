@@ -90,6 +90,7 @@ router.get('/localequery/:state', function (req, res) {
   var queryObj = [{damaged_state: [state]}]
   var selectCols = [desiredLocaleName]
   var summaryCols
+  console.log(JSON.stringify(queryObj))
   var data = dbApi.getData(queryObj, summaryCols, selectCols)
   var returnValue = ['no data found']
   if (data.length > 0) {
@@ -116,7 +117,6 @@ router.get('/disasternumber/:qry', function (req, res) {
   const qs = querystring.stringify({
     $filter: `${filter}`
   })
-  res.json(results)
   const url = `https://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries?${qs}`
   console.log(url)
   request(url, function (err, response, body) {
