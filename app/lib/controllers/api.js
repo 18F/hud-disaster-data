@@ -20,8 +20,8 @@ const csv = require('express-csv')
 router.get('/disasterquery/:qry', function (req, res) {
   const validCols = ['id', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType', 'declaredCountyArea', 'title']
   const qryParts = req.params.qry.replace(/-$/, '').toUpperCase().split('-')
-  const fifteenYearsAgo = moment().subtract(15, 'years')
-  let filter = `declarationDate gt '${fifteenYearsAgo.toString()}'`
+  const tenYearsAgo = moment().subtract(10, 'years')
+  let filter = `declarationDate gt '${tenYearsAgo.toString()}'`
   if (qryParts.length === 1 && /^\d+$/.test(qryParts[0])) filter += ` and disasterNumber eq ${qryParts[0]}`
   else if (qryParts.length === 1 && /^[A-Z]+$/.test(qryParts[0])) filter += ` and ( disasterType eq '${qryParts[0]}' or state eq '${qryParts[0]}')`
   else if (qryParts.length === 2) filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]}`
