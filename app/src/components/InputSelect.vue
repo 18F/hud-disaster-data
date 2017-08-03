@@ -261,6 +261,7 @@ export default {
       padding:0;
       margin:0;
       li {
+        /* height:50px; */
         &:before { display:none;}
 
         span {
