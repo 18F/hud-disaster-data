@@ -16,10 +16,10 @@ export const DEFAULT_GEOGRAPHIC_LEVEL = { code: 'City', name: 'City' }
 export const mutations = {
 /**
   Update the disaster number list with fresh data
-  @function updateDisasterList
+  @function updateReportDisasterList
   @param {Array} list - A list of disasters
   */
-  updateDisasterList: function (state, list) {
+  updateReportDisasterList: function (state, list) {
     state.disasterList = _.map(list, disaster => {
       let name = `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`
       return {name, code: name, data: disaster}
@@ -77,9 +77,9 @@ export const mutations = {
 These are the vuex actions
 */
 export const actions = {
-  loadDisasterList: function ({ commit }, qry) {
+  loadReportDisasterList: function ({ commit }, qry) {
     axios.get(`/api/disasterquery/${qry}`).then(response => {
-      commit('updateDisasterList', response.data)
+      commit('updateReportDisasterList', response.data)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }

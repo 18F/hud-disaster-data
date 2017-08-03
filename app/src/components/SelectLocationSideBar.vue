@@ -113,7 +113,7 @@ export default {
         { name: 'Wisconsin', code: 'WI' }, { name: 'Wyoming', code: 'WY' }
       ],
       geographicLevels: [{name: 'City', code: 'City'}, {name: 'County', code: 'County'}, {name: 'Congressional District', code: 'Congressional District'}],
-      query: ''
+      queryValue: ''
     }
   },
 
@@ -135,7 +135,7 @@ export default {
           this.disasterSelected = null
           this.$store.dispatch('setSelectedState', val)
           this.$store.dispatch('loadLocales', val.code)
-          this.$store.dispatch('loadDisasterList', val.code)
+          this.$store.dispatch('loadReportDisasterList', val.code)
         }
       }
     },
