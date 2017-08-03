@@ -35,8 +35,36 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger')
+        div.btn-group.user-state
+          label.sr-only(for='UserStateSelector') User state selector
+          button(type="button" @click="toggleUserState" name="UserStateSelector" title="Select user state" :class="selectStateExpanded")
+            img(src="/static/img/bryan_mcfadden.jpg")
+            icon(name="fa-caret-up" v-show="showUserState")
+            icon(name="fa-caret-down" v-show="!showUserState")
+          div.user-state-list(v-show="showUserState")
+            ul
+              li
+                span Texas
+              li
+                span Wisconsin
+              li
+                span Iowa
+        #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger' style="margin-right:20px;")
           icon(name='fa-bars' classes='ico-lg fill-black')
+        #burger-menu.hidden-md.hidden-lg.hidden(ref='burgerMenu')
+          ul
+            li
+              router-link(:to='{name: "disasterSearch"}' href="")
+                icon.ico-md(name='fa-sign-out')
+                | Data Export
+            li
+              router-link(:to='{name: "maps"}'  href="")
+                icon.ico-md(name='fa-globe')
+                | View Map
+            li
+              router-link(:to='{name: "reports"}'  href="")
+                icon.ico-md(name='fa-bar-chart')
+                | Reports
         #tabs(role="navigation").hidden-sm.hidden-xs
           router-link(:to='{name: "disasterSearch"}' href="")
             .tab(tabindex='-1')
@@ -53,20 +81,6 @@
                 icon.ico-md(name='fa-bar-chart')
                 span
                   | Reports
-      #burger-menu.hidden-md.hidden-lg.hidden(ref='burgerMenu')
-        ul
-          li
-            router-link(:to='{name: "disasterSearch"}' href="")
-              icon.ico-md(name='fa-sign-out')
-              | Data Export
-          li
-            router-link(:to='{name: "maps"}'  href="")
-              icon.ico-md(name='fa-globe')
-              | View Map
-          li
-            router-link(:to='{name: "reports"}'  href="")
-              icon.ico-md(name='fa-bar-chart')
-              | Reports
     #ribbon
       div(style="position:relative; top:-5px;")
         span
@@ -87,10 +101,14 @@ export default {
     return {
       title: 'Disaster Data Portal',
       premsg: 'An official website of the United States Government',
-      showGovBanner: false
+      showGovBanner: false,
+      showUserState: false
     }
   },
   methods: {
+    toggleUserState () {
+      this.showUserState = !this.showUserState
+    },
     startTour () {
       tour.start(this.$store)
     },
@@ -99,6 +117,11 @@ export default {
     },
     skipToContent () {
       this.$refs.guideMe.focus()
+    }
+  },
+  computed: {
+    selectStateExpanded () {
+      return this.showUserState ? 'expanded' : false
     }
   }
 }

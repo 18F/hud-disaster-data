@@ -17,6 +17,7 @@
         @blur="close"
         :class="isDisabled"
         :disabled="isDisabled")
+      icon.search-icon(name="fa-search")
       button.clear-text(@click='reset'
        v-if='isDirty'
         :title='`Clear Search Text for ${componentDescription}`'
@@ -52,7 +53,7 @@ export default {
       ref: 'inputSelectText',
       placeholder: 'type here',
       searchButtonTitle: 'Search Magnifying Glass Icon',
-      searchInputLabel: 'search for something'
+      searchInputLabel: '' // search for something
     }
   },
   computed: {
@@ -202,6 +203,7 @@ export default {
   .search-text {
     margin: 0;
     max-width:100%;
+    padding-left:35px;
   }
   .toggle-btn, .search-text {
     border:none;
@@ -213,6 +215,15 @@ export default {
   .search-wrapper.input-group {
     border-bottom:1px solid #ccc;
     overflow:hidden;
+    position:relative;
+
+    .search-icon {
+      position:absolute;
+      top:12px;
+      left:10px;
+      fill:#a9a9a9;
+      padding:0;
+    }
   }
 
   button {
@@ -220,6 +231,7 @@ export default {
       background: none;
       cursor:pointer;
       float: right;
+      right:8px;
       margin-top:-32px;
       max-width: 24px;
       padding: 0;
