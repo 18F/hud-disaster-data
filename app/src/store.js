@@ -11,6 +11,19 @@ const store = new Vuex.Store({
   modules: {
     searchStore,
     reportStore
+  },
+  state: {
+    userStatesViewable: null
+  },
+  mutations: {
+    setUserStatesViewable: (state, stateValue) => {
+      state.userStatesViewable = stateValue
+    }
+  },
+  getters: {
+    userStatesViewable: state => {
+      return state.userStatesViewable
+    }
   }
 })
 

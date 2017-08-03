@@ -37,18 +37,14 @@
           h1(ref='title') {{title}}
         div.btn-group.user-state
           label.sr-only(for='UserStateSelector') User state selector
-          button(type="button" @click="toggleUserState" name="UserStateSelector" title="Select user state" :class="selectStateExpanded")
-            img(src="/static/img/bryan_mcfadden.jpg")
+          button(type="button" @click="toggleUserState" name="UserStateSelector" title="Select user state" :class="selectStateExpanded" style="color:gray;")
+            | {{ selectedUserState }}
             icon(name="fa-caret-up" v-show="showUserState")
             icon(name="fa-caret-down" v-show="!showUserState")
           div.user-state-list(v-show="showUserState")
             ul
-              li
-                span Texas
-              li
-                span Wisconsin
-              li
-                span Iowa
+              li(v-for="stateValue in availableStates" @click="selectStatePermission(stateValue)" style="text-align:center;" )
+                | {{ stateValue }}
         #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger' style="margin-right:20px;")
           icon(name='fa-bars' classes='ico-lg fill-black')
         #burger-menu.hidden-md.hidden-lg.hidden(ref='burgerMenu')
@@ -102,7 +98,8 @@ export default {
       title: 'Disaster Data Portal',
       premsg: 'An official website of the United States Government',
       showGovBanner: false,
-      showUserState: false
+      showUserState: false,
+      availableStates: ['ALL', 'IA', 'WI', 'TX']
     }
   },
   methods: {
@@ -117,11 +114,18 @@ export default {
     },
     skipToContent () {
       this.$refs.guideMe.focus()
+    },
+    selectStatePermission (stateValue) {
+      this.$store.commit('setUserStatesViewable', stateValue)
+      this.showUserState = false
     }
   },
   computed: {
     selectStateExpanded () {
       return this.showUserState ? 'expanded' : false
+    },
+    selectedUserState () {
+      return this.$store.getters.userStatesViewable
     }
   }
 }
