@@ -7,6 +7,7 @@ const lusca = require('lusca')
 const cookieSession = require('cookie-session')
 
 const apiController = require('./lib/controllers/api')
+require('./lib/swagger')(app)
 // const controllers = require('./lib/controllers');
 // const mainController = controllers.main;
 
