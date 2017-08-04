@@ -12,6 +12,82 @@ const dbApi = require('./dbApi')
 * @module lib/controllers/api
 */
 /**
+* @swagger
+* definitions:
+*   Disaster:
+*     type: object
+*     properties:
+*       disasterNumber:
+*         type: integer
+*         format: int64
+*       ihProgramDeclared:
+*         type: boolean
+*       iaProgramDeclared:
+*         type: boolean
+*       paProgramDeclared:
+*         type: boolean
+*       hmProgramDeclared:
+*         type: boolean
+*       state:
+*         type: string
+*         description: A valid 2 charcter state code
+*       declarationDate:
+*         type: string
+*         format: date-time
+*       disasterType:
+*         type: string
+*       incidentType:
+*         type: string
+*       title:
+*         type: string
+*       incidentBeginDate:
+*         type: string
+*         format: date-time
+*       incidentEndDate:
+*         type: string
+*         format: date-time
+*       declaredCountyArea:
+*         type: string
+*       hash:
+*         type: string
+*         description: A commit like hash with 32 chars
+*       lastRefresh:
+*         type: string
+*         format: date-time
+*       disasterCloseOutDate:
+*         type: string
+*         format: date-time
+*       placeCode:
+*         type: integer
+*         format: int64
+*       id:
+*         type: string
+*         description: A commit like hash with 24 chars
+*/
+
+/**
+* @swagger
+* /disasterquery/{qry}:
+*   get:
+*     description: queries [FEMA API](https://www.fema.gov/api/open/v1), and returns disaster data
+*     produces:
+*       - application/json
+*     parameters:
+*       - in: path
+*         name: qry
+*         description: one or more of the disaster type, the disaster number, the state. If more than one, needs to start with disaster type,
+*           followed by a dash (-), followed by diaster number, optionally followed by another dash and the state abbreviation.
+*         required: true
+*         type: string
+*     responses:
+*       200:
+*         description: A list of disasters
+*         schema:
+*           type: array
+*           items:
+*             $ref: '#/definitions/Disaster'
+*/
+/**
 * router.get('/disasterquery/:qry') <br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data
 * @function get
