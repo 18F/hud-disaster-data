@@ -1,10 +1,10 @@
 span {
-  display: block;
-  color: #2c3e50;
+  display:block;
+  color:#2c3e50;
 }
 
-.screen-name { font-style: italic; }
-.no-padding { padding: 0; }
+.screen-name { font-style:italic; }
+.no-padding { padding:0; }
 .wrapper input[type="text"] {
   width:100%;
   max-width:100%;
@@ -14,9 +14,9 @@ span {
 #opaque-bg {
   background: url('/static/img/bg_50_opacity.png');
   @include media($large-screen) {
-    border-radius: 10px 0 0 10px;
+    border-radius:10px 0 0 10px;
   }
-  border-radius: 10px;
+  border-radius:10px;
   margin:0 auto;
   margin-bottom:20px;
   overflow: hidden;
@@ -32,29 +32,31 @@ span {
   }
   padding:0;
   &.with-extracts {
-    margin-bottom: 360px;
+    margin-bottom:360px;
   }
 
   h2 {
-    color: #fff;
-    text-align: left;
+    color:#fff;
+    text-align:left;
     margin-left:20px;
     height:25px;
     margin-top:1em;
   }
   #search-btn {
-    height: 46px;
+    height:46px;
     margin:0;
     border-radius:0;
     /* border: 1px solid #5b616b; */
     &:focus{
+      -moz-box-shadow:none;
+      -webkit-box-shadow:none;
       box-shadow:none;
     }
     .hdd-icon {
-      top: 0;
-      background: transparent;
-      right: 0;
-      fill: #fff;
+      top:0;
+      background:transparent;
+      right:0;
+      fill:#fff;
     }
     &:active, &:visited, &:focus {
       background-color: $color-primary
@@ -62,11 +64,11 @@ span {
   }
 
   #clear-text {
-    background: none;
-    position: relative;
+    background:none;
+    position:relative;
     float: right;
-    margin: -36px 25px 0 0;
-    max-width: 24px;
+    margin:-36px 25px 0 0;
+    max-width:24px;
     padding:0;
     .hdd-icon {
       right: 0;
@@ -82,31 +84,29 @@ span {
     :-moz-p {color:#777777;}
 
     .fa-spin.hdd-icon {
-      margin-top: -34px;
-      left: -16px;
+      margin-top:-34px;
+      left:-16px;
     }
 
-    .input-group-btn {
-      top:2px;
-    }
+    .input-group-btn { top:1px; }
 
     .hdd-icon {
       background-color:#fff;
-      fill: #000;
+      fill:#000;
       float:right;
       position:relative;
-      top: 0;
+      top:0;
       right:10px;
       height:1.3em;
       width:1.3em;
       &.clear-text {
-        cursor: pointer;
+        cursor:pointer;
       }
     }
   }
   /* Disaster list styles --------------------------------- */
   .disaster-list {
-    background-color: #fff;
+    background-color:#fff;
     height:340px;
     left:21px;
     overflow-x:hidden;
@@ -118,17 +118,17 @@ span {
     ul {
       display:block;
       margin:0;
-      list-style-type: none;
+      list-style-type:none;
       li {
         display:block;
-        border-bottom: 1px solid #ccc;
+        border-bottom:1px solid #ccc;
         margin:0;
         line-height:20px;
         &:before { content: ''; }
         &:hover {
-          background-color: #e2f6fd;
+          background-color:#e2f6fd;
           span {
-            color: white;
+            color:white;
           }
         }
       }
@@ -139,7 +139,7 @@ span {
 .DisasterSearch {
   padding-bottom:40px;
   /*this style is REQUIRED to line up disaster-search and messaging clearing "x" */
-  #message-clear-button { right:-5px; }
+  #message-clear-button {right:-5px; }
 }
 .DisasterSearch__input {
   font-size: 14px;
@@ -148,7 +148,7 @@ span {
   border: 1px solid #ccc;
   height:46px;
   //letter-spacing: 1px;
-  box-sizing: border-box;
+  box-sizing:border-box;
 }
 .DisasterSearch__input:focus {
   outline: 0;

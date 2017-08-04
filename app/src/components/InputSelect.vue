@@ -254,6 +254,8 @@ export default {
     /* width: 89.5%; */
     width:100%;
     z-index: 100;
+    -moz-box-shadow:5px 5px 5px rgba(0,0,0,0.5);
+    -webkit-box-shadow:5px 5px 5px rgba(0,0,0,0.5);
     box-shadow:5px 5px 5px rgba(0,0,0,0.5);
 
     .dropdown-content {
