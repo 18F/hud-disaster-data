@@ -21,6 +21,9 @@
           tr
             td(colspan="2")
               |Selected Locations: {{ locales }}
+        label.sr-only(for='Export') Export report
+        button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton" @click="exportTable")
+          |Export
         value-selector(:showSummarySelections="false")
         table.report-values-header
           thead
@@ -75,11 +78,27 @@ export default {
     summaryRecords () {
       return this.$store.getters.summaryRecords
     }
+  },
+  methods: {
+    exportTable () {
+      alert('export functionality soon to come')
+    }
   }
 }
 </script>
 
 <style lang="scss">
+#exportReportButton {
+  margin-top:20px;
+  text-align:right;
+  float: right;
+  margin-bottom: 20px;
+  margin-right: 0;
+  .hdd-icon { fill:#fff; }
+  height:40px;
+  margin-right:0;
+}
+
 .hidden { display:none; }
 table { margin:0; }
 .reports {
