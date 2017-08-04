@@ -5,7 +5,7 @@ import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '@/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
-const { updateReportDisasterList, updateLocaleList, clearStore, addDisasterFilter, addLocaleFilter, setShowReportLoader } = mutations
+const { updateReportDisasterList, updateLocaleList, clearStore, setState, addDisasterFilter, addLocaleFilter, setShowReportLoader } = mutations
 const { loadReportDisasterList, loadLocales, setSelectedState, loadReportData } = actions
 const { localeFilter, disasterFilter, showReportLoader } = getters
 
@@ -156,6 +156,16 @@ describe('reportStore', function () {
       should(state.localeList).be.an.Array().and.have.length(0)
       should(state.stateFilter).be.null()
       should(state.geographicLevel).be.an.Object().and.be.equal(DEFAULT_GEOGRAPHIC_LEVEL)
+    })
+  })
+
+  describe('setState', function () {
+    it('should set value of stateFilter', function () {
+      let state = {
+        stateFilter: null
+      }
+      setState(state, 'something')
+      should(state.stateFilter).be.equal('something')
     })
   })
 
