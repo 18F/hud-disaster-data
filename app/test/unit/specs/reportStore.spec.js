@@ -5,9 +5,9 @@ import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '@/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
-const { updateDisasterList, updateLocaleList, clearStore, addDisasterFilter, addLocaleFilter } = mutations
-const { loadDisasterList, loadLocales, setSelectedState, loadReportData } = actions
-const { localeFilter, disasterFilter } = getters
+const { updateReportDisasterList, updateLocaleList, clearStore, addDisasterFilter, addLocaleFilter, setShowReportLoader } = mutations
+const { loadReportDisasterList, loadLocales, setSelectedState, loadReportData } = actions
+const { localeFilter, disasterFilter, showReportLoader } = getters
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -40,11 +40,11 @@ describe('reportStore', function () {
   afterEach(function () {
     moxios.uninstall()
   })
-  describe('updateDisasterList', function () {
+  describe('updateReportDisasterList', function () {
     it('should set disaster', function () {
       let state = { disasterList: [] }
       let disasterNumberResults = getters.disasterNumberResults
-      updateDisasterList(state, TWO_RECORDS)
+      updateReportDisasterList(state, TWO_RECORDS)
       expect(state.disasterList.length).to.be.equal(2)
       expect(disasterNumberResults(state).length).to.be.equal(2)
     })
@@ -59,16 +59,16 @@ describe('reportStore', function () {
     })
   })
 
-  describe('loadDisasterList', function () {
-    it('should call commit for updateDisasterList when the data is loaded', function (done) {
+  describe('loadReportDisasterList', function () {
+    it('should call commit for updateReportDisasterList when the data is loaded', function (done) {
       moxios.stubRequest(/WI/, {
         status: 200,
         response: _.clone(TWO_RECORDS)
       })
       const commit = sinon.spy()
-      loadDisasterList({commit}, 'WI')
+      loadReportDisasterList({commit}, 'WI')
       moxios.wait(() => {
-        should(commit.calledWith('updateDisasterList')).be.true()
+        should(commit.calledWith('updateReportDisasterList')).be.true()
         should(commit.calledWith('resetStatus')).be.true()
         done()
       })
@@ -79,9 +79,9 @@ describe('reportStore', function () {
         response: []
       })
       const commit = sinon.spy()
-      loadDisasterList({commit}, 'WI')
+      loadReportDisasterList({commit}, 'WI')
       moxios.wait(() => {
-        should(commit.calledWith('updateDisasterList')).be.true()
+        should(commit.calledWith('updateReportDisasterList')).be.true()
         should(commit.calledWith('resetStatus')).be.false()
         should(commit.calledWith('setStatus')).be.true()
         done()
@@ -92,9 +92,9 @@ describe('reportStore', function () {
         status: 500
       })
       const commit = sinon.spy()
-      loadDisasterList({commit}, 'WI')
+      loadReportDisasterList({commit}, 'WI')
       moxios.wait(() => {
-        should(commit.calledWith('updateDisasterList')).be.false()
+        should(commit.calledWith('updateReportDisasterList')).be.false()
         should(commit.calledWith('resetStatus')).be.false()
         should(commit.calledWith('setStatus')).be.true()
         done()
@@ -156,6 +156,15 @@ describe('reportStore', function () {
       should(state.localeList).be.an.Array().and.have.length(0)
       should(state.stateFilter).be.null()
       should(state.geographicLevel).be.an.Object().and.be.equal(DEFAULT_GEOGRAPHIC_LEVEL)
+    })
+  })
+
+  describe('setShowReportLoader', function () {
+    it('should set value of showReportLoader to true', function () {
+      let state = {showReportLoader: false}
+      setShowReportLoader(state, true)
+      should(state.showReportLoader).be.equal(true)
+      should(showReportLoader(state)).be.equal(true)
     })
   })
 

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>src/tour.js - Documentation</title>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <span class="navicon"></span>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-build_dev-server.html">build/dev-server</a></li><li><a href="module-bus.html">bus</a></li><li><a href="module-components_App.html">components/App</a></li><li><a href="module-components_Disaster.html">components/Disaster</a></li><li><a href="module-components_DisasterSearch.html">components/DisasterSearch</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_DisasterSearch.html#~update">update</a></li></ul></li><li><a href="module-components_Header.html">components/Header</a></li><li><a href="module-components_Icon.html">components/Icon</a></li><li><a href="module-components_Map.html">components/Map</a></li><li><a href="module-components_Message.html">components/Message</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_Message.html#~displayMessage">displayMessage</a></li></ul></li><li><a href="module-components_Report.html">components/Report</a></li><li><a href="module-components_SavedExtracts.html">components/SavedExtracts</a></li><li><a href="module-components_Sprites.html">components/Sprites</a></li><li><a href="module-lib_controllers_api.html">lib/controllers/api</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-lib_controllers_api.html#~get">get</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~get">get</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~get">get</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~get">get</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~get">get</a></li></ul></li><li><a href="module-reportStore.html">reportStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-reportStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-reportStore.html#~updateReportDisasterList">updateReportDisasterList</a></li></ul></li><li><a href="module-router.html">router</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-router.html#.beforeRouteEnter">beforeRouteEnter</a></li></ul></li><li><a href="module-searchStore.html">searchStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-searchStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-searchStore.html#~clearCurrentExtract">clearCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~clearSearch">clearSearch</a></li><li data-type='method'><a href="module-searchStore.html#~deleteExtract">deleteExtract</a></li><li data-type='method'><a href="module-searchStore.html#~loadExtract">loadExtract</a></li><li data-type='method'><a href="module-searchStore.html#~resetStatus">resetStatus</a></li><li data-type='method'><a href="module-searchStore.html#~saveExtract">saveExtract</a></li><li data-type='method'><a href="module-searchStore.html#~setSearchLoading">setSearchLoading</a></li><li data-type='method'><a href="module-searchStore.html#~setStatus">setStatus</a></li><li data-type='method'><a href="module-searchStore.html#~toggleCurrentExtract">toggleCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~updateDisasterList">updateDisasterList</a></li></ul></li><li><a href="module-store.html">store</a></li><li><a href="module-tour.html">tour</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-tour.html#~clearTabIndex">clearTabIndex</a></li><li data-type='method'><a href="module-tour.html#~removeObserver">removeObserver</a></li><li data-type='method'><a href="module-tour.html#~restoreTabIndex">restoreTabIndex</a></li></ul></li><li><a href="module-vueMixins.html">vueMixins</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-vueMixins.html#~iconName">iconName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/tour.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Shepherd from 'tether-shepherd'
+import 'babel-polyfill'
+import magic from '@/bus'
+import _ from 'lodash'
+import util from '@/util'
+import $ from 'jquery'
+let $store
+
+/**
+* This module is responsible for the implementing all steps of tour.
+*
+* In order to keep tabbing confined to the items of interest in the current tour step, we maintane and
+* modify the tabindex of all tabbable elemnts in the DOM.  Unfortunately Internet Explorer doesn't respect
+* our tabindex settings.
+*
+* 1. On Tour start setup a MutationObserver to watch for DOM changes that cause tabindexes to be maintaned
+* 2. On Step start
+*   - save the current tab index in data-tabindex to be restored later
+*   - set tabindex = -1 for all elements with a tabindex
+*   - set up tab index for tour step and attached elements
+* 3. On Tour End
+*   - restore page tab index
+* @module tour
+*/
+let eventTarget
+let observer
+const getTabIndex = function (node) {
+  var index = node.tabIndex
+  if (util.isIE()) {
+    var tnode = _.get(node, 'attributes.tabIndex.specified')
+    if (!tnode) {
+      var map = {a: true, body: true, button: true, frame: true, iframe: true, img: true, input: true, isindex: true, object: true, select: true, textarea: true}
+      var nodeName = node.nodeName.toLowerCase()
+      return (map[nodeName]) ? 0 : null
+    }
+  } else {
+    if (index === -1) {
+      var attr = node.getAttribute('tabindex')
+      if (attr == null || (attr === '' &amp;&amp; !util.isGecko())) return null
+    }
+  }
+  return index
+}
+/**
+* Removes the MutationObserver that listens for changes to the DOM in order to maintane tabIndex
+* @function removeObserver
+*/
+export const removeObserver = function () {
+  restoreTabIndex()
+  if (!eventTarget) return
+  observer.disconnect()
+  eventTarget = null
+}
+export const clearElementTabIndex = function (el) {
+  if (el.setAttribute) {
+    let tabIndex = getTabIndex(el)
+    let shepherdStep = $(el).closest('.shepherd-step')
+    if (tabIndex === null || shepherdStep.length > 0 || el.hasAttribute('data-tabindex')) return
+    el.setAttribute('data-tabindex', tabIndex)
+    el.tabIndex = -1
+  }
+}
+/**
+* This function sets up a MutationObserver to watch over the 'app-container' for dynamic HTML that
+* needs to be maintaned and removed from the current tabIndex
+* @function clearTabIndex
+* @param {HTMLElement} target - Clear the tabIndex for all descendents of target (default. document)
+*/
+export const clearTabIndex = function (target) {
+  // if target is comment node, return out
+  if (target) {
+    if (target.nodeType === 8) return
+    else clearElementTabIndex(target)
+  }
+  target = target || document
+  _.each(target.querySelectorAll('*'), clearElementTabIndex)
+  if (eventTarget || target !== document) return
+  eventTarget = document.getElementById('app-container')
+  if (!eventTarget) return
+  observer = new MutationObserver(function (mutations) {
+    _.each(mutations, function (mutation) {
+      if (mutation.type === 'childList') {
+        _.each(mutation.addedNodes, clearTabIndex)
+      }
+    })
+  })
+  var config = { attributes: false, childList: true, characterData: false, subtree: true }
+  observer.observe(eventTarget, config)
+}
+export const restoreElementTabIndex = function (el) {
+  let tabIndex = parseInt(el.getAttribute('data-tabindex'), 10)
+  el.tabIndex = tabIndex
+  el.removeAttribute('data-tabindex')
+}
+/**
+* Restore the page tabIndex from data-tabindex attribute
+* @function restoreTabIndex
+* @param {HTMLElement} target - Restore the tabIndex of target and it's descendents
+*/
+export const restoreTabIndex = function (target) {
+  if (target &amp;&amp; target.hasAttribute('data-tabindex')) restoreElementTabIndex(target)
+  target = target || document
+  let tabElements = target.querySelectorAll('[data-tabindex]')
+  _.each(tabElements, restoreElementTabIndex)
+}
+
+export const setAccessiblityContent = function (el) {
+  el.setAttribute('aria-live', 'assertive')
+  el.setAttribute('role', 'alert')
+  // el.innerHTML = el.innerHTML + ' '
+  // the code below seems to cause NVDA to read (somewhat)
+  // document.querySelector('#search-text-label').innerText = el.innerText
+}
+
+const disasterSearchTour = new Shepherd.Tour({
+  defaults: {
+    classes: 'shepherd-element shepherd-open shepherd-theme-square',
+    showCancelLink: true,
+    scrollTo: true,
+    when: {
+      show: function () {
+        _.each(document.querySelectorAll('.shepherd-cancel-link'), link => {
+          link.textContent = ''
+          link.innerHTML = '&lt;svg class="hdd-icon">&lt;use xlink:href="#fa-times">&lt;/use>&lt;/svg>'
+          link.tabIndex = 0
+        })
+        _.each(document.querySelectorAll('.shepherd-button '), button => {
+          button.addEventListener('keypress', e => {
+            e.target.dispatchEvent(new Event('click'))
+          })
+          button.tabIndex = 0
+        })
+        _.each(document.querySelectorAll('.shepherd-content'), step => {
+          setAccessiblityContent(step)
+        })
+        if (this &amp;&amp; typeof this.getAttachTo !== 'undefined') restoreTabIndex(this.getAttachTo().element)
+      }
+    }
+  }
+})
+
+disasterSearchTour.on('show', () => clearTabIndex())
+disasterSearchTour.on('hide', () => removeObserver())
+disasterSearchTour.on('cancel', () => removeObserver())
+
+let back = {
+  text: 'Back',
+  classes: 'tour-back',
+  action: function () {
+    TourObject.showMessage()
+    disasterSearchTour.back()
+  }
+}
+let next = {
+  text: 'Next',
+  action: function () {
+    TourObject.showMessage()
+    disasterSearchTour.next()
+  }
+}
+let disasterLink = `
+    &lt;p>
+    Don’t know the disaster ID?
+    Look it up in &lt;a target="_blank" href="https://www.fema.gov/disasters" class="tabbable">FEMA’s disaster database&lt;/a>.
+    &lt;/p>`
+disasterSearchTour.addStep('enter-search', {
+  title: 'Search for a disaster',
+  text: `
+    &lt;div class="tour-message">
+      &lt;p>
+      Start here by typing in a FEMA disaster ID and clicking the magnifying glass icon.
+      &lt;/p>
+      &lt;p>
+      These IDs follow the format "DR‐4272‐TX" But you can also type "4272".
+      &lt;/p>
+      &lt;p>
+      If you want to see all the recent disasters in a state, type the 2-letter state code (examples, "TX", "CA", "FL").
+      &lt;/p>
+      ${disasterLink}
+    &lt;/div>
+    &lt;div class="tour-error" style="display:none;">
+      &lt;p>
+      Please enter a valid state code or disaster ID, for example "4272". Then click the magnifying glass icon.
+      &lt;/p>
+      ${disasterLink}
+    &lt;/div>
+    `,
+  attachTo: '.search-wrapper bottom',
+  when: {
+    show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
+      if (this.error) {
+        this.error = false
+        return
+      }
+      TourObject.showMessage()
+      const input = document.getElementById('search-text')
+      input.focus()
+      input.select()
+    }
+  },
+  buttons: [
+    {
+      text: 'Next',
+      action: () => {
+        let step = disasterSearchTour.getCurrentStep()
+        if ($store.getters.currentSearchResult.length > 0) {
+          disasterSearchTour.next()
+        } else {
+          step.hide()
+          TourObject.showError()
+          step.error = true
+          step.show()
+          const input = document.getElementById('search-text')
+          input.focus()
+          input.select()
+        }
+      }
+    }
+  ]
+})
+.addStep('select-disasters', {
+  title: 'Select a disaster',
+  text: `
+    &lt;div class="tour-message">
+      &lt;p>
+      To select a disaster, click the checkbox located under the disaster ID.
+      &lt;/p>
+    &lt;/div>
+    &lt;div class="tour-error" style="display:none;">
+      &lt;p>
+      No disasters selected.
+      &lt;/p>
+      &lt;p>
+      Please select a disaster.
+      &lt;/p>
+    &lt;/div>
+    `,
+  attachTo: '.disaster-list bottom',
+  when: {
+    show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
+      if (this.error) {
+        this.error = false
+        return
+      }
+      TourObject.showMessage()
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
+    }
+  },
+  buttons: [
+    back,
+    {
+      text: 'Next',
+      action: () => {
+        let step = disasterSearchTour.getCurrentStep()
+        if ($store.getters.currentExtract.length === 0) {
+          step.hide()
+          TourObject.showError()
+          step.error = true
+          step.show()
+        } else {
+          disasterSearchTour.next()
+        }
+      }
+    }
+  ]
+})
+.addStep('selected-export-data', {
+  title: 'Disaster selected',
+  text: `
+  &lt;p>
+  You’ve selected a disaster and it is now listed in the selected disasters list.
+  You can export the associated FEMA data now or save this search to export the data in the future.
+  You can also search for additional disasters to add to this list.
+  &lt;/p>
+  &lt;p>
+  First, let’s try exporting the data.
+  &lt;/p>
+  `,
+  buttons: [back, next],
+  attachTo: '#list bottom',
+  when: {
+    show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
+    },
+    'before-show': function () { document.getElementById('list').style['z-index'] = '1' },
+    hide: function () { document.getElementById('list').style['z-index'] = null }
+  }
+})
+.addStep('export-data', {
+  title: 'Export data',
+  text: `
+  &lt;p>To get household level data for the disaster selected, click the export button.&lt;/p>
+  &lt;p>Your computer will download a CSV-formatted file.&lt;/p>
+  `,
+  attachTo: '#export-button bottom',
+  buttons: [
+    {
+      text: 'Back',
+      classes: 'tour-back',
+      action: function () {
+        if ($store.getters.currentSearchResult.length > 0) {
+          disasterSearchTour.back()
+        } else {
+          disasterSearchTour.hide()
+          disasterSearchTour.start()
+        }
+      }
+    },
+    next]
+})
+.addStep('mutiple-enter-search', {
+  title: 'Add to your list',
+  text: `
+  &lt;div class="tour-message">
+    &lt;p>
+    If you want to export data for multiple disasters at the same time, you can search for another disaster and add it to the list.
+    &lt;/p>
+    &lt;p>
+    Try typing in the 2-letter state code for your state (example, "TX", "LA", "CA")
+    &lt;/p>
+  &lt;/div>
+  &lt;div class="tour-error" style="display:none;">
+    Please enter a valid 2-letter state code, such as "TX", and click the magnifying glass icon.
+  &lt;/div>
+  `,
+  attachTo: '.search-wrapper bottom',
+  when: {
+    show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
+    },
+    'before-show': function () {
+      if (this.error) {
+        this.error = false
+        return
+      }
+      TourObject.showMessage()
+      $store.commit('clearSearch')
+      const input = document.getElementById('search-text')
+      input.focus()
+      input.value = ''
+      magic.$emit('clearQuery')
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
+    }
+  },
+  buttons: [
+    back,
+    {
+      text: 'Next',
+      action: function () {
+        let step = disasterSearchTour.getCurrentStep()
+        if ($store.getters.currentSearchResult.length > 0) {
+          disasterSearchTour.next()
+        } else {
+          step.hide()
+          TourObject.showError()
+          const input = document.getElementById('search-text')
+          input.focus()
+          input.select()
+          step.error = true
+          step.show()
+        }
+      }
+    }
+  ]
+})
+.addStep('multiple-select-disasters', {
+  title: 'Select another disaster',
+  text: `
+    &lt;div class="tour-message">
+      &lt;p>
+      Here are all the recent disasters in your state.
+      Select additional disasters by clicking the checkbox located under the disaster ID.
+      &lt;/p>
+    &lt;/div>
+    &lt;div class="tour-error" style="display:none;">
+      &lt;p>
+      Less than 2 disasters selected.
+      Please select multiple disasters.
+      &lt;/p>
+    &lt;/div>
+    `,
+  attachTo: '.disaster-list bottom',
+  when: {
+    show: function () {
+      disasterSearchTour.options.defaults.when.show.apply(this)
+      if (this.error) {
+        this.error = false
+        return
+      }
+      TourObject.showMessage()
+    },
+    cancel: function () {
+      disasterSearchTour.options.defaults.when.cancel.apply(this)
+    }
+  },
+  buttons: [
+    back,
+    {
+      text: 'Next',
+      action: () => {
+        let step = disasterSearchTour.getCurrentStep()
+        if ($store.getters.currentExtract.length &lt; 2) {
+          step.hide()
+          TourObject.showError()
+          step.error = true
+          step.show()
+        } else {
+          disasterSearchTour.next()
+        }
+      }
+    }
+  ]
+})
+.addStep('save-search', {
+  title: 'Name and save your list',
+  text: `
+  &lt;div class="tour-message">
+  &lt;p>
+  You now have multiple disasters listed within your selected disaster list.
+  &lt;/p>
+  &lt;p>
+  Please enter a name in the name input field and click the save button to the right.
+  &lt;/p>
+  &lt;/div>
+  &lt;div class="tour-error" style="display:none;">
+    Please enter a unique name for your disaster list and click the save button.
+  &lt;/div>
+  `,
+  attachTo: '#saved_searches bottom',
+  buttons: [back,
+    {
+      text: 'Next',
+      action: () => {
+        let step = disasterSearchTour.getCurrentStep()
+        if ($store.getters.status.type !== 'success') {
+          step.hide()
+          TourObject.showError()
+          step.error = true
+          step.show()
+        } else {
+          disasterSearchTour.next()
+        }
+      }
+    }
+  ]
+})
+.addStep('use-saved-search', {
+  title: 'Access saved disaster list',
+  text: `
+    &lt;p>
+    Congratulations!
+    &lt;/p>
+    &lt;p>
+    You have successfully created a saved disaster list!
+    &lt;/p>
+    &lt;p>
+    It can be now be be accessed at any time when selected in the "Saved Disaster Lists" dropdown selector.
+    &lt;/p>
+  &lt;/div>
+  `,
+  attachTo: '#saved_searches bottom',
+  buttons: [back, next]
+})
+.addStep('deselect-disaster', {
+  title: 'Remove from list',
+  text: `
+    &lt;p>
+    If you want to remove a specific disaster from your list, deselect it by clicking the checkbox under the disaster ID.
+    &lt;/p>
+  &lt;/div>
+  `,
+  attachTo: '#list bottom',
+  buttons: [back, next]
+})
+.addStep('clear-current-extract', {
+  title: 'Clear list',
+  text: `
+    &lt;p>
+    If you want to clear all the disasters in your list and start over, click the clear button.
+    &lt;/p>
+  &lt;/div>
+  `,
+  attachTo: '#clear-button top',
+  buttons: [back,
+    {
+      text: 'Next',
+      action: () => {
+        $store.commit('clearCurrentExtract')
+        disasterSearchTour.next()
+      }
+    }
+  ]
+})
+.addStep('select-previous-search', {
+  title: 'Select a previously saved list',
+  text: `
+    &lt;p>
+    If you want to select a previously saved list of disaster(s), select an option from the dropdown list.
+    &lt;/p>
+  &lt;/div>
+  `,
+  attachTo: '#saved_searches bottom',
+  buttons: [back, next]
+})
+.addStep('delete-saved-search', {
+  title: 'Delete previously saved list',
+  text: `
+    &lt;p>
+    If you want to delete a previously saved list of disaster(s), select an option from the dropdown to load, then click the delete button.
+    &lt;/p>
+    &lt;p>
+    Warning: this will actually delete the list. If you do not want to delete a list, click Next.
+    &lt;/p>
+  &lt;/div>
+  `,
+  attachTo: '#saved_searches bottom',
+  buttons: [back, next]
+})
+.addStep('end-of-tour', {
+  title: 'Complete',
+  text: `
+    &lt;p>
+    Congratulations, you have completed the guided experience. Click here (link: FAQ) if you have additional questions.
+    &lt;/p>
+  &lt;/div>
+  `,
+  buttons: [back,
+    {
+      text: 'End Tour',
+      action: function () {
+        disasterSearchTour.cancel()
+        disasterSearchTour.hide()
+      }
+    }
+  ]
+})
+
+const TourObject = {
+  start (store) {
+    this.setStore(store)
+    if (Shepherd.activeTour) return
+    disasterSearchTour.start()
+  },
+  tour: disasterSearchTour,
+  next,
+  back,
+  setStore (store) {
+    if (store) $store = store
+  },
+  showError () {
+    _.each(document.querySelectorAll('.tour-message'), $el => ($el.style.display = 'none'))
+    _.each(document.querySelectorAll('.tour-error'), $el => ($el.style.display = 'block'))
+  },
+  showMessage () {
+    _.each(document.querySelectorAll('.tour-error'), $el => ($el.style.display = 'none'))
+    _.each(document.querySelectorAll('.tour-message'), $el => ($el.style.display = 'block'))
+  },
+  getTabIndex
+}
+export default TourObject
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc" target="_blank">JSDoc 3.5.3</a> on 7/4/2017 using the <a href="https://github.com/Grafluxe/boxy-jsdoc-template" target="_blank">boxy-jsdoc-template</a> theme.
+</footer>
+
+<script src="scripts/prettify/prettify.js"></script>
+<script src="scripts/prettify/lang-css.js"></script>
+<script src="scripts/script.js"></script>
+
+</body>
+</html>

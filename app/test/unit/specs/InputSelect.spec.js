@@ -37,18 +37,18 @@ describe('InputSelect', function () {
   })
 
   describe('unMatchedItems', function (done) {
-    it('should return items that match the query and selected is not true', function (done) {
+    it('should return items that match the queryValue and selected is not true', function (done) {
       vm.items = [{code: 'alpha', name: 'alpha', selected: false}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}]
-      vm.query = 'lph'
+      vm.queryValue = 'lph'
       Vue.nextTick(() => {
         should(vm.unMatchedItems[0].code).be.equal('alpha')
         done()
       })
     })
 
-    it('should return items that match the query and selected is true', function (done) {
+    it('should return items that match the queryValue and selected is true', function (done) {
       vm.items = [{code: 'alpha', name: 'alpha', selected: true}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}]
-      vm.query = 'lph'
+      vm.queryValue = 'lph'
       Vue.nextTick(() => {
         should(vm.unMatchedItems).be.empty()
         done()
@@ -57,30 +57,30 @@ describe('InputSelect', function () {
   })
 
   describe('update', function () {
-    it('should return item at listIndex position if there is no query', function () {
+    it('should return item at listIndex position if there is no queryValue', function () {
       vm.items = [{code: 'alpha', name: 'alpha'}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}]
       vm.listIndex = 1
       vm.update()
       should(vm.matchingItems[0].code).be.equal('beta')
     })
 
-    it('should set matching items to be item at listIndex position if there is query, and set query to item name', function () {
+    it('should set matching items to be item at listIndex position if there is queryValue, and set queryValue to item name', function () {
       vm.items = [{code: 'alpha', name: 'alpha', selected: true}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}]
       vm.listIndex = 1
-      vm.query = 'et'
+      vm.queryValue = 'et'
       vm.matchingItems = [{code: 'alpha', name: 'alpha', selected: true}, {code: 'beta', name: 'beta'}]
       vm.update()
       should(vm.matchingItems[0].name).be.equal('beta')
-      should(vm.query).be.equal('beta')
+      should(vm.queryValue).be.equal('beta')
     })
   })
 
   describe('checkForReset', function () {
-    it('should reset things if there is no query and one or more items', function () {
+    it('should reset things if there is no queryValue and one or more items', function () {
       vm.items = [{code: 'alpha', name: 'alpha'}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}]
       vm.matchingItems = [{code: 'beta', name: 'beta'}]
       vm.listIndex = 1
-      vm.query = ''
+      vm.queryValue = ''
       vm.checkForReset()
       should(vm.matchingItems.length).be.equal(vm.items.length)
       should(vm.matchingItems[0].code).be.equal(vm.items[0].code)
@@ -97,11 +97,11 @@ describe('InputSelect', function () {
   })
 
   describe('getMatchingItems', function () {
-    it('should return items if query is null', function () {
+    it('should return items if queryValue is null', function () {
       vm.items = ['a', 'b']
       should(vm.getMatchingItems()).be.equal(vm.items)
     })
-    it('should include items that contain query ignoring case', function () {
+    it('should include items that contain queryValue ignoring case', function () {
       vm.items = [{name: 'one'}, {name: 'TWo'}, {name: 'oNeTwo'}]
       const matchingItems = vm.getMatchingItems('one')
       should(matchingItems[0]).be.equal(vm.items[0])

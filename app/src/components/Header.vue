@@ -78,7 +78,7 @@
                 span
                   | Reports
     #ribbon
-      div(style="position:relative; top:-5px;")
+      div
         span
           | Need Help?
         button.usa-button.green(@click='startTour' title='Guide Me Button' ref="guideMe")
