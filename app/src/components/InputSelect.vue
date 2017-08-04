@@ -6,7 +6,7 @@
         type='search'
         :placeholder='searchInputLabel'
         autocomplete='off'
-        v-model='query'
+        v-model='queryValue'
         @keydown.esc='reset'
         @keydown.enter='update'
         @keydown.down.prevent="selectDown"
@@ -48,7 +48,7 @@ export default {
     return {
       matchingItems: [],
       listIndex: -1,
-      query: _.get(this, 'value.name'),
+      queryValue: _.get(this, 'value.name'),
       contentVisible: false,
       ref: 'inputSelectText',
       placeholder: 'type here',
@@ -61,13 +61,13 @@ export default {
       return this.items && this.items.length > 0
     },
     isEmpty () {
-      return !this.query
+      return !this.queryValue
     },
     isDirty () {
-      return !!this.query
+      return !!this.queryValue
     },
     unMatchedItems () {
-      return _.reject(this.getMatchingItems(this.query), 'selected')
+      return _.reject(this.getMatchingItems(this.queryValue), 'selected')
     },
     isDisabled () {
       return this.disabled ? 'disabled' : false
@@ -75,31 +75,31 @@ export default {
   },
   methods: {
     /**
-    * Will submit query to load items
+    * Will submit queryValue to load items
     * @function update
     */
     update () {
       if (this.listIndex > -1) {
-        if (this.query && this.query.length > 0) {
+        if (this.queryValue && this.queryValue.length > 0) {
           if (this.matchingItems && this.matchingItems.length > 0) {
-            // use matchingItems if there is a query text, and matching options
+            // use matchingItems if there is a queryValue text, and matching options
             this.select(this.matchingItems[this.listIndex])
           }
         } else {
-          // use items array, as there is no query text
+          // use items array, as there is no queryValue text
           this.select(this.items[this.listIndex])
         }
         this.close()
       }
     },
     reset () {
-      this.query = ''
+      this.queryValue = ''
       this.listIndex = -1
       this.$emit('clear', null)
       this.matchingItems = _.clone(this.items)
     },
     checkForReset () {
-      if (this.query === '' && this.items.length > 0) this.reset()
+      if (this.queryValue === '' && this.items.length > 0) this.reset()
     },
     toggleDropdown () {
       this.contentVisible = !this.contentVisible
@@ -112,7 +112,7 @@ export default {
         this.deselect(item)
       } else {
         this.matchingItems = [item]
-        this.query = item.name
+        this.queryValue = item.name
         if (this.onChange) this.onChange(item)
         this.contentVisible = false
         this.$emit('update:value', item)
@@ -137,14 +137,14 @@ export default {
     deselect (item) {
       delete item.selected
     },
-    getMatchingItems (query) {
-      if (!query) {
+    getMatchingItems (queryValue) {
+      if (!queryValue) {
         this.matchingItems = this.items
         this.listIndex = -1
       } else {
         this.matchingItems = []
         this.items.forEach((i) => {
-          if (i.name.toUpperCase().includes(query.toUpperCase())) {
+          if (i.name.toUpperCase().includes(queryValue.toUpperCase())) {
             this.matchingItems.push(i)
           }
         })

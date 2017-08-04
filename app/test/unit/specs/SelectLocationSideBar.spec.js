@@ -34,7 +34,7 @@ describe('SelectLocationSideBar component', function () {
     actions = {
       setSelectedState: sinon.stub(),
       loadLocales: sinon.stub(),
-      loadDisasterList: sinon.stub(),
+      loadReportDisasterList: sinon.stub(),
       loadReportData: sinon.stub()
     }
 
@@ -63,7 +63,7 @@ describe('SelectLocationSideBar component', function () {
         expect(vm.disasterSelected).to.be.null
         expect(dispatchSpy.calledWith('setSelectedState', iowa))
         expect(dispatchSpy.calledWith('loadLocales', iowa.code))
-        expect(dispatchSpy.calledWith('loadDisasterList', iowa.code))
+        expect(dispatchSpy.calledWith('loadReportDisasterList', iowa.code))
         done()
       })
     })
