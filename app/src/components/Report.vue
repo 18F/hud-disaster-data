@@ -30,19 +30,18 @@
             tr
               th Type
               th Amount
-        .report-loading.hidden
+        .report-loading(v-show="showReportLoader")
           icon.fa-spin(name='fa-spinner')
           span.fa-spin-text
             | Generating Report ...
           span.sr-only Loading...
-        .report-values
+        .report-values(v-show="!showReportLoader")
           table
               tr(v-for='(amount, desc) in summaryRecords')
                 td
                   | {{ desc }}
                 td
                   | {{ Math.round(amount * 100) / 100 }}
-
 </template>
 <script>
 import selectLocationSideBar from './SelectLocationSideBar'
@@ -63,6 +62,9 @@ export default {
       'disasterFilter',
       'geographicLevel'
     ]),
+    showReportLoader () {
+      return this.$store.getters.showReportLoader
+    },
     stateName () {
       return _.get(this.$store.getters.stateFilter, 'name') || ''
     },

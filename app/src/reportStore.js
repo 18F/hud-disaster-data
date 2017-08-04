@@ -26,6 +26,10 @@ export const mutations = {
     })
   },
 
+  setShowReportLoader: function (state, value) {
+    state.showReportLoader = value
+  },
+
   updateLocaleList: function (state, list) {
     state.localeList = list
   },
@@ -106,6 +110,7 @@ export const actions = {
   },
 
   loadReportData: function ({ commit }, {summaryCols, allFilters}) {
+    commit('setShowReportLoader', true)
     let formattedQuery
     _.forIn(allFilters, (value, key) => {
       if (formattedQuery) formattedQuery += `&${key}=${value.toString()}`
@@ -113,6 +118,7 @@ export const actions = {
     })
     axios.get(`/api/db?${formattedQuery}&summaryCols=${summaryCols}`).then(response => {
       commit('updateReportData', response.data)
+      commit('setShowReportLoader', false)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
@@ -135,6 +141,9 @@ export const getters = {
   },
   localeResults: state => {
     return state.localeList
+  },
+  showReportLoader: state => {
+    return state.showReportLoader
   },
   stateFilter: state => {
     return state.stateFilter
@@ -159,7 +168,8 @@ const reportStore = {
     geographicLevel: DEFAULT_GEOGRAPHIC_LEVEL,
     localeList: [],
     stateFilter: null,
-    summaryRecords: []
+    summaryRecords: [],
+    showReportLoader: false
   },
   actions,
   mutations,
