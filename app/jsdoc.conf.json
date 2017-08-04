@@ -11,7 +11,7 @@
     "plugins": ["node_modules/jsdoc-vue", "plugins/markdown"],
     "opts" : {
       "template": "node_modules/boxy-jsdoc-template",
-      "readme": "README.md"
+      "readme": "../README.md"
     },
     "templates": {
         "cleverLinks": false,
