@@ -22,8 +22,9 @@
             td(colspan="2")
               |Selected Locations: {{ locales }}
         label.sr-only(for='Export') Export report
-        button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton" @click="exportTable")
-          |Export
+        a(:href="exportURI()" download='HUD_FEMA_Report_download.csv' tabindex='-1')
+          button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton")
+            |Export
         value-selector(:showSummarySelections="false")
         table.report-values-header
           thead
@@ -82,8 +83,12 @@ export default {
     }
   },
   methods: {
-    exportTable () {
-      alert('export functionality soon to come')
+    exportURI () {
+      var csv = ''
+      csv += `Type,Amount\n`
+      _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `${key}, ${_.round(value, 2)}\n` })
+      console.log(csv)
+      return 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv)
     }
   }
 }

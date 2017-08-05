@@ -186,7 +186,7 @@ export default {
       }
 
       this.$store.dispatch('loadReportData',
-        { summaryCols: 'total_damages,unmet_need',
+        { summaryCols: 'total_damages,hud_unmet_need',
           allFilters
         })
     },

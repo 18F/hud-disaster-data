@@ -296,8 +296,8 @@ describe('reportStore', function () {
   })
 
   describe('loadReportData', function () {
-    const REPORT_SUMMARY = {numberOfRecords: 200, total_damages: 22000.50, unmet_need: 10000.50}
-    const filterParameter = {'summaryCols': 'total_damages,unmet_need', 'allFilters': {'stateId': 'TX'}}
+    const REPORT_SUMMARY = {numberOfRecords: 200, total_damages: 22000.50, hud_unmet_need: 10000.50}
+    const filterParameter = {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX'}}
 
     it('should call commit for updateReportData when the data is loaded', function (done) {
       moxios.stubRequest(/db/, {
