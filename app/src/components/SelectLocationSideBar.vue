@@ -189,6 +189,8 @@ export default {
         { summaryCols: 'total_damages,hud_unmet_need',
           allFilters
         })
+
+      window.history.replaceState(null, '', `${this.$route.fullPath.split('?')[0]}${this.$store.getters.stateUrlParameters}`)
     },
 
     removeDisaster (disaster) {

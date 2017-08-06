@@ -159,6 +159,14 @@ export const getters = {
   },
   summaryRecords: state => {
     return state.summaryRecords
+  },
+  stateUrlParameters: (state, getters) => {
+    if (!state.stateFilter) return ''
+    var parms = `?stateFilter=${state.stateFilter.code}`
+    if (getters.geographicLevel) parms += `&geographicLevel=${getters.geographicLevel.code}`
+    if (getters.localeFilter.length > 0) parms += `&localeFilter=${_.map(getters.localeFilter, l => l.code).join(',')}`
+    if (getters.disasterFilter.length > 0) parms += `&disasterFilter=${_.map(getters.disasterFilter, d => d.code).join(',')}`
+    return parms
   }
 }
 
