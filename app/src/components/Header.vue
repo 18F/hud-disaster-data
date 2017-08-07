@@ -54,10 +54,6 @@
                 icon.ico-md(name='fa-sign-out')
                 | Data Export
             li
-              router-link(:to='{name: "maps"}'  href="")
-                icon.ico-md(name='fa-globe')
-                | View Map
-            li
               router-link(:to='{name: "reports"}'  href="")
                 icon.ico-md(name='fa-bar-chart')
                 | Reports
@@ -67,11 +63,6 @@
                 icon.ico-md(name='fa-sign-out')
                 span
                   | Data Export
-          router-link(:to='{name: "maps"}'  href="")
-            .tab(tabindex='-1')
-                icon.ico-md(name='fa-globe')
-                span
-                  | View Map
           router-link(:to='{name: "reports"}'  href="")
             .tab(tabindex='-1')
                 icon.ico-md(name='fa-bar-chart')
