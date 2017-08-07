@@ -5,9 +5,11 @@ import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '@/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
-const { updateReportDisasterList, updateLocaleList, clearStore, addDisasterFilter, addLocaleFilter, setShowReportLoader } = mutations
+const { updateReportDisasterList, updateLocaleList, clearStore,
+  setState, addDisasterFilter, addLocaleFilter, removeDisasterFilter, removeLocaleFilter,
+  setShowReportLoader, setSelectedGeographicLevel, updateReportData } = mutations
 const { loadReportDisasterList, loadLocales, setSelectedState, loadReportData } = actions
-const { localeFilter, disasterFilter, showReportLoader } = getters
+const { localeFilter, disasterFilter, showReportLoader, geographicLevel, stateFilter, summaryRecords } = getters
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -159,12 +161,41 @@ describe('reportStore', function () {
     })
   })
 
+  describe('setState', function () {
+    it('should set value of stateFilter', function () {
+      let state = {
+        stateFilter: null
+      }
+      setState(state, 'something')
+      should(state.stateFilter).be.equal('something')
+      should(stateFilter(state)).be.equal('something')
+    })
+  })
+
   describe('setShowReportLoader', function () {
     it('should set value of showReportLoader to true', function () {
       let state = {showReportLoader: false}
       setShowReportLoader(state, true)
       should(state.showReportLoader).be.equal(true)
       should(showReportLoader(state)).be.equal(true)
+    })
+  })
+
+  describe('setSelectedGeographicLevel', function () {
+    it('should set value of geographicLevel to proper value', function () {
+      let state = {geographicLevel: 'level one'}
+      setSelectedGeographicLevel(state, 'level two')
+      should(state.geographicLevel).be.equal('level two')
+      should(geographicLevel(state)).be.equal('level two')
+    })
+  })
+
+  describe('updateReportData', function () {
+    it('should set value of summaryRecords to proper value', function () {
+      let state = {summaryRecords: null}
+      updateReportData(state, 'some data')
+      should(state.summaryRecords).be.equal('some data')
+      should(summaryRecords(state)).be.equal('some data')
     })
   })
 
@@ -192,6 +223,20 @@ describe('reportStore', function () {
     })
   })
 
+  describe('removeDisasterFilter', function () {
+    it('Should set the selected attribute of the chosen disaster to false', function () {
+      let state = {
+        disasterList: [
+          {name: 'one', selected: true},
+          {name: 'two', selected: true},
+          {name: 'three', selected: true}
+        ]
+      }
+      removeDisasterFilter(state, state.disasterList[1])
+      should(state.disasterList[1]).have.property('selected').which.is.false()
+    })
+  })
+
   describe('addLocaleFilter', function () {
     it('Should set the selected attribute of the chosen locale to true', function () {
       let state = {
@@ -203,6 +248,20 @@ describe('reportStore', function () {
       }
       addLocaleFilter(state, state.localeList[1])
       should(state.localeList[1]).have.property('selected').which.is.true()
+    })
+  })
+
+  describe('removeLocaleFilter', function () {
+    it('Should set the selected attribute of the chosen locale to false', function () {
+      let state = {
+        localeList: [
+          {name: 'one', selected: true},
+          {name: 'two', selected: true},
+          {name: 'three', selected: true}
+        ]
+      }
+      removeLocaleFilter(state, state.localeList[1])
+      should(state.localeList[1]).have.property('selected').which.is.false()
     })
   })
 
@@ -237,8 +296,8 @@ describe('reportStore', function () {
   })
 
   describe('loadReportData', function () {
-    const REPORT_SUMMARY = {numberOfRecords: 200, total_damages: 22000.50, unmet_need: 10000.50}
-    const filterParameter = {'summaryCols': 'total_damages,unmet_need', 'allFilters': {'stateId': 'TX'}}
+    const REPORT_SUMMARY = {numberOfRecords: 200, total_damages: 22000.50, hud_unmet_need: 10000.50}
+    const filterParameter = {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX'}}
 
     it('should call commit for updateReportData when the data is loaded', function (done) {
       moxios.stubRequest(/db/, {

@@ -86,7 +86,7 @@ describe('SelectLocationSideBar component', function () {
       const dispatchSpy = sinon.spy(store, 'dispatch')
       vm.createReport()
       Vue.nextTick(() => {
-        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,unmet_need', 'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'damaged_city', 'geoArea': ['HOUSTON']}}))
+        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'damaged_city', 'geoArea': ['HOUSTON']}}))
         done()
       })
     })
@@ -103,7 +103,7 @@ describe('SelectLocationSideBar component', function () {
       const dispatchSpy = sinon.spy(store, 'dispatch')
       vm.createReport()
       Vue.nextTick(() => {
-        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,unmet_need', 'allFilters': {'stateId': null, 'disasterId': [], 'geoName': 'county_name', 'geoArea': [{ code: 'HOUSTON', name: 'Houston' }]}}))
+        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': null, 'disasterId': [], 'geoName': 'county_name', 'geoArea': [{ code: 'HOUSTON', name: 'Houston' }]}}))
         done()
       })
     })

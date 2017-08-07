@@ -20,7 +20,7 @@ describe('Report component', function () {
       disasterFilter: function () { return [{code: 'DR-4272-TX', name: 'DR-4272-TX'}, {code: 'DR-4277-TX', name: 'DR-4277-TX'}] },
       localeFilter: function () { return [{code: 'Houston', name: 'Houston'}, {code: 'Alamo', name: 'Alamo'}] },
       geographicLevel: function () { return {code: 'city', name: 'city'} },
-      summaryRecords: function () { return { numberOfRecords: 1, total_damages: 100, unmet_need: 50 } }
+      summaryRecords: function () { return { numberOfRecords: 1, total_damages: 100, hud_unmet_need: 50 } }
     }
 
     store = new Vuex.Store({state: {}, getters})
@@ -66,7 +66,7 @@ describe('Report component', function () {
     it('should return the records for the summary report', function (done) {
       expect(vm.summaryRecords.numberOfRecords).to.be.equal(1)
       expect(vm.summaryRecords.total_damages).to.be.equal(100)
-      expect(vm.summaryRecords.unmet_need).to.be.equal(50)
+      expect(vm.summaryRecords.hud_unmet_need).to.be.equal(50)
       done()
     })
   })
