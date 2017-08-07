@@ -170,7 +170,14 @@ export default {
     },
 
     createReport () {
-      var allFilters = {}
+      let allFilters = {}
+      let summaryDisplayData = {
+        stateName: this.$store.getters.stateFilter.name,
+        disasters: this.$store.getters.disasterFilter,
+        locales: this.$store.getters.localeFilter,
+        level: this.$store.getters.geographicLevel.name
+      }
+
       if (this.$store.getters.stateFilter) allFilters.stateId = this.$store.getters.stateFilter.code
       if (this.$store.getters.disasterFilter.length > 0) allFilters.disasterId = _.flatMap(this.$store.getters.disasterFilter, dstr => dstr.code.split('-')[1])
       if (this.$store.getters.geographicLevel && this.$store.getters.localeFilter.length > 0) {
@@ -184,7 +191,7 @@ export default {
         }
         allFilters.geoArea = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
       }
-
+      this.$emit('updateSummaryDisplay', summaryDisplayData)
       this.$store.dispatch('loadReportData',
         { summaryCols: 'total_damages,hud_unmet_need',
           allFilters

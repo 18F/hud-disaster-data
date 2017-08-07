@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    selectLocationSideBar
+    selectLocationSideBar(v-on:updateSummaryDisplay='updateSummaryDisplay')
     div.col-xs-12.col-sm-12.col-md-8.col-lg-8.reports
       div.col-lg-12
         h1
@@ -55,6 +55,14 @@ import _ from 'lodash'
 */
 export default {
   name: 'report',
+  data () {
+    return {
+      displayStateName: '',
+      displayDisasters: [],
+      displayLocales: [],
+      displaylevel: ''
+    }
+  },
   components: {selectLocationSideBar, valueSelector},
   computed: {
     ...mapGetters([
@@ -67,16 +75,16 @@ export default {
       return this.$store.getters.showReportLoader
     },
     stateName () {
-      return _.get(this.$store.getters.stateFilter, 'name') || ''
+      return this.displayStateName
     },
     disasters () {
-      return _.map(this.$store.getters.disasterFilter, disaster => disaster.name).join(', ')
+      return _.map(this.displayDisasters, disaster => disaster.name).join(', ')
     },
     locales () {
-      return _.map(this.$store.getters.localeFilter, locale => locale.name).join(', ')
+      return _.map(this.displayLocales, locale => locale.name).join(', ')
     },
     level () {
-      return this.$store.getters.geographicLevel.name
+      return this.displaylevel
     },
     summaryRecords () {
       return this.$store.getters.summaryRecords
@@ -89,6 +97,13 @@ export default {
       _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `${key}, ${_.round(value, 2)}\n` })
       console.log(csv)
       return 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv)
+    },
+    updateSummaryDisplay (data) {
+      console.log('data', data)
+      this.displaylevel = data.level
+      this.displayStateName = data.stateName
+      this.displayDisasters = data.disasters
+      this.displayLocales = data.locales
     }
   }
 }
