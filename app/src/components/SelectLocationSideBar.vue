@@ -15,6 +15,7 @@
                 :on-change="changeState"
                 v-on:clear="clearStore"
                 style="background:#fff;"
+                ref="stateSelector"
               )
           div.rp-group.rp-geo-level
             | Geographic Level
@@ -26,6 +27,7 @@
                 :on-change="setLevel"
                 style="background:#fff;"
                 :hassubList="true"
+                ref="geographicLevelSelector"
               )
             div.locale.col-lg-12(name="lsGeographicLevels")
               div(class="input-group")
@@ -80,11 +82,51 @@
 // input(type="text" placeholder="search ..." style="position:absolute; padding-left:35px;")
 // icon(name='fa-search' style="position:relative; fill:#ccc; position:relative; top:15px; left:10px;")
 import inputselect from '@/components/InputSelect'
+import magic from '@/bus'
 import _ from 'lodash'
 
 export default {
   name: 'selectLocationSideBar',
   components: {inputselect},
+
+  created () {
+    if (this.$route.query) {
+      let params = this.$route.query
+      if (params.stateFilter) {
+        this.stateSelected = _.find(this.states, ['code', params.stateFilter])
+        this.$store.commit('setState', this.stateSelected)
+        // this.$refs.stateSelector.queryValue = this.stateSelected.name
+      }
+
+      if (params.geographicLevel) {
+        this.geographicLevelSelected = _.find(this.geographicLevels, ['code', params.geographicLevel])
+        this.setLevel(this.geographicLevelSelected)
+        // this.$refs.geographicLevelSelector.queryValue = this.geographicLevelSelected.name
+      }
+
+      if (params.localeFilter) {
+        magic.$once('localesLoaded', () => {
+          let localeResults = this.$store.getters.localeResults
+          const vm = this
+          _.map(params.localeFilter.split(','), function (loc) {
+            vm.$store.commit('addLocaleFilter', _.find(localeResults, ['code', loc]))
+          })
+        })
+      }
+
+      if (params.disasterFilter) {
+        this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
+        magic.$once('disastersLoaded', () => {
+          debugger
+          let disasterNumberResults = this.$store.getters.disasterNumberResults
+          const vm = this
+          _.map(params.disasterFilter.split(','), function (dstr) {
+            vm.$store.commit('addDisasterFilter', _.find(disasterNumberResults, ['code', dstr]))
+          })
+        })
+      }
+    }
+  },
 
   data () {
     return {

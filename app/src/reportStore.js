@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import _ from 'lodash'
 import es6Promise from 'es6-promise'
-// import magic from '@/bus'
+import magic from '@/bus'
 es6Promise.polyfill()
 Vue.use(Vuex)
 
@@ -87,6 +87,7 @@ export const actions = {
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
+      magic.$emit('disastersLoaded')
       commit('resetStatus')
     }).catch(err => {
       console.log(`Error fetching disaster list: ${err}`)
@@ -102,6 +103,7 @@ export const actions = {
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
+      magic.$emit('localesLoaded')
       commit('resetStatus')
     }).catch(err => {
       console.log(`Error fetching locale list: ${err}`)
