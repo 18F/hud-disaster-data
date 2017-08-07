@@ -26,8 +26,12 @@ export const mutations = {
     })
   },
 
-  setShowReportLoader: function (state, value) {
-    state.showReportLoader = value
+  setShowReport: function (state, value) {
+    state.showReport = value
+  },
+
+  setShowReportSpinner: function (state, value) {
+    state.showReportSpinner = value
   },
 
   updateLocaleList: function (state, list) {
@@ -110,15 +114,17 @@ export const actions = {
   },
 
   loadReportData: function ({ commit }, {summaryCols, allFilters}) {
-    commit('setShowReportLoader', true)
+  //  commit('setShowReport', false)
     let formattedQuery
+    commit('setShowReportSpinner', true)
     _.forIn(allFilters, (value, key) => {
       if (formattedQuery) formattedQuery += `&${key}=${value.toString()}`
       else formattedQuery = `${key}=${value.toString()}`
     })
     axios.get(`/api/db?${formattedQuery}&summaryCols=${summaryCols}`).then(response => {
       commit('updateReportData', response.data)
-      commit('setShowReportLoader', false)
+      commit('setShowReport', true)
+      commit('setShowReportSpinner', false)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
@@ -142,8 +148,11 @@ export const getters = {
   localeResults: state => {
     return state.localeList
   },
-  showReportLoader: state => {
-    return state.showReportLoader
+  showReport: state => {
+    return state.showReport
+  },
+  showReportSpinner: state => {
+    return state.showReportSpinner
   },
   stateFilter: state => {
     return state.stateFilter
@@ -169,7 +178,8 @@ const reportStore = {
     localeList: [],
     stateFilter: null,
     summaryRecords: [],
-    showReportLoader: false
+    showReport: false,
+    showReportSpinner: false
   },
   actions,
   mutations,
