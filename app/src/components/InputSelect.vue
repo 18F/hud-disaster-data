@@ -40,9 +40,11 @@
 </template>
 <script>
 import _ from 'lodash'
+import adjustScroll from '../mixins/adjustScroll'
 
 export default {
   name: 'input-select',
+  mixins: [adjustScroll],
   props: ['items', 'onChange', 'value', 'disabled', 'componentDescription'],
   data () {
     return {

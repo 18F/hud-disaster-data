@@ -1,17 +1,22 @@
 <template lang="pug">
   div
-    selectLocationSideBar
+    selectLocationSideBar(v-on:updateSummaryDisplay='updateSummaryDisplay')
     div.col-xs-12.col-sm-12.col-md-8.col-lg-8.reports
       div.col-lg-12
         h1
           |Summary Report
       div.col-lg-12.report-summary
+        value-selector(:showSummarySelections="false")
+        label.sr-only(for='Export') Export report
+        a(:href="exportURI()" download='HUD_FEMA_Report_download.csv' tabindex='-1')
+          button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton")
+            |Export
         table.usa-table-borderless
           tr
             td
               |State: {{ stateName }}
             td(id="creationDate")
-              |Created on: {{ new Date() }}
+              |Created on: {{ getCreationDate }}
           tr
             td(colspan="2")
               |Disaster(s): {{ disasters }}
@@ -21,22 +26,18 @@
           tr
             td(colspan="2")
               |Selected Locations: {{ locales }}
-        label.sr-only(for='Export') Export report
-        a(:href="exportURI()" download='HUD_FEMA_Report_download.csv' tabindex='-1')
-          button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton")
-            |Export
-        value-selector(:showSummarySelections="false")
         table.report-values-header
           thead
             tr
               th Type
               th Amount
-        .report-loading(v-show="showReportLoader")
-          icon.fa-spin(name='fa-spinner')
-          span.fa-spin-text
-            | Generating Report ...
-          span.sr-only Loading...
-        .report-values(v-show="!showReportLoader")
+        .report-shell(v-show="!showReport")
+          .loading(v-show="showReportSpinner")
+            icon.fa-spin(name='fa-spinner')
+            span.fa-spin-text
+              | Generating Report ...
+              span.sr-only Loading...
+        .report-values(v-show="showReport")
           table
               tr(v-for='(amount, desc) in summaryRecords')
                 td
@@ -55,6 +56,14 @@ import _ from 'lodash'
 */
 export default {
   name: 'report',
+  data () {
+    return {
+      displayStateName: '',
+      displayDisasters: [],
+      displayLocales: [],
+      displaylevel: ''
+    }
+  },
   components: {selectLocationSideBar, valueSelector},
   computed: {
     ...mapGetters([
@@ -63,23 +72,30 @@ export default {
       'disasterFilter',
       'geographicLevel'
     ]),
-    showReportLoader () {
-      return this.$store.getters.showReportLoader
+    showReport () {
+      return this.$store.getters.showReport
+    },
+    showReportSpinner () {
+      return this.$store.getters.showReportSpinner
     },
     stateName () {
-      return _.get(this.$store.getters.stateFilter, 'name') || ''
+      return this.displayStateName
     },
     disasters () {
-      return _.map(this.$store.getters.disasterFilter, disaster => disaster.name).join(', ')
+      return _.map(this.displayDisasters, disaster => disaster.name).join(', ')
     },
     locales () {
-      return _.map(this.$store.getters.localeFilter, locale => locale.name).join(', ')
+      return _.map(this.displayLocales, locale => locale.name).join(', ')
     },
     level () {
-      return this.$store.getters.geographicLevel.name
+      return this.displaylevel
     },
     summaryRecords () {
       return this.$store.getters.summaryRecords
+    },
+    getCreationDate () {
+      var date = new Date()
+      return ((date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear())
     }
   },
   methods: {
@@ -88,6 +104,13 @@ export default {
       csv += `Type,Amount\n`
       _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `${key}, ${_.round(value, 2)}\n` })
       return 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv)
+    },
+    updateSummaryDisplay (data) {
+      console.log('data', data)
+      this.displaylevel = data.level
+      this.displayStateName = data.stateName
+      this.displayDisasters = data.disasters
+      this.displayLocales = data.locales
     }
   }
 }
@@ -95,7 +118,6 @@ export default {
 
 <style lang="scss">
 #exportReportButton {
-  margin-top:20px;
   text-align:right;
   float: right;
   margin-bottom: 20px;
@@ -108,7 +130,7 @@ export default {
 .hidden { display:none; }
 table { margin:0; }
 .reports {
-  padding:10px 20px;
+  padding:10px 20px 0 20px;
   min-height:700px;
 
   div:first-child {
@@ -116,7 +138,7 @@ table { margin:0; }
 
     h1 {
       color:#fff;
-      margin:0 0 20px 0;
+      margin:0;
     }
   }
   .report-summary {
@@ -144,7 +166,7 @@ table { margin:0; }
   }
 
   table.report-values-header {
-    margin-top:10px;
+    margin-top:20px;
     th {
       color:#000;
       padding:10px;
@@ -154,7 +176,7 @@ table { margin:0; }
     }
   }
 
-  .report-loading {
+  .report-shell {
     background: url('/static/img/bg_50_opacity.png');
     border:1px solid #5b616b;
     height:455px;
@@ -173,7 +195,7 @@ table { margin:0; }
 
   .report-values {
     &.hidden { display:none; }
-    height:435px;
+    height:455px;
     background:#fff;
     overflow:auto;
     overflow-x:auto;
