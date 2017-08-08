@@ -23,7 +23,7 @@ describe('Report component', function () {
       summaryRecords: function () { return { numberOfRecords: 1, total_damages: 100, hud_unmet_need: 50 } }
     }
 
-    store = new Vuex.Store({state: {}, getters})
+    store = new Vuex.Store({state: { displayLevel: null, displayStateName: null, displayDisasters: null, displayLocales: null}, getters})
     Constructor = Vue.extend(Report)
     vm = new Constructor({store}).$mount()
   })
@@ -69,6 +69,17 @@ describe('Report component', function () {
       expect(vm.summaryRecords.numberOfRecords).to.be.equal(1)
       expect(vm.summaryRecords.total_damages).to.be.equal(100)
       expect(vm.summaryRecords.hud_unmet_need).to.be.equal(50)
+      done()
+    })
+  })
+  describe('updateSummaryDisplay', function () {
+    it('should set summary values', function (done) {
+      let data = {level: 'level val', stateName: 'stateName val', disasters: 'disasters val', locales: 'locales val'}
+      vm.updateSummaryDisplay(data)
+      expect(vm.displaylevel).to.be.equal('level val')
+      expect(vm.displayStateName).to.be.equal('stateName val')
+      expect(vm.displayDisasters).to.be.equal('disasters val')
+      expect(vm.displayLocales).to.be.equal('locales val')
       done()
     })
   })
