@@ -124,13 +124,11 @@ export default {
       let checkItemsLength = this.matchingItems.length || this.items.length
       if (this.listIndex < checkItemsLength - 1) {
         this.listIndex++
-        // probably need to adjust scroll location
       }
     },
     selectUp () {
       if (this.listIndex > 0) {
         this.listIndex--
-        // probably need to adjust scroll location
       }
     },
     isSelected (item) {
