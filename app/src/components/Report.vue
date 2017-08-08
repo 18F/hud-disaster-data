@@ -95,11 +95,9 @@ export default {
       var csv = ''
       csv += `Type,Amount\n`
       _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `${key}, ${_.round(value, 2)}\n` })
-      console.log(csv)
       return 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv)
     },
     updateSummaryDisplay (data) {
-      console.log('data', data)
       this.displaylevel = data.level
       this.displayStateName = data.stateName
       this.displayDisasters = data.disasters
