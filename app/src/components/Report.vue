@@ -9,14 +9,16 @@
         value-selector(:showSummarySelections="false")
         label.sr-only(for='Export') Export report
         a(:href="exportURI()" download='HUD_FEMA_Report_download.csv' tabindex='-1')
-          button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton")
+          button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton" :disabled="!showReport")
             |Export
         table.usa-table-borderless
           tr
             td
               |State: {{ stateName }}
             td(id="creationDate")
-              |Created on: {{ getCreationDate }}
+              div(v-show="showReport")
+                span Created on:
+                span {{ getCreationDate }}
           tr
             td(colspan="2")
               |Disaster(s): {{ disasters }}
@@ -49,6 +51,7 @@
 import selectLocationSideBar from './SelectLocationSideBar'
 import valueSelector from './ValueSelector'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 import _ from 'lodash'
 /**
 * Component responsible for displaying a report or reports.  This is just a stub, at this time.
@@ -94,8 +97,8 @@ export default {
       return this.$store.getters.summaryRecords
     },
     getCreationDate () {
-      var date = new Date()
-      return ((date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear())
+      var date = moment().format('MMMM DD, YYYY - h:mm a')
+      return date
     }
   },
   methods: {
@@ -158,7 +161,20 @@ table { margin:0; }
             border:none;
             padding: 0;
 
-            &#creationDate { text-align:right; }
+            &#creationDate {
+              text-align:right;
+
+              span {
+                display:inline;
+                padding:0 10px;
+                  &:first-child { color:#fff; }
+                  &:last-child {
+                      color:#000;
+                      background:#ffffcc;
+                      border-radius:4px;
+                  }
+                }
+              }
           }
       }
       .btn-group { vertical-align:inherit; }
@@ -204,9 +220,13 @@ table { margin:0; }
     table {
       color:#000;
       tr {
+        border-bottom:1px solid #ccc;
+        &:last-child {
+          border-bottom: none;
+        }
         td {
           &:first-child { width:65%; }
-          padding:5px 0 0 10px;
+          padding:5px 0 5px 10px;
         }
       }
     }

@@ -28,6 +28,7 @@
                 style="background:#fff;"
                 :hassubList="true"
                 ref="geographicLevelSelector"
+                :disabled="true"
               )
             div.locale.col-lg-12(name="lsGeographicLevels")
               div(class="input-group")
