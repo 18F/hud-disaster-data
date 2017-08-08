@@ -17,10 +17,10 @@ export default {
     return {
       showUserSelection: false,
       availableUsers: [
-        {name: 'All locations user', code: 'ALL'},
-        {name: 'Iowa user', code: 'IA'},
-        {name: 'Wisconsin user', code: 'WI'},
-        {name: 'Texas user', code: 'TX'}
+        {name: 'All locations user', username: 'ALL'},
+        {name: 'Iowa user', username: 'IA'},
+        {name: 'Wisconsin user', username: 'WI'},
+        {name: 'Texas user', username: 'TX'}
       ]
     }
   },
