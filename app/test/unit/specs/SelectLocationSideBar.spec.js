@@ -93,7 +93,7 @@ describe('SelectLocationSideBar component', function () {
 
     it('should set parameters, using geographicLevel "county" and nulls for all else but localeFilter, to proper values and pass them to loadReportData action', function (done) {
       let getters = {}
-      getters.stateFilter = () => { return null }
+      getters.stateFilter = () => { return {code: 'somethin', name: 'somethin'} }
       getters.localeFilter = () => { return [{ code: 'HOUSTON', name: 'Houston' }] }
       getters.disasterFilter = () => { return [] }
       getters.geographicLevel = () => { return { code: 'county', name: 'county' } }

@@ -1,7 +1,7 @@
 <template lang="pug">
   .value-selector
-    div.report-actions
-      div.btn-group( style='display:none;')
+    div.report-actions(style="display:none;")
+      div.btn-group
         label.sr-only(for='SummariesSelector') Show summary values selector
         button(type="button" @click="toggleSummarySelection" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded")
           icon(name='fa-columns' classes="columns")
@@ -69,7 +69,7 @@ export default {
 
 <style lang="scss">
 .value-selector {
-  margin-top:20px;
+  float:right;
 
   .report-actions {
     text-align:right;
