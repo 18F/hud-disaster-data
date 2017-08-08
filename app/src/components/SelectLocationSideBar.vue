@@ -95,13 +95,11 @@ export default {
       if (params.stateFilter) {
         this.stateSelected = _.find(this.states, ['code', params.stateFilter])
         this.$store.commit('setState', this.stateSelected)
-        // this.$refs.stateSelector.queryValue = this.stateSelected.name
       }
 
       if (params.geographicLevel) {
         this.geographicLevelSelected = _.find(this.geographicLevels, ['code', params.geographicLevel])
         this.setLevel(this.geographicLevelSelected)
-        // this.$refs.geographicLevelSelector.queryValue = this.geographicLevelSelected.name
       }
 
       if (params.localeFilter) {
