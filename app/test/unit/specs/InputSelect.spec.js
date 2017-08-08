@@ -168,4 +168,57 @@ describe('InputSelect', function () {
       should(vm.listIndex).be.equal(0)
     })
   })
+
+  describe('should include adjustScroll mixin', function () {
+    it('maybeAdjustScroll should be a function', function () {
+      should(typeof vm.maybeAdjustScroll).be.equal('function')
+    })
+  })
+
+  describe('should set scrollTop to position given', function () {
+    it('should scroll to given position', function () {
+      vm.items = [{code: 'alpha', name: 'alpha', selected: true}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}]
+      vm.toggleDropdown()
+      vm.scrollTo(196)
+      Vue.nextTick(() => {
+        should.exist(vm.$refs.dropdownMenu)
+        should(vm.$refs.dropdownMenu.scrollTop).be.equal(196)
+      })
+    })
+  })
+
+  describe('scrollTo should be called', function () {
+    it('should call scrollTo when selectDown is called on 4th item', function () {
+      vm.items = [{code: 'alpha', name: 'alpha', selected: true}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}, {code: 'meow', name: 'meow'}, {code: 'woof', name: 'woof'}]
+      vm.toggleDropdown()
+      vm.listIndex = 3
+      Vue.nextTick(() => {
+        vm.selectDown()
+        expect(vm.scrollTo.called).to.equal(true)
+        done()
+      })
+    })
+
+    it('should call scrollTo when selectUp is called on 5th item', function () {
+      vm.items = [{code: 'alpha', name: 'alpha', selected: true}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}, {code: 'meow', name: 'meow'}, {code: 'woof', name: 'woof'}]
+      vm.toggleDropdown()
+      vm.listIndex = 4
+      Vue.nextTick(() => {
+        vm.selectUp()
+        expect(vm.scrollTo.called).to.equal(true)
+        done()
+      })
+    })
+
+    it('should not call scrollTo when selectUp is called on 1st item', function () {
+      vm.items = [{code: 'alpha', name: 'alpha', selected: true}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}, {code: 'meow', name: 'meow'}, {code: 'woof', name: 'woof'}]
+      vm.toggleDropdown()
+      vm.listIndex = 0
+      Vue.nextTick(() => {
+        vm.selectUp()
+        expect(vm.scrollTo.called).to.equal(false)
+        done()
+      })
+    })
+  })
 })
