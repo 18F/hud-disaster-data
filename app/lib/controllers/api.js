@@ -276,7 +276,7 @@ module.exports = router
 *       id:
 *         type: string
 *         description: A commit like hash with 24 chars
-*   Grant
+*   Grant:
 *     type: object
 *     properties:
 *       disaster_id:
