@@ -32,8 +32,8 @@
           :disabled="isDisabled")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
-    .results-list(v-if="contentVisible")
-      ul.dropdown-content(ref="dropdownMenu" @blur="close")
+    .results-list(ref="dropdownMenu" v-if="contentVisible")
+      ul.dropdown-content(@blur="close")
         li(v-for='(item, index) in unMatchedItems' :class="{ active: item.selected, highlight: index === listIndex }" @mouseover="listIndex = index")
           span(@mousedown.prevent="select(item)")
             | {{ item.name }}
@@ -124,13 +124,11 @@ export default {
       let checkItemsLength = this.matchingItems.length || this.items.length
       if (this.listIndex < checkItemsLength - 1) {
         this.listIndex++
-        // probably need to adjust scroll location
       }
     },
     selectUp () {
       if (this.listIndex > 0) {
         this.listIndex--
-        // probably need to adjust scroll location
       }
     },
     isSelected (item) {
