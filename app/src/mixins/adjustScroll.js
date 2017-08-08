@@ -21,7 +21,7 @@ module.exports = {
       if (pixelsToPointerTop <= this.viewport().top) {
         return this.scrollTo(pixelsToPointerTop)
       } else if (pixelsToPointerBottom >= this.viewport().bottom) {
-        return this.scrollTo(this.viewport().top + this.pointerHeight())
+        return this.scrollTo(pixelsToPointerTop)
       }
     },
 
@@ -33,8 +33,8 @@ module.exports = {
     pixelsToPointerTop () {
       let pixelsToPointerTop = 0
       if (this.$refs.dropdownMenu) {
-        for (let i = 0; i < this.typeAheadPointer; i++) {
-          pixelsToPointerTop += this.$refs.dropdownMenu.children[i].offsetHeight
+        for (let i = 0; i < this.listIndex; i++) {
+          pixelsToPointerTop += this.$refs.dropdownMenu.children[0].children[i].offsetHeight
         }
       }
       return pixelsToPointerTop
@@ -54,7 +54,7 @@ module.exports = {
      * @returns {number}
      */
     pointerHeight () {
-      let element = this.$refs.dropdownMenu ? this.$refs.dropdownMenu.children[this.typeAheadPointer] : false
+      let element = this.$refs.dropdownMenu ? this.$refs.dropdownMenu.children[this.listIndex] : false
       return element ? element.offsetHeight : 0
     },
 

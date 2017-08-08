@@ -21,7 +21,7 @@ module.exports = function (app) {
     res.send(swaggerSpec)
   });
   app.get('/api-docs.yaml', function (req, res) {
-    res.setHeader('Content-Type', 'application/yaml')
+    res.setHeader('Content-Type', 'text/x-yaml')
     res.send(YAML.stringify(swaggerSpec, 4))
   })
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))

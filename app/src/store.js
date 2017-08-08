@@ -13,16 +13,16 @@ const store = new Vuex.Store({
     reportStore
   },
   state: {
-    userStatesViewable: null
+    user: null
   },
   mutations: {
-    setUserStatesViewable: (state, stateValue) => {
-      state.userStatesViewable = stateValue
+    setUser: (state, user) => {
+      state.user = user
     }
   },
   getters: {
-    userStatesViewable: state => {
-      return state.userStatesViewable
+    user: state => {
+      return state.user
     }
   }
 })

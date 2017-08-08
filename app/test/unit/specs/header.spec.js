@@ -50,27 +50,4 @@ describe('Header.vue', () => {
       focusStub.restore()
     })
   })
-
-  describe('toggleUserState', () => {
-    it('should change showUserState from false to true', () => {
-      const Constructor = Vue.extend(Header)
-      const vm = new Constructor({store, router}).$mount()
-      expect(vm.showUserState).to.be.equal(false)
-      vm.toggleUserState()
-      expect(vm.showUserState).to.be.equal(true)
-    })
-  })
-
-  describe('selectStatePermission', () => {
-    it('should set showUserState to false and call commit', () => {
-      const Constructor = Vue.extend(Header)
-      const vm = new Constructor({store, router}).$mount()
-      var commitSpy = sinon.stub(vm.$store, 'commit')
-      vm.showUserState = true
-      expect(vm.showUserState).to.be.equal(true)
-      vm.selectStatePermission()
-      expect(vm.showUserState).to.be.equal(false)
-      commitSpy.restore()
-    })
-  })
 })
