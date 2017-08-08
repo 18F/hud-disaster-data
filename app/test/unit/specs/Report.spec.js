@@ -30,15 +30,14 @@ describe('Report component', function () {
 
   describe('stateName', function () {
     it('should return the state name', function (done) {
+      vm.displayStateName = 'Wisconsin'
       expect(vm.stateName).to.be.equal('Wisconsin')
       done()
     })
   })
   describe('stateName', function () {
     it('should return an empty string if state is not set', function (done) {
-      store = new Vuex.Store({state: {}, getters: {stateFilter: function () { return null }}})
-      Constructor = Vue.extend(Report)
-      vm = new Constructor({store}).$mount()
+      vm.displayStateName = ''
       expect(vm.stateName).to.be.equal('')
       done()
     })
@@ -46,18 +45,21 @@ describe('Report component', function () {
 
   describe('disasters', function () {
     it('should return the disasters', function (done) {
+      vm.displayDisasters = getters.disasterFilter()
       expect(vm.disasters).to.be.equal('DR-4272-TX, DR-4277-TX')
       done()
     })
   })
   describe('locales', function () {
     it('should return the locales', function (done) {
+      vm.displayLocales = getters.localeFilter()
       expect(vm.locales).to.be.equal('Houston, Alamo')
       done()
     })
   })
   describe('level', function () {
     it('should return the geographicLevel', function (done) {
+      vm.displaylevel = 'city'
       expect(vm.level).to.be.equal('city')
       done()
     })

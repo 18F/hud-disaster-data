@@ -86,7 +86,7 @@ router.get('/export/:fileNamePart', function (req, res) {
   var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
   var results = dbApi.getData([{damaged_state: states}, {disaster_id: numbers}])
-  if (!results || results.length === 0) return res.status(204).send('No data found.')
+  if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
   var columns = []
   for (var key in results[0]) columns.push(key)
   var resultSet = [ columns ]
@@ -276,7 +276,7 @@ module.exports = router
 *       id:
 *         type: string
 *         description: A commit like hash with 24 chars
-*   Grant
+*   Grant:
 *     type: object
 *     properties:
 *       disaster_id:

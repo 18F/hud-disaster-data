@@ -35,16 +35,7 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        div.btn-group.user-state
-          label.sr-only(for='UserStateSelector') User state selector
-          button(type="button" @click="toggleUserState" name="UserStateSelector" title="Select user state" :class="selectStateExpanded" style="color:gray;")
-            | {{ selectedUserState }}
-            icon(name="fa-caret-up" v-show="showUserState")
-            icon(name="fa-caret-down" v-show="!showUserState")
-          div.user-state-list(v-show="showUserState")
-            ul
-              li(v-for="stateValue in availableStates" @click="selectStatePermission(stateValue)" style="text-align:center;" )
-                | {{ stateValue }}
+        user-selector
         #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger' style="margin-right:20px;")
           icon(name='fa-bars' classes='ico-lg fill-black')
         #burger-menu.hidden-md.hidden-lg.hidden(ref='burgerMenu')
@@ -53,10 +44,6 @@
               router-link(:to='{name: "disasterSearch"}' href="")
                 icon.ico-md(name='fa-sign-out')
                 | Data Export
-            li
-              router-link(:to='{name: "maps"}'  href="")
-                icon.ico-md(name='fa-globe')
-                | View Map
             li
               router-link(:to='{name: "reports"}'  href="")
                 icon.ico-md(name='fa-bar-chart')
@@ -67,11 +54,6 @@
                 icon.ico-md(name='fa-sign-out')
                 span
                   | Data Export
-          router-link(:to='{name: "maps"}'  href="")
-            .tab(tabindex='-1')
-                icon.ico-md(name='fa-globe')
-                span
-                  | View Map
           router-link(:to='{name: "reports"}'  href="")
             .tab(tabindex='-1')
                 icon.ico-md(name='fa-bar-chart')
@@ -87,25 +69,22 @@
 
 <script>
 import tour from '../tour'
+import UserSelector from '@/components/UserSelector'
 /**
 * The standard header for the site.  Contains official logo, government site statement, and tabs for navigation.
 * @module components/Header
 */
 
 export default {
+  components: {UserSelector},
   data () {
     return {
       title: 'Disaster Data Portal',
       premsg: 'An official website of the United States Government',
-      showGovBanner: false,
-      showUserState: false,
-      availableStates: ['ALL', 'IA', 'WI', 'TX']
+      showGovBanner: false
     }
   },
   methods: {
-    toggleUserState () {
-      this.showUserState = !this.showUserState
-    },
     startTour () {
       tour.start(this.$store)
     },
@@ -114,18 +93,6 @@ export default {
     },
     skipToContent () {
       this.$refs.guideMe.focus()
-    },
-    selectStatePermission (stateValue) {
-      this.$store.commit('setUserStatesViewable', stateValue)
-      this.showUserState = false
-    }
-  },
-  computed: {
-    selectStateExpanded () {
-      return this.showUserState ? 'expanded' : false
-    },
-    selectedUserState () {
-      return this.$store.getters.userStatesViewable
     }
   }
 }
