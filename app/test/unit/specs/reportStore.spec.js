@@ -9,7 +9,7 @@ const { updateReportDisasterList, updateLocaleList, clearStore,
   setState, addDisasterFilter, addLocaleFilter, removeDisasterFilter, removeLocaleFilter,
   setShowReportSpinner, setSelectedGeographicLevel, updateReportData } = mutations
 const { loadReportDisasterList, loadLocales, setSelectedState, loadReportData } = actions
-const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords } = getters
+const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords, stateUrlParameters } = getters
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -292,6 +292,62 @@ describe('reportStore', function () {
       const selected = disasterFilter(state)
       should(selected).be.an.Array().and.have.length(2)
       should(selected).not.containEql(state.disasterList[0])
+    })
+  })
+
+  describe('stateUrlParameters', () => {
+    it('should return an empty string if stateFilter doesn\'t exist', () => {
+      let state = {}
+      let result = stateUrlParameters(state, {})
+      should(result).equal('')
+    })
+    it('should add geographicLevel to the querystring if geographicLevel exist\'s', () => {
+      let state = {
+        stateFilter: {
+          code: 'TX'
+        }
+      }
+      let getters = {
+        geographicLevel: {
+          code: 'City'
+        },
+        localeFilter: [],
+        disasterFilter: []
+      }
+      let result = stateUrlParameters(state, getters)
+      should(result).equal('?stateFilter=TX&geographicLevel=City')
+    })
+    it('should add localeFilter to the querystring if is at least one localeFilter', () => {
+      let state = {
+        stateFilter: {
+          code: 'TX'
+        }
+      }
+      let getters = {
+        geographicLevel: {
+          code: 'City'
+        },
+        localeFilter: [{code: 'Far Far'}, {code: 'Away'}],
+        disasterFilter: []
+      }
+      let result = stateUrlParameters(state, getters)
+      should(result).equal('?stateFilter=TX&geographicLevel=City&localeFilter=Far Far,Away')
+    })
+    it('should add disasterFilter to the querystring if is at least one disasterFilter', () => {
+      let state = {
+        stateFilter: {
+          code: 'TX'
+        }
+      }
+      let getters = {
+        geographicLevel: {
+          code: 'City'
+        },
+        localeFilter: [{code: 'Far Far'}, {code: 'Away'}],
+        disasterFilter: [{code: '1234'}, {code: '5678'}]
+      }
+      let result = stateUrlParameters(state, getters)
+      should(result).equal('?stateFilter=TX&geographicLevel=City&localeFilter=Far Far,Away&disasterFilter=1234,5678')
     })
   })
 
