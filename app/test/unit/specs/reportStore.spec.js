@@ -7,9 +7,9 @@ import sinon from 'sinon'
 import should from 'should'
 const { updateReportDisasterList, updateLocaleList, clearStore,
   setState, addDisasterFilter, addLocaleFilter, removeDisasterFilter, removeLocaleFilter,
-  setShowReportLoader, setSelectedGeographicLevel, updateReportData } = mutations
+  setShowReportSpinner, setSelectedGeographicLevel, updateReportData } = mutations
 const { loadReportDisasterList, loadLocales, setSelectedState, loadReportData } = actions
-const { localeFilter, disasterFilter, showReportLoader, geographicLevel, stateFilter, summaryRecords } = getters
+const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords } = getters
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -174,10 +174,10 @@ describe('reportStore', function () {
 
   describe('setShowReportLoader', function () {
     it('should set value of showReportLoader to true', function () {
-      let state = {showReportLoader: false}
-      setShowReportLoader(state, true)
-      should(state.showReportLoader).be.equal(true)
-      should(showReportLoader(state)).be.equal(true)
+      let state = {showReportSpinner: false}
+      setShowReportSpinner(state, true)
+      should(state.showReportSpinner).be.equal(true)
+      should(showReportSpinner(state)).be.equal(true)
     })
   })
 

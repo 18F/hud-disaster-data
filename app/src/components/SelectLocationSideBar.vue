@@ -117,7 +117,6 @@ export default {
       if (params.disasterFilter) {
         this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
         magic.$once('disastersLoaded', () => {
-          debugger
           let disasterNumberResults = this.$store.getters.disasterNumberResults
           const vm = this
           _.map(params.disasterFilter.split(','), function (dstr) {
@@ -239,7 +238,7 @@ export default {
           allFilters
         })
 
-      window.history.replaceState(null, '', `${this.$route.fullPath.split('?')[0]}${this.$store.getters.stateUrlParameters}`)
+      window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
     },
 
     removeDisaster (disaster) {
