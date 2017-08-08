@@ -90,39 +90,7 @@ export default {
   components: {inputselect},
 
   created () {
-    if (this.$route.query) {
-      let params = this.$route.query
-      if (params.stateFilter) {
-        this.stateSelected = _.find(this.states, ['code', params.stateFilter])
-        this.$store.commit('setState', this.stateSelected)
-      }
-
-      if (params.geographicLevel) {
-        this.geographicLevelSelected = _.find(this.geographicLevels, ['code', params.geographicLevel])
-        this.setLevel(this.geographicLevelSelected)
-      }
-
-      if (params.localeFilter) {
-        magic.$once('localesLoaded', () => {
-          let localeResults = this.$store.getters.localeResults
-          const vm = this
-          _.map(params.localeFilter.split(','), function (loc) {
-            vm.$store.commit('addLocaleFilter', _.find(localeResults, ['code', loc]))
-          })
-        })
-      }
-
-      if (params.disasterFilter) {
-        this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
-        magic.$once('disastersLoaded', () => {
-          let disasterNumberResults = this.$store.getters.disasterNumberResults
-          const vm = this
-          _.map(params.disasterFilter.split(','), function (dstr) {
-            vm.$store.commit('addDisasterFilter', _.find(disasterNumberResults, ['code', dstr]))
-          })
-        })
-      }
-    }
+    this.initializeValuesFromURL()
   },
 
   data () {
@@ -245,6 +213,42 @@ export default {
 
     removeLocale (locale) {
       this.$store.commit('removeLocaleFilter', locale)
+    },
+
+    initializeValuesFromURL () {
+      if (this.$route.query) {
+        let params = this.$route.query
+        if (params.stateFilter) {
+          this.stateSelected = _.find(this.states, ['code', params.stateFilter])
+          this.$store.commit('setState', this.stateSelected)
+        }
+
+        if (params.geographicLevel) {
+          this.geographicLevelSelected = _.find(this.geographicLevels, ['code', params.geographicLevel])
+          this.setLevel(this.geographicLevelSelected)
+        }
+
+        if (params.localeFilter) {
+          magic.$once('localesLoaded', () => {
+            let localeResults = this.$store.getters.localeResults
+            const vm = this
+            _.map(params.localeFilter.split(','), function (loc) {
+              vm.$store.commit('addLocaleFilter', _.find(localeResults, ['code', loc]))
+            })
+          })
+        }
+
+        if (params.disasterFilter) {
+          this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
+          magic.$once('disastersLoaded', () => {
+            let disasterNumberResults = this.$store.getters.disasterNumberResults
+            const vm = this
+            _.map(params.disasterFilter.split(','), function (dstr) {
+              vm.$store.commit('addDisasterFilter', _.find(disasterNumberResults, ['code', dstr]))
+            })
+          })
+        }
+      }
     }
   }
 }
