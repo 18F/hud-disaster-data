@@ -13,6 +13,9 @@ div.btn-group.user-selector
 <script>
 export default {
   name: 'user-selector',
+  created () {
+    this.selectUser(this.availableUsers[0])
+  },
   data () {
     return {
       showUserSelection: false,
@@ -45,7 +48,8 @@ export default {
 </script>
 <style lang="scss">
 .user-selector {
-  position: fixed;
+  z-index: 2;
+  position: absolute;
   top: 30px;
   right: 10px;
   background-color: #fff;
