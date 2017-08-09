@@ -24,6 +24,8 @@ app.use(bodyParser.json())
 //   csrf: true,
 //   xssProtection: true
 // }));
+// handle fallback for HTML5 history API
+app.use(require('connect-history-api-fallback')())
 
 app.use(express.static(path.join(__dirname, 'dist')))
 // app.use(flash())
