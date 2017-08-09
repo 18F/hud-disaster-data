@@ -201,7 +201,7 @@ export default {
       }
       this.$emit('updateSummaryDisplay', summaryDisplayData)
       this.$store.dispatch('loadReportData',
-        { summaryCols: 'total_damages,hud_unmet_need',
+        { summaryCols: 'household_count,total_damages,hud_unmet_need',
           allFilters
         })
 

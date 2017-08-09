@@ -94,7 +94,7 @@ export default {
       return this.displaylevel
     },
     summaryRecords () {
-      return this.$store.getters.summaryRecords
+      return _.omit(this.$store.getters.summaryRecords, 'numberOfRecords')
     },
     getCreationDate () {
       var date = moment().format('MMMM DD, YYYY - h:mm a')
