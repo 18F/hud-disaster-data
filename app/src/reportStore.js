@@ -166,7 +166,7 @@ export const getters = {
     return _.filter(state.disasterList, 'selected')
   },
   geographicLevel: state => {
-    return state.geographicLevel
+    return state.geographicLevel || ''
   },
   summaryRecords: state => {
     return state.summaryRecords
