@@ -321,6 +321,13 @@ export default {
     .rp-group {
       margin-top:20px;
 
+      .locale-selection-list, .disaster-selection-list {
+        border:1px solid #353434;
+        border-top:0px;
+        height:160px;
+        overflow-y:scroll;
+      }
+
       &.rp-geo-level {
         min-height:300px;
 
@@ -338,16 +345,10 @@ export default {
               color:#000;
             }
           }
-          .locale-selection-list {
-            border:1px solid #353434;
-            border-top:0px;
-            height:162px;
-            overflow-y:scroll;
-          }
         }
       }
       &.disasters {
-        min-height:190px;
+        min-height:240px;
 
         .no-padding { padding:0px; }
         .add-disaster {
@@ -362,11 +363,7 @@ export default {
         }
         .disaster-selection-list {
           background:url('/static/img/bg_25_opacity.png');
-          border:1px solid #353434;
-          border-top:0px;
           clear:left;
-          height:110px;
-          overflow-y:scroll;
         }
       }
     }
