@@ -165,7 +165,6 @@ export default {
         this.$store.dispatch('loadLocales', this.stateSelected.code)
         this.checkDisabled()
       }
-
     },
 
     clearLevel () {
