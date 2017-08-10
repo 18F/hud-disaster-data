@@ -194,7 +194,7 @@ table { margin:0; }
   .report-shell {
     background: url('/static/img/bg_50_opacity.png');
     border:1px solid #5b616b;
-    height:455px;
+    height:505px;
     padding-top:18%;
     text-align:center;
 
@@ -210,7 +210,7 @@ table { margin:0; }
 
   .report-values {
     &.hidden { display:none; }
-    height:455px;
+    height:505px;
     background:#fff;
     overflow:auto;
     overflow-x:auto;
