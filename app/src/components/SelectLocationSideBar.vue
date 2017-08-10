@@ -16,6 +16,7 @@
                 v-on:clear="clearStore"
                 style="background:#fff;"
                 ref="stateSelector"
+                required="true"
               )
           div.rp-group.rp-geo-level
             | Geographic Level
