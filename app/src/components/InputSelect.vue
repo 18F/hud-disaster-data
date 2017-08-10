@@ -4,6 +4,7 @@
       label.sr-only(for='search-text') {{ searchInputLabel }}
       input.search-text(
         type='search'
+        :required='required'
         :placeholder='searchInputLabel'
         autocomplete='off'
         v-model='queryValue'
@@ -47,7 +48,7 @@ import adjustScroll from '../mixins/adjustScroll'
 export default {
   name: 'input-select',
   mixins: [adjustScroll],
-  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription'],
+  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription', 'required'],
   data () {
     return {
       matchingItems: [],
