@@ -1,7 +1,7 @@
 <template lang="pug">
 div.btn-group.user-selector
   label.sr-only(for='UserSelector') User selector
-  button(type="button" @click="toggleUserSelector" name="UserSelector" title="Select user" :class="selectUserExpanded" style="color:gray;")
+  button(type="button" @click="toggleUserSelector" name="UserSelector" title="Select user" :class="selectUserExpanded" style="color:gray;background:#001a2a;")
     | {{ selectedUser.name }}
     icon(name="fa-caret-up" v-show="showUserSelection")
     icon(name="fa-caret-down" v-show="!showUserSelection")
