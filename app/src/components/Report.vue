@@ -10,7 +10,8 @@
         label.sr-only(for='Export') Export report
         a(:href="exportURI()" download='HUD_FEMA_Report_download.csv' tabindex='-1')
           button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton" :disabled="!showReport")
-            |Export
+            | Export
+            icon(name='fa-sign-out')
         table.usa-table-borderless
           tr
             td
@@ -124,9 +125,15 @@ export default {
   float: right;
   margin-bottom: 20px;
   margin-right: 0;
-  .hdd-icon { fill:#fff; }
   height:40px;
   margin-right:0;
+  display: inline-flex;
+  &[disabled] .hdd-icon {
+    fill:#323a45;
+  }
+  .hdd-icon {
+    margin-left: 5px;
+  }
 }
 
 .hidden { display:none; }

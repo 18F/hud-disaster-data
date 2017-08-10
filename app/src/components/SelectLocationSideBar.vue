@@ -84,6 +84,7 @@
               | Clear
             button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create Report button")
               | Create Report
+              icon(name='fa-bar-chart')
 </template>
 
 <script>
@@ -376,6 +377,13 @@ export default {
       /* disabled button styles */
       button {
         &.usa-button.alt-button { margin-right:20px; }
+        &[disabled] .hdd-icon {
+          fill:#323a45;
+        }
+        .hdd-icon {
+          margin-left: 5px;
+        }
+        display: inline-flex;
       }
     }
   }
