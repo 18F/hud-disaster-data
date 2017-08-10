@@ -1,7 +1,7 @@
 <template lang="pug">
   .extracts
     #saved_searches
-      h3 Saved disaster lists
+      h3 Saved Disaster Lists
       div
         select(required='', v-show='!newExtract', @change='loadExtract', v-model='selectedExtractName', title='saved disaster lists')
           option(value='', disabled='', selected='') Select a list...
@@ -15,7 +15,7 @@
         label.sr-only(for='delete-button') delete saved disaster list: {{ selectedExtractName }}
         button#delete-button.usa-button(@click='deleteExtract', title='delete button', :disabled="selectedExtractName === ''")
           icon(classes='ico-lg gray', name='fa-trash-o')
-    h3 Selected disasters list
+    h3 Selected Disasters List
     .message-wrapper
       message(:status="status" :locationOfMessage="'extract-message'")
     #list

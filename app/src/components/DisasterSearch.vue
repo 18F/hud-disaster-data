@@ -3,7 +3,7 @@
     .row
       .col-xs-12.col-md-6.search-container(:class="hasItems?'with-extracts':''")
         #opaque-bg.row
-          h2 Disaster search
+          h2 Disaster Search
           .col.DisasterSearch
             #search
               .offset-bg
@@ -30,8 +30,6 @@
                   ul.disaster-search-recs
                     li(v-for='(item, $item) in items')
                       disaster(:prefix="'search'" :item='item')
-                .link-advanced-search
-                  a(href='#') Advanced Search
       .col-xs-12.col-md-6.no-padding.saved-extracts
         savedextracts(ref='extracts')
 </template>
