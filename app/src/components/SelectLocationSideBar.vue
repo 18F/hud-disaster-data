@@ -165,7 +165,6 @@ export default {
         this.$store.dispatch('loadLocales', this.stateSelected.code)
         this.checkDisabled()
       }
-
     },
 
     clearLevel () {
@@ -319,7 +318,9 @@ export default {
     .rp-group {
       margin-top:20px;
 
-      &.rp-geo-level { min-height:300px;
+      &.rp-geo-level {
+        min-height:300px;
+
         .locale {
           background:url('/static/img/bg_25_opacity.png');
           padding:10px;
@@ -329,8 +330,11 @@ export default {
             margin:0;
             min-width:70px;
             padding:15px 20px;
+            &:disabled {
+              background-color: #D6D7D9;
+              color:#000;
+            }
           }
-
           .locale-selection-list {
             border:1px solid #353434;
             border-top:0px;
@@ -348,8 +352,11 @@ export default {
           margin:0;
           min-width:70px;
           padding:15px 20px;
+          &:disabled {
+            background-color: #D6D7D9;
+            color:#000;
+          }
         }
-
         .disaster-selection-list {
           background:url('/static/img/bg_25_opacity.png');
           border:1px solid #353434;
@@ -365,10 +372,16 @@ export default {
       text-align:center;
       padding-bottom:10px;
 
+      /* disabled button styles */
       button {
         &.usa-button.alt-button { margin-right:20px; }
       }
     }
+  }
+  button[disabled], button:disabled {
+    opacity:1.0;
+    background-color:#ccc;
+    color:#000;
   }
 }
 

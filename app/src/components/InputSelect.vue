@@ -213,6 +213,9 @@ export default {
     border-top-right-radius:0px;
     border-bottom-right-radius:0px;
     svg { fill:#000; }
+    &.disabled, :disabled {
+    //  background-color:#ccc;
+    }
   }
 
   .search-text {
@@ -234,7 +237,7 @@ export default {
 
     .search-icon {
       position:absolute;
-      top:12px;
+      top:14px;
       left:10px;
       fill:#a9a9a9;
       padding:0;
@@ -252,9 +255,13 @@ export default {
       padding: 0;
       position: relative;
       .hdd-icon { fill: #b0b0b0; }
+
+      /* hide input clear when disabled */
+      &.disabled svg { display:none; }
       &:hover {
         .hdd-icon { fill: #000; }
       }
+
     }
   }
 
