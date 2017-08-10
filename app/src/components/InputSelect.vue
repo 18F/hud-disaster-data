@@ -29,7 +29,8 @@
           :title='`Toggle Drop Down List for ${componentDescription}`'
           @click="toggleDropdown"
           :class="isDisabled"
-          :disabled="isDisabled")
+          :disabled="isDisabled"
+          @blur="close")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
     .results-list(ref="dropdownMenu" v-if="contentVisible")
