@@ -309,11 +309,12 @@ describe('SelectLocationSideBar component', function () {
         done()
       })
     })
-    it('should do nothing if val is null or undefined', function (done) {
+    it('should set geographicLevel to null if empty', function (done) {
       let commitSpy = sinon.spy(store, 'commit')
       vm.setLevel()
       Vue.nextTick(() => {
-        should(commitSpy.calledWith('setSelectedGeographicLevel')).be.false()
+        should(commitSpy.calledWith('setSelectedGeographicLevel')).be.true()
+        expect(vm.geographicLevelSelected).to.be.null
         done()
       })
     })

@@ -27,8 +27,9 @@
                 :on-change="setLevel"
                 style="background:#fff;"
                 :hassubList="true"
+                v-on:clear="clearLevel"
                 ref="geographicLevelSelector"
-                :disabled="true"
+                :disabled="disableLevels"
               )
             div.locale.col-lg-12(name="lsGeographicLevels")
               div(class="input-group")
@@ -38,9 +39,10 @@
                     :items="localeItems",
                     label="localeName",
                     ref="localeSelect"
+                    :disabled="disableLocales"
                   )
                 span(class="input-group-btn")
-                  button.add-locale(type="button" @click="addLocale")
+                  button.add-locale(type="button" @click="addLocale" :disabled="disableLocales")
                     | Add
               div.locale-selection-list
                 ul(id="SelectedLocaleList")
@@ -61,9 +63,10 @@
                       label="disasterNumber"
                       ref="disasterSelect"
                       :dropdownMenuStyle="'max-height:350px; overflow:true;'"
+                      :disabled="disableDisasters"
                     )
                   span(class="input-group-btn")
-                    button.add-disaster(type="button" @click="addDisaster")
+                    button.add-disaster(type="button" @click="addDisaster" :disabled="disableDisasters")
                       | Add
                 div.disaster-selection-list
                   ul(id="SelectedDisasterList")
@@ -75,7 +78,7 @@
           div.rp-action-buttons
             button.usa-button.alt-button(type="button" @click="clearStore")
               | Clear
-            button.usa-button.green(type="button" @click="createReport")
+            button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate")
               | Create Report
 </template>
 
@@ -100,6 +103,10 @@ export default {
       geographicLevelSelected: this.$store.getters.geographicLevel,
       localeSelected: null,
       disasterSelected: null,
+      disableLevels: true,
+      disableLocales: true,
+      disableDisasters: true,
+      disableCreate: true,
       states: [
         { name: 'Alabama', code: 'AL' }, { name: 'Alaska', code: 'AK' }, { name: 'American Samoa', code: 'AS' },
         { name: 'Arizona', code: 'AZ' }, { name: 'Arkansas', code: 'AR' }, { name: 'California', code: 'CA' }, { name: 'Colorado', code: 'CO' },
@@ -138,6 +145,7 @@ export default {
     changeState (val) {
       if (val && val.code && val.code.length > 1) {
         if (!this.stateSelected || val.code !== this.stateSelected.code) {
+          this.stateSelected = val
           this.localeSelected = null
           this.disasterSelected = null
           this.$store.dispatch('setSelectedState', val)
@@ -145,6 +153,26 @@ export default {
           this.$store.dispatch('loadReportDisasterList', val.code)
         }
       }
+      this.checkDisabled()
+    },
+
+    setLevel (val) {
+      if (!val) {
+        this.clearLevel()
+      } else {
+        this.geographicLevelSelected = val
+        this.$store.commit('setSelectedGeographicLevel', val)
+        this.changeState(this.stateSelected)
+        this.$store.dispatch('loadLocales', this.stateSelected.code)
+      }
+      this.checkDisabled()
+    },
+
+    clearLevel () {
+      this.geographicLevelSelected = null
+      this.$store.commit('setSelectedGeographicLevel', null)
+      this.localeSelected = null
+      this.checkDisabled()
     },
 
     addLocale () {
@@ -163,18 +191,32 @@ export default {
       this.localeSelected = null
       this.disasterSelected = null
       this.stateSelected = null
+      this.checkDisabled()
       this.$store.commit('clearStore')
-    },
-
-    setLevel (val) {
-      if (!val) return
-      this.$store.commit('setSelectedGeographicLevel', val)
-      this.changeState(this.stateSelected)
-      this.$store.dispatch('loadLocales', this.stateSelected.code)
     },
 
     clearStore (val) {
       this.reset()
+    },
+
+    checkDisabled () {
+      // a function to manage which inputs are disabled
+      if (!this.stateSelected) {
+        // disable all the things
+        this.disableLocales = true
+        this.disableCreate = true
+        this.disableDisasters = true
+        this.disableLevels = true
+      } else {
+        this.disableCreate = false
+        this.disableDisasters = false
+        this.disableLevels = false
+        if (!this.geographicLevelSelected) {
+          this.disableLocales = true
+        } else {
+          this.disableLocales = false
+        }
+      }
     },
 
     createReport () {
