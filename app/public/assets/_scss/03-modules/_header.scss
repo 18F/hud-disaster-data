@@ -17,9 +17,8 @@
     padding-top:12px;
     background: #fff;
 
-    p {
-      margin:0;
-    }
+    .container-block { padding:0 10px; }
+    p { margin:0; }
 
     .padding-top {
       padding-top: 11px;
@@ -111,16 +110,23 @@
 
 #burger-menu {
   width: 100%;
-  background-color: #0071bc;
+  /* background-color: #0071bc; */
   clear: left;
   text-align: center;
 
   ul {
-    margin: 0 0 0 40rem;
-    text-align: left;
-    padding-top: 15px;
+    margin:0;
+    display:block;
+    padding: 0;
+    width:100%;
+
     li {
-      vertical-align: top;
+      background-color:#0071bc;
+      line-height:2.5;
+      text-align:center;
+      margin:0;
+      display:block;
+
       &::before {
         content: "";
       }
@@ -128,10 +134,10 @@
       a {
         text-decoration: none;
         color: #fff;
-        padding: 10px;
+        padding: 20px;
 
         .hdd-icon {
-          margin-bottom: -4px;
+          vertical-align:middle;
           margin-right: 10px;
         }
       }
@@ -143,8 +149,7 @@
   position:relative;
   top:7px;
   float:right;
-  margin-right:6%;
-  /* margin-left:47.5%; */
+  /* margin-right:6%; */
 
   a{
     cursor:pointer;
@@ -157,6 +162,7 @@
     margin-right:50px;
     padding:10px 0;
 
+    &:last-child { margin-right:20px;}
     .tab{
     float:left;
 
