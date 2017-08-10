@@ -4,6 +4,7 @@ import '@/vue-mixins'
 import InputSelect from '@/components/InputSelect' // eslint-disable-line
 import _ from 'lodash' // eslint-disable-line
 import should from 'should'
+import sinon from 'sinon'
 
 Vue.config.productionTip = false
 
@@ -71,6 +72,44 @@ describe('InputSelect', function () {
       vm.update()
       should(vm.matchingItems[0].name).be.equal('beta')
       should(vm.queryValue).be.equal('beta')
+    })
+    it('should call $emit for clear if there is no queryValue and listIndex is -1', function () {
+      let emitStub = sinon.stub(vm, '$emit')
+      vm.listIndex = -1
+      vm.queryValue = null
+      vm.update()
+      should(emitStub.called).be.equal(true)
+      emitStub.restore()
+    })
+
+    it('should call $emit for clear if there is a queryValue and matchingItems is not empty and listIndex is -1', function () {
+      let emitStub = sinon.stub(vm, '$emit')
+      vm.listIndex = -1
+      vm.queryValue = 'something'
+      vm.matchingItems = [ 1, 2 ]
+      vm.update()
+      should(emitStub.called).be.equal(true)
+      emitStub.restore()
+    })
+
+    it('should call $emit for clear if there is a queryValue and matchingItems has length of 0 and listIndex is -1', function () {
+      let emitStub = sinon.stub(vm, '$emit')
+      vm.listIndex = -1
+      vm.queryValue = 'something'
+      vm.matchingItems = []
+      vm.update()
+      should(emitStub.called).be.equal(true)
+      emitStub.restore()
+    })
+
+    it('should call $emit for clear if there is a queryValue and matchingItems has length of 1 and listIndex is -1', function () {
+      let selectStub = sinon.stub(vm, 'select')
+      vm.listIndex = -1
+      vm.queryValue = 'something'
+      vm.matchingItems = [ 1 ]
+      vm.update()
+      should(selectStub.called).be.equal(true)
+      selectStub.restore()
     })
   })
 
