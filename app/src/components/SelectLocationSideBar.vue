@@ -22,6 +22,7 @@
             #geographicLevelSelect
               inputselect(
                 :value.sync="geographicLevelSelected"
+                componentDescription="Geographic level select"
                 :items="geographicLevels"
                 label="geographicLevels"
                 :on-change="setLevel"
@@ -36,13 +37,14 @@
                 #localeSelect
                   inputselect(
                     :value.sync="localeSelected"
+                    componentDescription="Location select"
                     :items="localeItems",
                     label="localeName",
                     ref="localeSelect"
                     :disabled="disableLocales"
                   )
                 span(class="input-group-btn")
-                  button.add-locale(type="button" @click="addLocale" :disabled="disableLocales")
+                  button.add-locale(type="button" @click="addLocale" :disabled="disableLocales" title="Add selected locale to search query")
                     | Add
               div.locale-selection-list
                 ul(id="SelectedLocaleList")
@@ -59,6 +61,7 @@
                   div(id="disasterIdInput")
                     inputselect(
                       :value.sync="disasterSelected"
+                      componentDescription="Disaster select"
                       :items="disasterItems",
                       label="disasterNumber"
                       ref="disasterSelect"
@@ -66,7 +69,7 @@
                       :disabled="disableDisasters"
                     )
                   span(class="input-group-btn")
-                    button.add-disaster(type="button" @click="addDisaster" :disabled="disableDisasters")
+                    button.add-disaster(type="button" @click="addDisaster" :disabled="disableDisasters" title="Add selected disaster to search query")
                       | Add
                 div.disaster-selection-list
                   ul(id="SelectedDisasterList")
@@ -76,9 +79,9 @@
                       button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                         icon(name='fa-times')
           div.rp-action-buttons
-            button.usa-button.alt-button(type="button" @click="clearStore")
+            button.usa-button.alt-button(type="button" @click="clearStore" title="Clear entire search query button")
               | Clear
-            button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate")
+            button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create Report button")
               | Create Report
 </template>
 

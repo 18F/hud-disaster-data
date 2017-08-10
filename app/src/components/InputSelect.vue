@@ -16,7 +16,8 @@
         @focus='checkForReset'
         @blur="close"
         :class="isDisabled"
-        :disabled="isDisabled")
+        :disabled="isDisabled"
+        :title='`Text input for ${componentDescription}`')
       icon.search-icon(name="fa-search")
       button.clear-text(@click='reset'
        v-if='isDirty'
