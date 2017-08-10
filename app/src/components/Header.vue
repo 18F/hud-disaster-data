@@ -59,7 +59,7 @@
                 icon.ico-md(name='fa-bar-chart')
                 span
                   | Reports
-    #ribbon
+    #ribbon(v-if="showRibbon")
       div
         span
           | Need Help?
@@ -82,6 +82,11 @@ export default {
       title: 'Disaster Data Portal',
       premsg: 'An official website of the United States Government',
       showGovBanner: false
+    }
+  },
+  computed: {
+    showRibbon () {
+      return this.$route.name === 'disasterSearch'
     }
   },
   methods: {
