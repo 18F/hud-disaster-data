@@ -18,12 +18,12 @@ describe('/api/db', function () {
   })
 
   it('should return data when specifying a stateId/disasterId combination', (done) => {
-    request(app).get('/api/db?stateId=Tx&disasterId=4269')
+    request(app).get('/api/db?stateId=IA&disasterId=4187')
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.be.an.Object().and.have.property('disaster_id').which.is.equal('4269')
-      body[0].should.be.an.Object().and.have.property('damaged_state').which.is.equal('TX')
+      body[0].should.be.an.Object().and.have.property('disaster_id').which.is.equal('4187')
+      body[0].should.be.an.Object().and.have.property('damaged_state').which.is.equal('IA')
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
@@ -72,31 +72,31 @@ describe('/api/db summarizeCols', function () {
       damaged_city: 'HOUSTON',
       damaged_state: 'TX',
       total_damages: 3789.92,
-      unmet_need: 1624.76
+      hud_unmet_need: 1624.76
     },
     {
       disaster_id: '4269',
       damaged_city: 'HOUSTON',
       damaged_state: 'TX',
       total_damages: 3930.31,
-      unmet_need: 0
+      hud_unmet_need: 0
     },
     {
       disaster_id: '4269',
       damaged_city: 'HOUSTON',
       damaged_state: 'TX',
       total_damages: 270.65,
-      unmet_need: 270.65
+      hud_unmet_need: 270.65
     }]
-    let summaryCols = ['total_damages', 'unmet_need']
+    let summaryCols = ['total_damages', 'hud_unmet_need']
     let summarizedCols = dbApi.summarizeCols(data, summaryCols)
     summarizedCols.total_damages.should.be.equal(3789.92 + 3930.31 + 270.65)
-    summarizedCols.unmet_need.should.be.equal(1624.76 + 0 + 270.65)
+    summarizedCols.hud_unmet_need.should.be.equal(1624.76 + 0 + 270.65)
     done()
   })
   it('should return false no data is passed in', (done) => {
     let data = null
-    let summaryCols = ['total_damages', 'unmet_need']
+    let summaryCols = ['total_damages', 'hud_unmet_need']
     let summarizedCols = dbApi.summarizeCols(data, summaryCols)
     summarizedCols.should.be.equal(false)
     done()

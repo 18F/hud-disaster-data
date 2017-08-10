@@ -94,7 +94,7 @@ describe('DisasterSearch.vue', () => {
       expect(vm.query).to.be.equal(undefined)
       vm.update()
       Vue.nextTick(() => {
-        expect(vm.isEmpty()).to.be.equal(true)
+        expect(vm.isEmpty).to.be.equal(true)
       })
     })
   })

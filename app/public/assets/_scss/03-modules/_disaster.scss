@@ -2,13 +2,8 @@ $check-color: #2e8540;
 .disaster {
   font-size:15px;
 
-  h5{
-    font-weight:700;
-  }
-
-  .affected-areas {
-    vertical-align:bottom;
-  }
+  h5 { font-weight:700; }
+  .affected-areas { vertical-align:bottom; }
 
   .counties {
     background-color:#fff;
@@ -17,30 +12,28 @@ $check-color: #2e8540;
     margin-top:10px;
 
     ul li {
-      background-color: transparent;
+      background-color:transparent;
       border:none;
       display: block;
       padding-left:10px;
       line-height:36px;
     }
 
-    ul li:hover {
-      background-color:#f1f1f1;
-    }
+    ul li:hover { background-color:#f1f1f1; }
   }
 
   .select-button {
     background:transparent;
     color:#000;
-    margin: 5px 0 0 0;
-    padding: 0;
+    margin:5px 0 0 0;
+    padding:0;
 
     &:focus {
+      -moz-box-shadow:none;
+      -webkit-box-shadow:none;
       box-shadow:none;
     }
 
-    .hdd-icon {
-      fill: $check-color;
-    }
+    .hdd-icon { fill: $check-color; }
   }
 }
