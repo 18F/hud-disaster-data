@@ -162,10 +162,10 @@ export default {
       } else {
         this.geographicLevelSelected = val
         this.$store.commit('setSelectedGeographicLevel', val)
-        this.changeState(this.stateSelected)
         this.$store.dispatch('loadLocales', this.stateSelected.code)
+        this.checkDisabled()
       }
-      this.checkDisabled()
+
     },
 
     clearLevel () {
