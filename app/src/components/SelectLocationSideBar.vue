@@ -6,6 +6,8 @@
             | Report Parameters
           div.rp-group
             | State
+            span.float-right
+              | * Required
             #stateSelect
               inputselect(
                 :value.sync="stateSelected"
@@ -447,5 +449,12 @@ export default {
         }
       }
     }
+  }
+  .float-right {
+    display: inline;
+    float: right;
+    font-size: small;
+    color: #fff;
+    padding-top: 6px;
   }
 </style>

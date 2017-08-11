@@ -1,6 +1,6 @@
 <template lang="pug">
   .input-select
-    .search-wrapper.input-group(aria-live="assertive")
+    .search-wrapper.input-group(aria-live="assertive" v-bind:class="{ 'input-required': isRequired }")
       label.sr-only(for='search-text') {{ searchInputLabel }}
       input.search-text(
         type='search'
@@ -70,6 +70,9 @@ export default {
     },
     isDirty () {
       return !!this.queryValue
+    },
+    isRequired () {
+      return !this.queryValue && this.required
     },
     unMatchedItems () {
       return _.reject(this.getMatchingItems(this.queryValue), 'selected')
@@ -248,6 +251,10 @@ export default {
       fill:#a9a9a9;
       padding:0;
     }
+  }
+
+  .search-wrapper.input-group.input-required {
+    border: 2px solid #f00;
   }
 
   button {
