@@ -157,7 +157,6 @@ export default {
           this.localeSelected = null
           this.disasterSelected = null
           this.$store.dispatch('setSelectedState', val)
-          this.$store.dispatch('loadLocales', val.code)
           this.$store.dispatch('loadReportDisasterList', val.code)
         }
       }
@@ -198,6 +197,7 @@ export default {
       this.localeSelected = null
       this.disasterSelected = null
       this.stateSelected = null
+      this.geographicLevelSelected = null
       this.checkDisabled()
       this.$store.commit('clearStore')
     },
