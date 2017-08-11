@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import DisasterSearch from './components/DisasterSearch'
 import Report from './components/Report'
-import Map from './components/Map'
 import _ from 'lodash'
 
 Vue.use(VueRouter)
@@ -31,15 +30,14 @@ export const beforeRouteEnter = function (to, from, next) {
 
 DisasterSearch.beforeRouteEnter = beforeRouteEnter
 Report.beforeRouteEnter = beforeRouteEnter
-Map.beforeRouteEnter = beforeRouteEnter
 
 const routes = [
   { path: '/', name: 'disasterSearch', component: DisasterSearch },
-  { path: '/reports', name: 'reports', component: Report },
-  { path: '/maps', name: 'maps', component: Map }
+  { path: '/reports', name: 'reports', component: Report }
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes,
   linkExactActiveClass: 'selected'
 })

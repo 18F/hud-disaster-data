@@ -35,40 +35,32 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger')
+        user-selector
+        #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger' style="margin-right:20px;")
           icon(name='fa-bars' classes='ico-lg fill-black')
+        #burger-menu.hidden-md.hidden-lg.hidden(ref='burgerMenu')
+          ul
+            li
+              router-link(:to='{name: "disasterSearch"}' href="")
+                icon.ico-md(name='fa-sign-out')
+                | Data Export
+            li
+              router-link(:to='{name: "reports"}'  href="")
+                icon.ico-md(name='fa-bar-chart')
+                | Reports
         #tabs(role="navigation").hidden-sm.hidden-xs
           router-link(:to='{name: "disasterSearch"}' href="")
             .tab(tabindex='-1')
                 icon.ico-md(name='fa-sign-out')
                 span
                   | Data Export
-          router-link(:to='{name: "maps"}'  href="")
-            .tab(tabindex='-1')
-                icon.ico-md(name='fa-globe')
-                span
-                  | View Map
           router-link(:to='{name: "reports"}'  href="")
             .tab(tabindex='-1')
                 icon.ico-md(name='fa-bar-chart')
                 span
                   | Reports
-      #burger-menu.hidden-md.hidden-lg.hidden(ref='burgerMenu')
-        ul
-          li
-            router-link(:to='{name: "disasterSearch"}' href="")
-              icon.ico-md(name='fa-sign-out')
-              | Data Export
-          li
-            router-link(:to='{name: "maps"}'  href="")
-              icon.ico-md(name='fa-globe')
-              | View Map
-          li
-            router-link(:to='{name: "reports"}'  href="")
-              icon.ico-md(name='fa-bar-chart')
-              | Reports
     #ribbon
-      div(style="position:relative; top:-5px;")
+      div
         span
           | Need Help?
         button.usa-button.green(@click='startTour' title='Guide Me Button' ref="guideMe")
@@ -77,12 +69,14 @@
 
 <script>
 import tour from '../tour'
+import UserSelector from '@/components/UserSelector'
 /**
 * The standard header for the site.  Contains official logo, government site statement, and tabs for navigation.
 * @module components/Header
 */
 
 export default {
+  components: {UserSelector},
   data () {
     return {
       title: 'Disaster Data Portal',

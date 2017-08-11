@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import _ from 'lodash'
 import es6Promise from 'es6-promise'
-// import magic from '@/bus'
+import magic from '@/bus'
 es6Promise.polyfill()
 Vue.use(Vuex)
 
@@ -16,14 +16,22 @@ export const DEFAULT_GEOGRAPHIC_LEVEL = { code: 'City', name: 'City' }
 export const mutations = {
 /**
   Update the disaster number list with fresh data
-  @function updateDisasterList
+  @function updateReportDisasterList
   @param {Array} list - A list of disasters
   */
-  updateDisasterList: function (state, list) {
+  updateReportDisasterList: function (state, list) {
     state.disasterList = _.map(list, disaster => {
       let name = `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`
       return {name, code: name, data: disaster}
     })
+  },
+
+  setShowReport: function (state, value) {
+    state.showReport = value
+  },
+
+  setShowReportSpinner: function (state, value) {
+    state.showReportSpinner = value
   },
 
   updateLocaleList: function (state, list) {
@@ -77,12 +85,13 @@ export const mutations = {
 These are the vuex actions
 */
 export const actions = {
-  loadDisasterList: function ({ commit }, qry) {
+  loadReportDisasterList: function ({ commit }, qry) {
     axios.get(`/api/disasterquery/${qry}`).then(response => {
-      commit('updateDisasterList', response.data)
+      commit('updateReportDisasterList', response.data)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
+      magic.$emit('disastersLoaded')
       commit('resetStatus')
     }).catch(err => {
       console.log(`Error fetching disaster list: ${err}`)
@@ -98,6 +107,7 @@ export const actions = {
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
+      magic.$emit('localesLoaded')
       commit('resetStatus')
     }).catch(err => {
       console.log(`Error fetching locale list: ${err}`)
@@ -106,13 +116,17 @@ export const actions = {
   },
 
   loadReportData: function ({ commit }, {summaryCols, allFilters}) {
+  //  commit('setShowReport', false)
     let formattedQuery
+    commit('setShowReportSpinner', true)
     _.forIn(allFilters, (value, key) => {
       if (formattedQuery) formattedQuery += `&${key}=${value.toString()}`
       else formattedQuery = `${key}=${value.toString()}`
     })
     axios.get(`/api/db?${formattedQuery}&summaryCols=${summaryCols}`).then(response => {
       commit('updateReportData', response.data)
+      commit('setShowReport', true)
+      commit('setShowReportSpinner', false)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
@@ -136,6 +150,12 @@ export const getters = {
   localeResults: state => {
     return state.localeList
   },
+  showReport: state => {
+    return state.showReport
+  },
+  showReportSpinner: state => {
+    return state.showReportSpinner
+  },
   stateFilter: state => {
     return state.stateFilter
   },
@@ -146,10 +166,18 @@ export const getters = {
     return _.filter(state.disasterList, 'selected')
   },
   geographicLevel: state => {
-    return state.geographicLevel
+    return state.geographicLevel || ''
   },
   summaryRecords: state => {
     return state.summaryRecords
+  },
+  stateUrlParameters: (state, getters) => {
+    if (!state.stateFilter) return ''
+    var parms = `?stateFilter=${state.stateFilter.code}`
+    if (getters.geographicLevel) parms += `&geographicLevel=${getters.geographicLevel.code}`
+    if (getters.localeFilter.length > 0) parms += `&localeFilter=${_.map(getters.localeFilter, l => l.code).join(',')}`
+    if (getters.disasterFilter.length > 0) parms += `&disasterFilter=${_.map(getters.disasterFilter, d => d.code).join(',')}`
+    return parms
   }
 }
 
@@ -159,7 +187,9 @@ const reportStore = {
     geographicLevel: DEFAULT_GEOGRAPHIC_LEVEL,
     localeList: [],
     stateFilter: null,
-    summaryRecords: []
+    summaryRecords: [],
+    showReport: false,
+    showReportSpinner: false
   },
   actions,
   mutations,

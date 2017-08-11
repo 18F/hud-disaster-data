@@ -6,7 +6,7 @@
         type='search'
         :placeholder='searchInputLabel'
         autocomplete='off'
-        v-model='query'
+        v-model='queryValue'
         @keydown.esc='reset'
         @keydown.enter='update'
         @keydown.down.prevent="selectDown"
@@ -17,6 +17,7 @@
         @blur="close"
         :class="isDisabled"
         :disabled="isDisabled")
+      icon.search-icon(name="fa-search")
       button.clear-text(@click='reset'
        v-if='isDirty'
         :title='`Clear Search Text for ${componentDescription}`'
@@ -27,33 +28,34 @@
         button.usa-button.btn.toggle-btn(type="button"
           :title='`Toggle Drop Down List for ${componentDescription}`'
           @click="toggleDropdown"
-          @blur="close"
           :class="isDisabled"
           :disabled="isDisabled")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
-    .results-list(v-if="contentVisible")
-      ul.dropdown-content(ref="dropdownMenu")
+    .results-list(ref="dropdownMenu" v-if="contentVisible")
+      ul.dropdown-content(@blur="close")
         li(v-for='(item, index) in unMatchedItems' :class="{ active: item.selected, highlight: index === listIndex }" @mouseover="listIndex = index")
           span(@mousedown.prevent="select(item)")
             | {{ item.name }}
 </template>
 <script>
 import _ from 'lodash'
+import adjustScroll from '../mixins/adjustScroll'
 
 export default {
   name: 'input-select',
+  mixins: [adjustScroll],
   props: ['items', 'onChange', 'value', 'disabled', 'componentDescription'],
   data () {
     return {
       matchingItems: [],
       listIndex: -1,
-      query: _.get(this, 'value.name'),
+      queryValue: _.get(this, 'value.name'),
       contentVisible: false,
       ref: 'inputSelectText',
       placeholder: 'type here',
       searchButtonTitle: 'Search Magnifying Glass Icon',
-      searchInputLabel: 'search for something'
+      searchInputLabel: '' // search for something
     }
   },
   computed: {
@@ -61,13 +63,13 @@ export default {
       return this.items && this.items.length > 0
     },
     isEmpty () {
-      return !this.query
+      return !this.queryValue
     },
     isDirty () {
-      return !!this.query
+      return !!this.queryValue
     },
     unMatchedItems () {
-      return _.reject(this.getMatchingItems(this.query), 'selected')
+      return _.reject(this.getMatchingItems(this.queryValue), 'selected')
     },
     isDisabled () {
       return this.disabled ? 'disabled' : false
@@ -75,31 +77,45 @@ export default {
   },
   methods: {
     /**
-    * Will submit query to load items
+    * Will submit queryValue to load items
     * @function update
     */
     update () {
       if (this.listIndex > -1) {
-        if (this.query && this.query.length > 0) {
+        if (this.queryValue && this.queryValue.length > 0) {
           if (this.matchingItems && this.matchingItems.length > 0) {
-            // use matchingItems if there is a query text, and matching options
+            // use matchingItems if there is a queryValue text, and matching options
             this.select(this.matchingItems[this.listIndex])
           }
         } else {
-          // use items array, as there is no query text
+          // use items array, as there is no queryValue text
           this.select(this.items[this.listIndex])
         }
         this.close()
+      } else if (!this.queryValue || this.queryValue.length === 0) {
+        // no item selected in dropdown, no query text
+        this.$emit('clear', null)
+      } else if (this.matchingItems) {
+        if (this.matchingItems.length > 1) {
+          // user has hit enter when there are multiple matches
+          this.$emit('clear', null)
+        } else if (this.matchingItems.length === 0) {
+          // user has no matches to input
+          this.$emit('clear', null)
+        } else {
+          // user has only one match
+          this.select(this.matchingItems[0])
+        }
       }
     },
     reset () {
-      this.query = ''
+      this.queryValue = ''
       this.listIndex = -1
       this.$emit('clear', null)
       this.matchingItems = _.clone(this.items)
     },
     checkForReset () {
-      if (this.query === '' && this.items.length > 0) this.reset()
+      if (this.queryValue === '' && this.items.length > 0) this.reset()
     },
     toggleDropdown () {
       this.contentVisible = !this.contentVisible
@@ -112,7 +128,7 @@ export default {
         this.deselect(item)
       } else {
         this.matchingItems = [item]
-        this.query = item.name
+        this.queryValue = item.name
         if (this.onChange) this.onChange(item)
         this.contentVisible = false
         this.$emit('update:value', item)
@@ -122,13 +138,11 @@ export default {
       let checkItemsLength = this.matchingItems.length || this.items.length
       if (this.listIndex < checkItemsLength - 1) {
         this.listIndex++
-        // probably need to adjust scroll location
       }
     },
     selectUp () {
       if (this.listIndex > 0) {
         this.listIndex--
-        // probably need to adjust scroll location
       }
     },
     isSelected (item) {
@@ -137,14 +151,14 @@ export default {
     deselect (item) {
       delete item.selected
     },
-    getMatchingItems (query) {
-      if (!query) {
+    getMatchingItems (queryValue) {
+      if (!queryValue) {
         this.matchingItems = this.items
         this.listIndex = -1
       } else {
         this.matchingItems = []
         this.items.forEach((i) => {
-          if (i.name.toUpperCase().includes(query.toUpperCase())) {
+          if (i.name.toUpperCase().includes(queryValue.toUpperCase())) {
             this.matchingItems.push(i)
           }
         })
@@ -203,6 +217,7 @@ export default {
   .search-text {
     margin: 0;
     max-width:100%;
+    padding-left:35px;
   }
   .toggle-btn, .search-text {
     border:none;
@@ -214,6 +229,15 @@ export default {
   .search-wrapper.input-group {
     border-bottom:1px solid #ccc;
     overflow:hidden;
+    position:relative;
+
+    .search-icon {
+      position:absolute;
+      top:12px;
+      left:10px;
+      fill:#a9a9a9;
+      padding:0;
+    }
   }
 
   button {
@@ -221,6 +245,7 @@ export default {
       background: none;
       cursor:pointer;
       float: right;
+      right:8px;
       margin-top:-32px;
       max-width: 24px;
       padding: 0;
@@ -237,12 +262,14 @@ export default {
     color: black;
     cursor:pointer;
     list-style: none;
-    max-height: 315px;
+    max-height: 195px;
     overflow: auto;
     position: absolute;
     /* width: 89.5%; */
     width:100%;
-    z-index: 5;
+    z-index: 100;
+    -moz-box-shadow:5px 5px 5px rgba(0,0,0,0.5);
+    -webkit-box-shadow:5px 5px 5px rgba(0,0,0,0.5);
     box-shadow:5px 5px 5px rgba(0,0,0,0.5);
 
     .dropdown-content {
@@ -250,6 +277,7 @@ export default {
       padding:0;
       margin:0;
       li {
+        /* height:50px; */
         &:before { display:none;}
 
         span {

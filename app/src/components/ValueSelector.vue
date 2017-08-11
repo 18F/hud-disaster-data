@@ -1,10 +1,7 @@
 <template lang="pug">
   .value-selector
-    div.report-actions
-      label.sr-only(for='Export') Export report
-      button.usa-button.green(type="button" name="Export" title="Export report")
-        |Export
-      div.btn-group( style='display:none;')
+    div.report-actions(style="display:none;")
+      div.btn-group
         label.sr-only(for='SummariesSelector') Show summary values selector
         button(type="button" @click="toggleSummarySelection" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded")
           icon(name='fa-columns' classes="columns")
@@ -72,7 +69,7 @@ export default {
 
 <style lang="scss">
 .value-selector {
-  margin-top:20px;
+  float:right;
 
   .report-actions {
     text-align:right;
@@ -104,7 +101,7 @@ export default {
     .summary-selection-list {
       //background-color:#000;
       background: url("/static/img/bg_90_opacity.png");
-      box-shadow:5px 5px 10px #000;
+      box-shadow:5px 5px 10px rgba(0,0,0,0.5);
       position: absolute;
       right:0;
       text-align:left;
