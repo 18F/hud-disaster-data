@@ -221,6 +221,10 @@ export default {
   }
 
   .search-text {
+    /* Override font for IE10+ ------------------------------ */
+    @media all and (-ms-high-contrast:none), (-ms-high-contrast:active) {
+      font-family: 'Arial', sans-serif !important;
+    }
     margin: 0;
     max-width:100%;
     padding-left:35px;
