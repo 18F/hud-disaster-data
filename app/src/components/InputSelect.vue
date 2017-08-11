@@ -241,6 +241,7 @@ export default {
 
   .search-wrapper.input-group {
     border-bottom:1px solid #ccc;
+    width:100%;
     overflow:hidden;
     position:relative;
 
@@ -254,7 +255,7 @@ export default {
   }
 
   .search-wrapper.input-group.input-required {
-    border: 2px solid #f00;
+    outline: 2px solid #f00;
   }
 
   button {

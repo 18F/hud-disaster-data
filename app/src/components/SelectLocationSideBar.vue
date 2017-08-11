@@ -6,8 +6,7 @@
             | Report Parameters
           div.rp-group
             | State
-            span.float-right
-              | * Required
+            span(style="font-size:13px; color:#f00; display:inline; padding-left:5px;") *
             #stateSelect
               inputselect(
                 :value.sync="stateSelected"
@@ -20,6 +19,8 @@
                 ref="stateSelector"
                 required="true"
               )
+              span.float-right(style="font-size:13px; color:#f00;")
+                | * required
           div.rp-group.rp-geo-level
             | Geographic Level
             #geographicLevelSelect
