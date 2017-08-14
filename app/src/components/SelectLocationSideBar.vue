@@ -311,6 +311,7 @@ export default {
 
   .rp-container {
     background:url('../../static/img/bg_50_opacity.png');
+    border-radius:10px;
     min-height:700px;
     padding:0 20px;
 
