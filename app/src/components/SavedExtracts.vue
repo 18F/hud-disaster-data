@@ -3,17 +3,17 @@
     #saved_searches
       h3 Saved Disaster Lists
       div
-        select(required='', v-show='!newExtract', @change='loadExtract', v-model='selectedExtractName', title='saved disaster lists')
+        select(required='', v-show='!newExtract', @change='loadExtract', v-model='selectedExtractName', title='Saved disaster lists')
           option(value='', disabled='', selected='') Select a list...
           option(v-for='extract in savedExtracts', v-bind:value='extract.name') {{extract.name}}
         label.sr-only(for='extract-name') Search Name
         input#extract-name(v-show='newExtract', v-model='extractName', @keydown.enter='saveExtract' name='extract-name', type='text', placeholder='Enter a name for your list')
       #cta
         label.sr-only(for='save-button') Save selected disaster list
-        button#save-button.usa-button(@click='saveExtract', title='save button', :disabled='!newExtract', style='vertical-align:top;')
+        button#save-button.usa-button(@click='saveExtract', title='Save button', :disabled='!newExtract', style='vertical-align:top;')
           icon(classes='ico-lg gray', name='fa-save')
         label.sr-only(for='delete-button') delete saved disaster list: {{ selectedExtractName }}
-        button#delete-button.usa-button(@click='deleteExtract', title='delete button', :disabled="selectedExtractName === ''")
+        button#delete-button.usa-button(@click='deleteExtract', title='Delete button', :disabled="selectedExtractName === ''")
           icon(classes='ico-lg gray', name='fa-trash-o')
     h3 Selected Disasters List
     .message-wrapper
@@ -28,9 +28,9 @@
         li(v-for='(item, $item) in items')
           disaster(:prefix="'saved'", :item='item')
     #action-buttons
-      button#clear-button.usa-button.alt-button(@click='clear' title='Clear Button') Clear
+      button#clear-button.usa-button.alt-button(@click='clear' title='Clear button') Clear
       a(:href='download()' tabindex='-1' download='')
-        button#export-button.usa-button.green(:disabled='items.length === 0' title='Export Button')
+        button#export-button.usa-button.green(:disabled='items.length === 0' title='Export button')
           | Export
           icon(classes='export', name='fa-sign-out')
 </template>

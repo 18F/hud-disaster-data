@@ -6,7 +6,7 @@
             | Report Parameters
           div.rp-group
             | State
-            span(style="font-size:13px; color:#f00; display:inline; padding-left:5px;") *
+            span.rp-required *
             #stateSelect
               inputselect(
                 :value.sync="stateSelected"
@@ -48,7 +48,7 @@
                     :disabled="disableLocales"
                   )
                 span(class="input-group-btn")
-                  button.add-locale(type="button" @click="addLocale" :disabled="disableLocales" title="Add selected locale to search query")
+                  button.add-locale(type="button" @click="addLocale" :disabled="disableLocales" title="Add locale button")
                     | Add
               div.locale-selection-list
                 ul(id="SelectedLocaleList")
@@ -73,7 +73,7 @@
                       :disabled="disableDisasters"
                     )
                   span(class="input-group-btn")
-                    button.add-disaster(type="button" @click="addDisaster" :disabled="disableDisasters" title="Add selected disaster to search query")
+                    button.add-disaster(type="button" @click="addDisaster" :disabled="disableDisasters" title="Add disaster button")
                       | Add
                 div.disaster-selection-list
                   ul(id="SelectedDisasterList")
@@ -83,9 +83,9 @@
                       button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                         icon(name='fa-times')
           div.rp-action-buttons
-            button.usa-button.alt-button(type="button" @click="clearStore" title="Clear entire search query button")
+            button.usa-button.alt-button(type="button" @click="clearStore" title="Clear all report parameters button")
               | Clear
-            button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create Report button")
+            button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create report button")
               | Create Report
               icon(name='fa-bar-chart')
 </template>
@@ -311,6 +311,7 @@ export default {
 
   .rp-container {
     background:url('../../static/img/bg_50_opacity.png');
+    border-radius:10px;
     min-height:700px;
     padding:0 20px;
 
@@ -325,6 +326,13 @@ export default {
 
     .rp-group {
       margin-top:20px;
+
+      .rp-required {
+        font-size:15px;
+        color:#f00;
+        display:inline;
+        padding-left:5px;
+      }
 
       .locale-selection-list, .disaster-selection-list {
         border:1px solid #353434;
@@ -384,7 +392,7 @@ export default {
           fill:#323a45;
         }
         .hdd-icon {
-          margin-left: 5px;
+          margin-left: 10px;
         }
         display: inline-flex;
       }
