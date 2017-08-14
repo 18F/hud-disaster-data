@@ -1,7 +1,7 @@
 SET SERVEROUTPUT ON
 
 DECLARE
-  returnVal fema_data.resultArray;
+  returnVal fema_data.recordArray;
   summaryReturnVal fema_data.summaryArray;
   disasterList VARCHAR2(2000);
 

@@ -2,7 +2,6 @@ SET SERVEROUTPUT ON
 
 DECLARE
   returnVal fema_data.localeArray;
-  disasterList VARCHAR2(2000);
 
 BEGIN
 
