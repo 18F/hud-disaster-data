@@ -217,6 +217,8 @@ BEGIN
         summary_sql_stmt := summary_sql_stmt || CHR(10) || 'UNION ALL' || CHR(10);
       END IF;
     END LOOP;
+    summary_sql_stmt := summary_sql_stmt || CHR(10) || 'UNION ALL' || CHR(10) ||
+                        'SELECT ''NumberOfRecords'', count(*) FROM '|| FEMA_TABLE_NAME || ' fad '|| whereClause ;
   ELSIF selectcols IS NOT NULL
   THEN
     DBMS_UTILITY.comma_to_table ( list => selectcols, tablen => selectColsListLen, tab => selectColsList);
