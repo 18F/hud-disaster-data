@@ -2,7 +2,7 @@
   #appHeader.header.--global
     <!-- REQUIRED for 508 compliancy -->
     #skiptocontent
-      a(tabindex="0" @click="skipToContent" @keyup.enter="skipToContent") skip to main content
+      a(tabindex="0" @click="skipToContent" @keyup.enter="skipToContent" style="color: #fdfeff;") skip to main content
     .header.header--pre
       .container-block
         p
