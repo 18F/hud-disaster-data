@@ -454,7 +454,7 @@ module.exports = router
 *         type: integer
 *       place2kx:
 *         type: integer
-*       cbsa:
+*       CORE_BASD_STSCL_AREA_CD:
 *         type: integer
 *       std_addr:
 *         type: string

@@ -19,10 +19,10 @@
                     @keydown.enter='update')
                   icon(v-if="loading", classes='fa-spin' name='fa-spinner')
                   template(v-else)
-                    button#clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
+                    button#clear-text(@click='reset' v-if='isDirty' title='Clear search text')
                       icon(classes='clear-text' name='fa-times')
                   span.input-group-btn
-                    button#search-btn.usa-button.btn.btn-default(type="button" @click="update" title="Search Disasters Magnifying Glass Icon")
+                    button#search-btn.usa-button.btn.btn-default(type="button" @click="update" title="Search disasters magnifying glass icon")
                       icon(name='fa-search')
                 .message-wrapper
                   message(:status="status" :locationOfMessage="'app-message'")

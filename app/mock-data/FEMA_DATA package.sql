@@ -1,16 +1,18 @@
 CREATE OR REPLACE PACKAGE fema_data AS
   FEMA_TABLE_NAME VARCHAR2(80) := 'FEMA_APPLICANT_DATA';
-  TYPE resultArray IS TABLE OF FEMA_APPLICANT_DATA%ROWTYPE INDEX BY PLS_INTEGER;
+  TYPE recordArray IS TABLE OF FEMA_APPLICANT_DATA%ROWTYPE INDEX BY PLS_INTEGER;
   TYPE summaryRec
     IS RECORD ( summaryColumn VARCHAR2(100), summaryAmount NUMBER(15,2));
   TYPE summaryArray IS TABLE OF summaryRec INDEX BY PLS_INTEGER;
+  TYPE localeArray IS TABLE OF VARCHAR2(32767) INDEX BY PLS_INTEGER;
+  TYPE disasterArray IS TABLE OF VARCHAR2(32767) INDEX BY PLS_INTEGER;
 
 PROCEDURE get_locales
 (
   stateid IN VARCHAR2,
   localetype IN VARCHAR2,
   disasterid IN VARCHAR2,
-  results OUT resultArray
+  results OUT localeArray
 );
 
 PROCEDURE get_disasters
@@ -18,7 +20,7 @@ PROCEDURE get_disasters
   stateid IN VARCHAR2,
   localetype IN VARCHAR2 DEFAULT NULL,
   localevalues IN VARCHAR2 DEFAULT NULL,
-  results OUT resultArray
+  results OUT disasterArray
 );
 
 PROCEDURE get_records (
@@ -28,7 +30,7 @@ PROCEDURE get_records (
   localevalues   IN VARCHAR2 DEFAULT NULL,
   selectcols   IN VARCHAR2 DEFAULT NULL,
   summarycols   IN VARCHAR2 DEFAULT NULL,
-  results      OUT resultArray,
+  results      OUT recordArray,
   summaryresults OUT summaryArray
 );
 END fema_data;
@@ -41,7 +43,7 @@ PROCEDURE get_locales (
   stateid IN VARCHAR2,
   localetype IN VARCHAR2,
   disasterid IN VARCHAR2,
-  results OUT resultArray
+  results OUT localeArray
 ) AS
   sql_stmt   VARCHAR2(32767);
   disasterClause VARCHAR2(32767);
@@ -52,13 +54,12 @@ BEGIN
       disasterClause := 'AND fad.DSTER_ID IN (' || disasterid || ')';
   END IF;
 
-  sql_stmt := 'SELECT UNIQUE ' || localetype || '
+  sql_stmt := 'SELECT UNIQUE ' || localetype || ' AS ' || localetype || '
      FROM '|| FEMA_TABLE_NAME || ' fad
     WHERE  fad.DMGE_STATE_CD = :STATEID
       ' || disasterClause || '
     ORDER
        BY 1';
-
     EXECUTE IMMEDIATE sql_stmt BULK COLLECT
        INTO results
       USING stateid;
@@ -71,18 +72,38 @@ PROCEDURE get_disasters (
   stateid IN VARCHAR2,
   localetype IN VARCHAR2 DEFAULT NULL,
   localevalues IN VARCHAR2 DEFAULT NULL,
-  results OUT resultArray
+  results OUT disasterArray
 ) AS
   sql_stmt   VARCHAR2(32767);
   localeClause VARCHAR2(32767);
+  localevaluesList DBMS_UTILITY.uncl_array;
 BEGIN
 
   IF localetype IS NOT NULL
   THEN
-    localeClause := 'AND fad.' || localetype || ' IN (' || localevalues || ')';
+    localeClause := 'AND fad.' || localetype || ' IN (' ;
+
+    FOR CURRENT_ROW IN (
+      with test as
+        (select localevalues from dual)
+        select regexp_substr(localevalues, '[^,]+', 1, rownum) SPLIT
+        from test
+        connect by level <= length (regexp_replace(localevalues, '[^,]+'))  + 1)
+    LOOP
+      localevaluesList(localevaluesList.COUNT) := CURRENT_ROW.SPLIT;
+    END LOOP;
+
+    FOR i IN localevaluesList.FIRST .. localevaluesList.LAST LOOP
+      localeClause := localeClause || '''' || localevaluesList(i) || '''';
+      IF i < localevaluesList.LAST
+      THEN
+        localeClause := localeClause || ',';
+      END IF;
+    END LOOP;
+    localeClause := localeClause || ')';
   END IF;
 
-  sql_stmt := 'SELECT UNIQUE DSTER_ID
+  sql_stmt := 'SELECT UNIQUE DSTER_ID AS DSTER_ID
      FROM '|| FEMA_TABLE_NAME || ' fad
     WHERE  fad.DMGE_STATE_CD = :STATEID
       ' || localeClause || '
@@ -104,7 +125,7 @@ PROCEDURE get_records (
   localevalues   IN VARCHAR2 DEFAULT NULL,
   selectcols   IN VARCHAR2 DEFAULT NULL,
   summarycols   IN VARCHAR2 DEFAULT NULL,
-  results      OUT resultArray,
+  results      OUT recordArray,
   summaryresults OUT summaryArray
 ) AS
   sql_stmt   VARCHAR2(32767);
@@ -196,6 +217,8 @@ BEGIN
         summary_sql_stmt := summary_sql_stmt || CHR(10) || 'UNION ALL' || CHR(10);
       END IF;
     END LOOP;
+    summary_sql_stmt := summary_sql_stmt || CHR(10) || 'UNION ALL' || CHR(10) ||
+                        'SELECT ''NumberOfRecords'', count(*) FROM '|| FEMA_TABLE_NAME || ' fad '|| whereClause ;
   ELSIF selectcols IS NOT NULL
   THEN
     DBMS_UTILITY.comma_to_table ( list => selectcols, tablen => selectColsListLen, tab => selectColsList);
