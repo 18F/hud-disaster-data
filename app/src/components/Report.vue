@@ -137,7 +137,7 @@ export default {
     fill:#323a45;
   }
   .hdd-icon {
-    margin-left: 5px;
+    margin-left: 10px;
   }
 }
 
@@ -182,7 +182,6 @@ table { margin:0; }
                   &:last-child {
                       color:#000;
                       background:#ffffcc;
-                      border-radius:4px;
                   }
                 }
               }
@@ -194,6 +193,9 @@ table { margin:0; }
 
   table.report-values-header {
     margin-top:20px;
+    border-left:2px solid #fff;
+    border-right:2px solid #fff;
+
     th {
       color:#000;
       padding:10px;
@@ -205,7 +207,7 @@ table { margin:0; }
 
   .report-shell {
     background: url('/static/img/bg_50_opacity.png');
-    border:1px solid #5b616b;
+    /* border:1px solid #5b616b; */
     height:505px;
     padding-top:18%;
     text-align:center;

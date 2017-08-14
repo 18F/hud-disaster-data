@@ -22,13 +22,13 @@
       icon.search-icon(name="fa-search")
       button.clear-text(@click='reset'
        v-if='isDirty'
-        :title='`Clear Search Text for ${componentDescription}`'
+        :title='`Clear search text for ${componentDescription}`'
         :class="isDisabled"
         :disabled="isDisabled")
         icon(classes='clear-text' name='fa-times')
       span.input-group-btn
         button.usa-button.btn.toggle-btn(type="button"
-          :title='`Toggle Drop Down List for ${componentDescription}`'
+          :title='`Toggle drop-down list for ${componentDescription}`'
           @click="toggleDropdown"
           :class="isDisabled"
           :disabled="isDisabled"
@@ -57,7 +57,7 @@ export default {
       contentVisible: false,
       ref: 'inputSelectText',
       placeholder: 'type here',
-      searchButtonTitle: 'Search Magnifying Glass Icon',
+      searchButtonTitle: 'Search magnifying glass icon',
       searchInputLabel: '' // search for something
     }
   },
