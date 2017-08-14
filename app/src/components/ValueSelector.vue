@@ -1,6 +1,6 @@
 <template lang="pug">
   .value-selector
-    div.report-actions(style="display:none;")
+    div.report-actions
       div.btn-group
         label.sr-only(for='SummariesSelector') Show summary values selector
         button(type="button" @click="toggleSummarySelection" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded")
@@ -15,7 +15,7 @@
             td
               label.sr-only(for='SelectAllSummaryValues') Select all summary values
               button(type="button" name="SelectAllSummaryValues" title="Select all summary values")
-                icon.ico-lg(name="fa-check-square-o")
+                icon.ico-md(name="fa-square-o")
             td
               |All
         .summary-values
@@ -23,25 +23,25 @@
             li
               label.sr-only(for='UnmetNeeds') Select unmet needs summary
               button(type="button" name="UnmetNeeds" title="Unmet needs summary")
-                icon.ico-lg(name="fa-check-square-o")
+                icon.ico-md(name="fa-check-square-o")
               span
                 |Unmet Need
             li
               label.sr-only(for='TotalDamages') Select total damages summary
               button(type="button" name="TotalDamages" title="Total damages summary")
-                icon.ico-lg(name="fa-check-square-o")
+                icon.ico-md(name="fa-check-square-o")
               span
                 |Total Damages
             li
               label.sr-only(for='FEMACityFundingAverage') Select FEMA city funding average summary
               button(type="button" name="FEMACityFundingAverage" title="FEMA city funding average summary")
-                icon.ico-lg(name="fa-square-o")
+                icon.ico-md(name="fa-square-o")
               span
                 |FEMA City Funding Average
             li
               label.sr-only(for='FEMAAverageLoss') Select FEMA average loss summary
               button(type="button" name="FEMAAverageLoss" title="FEMA average loss summary")
-                icon.ico-lg(name="fa-square-o")
+                icon.ico-md(name="fa-square-o")
               span
                 |FEMA Average Loss
 </template>
@@ -86,9 +86,10 @@ export default {
         background-color:#0071bc;
         .hdd-icon { fill:#fff; }
 
-        &.expanded {
-          background-color:#ccc;
-          .hdd-icon { fill:#666; }
+        &.expanded { background-color:#205493; }
+        &[disabled] {
+          background-color: #e3e3e3;
+          .hdd-icon { fill: #000; }
         }
       }
     }
@@ -128,17 +129,17 @@ export default {
           td {
             margin:0;
             border:none;
-            padding:0;
+            padding:5px 0 0 10px;
 
             &:first-child {
               width:40px;
-              padding:5px 0;
+              padding:5px;
               border:none;
             }
 
             button{
               background:transparent;
-              padding:10px;
+              padding:10px 5px 10px 5px;
               margin:0;
               .hdd-icon { fill:#fff; } /* fill:#000; */
             }
@@ -173,7 +174,7 @@ export default {
               button {
                 background:transparent;
                 float:left;
-                padding:10px;
+                padding:15px 10px;
                 margin:0;
                 .hdd-icon { fill:#000; }
               }

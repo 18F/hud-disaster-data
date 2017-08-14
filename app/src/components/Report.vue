@@ -6,7 +6,7 @@
         h1
           |Summary Report
       div.col-lg-12.report-summary
-        value-selector(:showSummarySelections="false")
+        value-selector.hidden(:showSummarySelections="false")
         label.sr-only(for='Export') Export report
         a(:href="exportURI()" download='HUD_FEMA_Report_download.csv' tabindex='-1')
           button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton" :disabled="!showReport")
@@ -65,7 +65,8 @@ export default {
       displayStateName: '',
       displayDisasters: [],
       displayLocales: [],
-      displaylevel: ''
+      displaylevel: '',
+      createdDate: ''
     }
   },
   components: {selectLocationSideBar, valueSelector},
@@ -98,8 +99,7 @@ export default {
       return _.omit(this.$store.getters.summaryRecords, 'numberOfRecords')
     },
     getCreationDate () {
-      var date = moment().format('MMMM DD, YYYY - h:mm a')
-      return date
+      return this.createdDate
     }
   },
   methods: {
@@ -114,6 +114,11 @@ export default {
       this.displayStateName = data.stateName
       this.displayDisasters = data.disasters
       this.displayLocales = data.locales
+      this.createdDate = this.createReportCreationDt()
+    },
+    createReportCreationDt () {
+      var date = moment().format('MMMM DD, YYYY - h:mm a')
+      return date
     }
   }
 }

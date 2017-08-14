@@ -6,6 +6,7 @@
             | Report Parameters
           div.rp-group
             | State
+            span(style="font-size:13px; color:#f00; display:inline; padding-left:5px;") *
             #stateSelect
               inputselect(
                 :value.sync="stateSelected"
@@ -18,6 +19,8 @@
                 ref="stateSelector"
                 required="true"
               )
+              span.float-right(style="font-size:13px; color:#f00;")
+                | * required
           div.rp-group.rp-geo-level
             | Geographic Level
             #geographicLevelSelect
@@ -154,7 +157,6 @@ export default {
           this.localeSelected = null
           this.disasterSelected = null
           this.$store.dispatch('setSelectedState', val)
-          this.$store.dispatch('loadLocales', val.code)
           this.$store.dispatch('loadReportDisasterList', val.code)
         }
       }
@@ -195,6 +197,7 @@ export default {
       this.localeSelected = null
       this.disasterSelected = null
       this.stateSelected = null
+      this.geographicLevelSelected = null
       this.checkDisabled()
       this.$store.commit('clearStore')
     },
@@ -447,5 +450,12 @@ export default {
         }
       }
     }
+  }
+  .float-right {
+    display: inline;
+    float: right;
+    font-size: small;
+    color: #fff;
+    padding-top: 6px;
   }
 </style>
