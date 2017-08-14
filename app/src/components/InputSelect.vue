@@ -102,23 +102,24 @@ export default {
         // no item selected in dropdown, no query text
         this.$emit('clear', null)
       } else if (this.matchingItems) {
-        if (this.matchingItems.length > 1) {
-          // user has hit enter when there are multiple matches
-          this.$emit('clear', null)
-        } else if (this.matchingItems.length === 0) {
-          // user has no matches to input
-          this.$emit('clear', null)
-        } else {
+        if (this.matchingItems.length === 1) {
           // user has only one match
           this.select(this.matchingItems[0])
+        } else {
+          // user has no matches to input
+          // or user has hit enter when there are multiple matches
+          this.$emit('clear', null)
         }
       }
     },
-    reset () {
+    clearValue () {
       this.queryValue = ''
       this.listIndex = -1
-      this.$emit('clear', null)
       this.matchingItems = _.clone(this.items)
+    },
+    reset () {
+      this.$emit('clear', null)
+      this.clearValue()
     },
     checkForReset () {
       if (this.queryValue === '' && this.items.length > 0) this.reset()

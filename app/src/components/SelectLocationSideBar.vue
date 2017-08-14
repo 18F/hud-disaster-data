@@ -14,7 +14,7 @@
                 label="name"
                 componentDescription="State Select"
                 :on-change="changeState"
-                v-on:clear="clearStore"
+                v-on:clear="reset"
                 style="background:#fff;"
                 ref="stateSelector"
                 required="true"
@@ -83,7 +83,7 @@
                       button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                         icon(name='fa-times')
           div.rp-action-buttons
-            button.usa-button.alt-button(type="button" @click="clearStore" title="Clear entire search query button")
+            button.usa-button.alt-button(type="button" @click="reset" title="Clear entire search query button")
               | Clear
             button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create Report button")
               | Create Report
@@ -156,11 +156,19 @@ export default {
           this.stateSelected = val
           this.localeSelected = null
           this.disasterSelected = null
+          this.clearLevel()
+          this.clearDisaster()
           this.$store.dispatch('setSelectedState', val)
           this.$store.dispatch('loadReportDisasterList', val.code)
         }
       }
       this.checkDisabled()
+    },
+
+    clearStateSelected () {
+      this.stateSelected = null
+      this.$refs.stateSelector.clearValue()
+      this.$store.commit('setState', null)
     },
 
     setLevel (val) {
@@ -172,38 +180,46 @@ export default {
         this.$store.dispatch('loadLocales', this.stateSelected.code)
         this.checkDisabled()
       }
+      this.clearLocales()
     },
 
     clearLevel () {
       this.geographicLevelSelected = null
       this.$store.commit('setSelectedGeographicLevel', null)
-      this.localeSelected = null
+      this.$refs.geographicLevelSelector.clearValue()
+      this.clearLocales()
       this.checkDisabled()
+    },
+
+    clearLocales () {
+      this.localeSelected = null
+      this.$store.commit('updateLocaleList', [])
+      this.$refs.localeSelect.clearValue()
     },
 
     addLocale () {
       if (!this.localeSelected) return
       this.$store.commit('addLocaleFilter', this.localeSelected)
-      this.$refs.localeSelect.reset()
+      this.$refs.localeSelect.clearValue()
     },
 
     addDisaster () {
       if (!this.disasterSelected) return
       this.$store.commit('addDisasterFilter', this.disasterSelected)
-      this.$refs.disasterSelect.reset()
+      this.$refs.disasterSelect.clearValue()
+    },
+
+    clearDisaster () {
+      this.disasterSelected = null
+      this.$store.commit('updateReportDisasterList', [])
+      this.$refs.disasterSelect.clearValue()
     },
 
     reset () {
-      this.localeSelected = null
-      this.disasterSelected = null
-      this.stateSelected = null
-      this.geographicLevelSelected = null
+      this.clearStateSelected()
+      this.clearLevel()
+      this.clearDisaster()
       this.checkDisabled()
-      this.$store.commit('clearStore')
-    },
-
-    clearStore (val) {
-      this.reset()
     },
 
     checkDisabled () {
