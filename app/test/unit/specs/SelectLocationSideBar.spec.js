@@ -30,7 +30,8 @@ describe('SelectLocationSideBar component', function () {
       addDisasterFilter: sinon.stub(),
       addLocaleFilter: sinon.stub(),
       setSelectedGeographicLevel: sinon.stub(),
-      clearStore: sinon.stub()
+      clearStore: sinon.stub(),
+      updateReportDisasterList: sinon.stub()
     }
     actions = {
       setSelectedState: sinon.stub(),
