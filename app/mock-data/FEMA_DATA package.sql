@@ -60,7 +60,6 @@ BEGIN
       ' || disasterClause || '
     ORDER
        BY 1';
-
     EXECUTE IMMEDIATE sql_stmt BULK COLLECT
        INTO results
       USING stateid;
@@ -111,7 +110,6 @@ BEGIN
     ORDER
        BY 1';
 
-    dbms_output.put_line('Generated query: ' || sql_stmt);
     EXECUTE IMMEDIATE sql_stmt BULK COLLECT
        INTO results
       USING stateid;
