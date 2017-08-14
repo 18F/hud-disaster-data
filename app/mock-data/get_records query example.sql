@@ -6,8 +6,9 @@ DECLARE
   disasterList VARCHAR2(2000);
 
 BEGIN
-DBMS_OUTPUT.PUT_LINE('results for ' || q'[disasterid => 'ALL', stateid => 'WI', localetype => 'CNTY_NAME',   localevalues => 'Dane (County)',
+DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[disasterid => 'ALL', stateid => 'WI', localetype => 'CNTY_NAME',   localevalues => 'Dane (County)',
 summaryCols => 'TOTAL_DMGE_AMNT,TOTAL_ASSTN_AMNT,HUD_UNMT_NEED_AMNT', results => returnVal, summaryresults => summaryReturnVal]');
+DBMS_OUTPUT.NEW_LINE();
 fema_data.get_records(disasterid => 'ALL', stateid => 'WI', localetype => 'CNTY_NAME',   localevalues => 'Dane (County)',
  summaryCols => 'TOTAL_DMGE_AMNT,TOTAL_ASSTN_AMNT,HUD_UNMT_NEED_AMNT', results => returnVal, summaryresults => summaryReturnVal);
 
@@ -17,8 +18,9 @@ end loop;
 
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
-DBMS_OUTPUT.PUT_LINE('results for ' || q'[disasterid => 'ALL', stateid => 'WI', localetype => 'CNTY_NAME',   localevalues => 'Dane (County),Polk (County)',
+DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[disasterid => 'ALL', stateid => 'WI', localetype => 'CNTY_NAME',   localevalues => 'Dane (County),Polk (County)',
 summaryCols => 'TOTAL_DMGE_AMNT,TOTAL_ASSTN_AMNT,HUD_UNMT_NEED_AMNT', results => returnVal, summaryresults => summaryReturnVal]');
+DBMS_OUTPUT.NEW_LINE();
 fema_data.get_records(disasterid => 'ALL', stateid => 'WI', localetype => 'CNTY_NAME',   localevalues => 'Dane (County),Polk (County)',
  summaryCols => 'TOTAL_DMGE_AMNT,TOTAL_ASSTN_AMNT,HUD_UNMT_NEED_AMNT', results => returnVal, summaryresults => summaryReturnVal);
 
@@ -28,7 +30,8 @@ end loop;
 
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
-DBMS_OUTPUT.PUT_LINE('results for ' || q'[disasterid => '4272,1791', summaryCols => 'TOTAL_DMGE_AMNT,TOTAL_ASSTN_AMNT,HUD_UNMT_NEED_AMNT', results => returnVal, summaryresults => summaryReturnVal]');
+DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[disasterid => '4272,1791', summaryCols => 'TOTAL_DMGE_AMNT,TOTAL_ASSTN_AMNT,HUD_UNMT_NEED_AMNT', results => returnVal, summaryresults => summaryReturnVal]');
+DBMS_OUTPUT.NEW_LINE();
 fema_data.get_records(disasterid => '4272,1791', summaryCols => 'TOTAL_DMGE_AMNT,TOTAL_ASSTN_AMNT,HUD_UNMT_NEED_AMNT', results => returnVal, summaryresults => summaryReturnVal);
 for i in 1 .. summaryReturnVal.count loop
   dbms_output.put_line(summaryReturnVal(i).summaryColumn || ':  ' || summaryReturnVal(i).summaryAmount);
@@ -37,7 +40,8 @@ end loop;
 
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
-DBMS_OUTPUT.PUT_LINE('results for ' || q'[disasterid => '4272,1791', results => returnVal, summaryresults => summaryReturnVal]');
+DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[disasterid => '4272,1791', results => returnVal, summaryresults => summaryReturnVal]');
+DBMS_OUTPUT.NEW_LINE();
 fema_data.get_records(disasterid => '4272,1791', results => returnVal, summaryresults => summaryReturnVal);
 for i in 1 .. returnVal.count loop
   dbms_output.put_line(returnVal(i).DSTER_ID || '   ' ||
@@ -66,7 +70,8 @@ end loop;
 
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
-DBMS_OUTPUT.PUT_LINE('results for ' || q'[disasterid => 'ALL',localetype => 'DMGE_CITY_NAME',   localevalues => 'Madison,Cedar Rapids', results => returnVal, summaryresults => summaryReturnVal]');
+DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[disasterid => 'ALL',localetype => 'DMGE_CITY_NAME',   localevalues => 'Madison,Cedar Rapids', results => returnVal, summaryresults => summaryReturnVal]');
+DBMS_OUTPUT.NEW_LINE();
 fema_data.get_records(disasterid => 'ALL',localetype => 'DMGE_CITY_NAME',   localevalues => 'Madison,Cedar Rapids', results => returnVal, summaryresults => summaryReturnVal);
 for i in 1 .. returnVal.count loop
   dbms_output.put_line(returnVal(i).DSTER_ID || '   ' ||
