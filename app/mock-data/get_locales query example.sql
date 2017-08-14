@@ -15,6 +15,16 @@ BEGIN
 
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for get_locales: ' || q'[stateid => 'IA', localetype => 'CNTY_NAME', disasterid =>'4187,4289', results => returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_locales(stateid => 'IA', localetype => 'CNTY_NAME', disasterid =>'4187,4289', results => returnVal);
+
+  for i in 1 .. returnVal.count loop
+   dbms_output.put_line(returnVal(i));
+  end loop;
+
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for get_locales: ' || q'[stateid => 'IA', localetype => 'DMGE_CITY_NAME', disasterid =>'4187,4289', results => returnVal]');
   DBMS_OUTPUT.NEW_LINE();
   fema_data.get_locales(stateid => 'IA', localetype => 'DMGE_CITY_NAME', disasterid =>'4187,4289', results => returnVal);

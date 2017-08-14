@@ -5,6 +5,12 @@ Harris (County)
 Nueces (County)
 
 
+results for get_locales: stateid => 'IA', localetype => 'CNTY_NAME', disasterid =>'4187,4289', results => returnVal
+
+Linn (County)
+Polk (County)
+
+
 results for get_locales: stateid => 'IA', localetype => 'DMGE_CITY_NAME', disasterid =>'4187,4289', results => returnVal
 
 Cedar Rapids
