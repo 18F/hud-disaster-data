@@ -2,7 +2,7 @@
 import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
 import moxios from 'moxios' // eslint-disable-line
-import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '@/reportStore' // eslint-disable-line
+import { mutations, actions, getters } from '@/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
 const { updateReportDisasterList, updateLocaleList, clearStore,
@@ -152,12 +152,12 @@ describe('reportStore', function () {
 
   describe('clearStore', function () {
     it('should reset state to defaults', function () {
-      let state = {}
+      let state = {disasterList: ['one', 'two'], localeList: ['one', 'two'], stateFilter: 'ZZ', geographicLevel: 'TOP'}
       clearStore(state)
       should(state.disasterList).be.an.Array().and.have.length(0)
       should(state.localeList).be.an.Array().and.have.length(0)
       should(state.stateFilter).be.null()
-      should(state.geographicLevel).be.an.Object().and.be.equal(DEFAULT_GEOGRAPHIC_LEVEL)
+      should(state.geographicLevel).be.null()
     })
   })
 
