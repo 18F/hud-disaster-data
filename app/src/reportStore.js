@@ -114,10 +114,12 @@ export const actions = {
   //   })
   // },
   loadLocales: function ({ commit, state }, qry) {
-    let querystring = `/api/locales/${state.stateFilter.code}/${state.geographicLevel.code.toLowerCase()}`
+    let localType = state.geographicLevel.code.toLowerCase()
+    let querystring = `/api/locales/${state.stateFilter.code}/${localType}`
     axios.get(querystring).then(response => {
       commit('updateLocaleList', _.map(response.data, (r) => {
-        return { code: r, name: r }
+        let name = (localType === 'congrdist') ? `${r.substring(2, 4)}-${r.substring(4)}` : r
+        return { code: r, name }
       }))
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
