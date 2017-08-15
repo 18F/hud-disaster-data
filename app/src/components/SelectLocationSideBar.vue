@@ -256,12 +256,12 @@ export default {
       if (this.$store.getters.geographicLevel && this.$store.getters.localeFilter.length > 0) {
         allFilters.geoName = this.$store.getters.geographicLevel.code.toLowerCase()
         allFilters.geoArea = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
-        this.$emit('updateSummaryDisplay', summaryDisplayData)
-        this.$store.dispatch('loadReportData',
-          { summaryCols: 'household_count,total_damages,hud_unmet_need',
-            allFilters
-          })
       }
+      this.$emit('updateSummaryDisplay', summaryDisplayData)
+      this.$store.dispatch('loadReportData',
+        { summaryCols: 'household_count,total_damages,hud_unmet_need',
+          allFilters
+        })
       window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
     },
 

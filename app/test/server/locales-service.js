@@ -21,7 +21,7 @@ describe('/locales/:stateId/:localeType', function () {
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.have.property('fcd_fips91')
+      body[0].should.not.be.empty
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
