@@ -6,7 +6,6 @@ const _ = require('lodash')
 const querystring = require('querystring')
 const csv = require('express-csv')
 const dbApi = require('./dbApi')
-
 /**
 * Creates the routes for the backend functionality.
 * @module lib/controllers/api
@@ -204,6 +203,50 @@ router.get('/db', (req, res) => {
   var results = dbApi.getData(queryObj, summaryCols, selectCols)
   res.json(results)
 })
+
+/**
+* router.get('/locales/:stateId/:localeType') <br/>
+* @function get
+* @param {stateId}- a state id
+* @param {localeType}- a geographic level (city, county, congrdist)
+* @param {disasterId}- a comma separated list of disaster id's (optional)
+**/
+router.get('/locales/:stateId/:localeType', (req, res) => {
+  var stateId = req.params.stateId.toUpperCase()
+  var localeType = decodeLocaleField(req.params.localeType)
+  if (!localeType) return
+  var selectCols = [localeType]
+  var disasterId = _.get(req.query, 'disasterId')
+  if (disasterId) disasterId = disasterId.split(',')
+  var queryObj = []
+  if (disasterId) queryObj.push({'disaster_id': disasterId})
+  queryObj.push({'damaged_state': [stateId]})
+  var data = dbApi.getData(queryObj, null, selectCols)
+  var results = _.uniqBy(data, l => JSON.stringify(l))
+  res.json(results)
+})
+
+const decodeLocaleField = (fieldname) => {
+// Below is what it will eventually be:
+  // switch (fieldname) {
+  //   case 'city':
+  //     return 'DMGE_CITY_NAME'
+  //   case 'county':
+  //     return 'CNTY_NAME'
+  //   case 'congrdist':
+  //     return 'FCD_FIPS91_CD'
+  // }
+
+// this is what is is now for our dummy database
+  switch (fieldname) {
+    case 'city':
+      return 'damaged_city'
+    case 'county':
+      return 'county_name'
+    case 'congrdist':
+      return 'fcd_fips91'
+  }
+}
 
 const rollUpData = (data) => {
   var rolledUpData = []
