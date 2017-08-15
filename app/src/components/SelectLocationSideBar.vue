@@ -254,22 +254,14 @@ export default {
       if (this.$store.getters.stateFilter) allFilters.stateId = this.$store.getters.stateFilter.code
       if (this.$store.getters.disasterFilter.length > 0) allFilters.disasterId = _.flatMap(this.$store.getters.disasterFilter, dstr => dstr.code.split('-')[1])
       if (this.$store.getters.geographicLevel && this.$store.getters.localeFilter.length > 0) {
-        switch (this.$store.getters.geographicLevel.code.toLowerCase()) {
-          case 'city':
-            allFilters.geoName = 'damaged_city'
-            break
-          case 'county':
-            allFilters.geoName = 'county_name'
-            break
-        }
+        allFilters.geoName = this.$store.getters.geographicLevel.code.toLowerCase()
         allFilters.geoArea = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
+        this.$emit('updateSummaryDisplay', summaryDisplayData)
+        this.$store.dispatch('loadReportData',
+          { summaryCols: 'household_count,total_damages,hud_unmet_need',
+            allFilters
+          })
       }
-      this.$emit('updateSummaryDisplay', summaryDisplayData)
-      this.$store.dispatch('loadReportData',
-        { summaryCols: 'household_count,total_damages,hud_unmet_need',
-          allFilters
-        })
-
       window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
     },
 

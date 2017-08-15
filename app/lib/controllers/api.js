@@ -185,7 +185,7 @@ router.get('/db', (req, res) => {
       return area
     })
   }
-  var geoName = _.get(req.query, 'geoName')
+  var geoName = decodeLocaleField(_.get(req.query, 'geoName'))
   if ((geoName && !geoArea) || (!geoName && geoArea)) {
     res.status(406).send('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
     return
@@ -209,20 +209,16 @@ router.get('/db', (req, res) => {
 * @function get
 * @param {stateId}- a state id
 * @param {localeType}- a geographic level (city, county, congrdist)
-* @param {disasterId}- a comma separated list of disaster id's (optional)
 **/
 router.get('/locales/:stateId/:localeType', (req, res) => {
   var stateId = req.params.stateId.toUpperCase()
   var localeType = decodeLocaleField(req.params.localeType)
   if (!localeType) return
   var selectCols = [localeType]
-  var disasterId = _.get(req.query, 'disasterId')
-  if (disasterId) disasterId = disasterId.split(',')
   var queryObj = []
-  if (disasterId) queryObj.push({'disaster_id': disasterId})
   queryObj.push({'damaged_state': [stateId]})
   var data = dbApi.getData(queryObj, null, selectCols)
-  var results = _.uniqBy(data, l => JSON.stringify(l))
+  var results = _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
   res.json(results)
 })
 
