@@ -148,6 +148,21 @@ describe('reportStore', function () {
         done()
       })
     })
+    it('should format congressional district correctly', function (done) {
+      moxios.stubRequest(/WI/, {
+        status: 200,
+        response: ['1234567', '7654321']
+      })
+      const commit = sinon.spy()
+      const state = {geographicLevel: {name: 'Congressional District', code: 'CongrDist'}, stateFilter: {code: 'WI', name: 'WI'}}
+      loadLocales({commit, state}, 'WI')
+      const expected = [{code: '1234567', name: '34-567'}, {code: '7654321', name: '54-321'}]
+      moxios.wait(() => {
+        should(commit.calledWith('updateLocaleList', expected)).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
   })
 
   describe('clearStore', function () {
