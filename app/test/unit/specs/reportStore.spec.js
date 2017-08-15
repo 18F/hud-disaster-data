@@ -106,13 +106,13 @@ describe('reportStore', function () {
 
   describe('loadLocales', function () {
     it('should call commit for updateLocaleList when the data is loaded', function (done) {
-      moxios.stubRequest(/TX/, {
+      moxios.stubRequest(/WI/, {
         status: 200,
         response: _.clone(TWO_LOCALES)
       })
       const commit = sinon.spy()
-      const state = {geographicLevel: {code: 'City', name: 'City'}}
-      loadLocales({commit, state}, 'TX')
+      const state = {geographicLevel: {code: 'City', name: 'City'}, stateFilter: {code: 'WI', name: 'WI'}}
+      loadLocales({commit, state}, 'WI')
       moxios.wait(() => {
         should(commit.calledWith('updateLocaleList')).be.true()
         should(commit.calledWith('resetStatus')).be.true()
@@ -120,13 +120,13 @@ describe('reportStore', function () {
       })
     })
     it('should set status to "no results found" if result is empty', function (done) {
-      moxios.stubRequest(/TX/, {
+      moxios.stubRequest(/WI/, {
         status: 200,
         response: []
       })
       const commit = sinon.spy()
-      const state = {geographicLevel: {code: 'City', name: 'City'}}
-      loadLocales({commit, state}, 'TX')
+      const state = {geographicLevel: {code: 'City', name: 'City'}, stateFilter: {code: 'WI', name: 'WI'}}
+      loadLocales({commit, state}, 'WI')
       moxios.wait(() => {
         should(commit.calledWith('updateLocaleList')).be.true()
         should(commit.calledWith('resetStatus')).be.false()
@@ -135,12 +135,12 @@ describe('reportStore', function () {
       })
     })
     it('should set status to error if server responds with error', function (done) {
-      moxios.stubRequest(/TX/, {
+      moxios.stubRequest(/WI/, {
         status: 500
       })
       const commit = sinon.spy()
-      const state = {geographicLevel: {code: 'City', name: 'City'}}
-      loadLocales({commit, state}, 'TX')
+      const state = {geographicLevel: {code: 'City', name: 'City'}, stateFilter: {code: 'WI', name: 'WI'}}
+      loadLocales({commit, state}, 'WI')
       moxios.wait(() => {
         should(commit.calledWith('updateLocaleList')).be.false()
         should(commit.calledWith('resetStatus')).be.false()
