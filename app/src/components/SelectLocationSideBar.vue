@@ -1,6 +1,6 @@
 <template lang="pug">
   div(id="sideBar")
-      div.rp-wrapper(tabindex='0')
+      div.rp-wrapper
         div.rp-container.col-xs-12.col-sm-12.col-md-4.col-lg-4
           div.rp-header
             | Report Parameters
