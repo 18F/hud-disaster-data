@@ -97,35 +97,6 @@ router.get('/export/:fileNamePart', function (req, res) {
 })
 
 /**
-* router.get('/localequery/:fileNamePart') <br/>
-*  queries our data to return locales within the selected state
-* @function get
-* @param {qry} - a 2 character state abbreviation
-*/
-router.get('/localequery/:state', function (req, res) {
-  var state = req.params.state.toUpperCase()
-  var level = _.get(req.query, 'level').toLowerCase()
-  var desiredLocaleName
-  if (level === 'city') desiredLocaleName = 'damaged_city'
-  else if (level === 'county') desiredLocaleName = 'county_name'
-  else {
-    res.json(['no data found'])
-    return
-  }
-  var queryObj = [{damaged_state: [state]}]
-  var selectCols = [desiredLocaleName]
-  var summaryCols
-  console.log(JSON.stringify(queryObj))
-  var data = dbApi.getData(queryObj, summaryCols, selectCols)
-  var returnValue = ['no data found']
-  if (data.length > 0) {
-    var values = _.uniq(_.map(data, rec => rec[desiredLocaleName]))
-    returnValue = _.sortBy(_.map(values, rec => { return {code: rec, name: rec} }), 'code')
-  }
-  res.json(returnValue)
-})
-
-/**
 * router.get('/disasternumber/:qry') <br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data for specific disasters
 * @function get

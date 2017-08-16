@@ -98,21 +98,6 @@ export const actions = {
     })
   },
 
-  // loadLocales: function ({ commit, state }, qry) {
-  //   let querystring = `/api/localequery/${qry}`
-  //   if (state.geographicLevel) querystring += `?level=${state.geographicLevel.name.toLowerCase()}`
-  //   axios.get(querystring).then(response => {
-  //     commit('updateLocaleList', response.data)
-  //     if (response.data && response.data.length === 0) {
-  //       return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
-  //     }
-  //     magic.$emit('localesLoaded')
-  //     commit('resetStatus')
-  //   }).catch(err => {
-  //     console.log(`Error fetching locale list: ${err}`)
-  //     commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD locale data is unavailable at this time.  Try again later or contact your administrator.'})
-  //   })
-  // },
   loadLocales: function ({ commit, state }, qry) {
     let localType = state.geographicLevel.code.toLowerCase()
     let querystring = `/api/locales/${state.stateFilter.code}/${localType}`
