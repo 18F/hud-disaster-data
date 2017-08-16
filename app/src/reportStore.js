@@ -7,7 +7,6 @@ import magic from '@/bus'
 es6Promise.polyfill()
 Vue.use(Vuex)
 
-export const DEFAULT_GEOGRAPHIC_LEVEL = { code: 'City', name: 'City' }
 /**
 * Manages the state for client functions.
 * @module reportStore
@@ -42,7 +41,7 @@ export const mutations = {
     state.disasterList = []
     state.localeList = []
     state.stateFilter = null
-    state.geographicLevel = DEFAULT_GEOGRAPHIC_LEVEL
+    state.geographicLevel = null
   },
 
   setState: function (state, chosenState) {
@@ -100,10 +99,13 @@ export const actions = {
   },
 
   loadLocales: function ({ commit, state }, qry) {
-    let querystring = `/api/localequery/${qry}`
-    if (state.geographicLevel) querystring += `?level=${state.geographicLevel.name.toLowerCase()}`
+    let localType = state.geographicLevel.code.toLowerCase()
+    let querystring = `/api/locales/${state.stateFilter.code}/${localType}`
     axios.get(querystring).then(response => {
-      commit('updateLocaleList', response.data)
+      commit('updateLocaleList', _.map(response.data, (r) => {
+        let name = (localType === 'congrdist') ? `${r.substring(2, 4)}-${r.substring(4)}` : r
+        return { code: r, name }
+      }))
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
@@ -184,7 +186,7 @@ export const getters = {
 const reportStore = {
   state: {
     disasterList: [],
-    geographicLevel: DEFAULT_GEOGRAPHIC_LEVEL,
+    geographicLevel: null,
     localeList: [],
     stateFilter: null,
     summaryRecords: [],

@@ -1,11 +1,12 @@
 <template lang="pug">
   div(id="sideBar")
-      div.rp-wrapper(tabindex='0')
+      div.rp-wrapper
         div.rp-container.col-xs-12.col-sm-12.col-md-4.col-lg-4
           div.rp-header
             | Report Parameters
           div.rp-group
             | State
+            span.rp-required *
             #stateSelect
               inputselect(
                 :value.sync="stateSelected"
@@ -13,15 +14,19 @@
                 label="name"
                 componentDescription="State Select"
                 :on-change="changeState"
-                v-on:clear="clearStore"
+                v-on:clear="reset"
                 style="background:#fff;"
                 ref="stateSelector"
+                required="true"
               )
+              span.float-right(style="font-size:13px; color:#f00;")
+                | * required
           div.rp-group.rp-geo-level
             | Geographic Level
             #geographicLevelSelect
               inputselect(
                 :value.sync="geographicLevelSelected"
+                componentDescription="Geographic level select"
                 :items="geographicLevels"
                 label="geographicLevels"
                 :on-change="setLevel"
@@ -36,13 +41,14 @@
                 #localeSelect
                   inputselect(
                     :value.sync="localeSelected"
+                    componentDescription="Location select"
                     :items="localeItems",
                     label="localeName",
                     ref="localeSelect"
                     :disabled="disableLocales"
                   )
                 span(class="input-group-btn")
-                  button.add-locale(type="button" @click="addLocale" :disabled="disableLocales")
+                  button.add-locale(type="button" @click="addLocale" :disabled="disableLocales" title="Add locale button")
                     | Add
               div.locale-selection-list
                 ul(id="SelectedLocaleList")
@@ -59,6 +65,7 @@
                   div(id="disasterIdInput")
                     inputselect(
                       :value.sync="disasterSelected"
+                      componentDescription="Disaster select"
                       :items="disasterItems",
                       label="disasterNumber"
                       ref="disasterSelect"
@@ -66,7 +73,7 @@
                       :disabled="disableDisasters"
                     )
                   span(class="input-group-btn")
-                    button.add-disaster(type="button" @click="addDisaster" :disabled="disableDisasters")
+                    button.add-disaster(type="button" @click="addDisaster" :disabled="disableDisasters" title="Add disaster button")
                       | Add
                 div.disaster-selection-list
                   ul(id="SelectedDisasterList")
@@ -76,10 +83,11 @@
                       button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                         icon(name='fa-times')
           div.rp-action-buttons
-            button.usa-button.alt-button(type="button" @click="clearStore")
+            button.usa-button.alt-button(type="button" @click="reset" title="Clear all report parameters button")
               | Clear
-            button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate")
+            button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create report button")
               | Create Report
+              icon(name='fa-bar-chart')
 </template>
 
 <script>
@@ -126,7 +134,7 @@ export default {
         { name: 'Virgin Islands', code: 'VI' }, { name: 'Virginia', code: 'VA' }, { name: 'Washington', code: 'WA' }, { name: 'West Virginia', code: 'WV' },
         { name: 'Wisconsin', code: 'WI' }, { name: 'Wyoming', code: 'WY' }
       ],
-      geographicLevels: [{name: 'City', code: 'City'}, {name: 'County', code: 'County'}, {name: 'Congressional District', code: 'Congressional District'}],
+      geographicLevels: [{name: 'City', code: 'City'}, {name: 'County', code: 'County'}, {name: 'Congressional District', code: 'CongrDist'}],
       queryValue: ''
     }
   },
@@ -148,12 +156,19 @@ export default {
           this.stateSelected = val
           this.localeSelected = null
           this.disasterSelected = null
+          this.clearLevel()
+          this.clearDisaster()
           this.$store.dispatch('setSelectedState', val)
-          this.$store.dispatch('loadLocales', val.code)
           this.$store.dispatch('loadReportDisasterList', val.code)
         }
       }
       this.checkDisabled()
+    },
+
+    clearStateSelected () {
+      this.stateSelected = null
+      this.$refs.stateSelector.clearValue()
+      this.$store.commit('setState', null)
     },
 
     setLevel (val) {
@@ -162,41 +177,49 @@ export default {
       } else {
         this.geographicLevelSelected = val
         this.$store.commit('setSelectedGeographicLevel', val)
-        this.changeState(this.stateSelected)
         this.$store.dispatch('loadLocales', this.stateSelected.code)
+        this.checkDisabled()
       }
-      this.checkDisabled()
+      this.clearLocales()
     },
 
     clearLevel () {
       this.geographicLevelSelected = null
       this.$store.commit('setSelectedGeographicLevel', null)
-      this.localeSelected = null
+      this.$refs.geographicLevelSelector.clearValue()
+      this.clearLocales()
       this.checkDisabled()
+    },
+
+    clearLocales () {
+      this.localeSelected = null
+      this.$store.commit('updateLocaleList', [])
+      this.$refs.localeSelect.clearValue()
     },
 
     addLocale () {
       if (!this.localeSelected) return
       this.$store.commit('addLocaleFilter', this.localeSelected)
-      this.$refs.localeSelect.reset()
+      this.$refs.localeSelect.clearValue()
     },
 
     addDisaster () {
       if (!this.disasterSelected) return
       this.$store.commit('addDisasterFilter', this.disasterSelected)
-      this.$refs.disasterSelect.reset()
+      this.$refs.disasterSelect.clearValue()
+    },
+
+    clearDisaster () {
+      this.disasterSelected = null
+      this.$store.commit('updateReportDisasterList', [])
+      this.$refs.disasterSelect.clearValue()
     },
 
     reset () {
-      this.localeSelected = null
-      this.disasterSelected = null
-      this.stateSelected = null
+      this.clearStateSelected()
+      this.clearLevel()
+      this.clearDisaster()
       this.checkDisabled()
-      this.$store.commit('clearStore')
-    },
-
-    clearStore (val) {
-      this.reset()
     },
 
     checkDisabled () {
@@ -231,14 +254,7 @@ export default {
       if (this.$store.getters.stateFilter) allFilters.stateId = this.$store.getters.stateFilter.code
       if (this.$store.getters.disasterFilter.length > 0) allFilters.disasterId = _.flatMap(this.$store.getters.disasterFilter, dstr => dstr.code.split('-')[1])
       if (this.$store.getters.geographicLevel && this.$store.getters.localeFilter.length > 0) {
-        switch (this.$store.getters.geographicLevel.code.toLowerCase()) {
-          case 'city':
-            allFilters.geoName = 'damaged_city'
-            break
-          case 'county':
-            allFilters.geoName = 'county_name'
-            break
-        }
+        allFilters.geoName = this.$store.getters.geographicLevel.code.toLowerCase()
         allFilters.geoArea = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
       }
       this.$emit('updateSummaryDisplay', summaryDisplayData)
@@ -246,7 +262,6 @@ export default {
         { summaryCols: 'household_count,total_damages,hud_unmet_need',
           allFilters
         })
-
       window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
     },
 
@@ -304,6 +319,7 @@ export default {
 
   .rp-container {
     background:url('../../static/img/bg_50_opacity.png');
+    border-radius:10px;
     min-height:700px;
     padding:0 20px;
 
@@ -319,7 +335,23 @@ export default {
     .rp-group {
       margin-top:20px;
 
-      &.rp-geo-level { min-height:300px;
+      .rp-required {
+        font-size:15px;
+        color:#f00;
+        display:inline;
+        padding-left:5px;
+      }
+
+      .locale-selection-list, .disaster-selection-list {
+        border:1px solid #353434;
+        border-top:0px;
+        height:160px;
+        overflow-y:scroll;
+      }
+
+      &.rp-geo-level {
+        min-height:300px;
+
         .locale {
           background:url('/static/img/bg_25_opacity.png');
           padding:10px;
@@ -329,18 +361,15 @@ export default {
             margin:0;
             min-width:70px;
             padding:15px 20px;
-          }
-
-          .locale-selection-list {
-            border:1px solid #353434;
-            border-top:0px;
-            height:162px;
-            overflow-y:scroll;
+            &:disabled {
+              background-color: #D6D7D9;
+              color:#000;
+            }
           }
         }
       }
       &.disasters {
-        min-height:190px;
+        min-height:240px;
 
         .no-padding { padding:0px; }
         .add-disaster {
@@ -348,15 +377,14 @@ export default {
           margin:0;
           min-width:70px;
           padding:15px 20px;
+          &:disabled {
+            background-color: #D6D7D9;
+            color:#000;
+          }
         }
-
         .disaster-selection-list {
           background:url('/static/img/bg_25_opacity.png');
-          border:1px solid #353434;
-          border-top:0px;
           clear:left;
-          height:110px;
-          overflow-y:scroll;
         }
       }
     }
@@ -365,10 +393,23 @@ export default {
       text-align:center;
       padding-bottom:10px;
 
+      /* disabled button styles */
       button {
         &.usa-button.alt-button { margin-right:20px; }
+        &[disabled] .hdd-icon {
+          fill:#323a45;
+        }
+        .hdd-icon {
+          margin-left: 10px;
+        }
+        display: inline-flex;
       }
     }
+  }
+  button[disabled], button:disabled {
+    opacity:1.0;
+    background-color:#ccc;
+    color:#000;
   }
 }
 
@@ -425,5 +466,12 @@ export default {
         }
       }
     }
+  }
+  .float-right {
+    display: inline;
+    float: right;
+    font-size: small;
+    color: #fff;
+    padding-top: 6px;
   }
 </style>

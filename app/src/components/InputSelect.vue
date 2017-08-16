@@ -1,9 +1,10 @@
 <template lang="pug">
   .input-select
-    .search-wrapper.input-group(aria-live="assertive")
+    .search-wrapper.input-group(aria-live="assertive" v-bind:class="{ 'input-required': isRequired }")
       label.sr-only(for='search-text') {{ searchInputLabel }}
       input.search-text(
         type='search'
+        :required='required'
         :placeholder='searchInputLabel'
         autocomplete='off'
         v-model='queryValue'
@@ -16,20 +17,22 @@
         @focus='checkForReset'
         @blur="close"
         :class="isDisabled"
-        :disabled="isDisabled")
+        :disabled="isDisabled"
+        :title='`Text input for ${componentDescription}`')
       icon.search-icon(name="fa-search")
       button.clear-text(@click='reset'
        v-if='isDirty'
-        :title='`Clear Search Text for ${componentDescription}`'
+        :title='`Clear search text for ${componentDescription}`'
         :class="isDisabled"
         :disabled="isDisabled")
         icon(classes='clear-text' name='fa-times')
       span.input-group-btn
         button.usa-button.btn.toggle-btn(type="button"
-          :title='`Toggle Drop Down List for ${componentDescription}`'
+          :title='`Toggle drop-down list for ${componentDescription}`'
           @click="toggleDropdown"
           :class="isDisabled"
-          :disabled="isDisabled")
+          :disabled="isDisabled"
+          @blur="close")
           icon(v-show="contentVisible" name='fa-caret-up')
           icon(v-show="!contentVisible" name='fa-caret-down')
     .results-list(ref="dropdownMenu" v-if="contentVisible")
@@ -45,7 +48,7 @@ import adjustScroll from '../mixins/adjustScroll'
 export default {
   name: 'input-select',
   mixins: [adjustScroll],
-  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription'],
+  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription', 'required'],
   data () {
     return {
       matchingItems: [],
@@ -54,7 +57,7 @@ export default {
       contentVisible: false,
       ref: 'inputSelectText',
       placeholder: 'type here',
-      searchButtonTitle: 'Search Magnifying Glass Icon',
+      searchButtonTitle: 'Search magnifying glass icon',
       searchInputLabel: '' // search for something
     }
   },
@@ -67,6 +70,9 @@ export default {
     },
     isDirty () {
       return !!this.queryValue
+    },
+    isRequired () {
+      return !this.queryValue && this.required
     },
     unMatchedItems () {
       return _.reject(this.getMatchingItems(this.queryValue), 'selected')
@@ -96,23 +102,24 @@ export default {
         // no item selected in dropdown, no query text
         this.$emit('clear', null)
       } else if (this.matchingItems) {
-        if (this.matchingItems.length > 1) {
-          // user has hit enter when there are multiple matches
-          this.$emit('clear', null)
-        } else if (this.matchingItems.length === 0) {
-          // user has no matches to input
-          this.$emit('clear', null)
-        } else {
+        if (this.matchingItems.length === 1) {
           // user has only one match
           this.select(this.matchingItems[0])
+        } else {
+          // user has no matches to input
+          // or user has hit enter when there are multiple matches
+          this.$emit('clear', null)
         }
       }
     },
-    reset () {
+    clearValue () {
       this.queryValue = ''
       this.listIndex = -1
-      this.$emit('clear', null)
       this.matchingItems = _.clone(this.items)
+    },
+    reset () {
+      this.$emit('clear', null)
+      this.clearValue()
     },
     checkForReset () {
       if (this.queryValue === '' && this.items.length > 0) this.reset()
@@ -212,9 +219,16 @@ export default {
     border-top-right-radius:0px;
     border-bottom-right-radius:0px;
     svg { fill:#000; }
+    &.disabled, :disabled {
+    //  background-color:#ccc;
+    }
   }
 
   .search-text {
+    /* Override font for IE10+ ------------------------------ */
+    @media all and (-ms-high-contrast:none), (-ms-high-contrast:active) {
+      font-family: 'Arial', sans-serif !important;
+    }
     margin: 0;
     max-width:100%;
     padding-left:35px;
@@ -228,16 +242,21 @@ export default {
 
   .search-wrapper.input-group {
     border-bottom:1px solid #ccc;
+    width:100%;
     overflow:hidden;
     position:relative;
 
     .search-icon {
       position:absolute;
-      top:12px;
+      top:14px;
       left:10px;
       fill:#a9a9a9;
       padding:0;
     }
+  }
+
+  .search-wrapper.input-group.input-required {
+    outline: 2px solid #f00;
   }
 
   button {
@@ -251,9 +270,13 @@ export default {
       padding: 0;
       position: relative;
       .hdd-icon { fill: #b0b0b0; }
+
+      /* hide input clear when disabled */
+      &.disabled svg { display:none; }
       &:hover {
         .hdd-icon { fill: #000; }
       }
+
     }
   }
 
