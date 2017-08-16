@@ -43,7 +43,7 @@ describe('/api/db', function () {
   })
 
   it('should return failure code if specifying a geoName but not geoArea, or visa versa', (done) => {
-    request(app).get('/api/db?stateId=TX&geoName=damaged_city')
+    request(app).get('/api/db?stateId=TX&geoName=city')
     .expect(function (res) {
       const message = res.text
       message.should.be.equal('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')

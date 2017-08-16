@@ -6,11 +6,12 @@
         h1
           |Summary Report
       div.col-lg-12.report-summary
-        value-selector(:showSummarySelections="false")
+        value-selector.hidden(:showSummarySelections="false")
         label.sr-only(for='Export') Export report
         a(:href="exportURI()" download='HUD_FEMA_Report_download.csv' tabindex='-1')
           button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton" :disabled="!showReport")
-            |Export
+            | Export
+            icon(name='fa-sign-out')
         table.usa-table-borderless
           tr
             td
@@ -64,7 +65,8 @@ export default {
       displayStateName: '',
       displayDisasters: [],
       displayLocales: [],
-      displaylevel: ''
+      displaylevel: '',
+      createdDate: ''
     }
   },
   components: {selectLocationSideBar, valueSelector},
@@ -97,8 +99,7 @@ export default {
       return _.omit(this.$store.getters.summaryRecords, 'numberOfRecords')
     },
     getCreationDate () {
-      var date = moment().format('MMMM DD, YYYY - h:mm a')
-      return date
+      return this.createdDate
     }
   },
   methods: {
@@ -113,6 +114,11 @@ export default {
       this.displayStateName = data.stateName
       this.displayDisasters = data.disasters
       this.displayLocales = data.locales
+      this.createdDate = this.createReportCreationDt()
+    },
+    createReportCreationDt () {
+      var date = moment().format('MMMM DD, YYYY - h:mm a')
+      return date
     }
   }
 }
@@ -124,9 +130,15 @@ export default {
   float: right;
   margin-bottom: 20px;
   margin-right: 0;
-  .hdd-icon { fill:#fff; }
   height:40px;
   margin-right:0;
+  display: inline-flex;
+  &[disabled] .hdd-icon {
+    fill:#323a45;
+  }
+  .hdd-icon {
+    margin-left: 10px;
+  }
 }
 
 .hidden { display:none; }
@@ -170,7 +182,6 @@ table { margin:0; }
                   &:last-child {
                       color:#000;
                       background:#ffffcc;
-                      border-radius:4px;
                   }
                 }
               }
@@ -182,6 +193,9 @@ table { margin:0; }
 
   table.report-values-header {
     margin-top:20px;
+    border-left:2px solid #fff;
+    border-right:2px solid #fff;
+
     th {
       color:#000;
       padding:10px;
@@ -193,8 +207,8 @@ table { margin:0; }
 
   .report-shell {
     background: url('/static/img/bg_50_opacity.png');
-    border:1px solid #5b616b;
-    height:455px;
+    /* border:1px solid #5b616b; */
+    height:505px;
     padding-top:18%;
     text-align:center;
 
@@ -210,7 +224,7 @@ table { margin:0; }
 
   .report-values {
     &.hidden { display:none; }
-    height:455px;
+    height:505px;
     background:#fff;
     overflow:auto;
     overflow-x:auto;

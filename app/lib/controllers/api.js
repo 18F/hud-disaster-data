@@ -6,7 +6,6 @@ const _ = require('lodash')
 const querystring = require('querystring')
 const csv = require('express-csv')
 const dbApi = require('./dbApi')
-
 /**
 * Creates the routes for the backend functionality.
 * @module lib/controllers/api
@@ -98,35 +97,6 @@ router.get('/export/:fileNamePart', function (req, res) {
 })
 
 /**
-* router.get('/localequery/:fileNamePart') <br/>
-*  queries our data to return locales within the selected state
-* @function get
-* @param {qry} - a 2 character state abbreviation
-*/
-router.get('/localequery/:state', function (req, res) {
-  var state = req.params.state.toUpperCase()
-  var level = _.get(req.query, 'level').toLowerCase()
-  var desiredLocaleName
-  if (level === 'city') desiredLocaleName = 'damaged_city'
-  else if (level === 'county') desiredLocaleName = 'county_name'
-  else {
-    res.json(['no data found'])
-    return
-  }
-  var queryObj = [{damaged_state: [state]}]
-  var selectCols = [desiredLocaleName]
-  var summaryCols
-  console.log(JSON.stringify(queryObj))
-  var data = dbApi.getData(queryObj, summaryCols, selectCols)
-  var returnValue = ['no data found']
-  if (data.length > 0) {
-    var values = _.uniq(_.map(data, rec => rec[desiredLocaleName]))
-    returnValue = _.sortBy(_.map(values, rec => { return {code: rec, name: rec} }), 'code')
-  }
-  res.json(returnValue)
-})
-
-/**
 * router.get('/disasternumber/:qry') <br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data for specific disasters
 * @function get
@@ -186,7 +156,7 @@ router.get('/db', (req, res) => {
       return area
     })
   }
-  var geoName = _.get(req.query, 'geoName')
+  var geoName = decodeLocaleField(_.get(req.query, 'geoName'))
   if ((geoName && !geoArea) || (!geoName && geoArea)) {
     res.status(406).send('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
     return
@@ -204,6 +174,46 @@ router.get('/db', (req, res) => {
   var results = dbApi.getData(queryObj, summaryCols, selectCols)
   res.json(results)
 })
+
+/**
+* router.get('/locales/:stateId/:localeType') <br/>
+* @function get
+* @param {stateId}- a state id
+* @param {localeType}- a geographic level (city, county, congrdist)
+**/
+router.get('/locales/:stateId/:localeType', (req, res) => {
+  var stateId = req.params.stateId.toUpperCase()
+  var localeType = decodeLocaleField(req.params.localeType)
+  if (!localeType) return
+  var selectCols = [localeType]
+  var queryObj = []
+  queryObj.push({'damaged_state': [stateId]})
+  var data = dbApi.getData(queryObj, null, selectCols)
+  var results = _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
+  res.json(results)
+})
+
+const decodeLocaleField = (fieldname) => {
+// Below is what it will eventually be:
+  // switch (fieldname) {
+  //   case 'city':
+  //     return 'DMGE_CITY_NAME'
+  //   case 'county':
+  //     return 'CNTY_NAME'
+  //   case 'congrdist':
+  //     return 'FCD_FIPS91_CD'
+  // }
+
+// this is what is is now for our dummy database
+  switch (fieldname) {
+    case 'city':
+      return 'damaged_city'
+    case 'county':
+      return 'county_name'
+    case 'congrdist':
+      return 'fcd_fips91'
+  }
+}
 
 const rollUpData = (data) => {
   var rolledUpData = []
@@ -454,7 +464,7 @@ module.exports = router
 *         type: integer
 *       place2kx:
 *         type: integer
-*       cbsa:
+*       CORE_BASD_STSCL_AREA_CD:
 *         type: integer
 *       std_addr:
 *         type: string

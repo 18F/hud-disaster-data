@@ -40,14 +40,18 @@ describe('Header.vue', () => {
     })
   })
   describe('skipToContent', () => {
-    it('should set focus on Guide Me button', () => {
+    it('should set focus on Guide Me button', (done) => {
       const Constructor = Vue.extend(Header)
       const vm = new Constructor({store, router}).$mount()
-      expect(document.activeElement.nodeName).to.be.equal('BODY')
-      const focusStub = sinon.stub(vm.$refs.guideMe, 'focus')
-      vm.skipToContent()
-      expect(focusStub.called).to.be.equal(true)
-      focusStub.restore()
+      vm.$router.push({name: 'disasterSearch'})
+      Vue.nextTick(function () {
+        expect(document.activeElement.nodeName).to.be.equal('BODY')
+        const focusStub = sinon.stub(vm.$refs.guideMe, 'focus')
+        vm.skipToContent()
+        expect(focusStub.called).to.be.equal(true)
+        focusStub.restore()
+        done()
+      })
     })
   })
 })

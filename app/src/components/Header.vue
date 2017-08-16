@@ -2,7 +2,7 @@
   #appHeader.header.--global
     <!-- REQUIRED for 508 compliancy -->
     #skiptocontent
-      a(tabindex="0" @click="skipToContent" @keyup.enter="skipToContent") skip to main content
+      a(tabindex="0" @click="skipToContent" @keyup.enter="skipToContent" style="color: #fdfeff;") skip to main content
     .header.header--pre
       .container-block
         p
@@ -59,7 +59,7 @@
                 icon.ico-md(name='fa-bar-chart')
                 span
                   | Reports
-    #ribbon
+    #ribbon(v-if="showRibbon")
       div
         span
           | Need Help?
@@ -82,6 +82,11 @@ export default {
       title: 'Disaster Data Portal',
       premsg: 'An official website of the United States Government',
       showGovBanner: false
+    }
+  },
+  computed: {
+    showRibbon () {
+      return this.$route.name === 'disasterSearch'
     }
   },
   methods: {

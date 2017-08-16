@@ -3,7 +3,7 @@
     .row
       .col-xs-12.col-md-6.search-container(:class="hasItems?'with-extracts':''")
         #opaque-bg.row
-          h2 Disaster search
+          h2 Disaster Search
           .col.DisasterSearch
             #search
               .offset-bg
@@ -19,10 +19,10 @@
                     @keydown.enter='update')
                   icon(v-if="loading", classes='fa-spin' name='fa-spinner')
                   template(v-else)
-                    button#clear-text(@click='reset' v-if='isDirty' title='Clear Search Text')
+                    button#clear-text(@click='reset' v-if='isDirty' title='Clear search text')
                       icon(classes='clear-text' name='fa-times')
                   span.input-group-btn
-                    button#search-btn.usa-button.btn.btn-default(type="button" @click="update" title="Search Disasters Magnifying Glass Icon")
+                    button#search-btn.usa-button.btn.btn-default(type="button" @click="update" title="Search disasters magnifying glass icon")
                       icon(name='fa-search')
                 .message-wrapper
                   message(:status="status" :locationOfMessage="'app-message'")
@@ -30,8 +30,6 @@
                   ul.disaster-search-recs
                     li(v-for='(item, $item) in items')
                       disaster(:prefix="'search'" :item='item')
-                .link-advanced-search
-                  a(href='#') Advanced Search
       .col-xs-12.col-md-6.no-padding.saved-extracts
         savedextracts(ref='extracts')
 </template>

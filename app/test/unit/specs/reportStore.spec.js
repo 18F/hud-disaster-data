@@ -2,7 +2,7 @@
 import 'es6-promise/auto' // eslint-disable-line
 import _ from 'lodash'
 import moxios from 'moxios' // eslint-disable-line
-import { mutations, actions, getters, DEFAULT_GEOGRAPHIC_LEVEL } from '@/reportStore' // eslint-disable-line
+import { mutations, actions, getters } from '@/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
 const { updateReportDisasterList, updateLocaleList, clearStore,
@@ -106,13 +106,13 @@ describe('reportStore', function () {
 
   describe('loadLocales', function () {
     it('should call commit for updateLocaleList when the data is loaded', function (done) {
-      moxios.stubRequest(/TX/, {
+      moxios.stubRequest(/WI/, {
         status: 200,
         response: _.clone(TWO_LOCALES)
       })
       const commit = sinon.spy()
-      const state = {geographicLevel: {code: 'City', name: 'City'}}
-      loadLocales({commit, state}, 'TX')
+      const state = {geographicLevel: {code: 'City', name: 'City'}, stateFilter: {code: 'WI', name: 'WI'}}
+      loadLocales({commit, state}, 'WI')
       moxios.wait(() => {
         should(commit.calledWith('updateLocaleList')).be.true()
         should(commit.calledWith('resetStatus')).be.true()
@@ -120,13 +120,13 @@ describe('reportStore', function () {
       })
     })
     it('should set status to "no results found" if result is empty', function (done) {
-      moxios.stubRequest(/TX/, {
+      moxios.stubRequest(/WI/, {
         status: 200,
         response: []
       })
       const commit = sinon.spy()
-      const state = {geographicLevel: {code: 'City', name: 'City'}}
-      loadLocales({commit, state}, 'TX')
+      const state = {geographicLevel: {code: 'City', name: 'City'}, stateFilter: {code: 'WI', name: 'WI'}}
+      loadLocales({commit, state}, 'WI')
       moxios.wait(() => {
         should(commit.calledWith('updateLocaleList')).be.true()
         should(commit.calledWith('resetStatus')).be.false()
@@ -135,12 +135,12 @@ describe('reportStore', function () {
       })
     })
     it('should set status to error if server responds with error', function (done) {
-      moxios.stubRequest(/TX/, {
+      moxios.stubRequest(/WI/, {
         status: 500
       })
       const commit = sinon.spy()
-      const state = {geographicLevel: {code: 'City', name: 'City'}}
-      loadLocales({commit, state}, 'TX')
+      const state = {geographicLevel: {code: 'City', name: 'City'}, stateFilter: {code: 'WI', name: 'WI'}}
+      loadLocales({commit, state}, 'WI')
       moxios.wait(() => {
         should(commit.calledWith('updateLocaleList')).be.false()
         should(commit.calledWith('resetStatus')).be.false()
@@ -148,16 +148,31 @@ describe('reportStore', function () {
         done()
       })
     })
+    it('should format congressional district correctly', function (done) {
+      moxios.stubRequest(/WI/, {
+        status: 200,
+        response: ['1234567', '7654321']
+      })
+      const commit = sinon.spy()
+      const state = {geographicLevel: {name: 'Congressional District', code: 'CongrDist'}, stateFilter: {code: 'WI', name: 'WI'}}
+      loadLocales({commit, state}, 'WI')
+      const expected = [{code: '1234567', name: '34-567'}, {code: '7654321', name: '54-321'}]
+      moxios.wait(() => {
+        should(commit.calledWith('updateLocaleList', expected)).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
   })
 
   describe('clearStore', function () {
     it('should reset state to defaults', function () {
-      let state = {}
+      let state = {disasterList: ['one', 'two'], localeList: ['one', 'two'], stateFilter: 'ZZ', geographicLevel: 'TOP'}
       clearStore(state)
       should(state.disasterList).be.an.Array().and.have.length(0)
       should(state.localeList).be.an.Array().and.have.length(0)
       should(state.stateFilter).be.null()
-      should(state.geographicLevel).be.an.Object().and.be.equal(DEFAULT_GEOGRAPHIC_LEVEL)
+      should(state.geographicLevel).be.null()
     })
   })
 

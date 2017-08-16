@@ -30,7 +30,8 @@ describe('SelectLocationSideBar component', function () {
       addDisasterFilter: sinon.stub(),
       addLocaleFilter: sinon.stub(),
       setSelectedGeographicLevel: sinon.stub(),
-      clearStore: sinon.stub()
+      clearStore: sinon.stub(),
+      updateReportDisasterList: sinon.stub()
     }
     actions = {
       setSelectedState: sinon.stub(),
@@ -244,14 +245,18 @@ describe('SelectLocationSideBar component', function () {
       vm.localeSelected = 1
       vm.disasterSelected = 1
       vm.stateSelected = 1
-      let commitSpy = sinon.spy(store, 'commit')
+      let commitSpy = sinon.spy(vm.$store, 'commit')
       vm.reset()
       Vue.nextTick(() => {
         should(vm.localeSelected).be.null()
         should(vm.disasterSelected).be.null()
+        should(vm.geographicLevelSelected).be.null()
         should(vm.stateSelected).be.null()
-        should(commitSpy.calledWith('clearStore')).be.true()
+        should(commitSpy.calledWith('setSelectedGeographicLevel')).be.true()
+        should(commitSpy.calledWith('updateLocaleList')).be.true()
+        should(commitSpy.calledWith('setState')).be.true()
         done()
+        commitSpy.restore()
       })
     })
   })
@@ -315,18 +320,6 @@ describe('SelectLocationSideBar component', function () {
       Vue.nextTick(() => {
         should(commitSpy.calledWith('setSelectedGeographicLevel')).be.true()
         expect(vm.geographicLevelSelected).to.be.null
-        done()
-      })
-    })
-  })
-
-  describe('clearStore', function () {
-    it('should call reset', function (done) {
-      let val = 'something'
-      let commitSpy = sinon.spy(vm, 'reset')
-      vm.clearStore(val)
-      Vue.nextTick(() => {
-        should(commitSpy.called).be.true()
         done()
       })
     })
