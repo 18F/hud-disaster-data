@@ -22,21 +22,21 @@ describe('/api/db', function () {
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.be.an.Object().and.have.property('disaster_id').which.is.equal('4187')
-      body[0].should.be.an.Object().and.have.property('damaged_state').which.is.equal('IA')
+      body[0].should.be.an.Object().and.have.property('dster_id').which.is.equal('4187')
+      body[0].should.be.an.Object().and.have.property('dmge_state_cd').which.is.equal('IA')
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
   })
 
   it('should return only columns that are specified as selectCols', (done) => {
-    request(app).get('/api/db?stateId=Tx&selectCols=damaged_city,damaged_state')
+    request(app).get('/api/db?stateId=Tx&selectCols=dmge_city_name,dmge_state_cd')
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.be.an.Object().and.have.property('damaged_state').and.should.not.be.empty()
-      body[0].should.be.an.Object().and.have.property('damaged_city').and.should.not.be.empty()
-      body[0].should.be.an.Object().and.not.have.property('disaster_id')
+      body[0].should.be.an.Object().and.have.property('dmge_state_cd').and.should.not.be.empty()
+      body[0].should.be.an.Object().and.have.property('dmge_city_name').and.should.not.be.empty()
+      body[0].should.be.an.Object().and.not.have.property('dster_id')
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
@@ -68,23 +68,23 @@ describe('/api/db summarizeCols', function () {
 
   it('should return JSON with summarized column values', (done) => {
     let data = [{
-      disaster_id: '4269',
+      dster_id: '4269',
       damaged_city: 'HOUSTON',
-      damaged_state: 'TX',
+      dmge_state_cd: 'TX',
       total_damages: 3789.92,
       hud_unmet_need: 1624.76
     },
     {
-      disaster_id: '4269',
+      dster_id: '4269',
       damaged_city: 'HOUSTON',
-      damaged_state: 'TX',
+      dmge_state_cd: 'TX',
       total_damages: 3930.31,
       hud_unmet_need: 0
     },
     {
-      disaster_id: '4269',
+      dster_id: '4269',
       damaged_city: 'HOUSTON',
-      damaged_state: 'TX',
+      dmge_state_cd: 'TX',
       total_damages: 270.65,
       hud_unmet_need: 270.65
     }]
