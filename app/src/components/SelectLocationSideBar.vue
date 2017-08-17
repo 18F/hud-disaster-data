@@ -276,7 +276,7 @@ export default {
     },
 
     initializeValuesFromURL () {
-      if (this.$route.query && this.$route.query.stateFilter) {
+      if (this.$route && this.$route.query && this.$route.query.stateFilter) {
         let params = this.$route.query
         if (params.stateFilter) {
           this.stateSelected = _.find(this.states, ['code', params.stateFilter])
