@@ -96,7 +96,7 @@ export default {
       return this.displaylevel
     },
     summaryRecords () {
-      return _.omit(this.$store.getters.summaryRecords, 'numberOfRecords')
+      return this.$store.getters.summaryRecords
     },
     getCreationDate () {
       return this.createdDate

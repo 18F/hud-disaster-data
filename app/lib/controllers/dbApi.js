@@ -4,7 +4,7 @@ const fileAsync = require('lowdb/lib/storages/file-async')
 
 // Start database using file-async storage
 // For ease of use, read is synchronous
-const db = low('mock-data/FEMA_Final_Test_Data.json', {
+const db = low('mock-data/REAC Modified Database.json', {
   storage: fileAsync
 })
 
@@ -48,7 +48,7 @@ const summarizeCols = function (data, summaryCols) {
   var numberOfRecords = data.length
   var summary = {numberOfRecords}
   _.forEach(summaryCols, (col) => {
-    summary[col] = _.sumBy(data, rec => _.toNumber(rec[col]))
+    summary[col] = _.sumBy(data, rec => rec[col])
   })
   return summary
 }
