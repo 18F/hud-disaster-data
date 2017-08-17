@@ -105,7 +105,6 @@ export default {
   },
   beforeDestroy () {
     this.reset()
-    this.$store.commit('setShowReport', false)
     this.$store.commit('clearStore', null)
   },
   data () {
