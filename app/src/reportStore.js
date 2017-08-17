@@ -38,10 +38,15 @@ export const mutations = {
   },
 
   clearStore: function (state) {
-    state.disasterList = []
-    state.localeList = []
-    state.stateFilter = null
-    state.geographicLevel = null
+    state = {
+      disasterList: [],
+      geographicLevel: null,
+      localeList: [],
+      stateFilter: null,
+      summaryRecords: [],
+      showReport: false,
+      showReportSpinner: false
+    }
   },
 
   setState: function (state, chosenState) {

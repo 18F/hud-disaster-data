@@ -100,15 +100,18 @@ import _ from 'lodash'
 export default {
   name: 'selectLocationSideBar',
   components: {inputselect},
-
   created () {
     this.initializeValuesFromURL()
   },
-
+  beforeDestroy () {
+    this.reset()
+    this.$store.commit('setShowReport', false)
+    this.$store.commit('clearStore', null)
+  },
   data () {
     return {
       stateSelected: null,
-      geographicLevelSelected: this.$store.getters.geographicLevel,
+      geographicLevelSelected: null,
       localeSelected: null,
       disasterSelected: null,
       disableLevels: true,
