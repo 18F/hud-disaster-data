@@ -84,7 +84,7 @@ router.get('/export/:fileNamePart', function (req, res) {
   if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
   var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
-  var results = dbApi.getData([{damaged_state: states}, {disaster_id: numbers}])
+  var results = dbApi.getData([{dmge_state_cd: states}, {dster_id: numbers}])
   if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
   var columns = []
   for (var key in results[0]) columns.push(key)
@@ -164,8 +164,8 @@ router.get('/db', (req, res) => {
   var summaryCols = _.get(req.query, 'summaryCols')
   summaryCols = summaryCols ? summaryCols.split(',') : null
   var queryObj = []
-  if (disasterId) queryObj.push({'disaster_id': disasterId})
-  if (stateId) queryObj.push({'damaged_state': stateId})
+  if (disasterId) queryObj.push({'dster_id': disasterId})
+  if (stateId) queryObj.push({'dmge_state_cd': stateId})
   if (geoName && geoArea) {
     var arg = {}
     arg[geoName] = geoArea
@@ -187,31 +187,20 @@ router.get('/locales/:stateId/:localeType', (req, res) => {
   if (!localeType) return
   var selectCols = [localeType]
   var queryObj = []
-  queryObj.push({'damaged_state': [stateId]})
+  queryObj.push({'dmge_state_cd': [stateId]})
   var data = dbApi.getData(queryObj, null, selectCols)
   var results = _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
   res.json(results)
 })
 
 const decodeLocaleField = (fieldname) => {
-// Below is what it will eventually be:
-  // switch (fieldname) {
-  //   case 'city':
-  //     return 'DMGE_CITY_NAME'
-  //   case 'county':
-  //     return 'CNTY_NAME'
-  //   case 'congrdist':
-  //     return 'FCD_FIPS91_CD'
-  // }
-
-// this is what is is now for our dummy database
   switch (fieldname) {
     case 'city':
-      return 'damaged_city'
+      return 'dmge_city_name'
     case 'county':
-      return 'county_name'
+      return 'cnty_name'
     case 'congrdist':
-      return 'fcd_fips91'
+      return 'fcd_fips91_cd'
   }
 }
 
@@ -289,7 +278,7 @@ module.exports = router
 *   Grant:
 *     type: object
 *     properties:
-*       disaster_id:
+*       dster_id:
 *         type: integer
 *         format: int64
 *       disaster_type:
@@ -327,7 +316,7 @@ module.exports = router
 *         type: string
 *       damaged_city:
 *         type: string
-*       damaged_state:
+*       dmge_state_cd:
 *         type: string
 *       damaged_zip5:
 *         type: integer

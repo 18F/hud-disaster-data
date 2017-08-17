@@ -261,7 +261,7 @@ export default {
       }
       this.$emit('updateSummaryDisplay', summaryDisplayData)
       this.$store.dispatch('loadReportData',
-        { summaryCols: 'household_count,total_damages,hud_unmet_need',
+        { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
           allFilters
         })
       window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
