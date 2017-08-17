@@ -100,7 +100,7 @@ import _ from 'lodash'
 export default {
   name: 'selectLocationSideBar',
   components: {inputselect},
-  created () {
+  mounted () {
     this.initializeValuesFromURL()
   },
   beforeDestroy () {
@@ -279,8 +279,7 @@ export default {
       if (this.$route && this.$route.query && this.$route.query.stateFilter) {
         let params = this.$route.query
         if (params.stateFilter) {
-          this.stateSelected = _.find(this.states, ['code', params.stateFilter])
-          this.$store.commit('setState', this.stateSelected)
+          this.changeState(_.find(this.states, ['code', params.stateFilter]))
         }
 
         if (params.geographicLevel) {
@@ -299,7 +298,7 @@ export default {
         }
 
         if (params.disasterFilter) {
-          this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
+
           magic.$once('disastersLoaded', () => {
             let disasterNumberResults = this.$store.getters.disasterNumberResults
             const vm = this
