@@ -1,23 +1,27 @@
 
 
+results for get_disasters: stateid => 'WI', localetype => 'something', results => returnVal
+
+
+
 results for get_disasters: stateid => 'WI', results => returnVal
 
 1966
 
 
-results for get_disasters: stateid => 'IA', localetype => 'DMGE_CITY_NAME', localevalues => 'Cedar Rapids', results => returnVal
+results for get_disasters: stateid => 'IA', localetype => 'city', localevalues => 'Cedar Rapids', results => returnVal
 
 4187
 
 
-results for get_disasters: stateid => 'TX', localetype => 'CNTY_NAME', localevalues => 'Harris (County)', results => returnVal
+results for get_disasters: stateid => 'TX', localetype => 'county', localevalues => 'Harris (County)', results => returnVal
 
 1791
 4223
 4272
 
 
-results for get_disasters: stateid => 'TX', localetype => 'FCD_FIPS91_CD', localevalues => '4814115,4818115', results => returnVal
+results for get_disasters: stateid => 'TX', localetype => 'congrdist', localevalues => '4814115,4818115', results => returnVal
 
 1791
 4223
