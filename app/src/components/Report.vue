@@ -45,8 +45,8 @@
               tr(v-for='(amount, desc) in summaryRecords')
                 td
                   | {{ desc }}
-                td
-                  | {{ Math.round(amount * 100) / 100 }}
+                td(style="text-align:right;padding-right:10px;")
+                  | {{ amount }}
 </template>
 <script>
 import selectLocationSideBar from './SelectLocationSideBar'
@@ -105,8 +105,8 @@ export default {
   methods: {
     exportURI () {
       var csv = ''
-      csv += `Type,Amount\n`
-      _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `${key}, ${_.round(value, 2)}\n` })
+      csv += `"Type","Amount"\n`
+      _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `"${key}", "${value}"\n` })
       return 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv)
     },
     updateSummaryDisplay (data) {

@@ -208,9 +208,10 @@ describe('reportStore', function () {
   describe('updateReportData', function () {
     it('should set value of summaryRecords to proper value', function () {
       let state = {summaryRecords: null}
-      updateReportData(state, 'some data')
-      should(state.summaryRecords).be.equal('some data')
-      should(summaryRecords(state)).be.equal('some data')
+      let newSummaryRecord = {someField: 1000, someOtherField: 9000}
+      updateReportData(state, newSummaryRecord)
+      should(state.summaryRecords.someField).be.equal(newSummaryRecord.someField)
+      should(summaryRecords(state).someOtherField).be.equal(newSummaryRecord.someOtherField)
     })
   })
 
