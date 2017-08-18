@@ -286,7 +286,6 @@ export default {
 
         if (params.geographicLevel) {
           let level = _.find(this.geographicLevels, ['code', params.geographicLevel])
-          this.setLevel(level)
           this.$refs.geographicLevelSelector.select(level)
         }
 
