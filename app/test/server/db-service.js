@@ -2,7 +2,7 @@
 const request = require('supertest')
 const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
-const dbApi = require('../../lib/controllers/dbApi')
+const hudApi = require('../../lib/middleware/hudApi')
 
 describe('/api/db', function () {
   this.timeout(10000)
@@ -89,7 +89,7 @@ describe('/api/db summarizeCols', function () {
       hud_unmet_need: 270.65
     }]
     let summaryCols = ['total_damages', 'hud_unmet_need']
-    let summarizedCols = dbApi.summarizeCols(data, summaryCols)
+    let summarizedCols = hudApi.summarizeCols(data, summaryCols)
     summarizedCols.total_damages.should.be.equal(3789.92 + 3930.31 + 270.65)
     summarizedCols.hud_unmet_need.should.be.equal(1624.76 + 0 + 270.65)
     done()
@@ -97,7 +97,7 @@ describe('/api/db summarizeCols', function () {
   it('should return false no data is passed in', (done) => {
     let data = null
     let summaryCols = ['total_damages', 'hud_unmet_need']
-    let summarizedCols = dbApi.summarizeCols(data, summaryCols)
+    let summarizedCols = hudApi.summarizeCols(data, summaryCols)
     summarizedCols.should.be.equal(false)
     done()
   })

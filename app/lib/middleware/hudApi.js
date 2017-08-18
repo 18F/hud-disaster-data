@@ -53,4 +53,26 @@ const summarizeCols = function (data, summaryCols) {
   return summary
 }
 
-module.exports = { getData, summarizeCols }
+const getDisasters = function({state, localeType, locales}, cb) {
+  const localeField = decodeLocaleField(localeType)
+  return db.get('disasterRecs').filter(rec => {
+    if (rec.dmge_state_cd !== state) return false
+    if (!localeField || !locales) return true
+    return locales.includes(rec[localeField])
+  })
+  .map('dster_id')
+  .uniq()
+  .value()
+}
+
+const localeFields = {
+  city: 'dmge_city_name',
+  county: 'cnty_name',
+  congrdist: 'fcd_fips91_cd'
+}
+
+const decodeLocaleField = (fieldname) => {
+  return localeFields[fieldname]
+}
+
+module.exports = { getData, summarizeCols, getDisasters, decodeLocaleField }

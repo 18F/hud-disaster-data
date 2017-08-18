@@ -14,8 +14,8 @@
 ** 2         08/18/2017   Dave Hannon, Flexion Inc   improved code to condense logic
 *******************************/
 
-DROP PACKAGE fema_data;
 CREATE OR REPLACE PACKAGE fema_data AS
+/* $Header$ */
   TYPE recordArray IS TABLE OF FEMA_HOUSEHOLD_DATA_HOUSEHOLD%ROWTYPE INDEX BY PLS_INTEGER;
   TYPE charParameterArray IS TABLE OF VARCHAR2(32767) INDEX BY PLS_INTEGER;
   TYPE nbrParameterArray IS TABLE OF NUMBER(5) INDEX BY PLS_INTEGER;
@@ -110,7 +110,7 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
        ORDER BY 1;
     ELSIF localetype = 'congrdist'
     THEN
-      SELECT UNIQUE FCD_FIPS91_CD AS congrdist
+      SELECT UNIQUE FCD_FIPS_91_CD AS congrdist
         BULK COLLECT INTO results
         FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
        WHERE fhdh.DMGE_STATE_CD = stateid
@@ -143,7 +143,7 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
           OR
           ( localetype = 'county' AND fhdh.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
           OR
-          ( localetype = 'congrdist' AND fhdh.FCD_FIPS91_CD IN (SELECT * FROM TABLE(localevalues)) )
+          ( localetype = 'congrdist' AND fhdh.FCD_FIPS_91_CD IN (SELECT * FROM TABLE(localevalues)) )
         )
      ORDER BY 1;
   EXCEPTION
@@ -174,7 +174,7 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
        OR
        ( localetype = 'county' AND fhdh.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
        OR
-       ( localetype = 'congrdist' AND fhdh.FCD_FIPS91_CD IN (SELECT * FROM TABLE(localevalues)) )
+       ( localetype = 'congrdist' AND fhdh.FCD_FIPS_91_CD IN (SELECT * FROM TABLE(localevalues)) )
      );
 
   EXCEPTION
@@ -224,7 +224,7 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
          OR
          ( localetype = 'county' AND fhdh.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
          OR
-         ( localetype = 'congrdist' AND fhdh.FCD_FIPS91_CD IN (SELECT * FROM TABLE(localevalues)) )
+         ( localetype = 'congrdist' AND fhdh.FCD_FIPS_91_CD IN (SELECT * FROM TABLE(localevalues)) )
        );
   EXCEPTION
     WHEN no_data_found THEN

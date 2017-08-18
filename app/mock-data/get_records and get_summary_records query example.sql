@@ -67,7 +67,7 @@ dbms_output.put_line( 'HSHD_SIZE_CNT' || '    ' ||
                      'INCM_AMNT' || '    ' ||
                      'HZRD_INSNC_AMNT' || '    ' ||
                      'FLOOD_INSNC_AMNT' || '    ' ||
-                     'OHTER_INSNC_AMNT' || '    ' ||
+                     'OTHER_INSNC_AMNT' || '    ' ||
                      'REAL_PROP_LOSS_AMNT' || '    ' ||
                      'FLOOD_DMGE_AMNT' || '    ' ||
                      'FNDTN_DMGE_AMNT' || '    ' ||
@@ -88,7 +88,7 @@ for i in 1 .. summaryReturnVal.count loop
                       summaryReturnVal(i).INCM_AMNT || '    ' ||
                       summaryReturnVal(i).HZRD_INSNC_AMNT || '    ' ||
                       summaryReturnVal(i).FLOOD_INSNC_AMNT || '    ' ||
-                      summaryReturnVal(i).OHTER_INSNC_AMNT || '    ' ||
+                      summaryReturnVal(i).OTHER_INSNC_AMNT || '    ' ||
                       summaryReturnVal(i).REAL_PROP_LOSS_AMNT || '    ' ||
                       summaryReturnVal(i).FLOOD_DMGE_AMNT || '    ' ||
                       summaryReturnVal(i).FNDTN_DMGE_AMNT || '    ' ||
