@@ -4,6 +4,7 @@ import axios from 'axios'
 import _ from 'lodash'
 import es6Promise from 'es6-promise'
 import magic from '@/bus'
+import numeral from 'numeral'
 es6Promise.polyfill()
 Vue.use(Vuex)
 
@@ -11,7 +12,6 @@ Vue.use(Vuex)
 * Manages the state for client functions.
 * @module reportStore
 */
-
 export const mutations = {
 /**
   Update the disaster number list with fresh data
@@ -174,7 +174,21 @@ export const getters = {
     return state.geographicLevel || ''
   },
   summaryRecords: state => {
-    return state.summaryRecords
+    const numericConversionList = {
+      hud_unmt_need_amnt: {text: 'Number of households affected', format: '0,0'},
+      numberOfRecords: {text: 'Total FEMA verified real property loss', format: '$0,0.00'},
+      total_dmge_amnt: {text: 'HUD estimated unmet need', format: '$0,0.00'}
+    }
+    let newSummaryRecord = {}
+    for (var key in state.summaryRecords) {
+      let newKey = numericConversionList[key] ? numericConversionList[key].text : key
+      let format = numericConversionList[key] ? numericConversionList[key].format : null
+      let value = numericConversionList[key] ? Number(state.summaryRecords[key]) : state.summaryRecords[key]
+      if (format) newSummaryRecord[newKey] = numeral(value).format(format)
+      else newSummaryRecord[newKey] = value
+    }
+
+    return newSummaryRecord
   },
   stateUrlParameters: (state, getters) => {
     if (!state.stateFilter) return ''
