@@ -11,6 +11,7 @@
 ** Version   Date          Author                    Description
 ** -------   -----------  ------------------------   ------------------------------------
 ** 1         08/16/2017   Dave Hannon, Flexion Inc   initial version
+** 2         08/18/2017   Dave Hannon, Flexion Inc   improved code to condense logic
 *******************************/
 
 DROP PACKAGE fema_data;
@@ -89,51 +90,31 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
     disasterid IN nbrParameterArray,
     results OUT localeArray
   ) AS
+    disasterParmCount NUMBER(5) := disasterid.COUNT;
   BEGIN
-    IF localetype = 'city' AND disasterid.COUNT = 0
+    IF localetype = 'city'
     THEN
       SELECT UNIQUE DMGE_CITY_NAME AS city
         BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
+        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
+       WHERE fhdh.DMGE_STATE_CD = stateid
+         AND ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
        ORDER BY 1;
-    ELSIF localetype = 'city' AND disasterid.COUNT > 0
-    THEN
-      SELECT UNIQUE DMGE_CITY_NAME AS city
-        BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
-         AND fad.DSTER_ID IN (SELECT * FROM TABLE(disasterid))
-       ORDER BY 1;
-    ELSIF localetype = 'county' AND disasterid.COUNT = 0
+    ELSIF localetype = 'county'
     THEN
       SELECT UNIQUE CNTY_NAME AS county
         BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
+        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
+       WHERE fhdh.DMGE_STATE_CD = stateid
+       AND ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
        ORDER BY 1;
-    ELSIF localetype = 'county' AND disasterid.COUNT > 0
-    THEN
-      SELECT UNIQUE CNTY_NAME AS county
-        BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
-         AND fad.DSTER_ID IN (SELECT * FROM TABLE(disasterid))
-       ORDER BY 1;
-    ELSIF localetype = 'congrdist' AND disasterid.COUNT = 0
+    ELSIF localetype = 'congrdist'
     THEN
       SELECT UNIQUE FCD_FIPS91_CD AS congrdist
         BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
-       ORDER BY 1;
-    ELSIF localetype = 'congrdist' AND disasterid.COUNT > 0
-    THEN
-      SELECT UNIQUE FCD_FIPS91_CD AS congrdist
-        BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
-         AND fad.DSTER_ID IN (SELECT * FROM TABLE(disasterid))
+        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
+       WHERE fhdh.DMGE_STATE_CD = stateid
+       AND ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
        ORDER BY 1;
     END IF;
     EXCEPTION
@@ -149,43 +130,26 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
     localevalues IN charParameterArray DEFAULT emptyCharParm,
     results OUT disasterArray
   ) AS
+    localeParmCount NUMBER(5) := localevalues.COUNT;
   BEGIN
-    IF localetype IS NULL AND localevalues.COUNT = 0
-    THEN
-      SELECT UNIQUE DSTER_ID AS disaster
-        BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
-       ORDER BY 1;
-    ELSIF localetype = 'city' AND localevalues.COUNT > 0
-    THEN
-      SELECT UNIQUE DSTER_ID AS disaster
-        BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
-         AND fad.DMGE_CITY_NAME IN (SELECT * FROM TABLE(localevalues))
-       ORDER BY 1;
-    ELSIF localetype = 'county' AND localevalues.COUNT > 0
-    THEN
-      SELECT UNIQUE DSTER_ID AS disaster
-        BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
-         AND fad.CNTY_NAME IN (SELECT * FROM TABLE(localevalues))
-       ORDER BY 1;
-    ELSIF localetype = 'congrdist' AND localevalues.COUNT > 0
-    THEN
-      SELECT UNIQUE DSTER_ID AS disaster
-        BULK COLLECT INTO results
-        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-       WHERE fad.DMGE_STATE_CD = stateid
-         AND fad.FCD_FIPS91_CD IN (SELECT * FROM TABLE(localevalues))
-       ORDER BY 1;
-    END IF;
-    EXCEPTION
-      WHEN no_data_found THEN
-        DBMS_OUTPUT.PUT_LINE('No data returned');
-        RAISE;
+    SELECT UNIQUE DSTER_ID AS disaster
+      BULK COLLECT INTO results
+      FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
+      WHERE ( stateid IS NULL OR fhdh.DMGE_STATE_CD = stateid )
+        AND (
+          ( localetype IS NULL AND localeParmCount = 0 )
+          OR
+          ( localetype = 'city' AND fhdh.DMGE_CITY_NAME IN (SELECT * FROM TABLE(localevalues)) )
+          OR
+          ( localetype = 'county' AND fhdh.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
+          OR
+          ( localetype = 'congrdist' AND fhdh.FCD_FIPS91_CD IN (SELECT * FROM TABLE(localevalues)) )
+        )
+     ORDER BY 1;
+  EXCEPTION
+    WHEN no_data_found THEN
+      DBMS_OUTPUT.PUT_LINE('No data returned');
+      RAISE;
   END get_disasters;
 
   PROCEDURE get_records (
@@ -200,17 +164,17 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
   BEGIN
   SELECT *
     BULK COLLECT INTO results
-    FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-   WHERE ( disasterParmCount = 0 OR fad.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
-     AND ( stateid IS NULL OR fad.DMGE_STATE_CD = stateid )
+    FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
+   WHERE ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
+     AND ( stateid IS NULL OR fhdh.DMGE_STATE_CD = stateid )
      AND (
        ( localetype IS NULL AND localeParmCount = 0 )
        OR
-       ( localetype = 'city' AND fad.DMGE_CITY_NAME IN (SELECT * FROM TABLE(localevalues)) )
+       ( localetype = 'city' AND fhdh.DMGE_CITY_NAME IN (SELECT * FROM TABLE(localevalues)) )
        OR
-       ( localetype = 'county' AND fad.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
+       ( localetype = 'county' AND fhdh.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
        OR
-       ( localetype = 'congrdist' AND fad.FCD_FIPS91_CD IN (SELECT * FROM TABLE(localevalues)) )
+       ( localetype = 'congrdist' AND fhdh.FCD_FIPS91_CD IN (SELECT * FROM TABLE(localevalues)) )
      );
 
   EXCEPTION
@@ -250,17 +214,17 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
             SUM( TOTAL_ASSTN_AMNT ) AS TOTAL_ASSTN_AMNT,
             SUM( HUD_UNMT_NEED_AMNT ) AS HUD_UNMT_NEED_AMNT
       BULK COLLECT INTO results
-      FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fad
-     WHERE ( disasterParmCount = 0 OR fad.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
-       AND ( stateid IS NULL OR fad.DMGE_STATE_CD = stateid )
+      FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
+     WHERE ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
+       AND ( stateid IS NULL OR fhdh.DMGE_STATE_CD = stateid )
        AND (
          ( localetype IS NULL AND localeParmCount = 0 )
          OR
-         ( localetype = 'city' AND fad.DMGE_CITY_NAME IN (SELECT * FROM TABLE(localevalues)) )
+         ( localetype = 'city' AND fhdh.DMGE_CITY_NAME IN (SELECT * FROM TABLE(localevalues)) )
          OR
-         ( localetype = 'county' AND fad.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
+         ( localetype = 'county' AND fhdh.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
          OR
-         ( localetype = 'congrdist' AND fad.FCD_FIPS91_CD IN (SELECT * FROM TABLE(localevalues)) )
+         ( localetype = 'congrdist' AND fhdh.FCD_FIPS91_CD IN (SELECT * FROM TABLE(localevalues)) )
        );
   EXCEPTION
     WHEN no_data_found THEN
