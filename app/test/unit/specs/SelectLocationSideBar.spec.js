@@ -20,7 +20,6 @@ describe('SelectLocationSideBar component', function () {
   let vm
 
   beforeEach(function () {
-    console.log("BEFORE EACH 23LK23LKJ23LKJ23LKJ23LJ23LKJ2L3KJL2J3")
     getters = {
       disasterNumberResults: function () { return [] },
       localeResults: function () { return [] }
