@@ -6,6 +6,18 @@ const _ = require('lodash')
 const querystring = require('querystring')
 const csv = require('express-csv')
 const dbApi = require('./dbApi')
+const fema = require('../middleware/fema')
+
+router.get('/states/:state/disasters', function (req, res) {
+  const state = req.params.state
+  const disasterIds = dbApi.getDisasters({state: req.params.state})
+  const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
+  let filter = `state eq '${state}' and ${disasterCond}`
+  fema.getDisasters({filter}, (err, disasters) => {
+    if (err) return res.send(500, {err: err.message})
+    res.json(disasters)
+  })
+})
 /**
 * Creates the routes for the backend functionality.
 * @module lib/controllers/api
@@ -40,7 +52,6 @@ const dbApi = require('./dbApi')
 * followed by a dash (-), followed by diaster number, optionally followed by another dash and the state abbreviation.
 */
 router.get('/disasterquery/:qry', function (req, res) {
-  const validCols = ['id', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType', 'declaredCountyArea', 'title']
   const qryParts = req.params.qry.replace(/-$/, '').toUpperCase().split('-')
   const tenYearsAgo = moment().subtract(10, 'years')
   let filter = `declarationDate gt '${tenYearsAgo.toString()}'`
@@ -48,27 +59,13 @@ router.get('/disasterquery/:qry', function (req, res) {
   else if (qryParts.length === 1 && /^[A-Z]+$/.test(qryParts[0])) filter += ` and ( disasterType eq '${qryParts[0]}' or state eq '${qryParts[0]}')`
   else if (qryParts.length === 2) filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]}`
   else filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' `
-
-  const qs = querystring.stringify({
-    $filter: filter,
-    $orderby: 'declarationDate desc',
-    $top: 250
-  })
-  const selectCols = `$select=${validCols.join()}` // Left out of stringify because it's excaping commas and FEMA API doesn't like it
-  const url = `https://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries?${qs}&${selectCols}`
-  console.log(url)
-  request(url, function (err, response, body) {
-    // TODO handle error for cases when FEMA API responds with body starting wth '<!DOCTYPE html>' +bug id:2 gh:9
-    var data
-    try {
-      data = JSON.parse(body, (key, value) => {
-        return key === 'declarationDate' ? moment(value).format('MMMM DD, YYYY') : value
-      })
-    } catch (e) {
-      return res.send(503, {status: response.statusCode, message: e.message})
-    }
-    var rolledUpData = rollUpData(data)
-    res.json(rolledUpData)
+  fema.getDisasters({
+    filter: filter,
+    orderBy: 'declarationDate desc',
+    top: 250
+  }, (err, data) => {
+    if (err) return res.send(503, {status: err.status, message: err.message})
+    res.json(data)
   })
 })
 
@@ -110,23 +107,11 @@ router.get('/disasternumber/:qry', function (req, res) {
     if (arg > 0) filter += ' or '
     filter += `( disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' )`
   }
-  const qs = querystring.stringify({
-    $filter: `${filter}`
-  })
-  const url = `https://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries?${qs}`
-  console.log(url)
-  request(url, function (err, response, body) {
-    // TODO handle error for cases when FEMA API responds with body starting wth '<!DOCTYPE html>' +bug id:2 gh:9
-    var data
-    try {
-      data = JSON.parse(body, (key, value) => {
-        return key === 'declarationDate' ? moment(value).format('MMMM DD, YYYY') : value
-      })
-    } catch (e) {
-      return res.send(503, {status: response.statusCode, message: e.message})
-    }
-    var rolledUpData = rollUpData(data)
-    res.json(rolledUpData)
+  fema.getDisasters({
+    filter: `${filter}`
+  }, (err, data) => {
+    if (err) return res.send(503, {status: err.status, message: err.message})
+    res.json(data)
   })
 })
 
@@ -156,7 +141,7 @@ router.get('/db', (req, res) => {
       return area
     })
   }
-  var geoName = decodeLocaleField(_.get(req.query, 'geoName'))
+  var geoName = dbApi.decodeLocaleField(_.get(req.query, 'geoName'))
   if ((geoName && !geoArea) || (!geoName && geoArea)) {
     res.status(406).send('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
     return
@@ -183,7 +168,7 @@ router.get('/db', (req, res) => {
 **/
 router.get('/locales/:stateId/:localeType', (req, res) => {
   var stateId = req.params.stateId.toUpperCase()
-  var localeType = decodeLocaleField(req.params.localeType)
+  var localeType = dbApi.decodeLocaleField(req.params.localeType)
   if (!localeType) return
   var selectCols = [localeType]
   var queryObj = []
@@ -193,34 +178,6 @@ router.get('/locales/:stateId/:localeType', (req, res) => {
   res.json(results)
 })
 
-const decodeLocaleField = (fieldname) => {
-  switch (fieldname) {
-    case 'city':
-      return 'dmge_city_name'
-    case 'county':
-      return 'cnty_name'
-    case 'congrdist':
-      return 'fcd_fips91_cd'
-  }
-}
-
-const rollUpData = (data) => {
-  var rolledUpData = []
-  if (_.get(data, 'DisasterDeclarationsSummaries')) {
-    data.DisasterDeclarationsSummaries.forEach((record) => {
-      var disasterRecFound = false
-      for (var x in rolledUpData) {
-        var existingRecord = rolledUpData[x]
-        if (record.disasterNumber === existingRecord.disasterNumber) disasterRecFound = x
-      }
-      if (!disasterRecFound) {
-        record.declaredCountyArea = [record.declaredCountyArea]
-        rolledUpData.push(record)
-      } else rolledUpData[disasterRecFound].declaredCountyArea.push(record.declaredCountyArea)
-    })
-  }
-  return rolledUpData
-}
 module.exports = router
 
 /**

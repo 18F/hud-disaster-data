@@ -48,6 +48,7 @@ export default {
 </script>
 <style lang="scss">
 .user-selector {
+  display: none;
   z-index: 2;
   position: absolute;
   top: 30px;
