@@ -10,7 +10,23 @@ const fema = require('../middleware/fema')
 
 router.get('/states/:state/disasters', function (req, res) {
   const state = req.params.state
-  const disasterIds = hudApi.getDisasters({state: req.params.state})
+  const queryParams = _.get(req, 'query')
+  const validLocaleTypes = ['city', 'county', 'congrdist']
+  let localeType
+  let locales
+  let errMessage = 'Invalid parameters sent.  Use one of: city, county, or congrdist, with a comma separated list of values. Not Acceptable.'
+  if (!_.isEmpty(queryParams)) {
+    localeType = _.findKey(queryParams)
+    if (_.indexOf(validLocaleTypes, localeType) !== -1) locales = queryParams[localeType]
+    else return res.status(406).send(errMessage)
+    if (!locales) return res.status(406).send(errMessage)
+  }
+  let queryObj = {state: req.params.state}
+  if (localeType) {
+    queryObj.localeType = localeType
+    queryObj.locales = locales
+  }
+  const disasterIds = hudApi.getDisasters(queryObj)
   const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
   let filter = `state eq '${state}' and ${disasterCond}`
   fema.getDisasters({filter}, (err, disasters) => {
