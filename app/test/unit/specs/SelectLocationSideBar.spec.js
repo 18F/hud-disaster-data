@@ -20,6 +20,7 @@ describe('SelectLocationSideBar component', function () {
   let vm
 
   beforeEach(function () {
+    console.log("BEFORE EACH 23LK23LKJ23LKJ23LKJ23LJ23LKJ2L3KJL2J3")
     getters = {
       disasterNumberResults: function () { return [] },
       localeResults: function () { return [] }
@@ -40,8 +41,6 @@ describe('SelectLocationSideBar component', function () {
       loadReportData: sinon.stub()
     }
     store = new Vuex.Store({state: {}, mutations, getters, actions})
-    let createdStub = sinon.stub()
-    SelectLocationSideBar.created = createdStub
     Constructor = Vue.extend(SelectLocationSideBar)
     vm = new Constructor({store}).$mount()
   })
@@ -53,18 +52,14 @@ describe('SelectLocationSideBar component', function () {
     })
   })
 
-  describe('created event/initializeValuesFromURL', function () {
+  describe.only('created event/initializeValuesFromURL', function () {
     const testStates = [{ code: 'MZ', name: 'Manzana' }, { code: 'NR', name: 'Naranja' }, { code: 'PL', name: 'Platano' }]
     const testGeoLevels = [{ code: 'city', name: 'City' }, { code: 'county', name: 'County' }, { code: 'something', name: 'Else' }]
     const testLocales = [{ code: 'Jodar', name: 'Jodar' }, { code: 'Ubeda', name: 'Ubeda' }, { code: 'Madrid', name: 'Madrid' }]
     const testDisasters = [{ code: 'AA-1234-ZZ', name: 'AA-1234-ZZ' }, { code: 'BB-5678-YY', name: 'BB-5678-YY' }, { code: 'CC-0987-XX', name: 'CC-0987-XX' }]
 
     it('should set no values in the selections if no URL parameters are passed in', function (done) {
-      let createdStub = sinon.stub()
       const that = { $route: { query: null }, stateSelected: null, geographicLevelSelected: null }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
@@ -78,7 +73,6 @@ describe('SelectLocationSideBar component', function () {
       const commitSpy = sinon.spy()
       const setLevelSpy = sinon.spy()
       const magicOnceSpy = sinon.spy(magic, '$once')
-      let createdStub = sinon.stub()
       store.commit = commitSpy
       store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
@@ -90,10 +84,14 @@ describe('SelectLocationSideBar component', function () {
         $store: store,
         stateSelected: null,
         geographicLevelSelected: null,
-        setLevel: setLevelSpy }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
+        setLevel: setLevelSpy,
+        changeState: function (val) { this.stateSelected = val },
+        $refs: {
+          stateSelector: { select: (state) => { return true } },
+          geographicLevelSelector: { select: (state) => { return true } }
+        }
+      }
+
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
@@ -111,7 +109,7 @@ describe('SelectLocationSideBar component', function () {
       const commitSpy = sinon.spy()
       const setLevelSpy = sinon.spy()
       const magicOnceSpy = sinon.spy(magic, '$once')
-      let createdStub = sinon.stub()
+
       store.commit = commitSpy
       store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
@@ -124,10 +122,14 @@ describe('SelectLocationSideBar component', function () {
         $store: store,
         stateSelected: null,
         geographicLevelSelected: null,
-        setLevel: setLevelSpy }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
+        setLevel: setLevelSpy,
+        changeState: function (val) { this.stateSelected = val },
+        $refs: {
+          stateSelector: { select: (state) => { return true } },
+          geographicLevelSelector: { select: (state) => { this.setLevel() } }
+        }
+      }
+
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
@@ -146,7 +148,6 @@ describe('SelectLocationSideBar component', function () {
       const commitSpy = sinon.spy()
       const setLevelSpy = sinon.spy()
       const magicOnceSpy = sinon.spy(magic, '$once')
-      let createdStub = sinon.stub()
       store.commit = commitSpy
       store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
@@ -161,10 +162,14 @@ describe('SelectLocationSideBar component', function () {
         $store: store,
         stateSelected: null,
         geographicLevelSelected: null,
-        setLevel: setLevelSpy }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
+        setLevel: setLevelSpy,
+        changeState: function (val) { this.stateSelected = val },
+        $refs: {
+          stateSelector: { select: (state) => { return true } },
+          geographicLevelSelector: { select: (state) => { this.setLevel() } }
+        }
+      }
+
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
