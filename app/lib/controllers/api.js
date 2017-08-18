@@ -5,12 +5,12 @@ const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
 const csv = require('express-csv')
-const dbApi = require('./dbApi')
+const hudApi = require('../middleware/hudApi')
 const fema = require('../middleware/fema')
 
 router.get('/states/:state/disasters', function (req, res) {
   const state = req.params.state
-  const disasterIds = dbApi.getDisasters({state: req.params.state})
+  const disasterIds = hudApi.getDisasters({state: req.params.state})
   const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
   let filter = `state eq '${state}' and ${disasterCond}`
   fema.getDisasters({filter}, (err, disasters) => {
@@ -81,7 +81,7 @@ router.get('/export/:fileNamePart', function (req, res) {
   if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
   var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
-  var results = dbApi.getData([{dmge_state_cd: states}, {dster_id: numbers}])
+  var results = hudApi.getData([{dmge_state_cd: states}, {dster_id: numbers}])
   if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
   var columns = []
   for (var key in results[0]) columns.push(key)
@@ -141,7 +141,7 @@ router.get('/db', (req, res) => {
       return area
     })
   }
-  var geoName = dbApi.decodeLocaleField(_.get(req.query, 'geoName'))
+  var geoName = hudApi.decodeLocaleField(_.get(req.query, 'geoName'))
   if ((geoName && !geoArea) || (!geoName && geoArea)) {
     res.status(406).send('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
     return
@@ -156,7 +156,7 @@ router.get('/db', (req, res) => {
     arg[geoName] = geoArea
     queryObj.push(arg)
   }
-  var results = dbApi.getData(queryObj, summaryCols, selectCols)
+  var results = hudApi.getData(queryObj, summaryCols, selectCols)
   res.json(results)
 })
 
@@ -168,12 +168,12 @@ router.get('/db', (req, res) => {
 **/
 router.get('/locales/:stateId/:localeType', (req, res) => {
   var stateId = req.params.stateId.toUpperCase()
-  var localeType = dbApi.decodeLocaleField(req.params.localeType)
+  var localeType = hudApi.decodeLocaleField(req.params.localeType)
   if (!localeType) return
   var selectCols = [localeType]
   var queryObj = []
   queryObj.push({'dmge_state_cd': [stateId]})
-  var data = dbApi.getData(queryObj, null, selectCols)
+  var data = hudApi.getData(queryObj, null, selectCols)
   var results = _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
   res.json(results)
 })
