@@ -106,7 +106,7 @@ export const actions = {
     let querystring = `/api/locales/${state.stateFilter.code}/${localType}`
     axios.get(querystring).then(response => {
       commit('updateLocaleList', _.map(response.data, (r) => {
-        let name = (localType === 'congrdist') ? `${r.substring(2, 4)}-${r.substring(4)}` : r
+        let name = (localType === 'congrdist') ? `${r.substring(2, 4)}` : r
         return { code: r, name }
       }))
       if (response.data && response.data.length === 0) {
