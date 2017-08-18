@@ -25,7 +25,6 @@ const getDisasters = function({filter, orderBy, top}, cb) {
     }
     cb(null, rollUpData(data))
   })
-
 }
 
 const rollUpData = (data) => {

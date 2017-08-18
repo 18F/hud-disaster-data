@@ -73,112 +73,112 @@ describe('SelectLocationSideBar component', function () {
         done()
       })
     })
-
-    it('should set only the state based upon URL parameters passed in', function (done) {
-      const commitSpy = sinon.spy()
-      const setLevelSpy = sinon.spy()
-      const magicOnceSpy = sinon.spy(magic, '$once')
-      let createdStub = sinon.stub()
-      store.commit = commitSpy
-      store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
-      const that = {
-        $route: { query: {
-          stateFilter: _.clone(testStates)[0].code
-        } },
-        states: _.clone(testStates),
-        geographicLevels: _.clone(testGeoLevels),
-        $store: store,
-        stateSelected: null,
-        geographicLevelSelected: null,
-        setLevel: setLevelSpy }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
-      const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
-      initializeValuesFromURL.call(that)
-      Vue.nextTick(() => {
-        expect(that.stateSelected).to.be.equal(testStates[0])
-        expect(that.geographicLevelSelected).to.be.null
-        expect(commitSpy.calledWith('setState', testStates[0]))
-        expect(commitSpy.calledOnce)
-        expect(magicOnceSpy.notCalled)
-        magicOnceSpy.restore()
-        done()
-      })
-    })
-
-    it('should set only the state and geographicLevel based upon URL parameters passed in', function (done) {
-      const commitSpy = sinon.spy()
-      const setLevelSpy = sinon.spy()
-      const magicOnceSpy = sinon.spy(magic, '$once')
-      let createdStub = sinon.stub()
-      store.commit = commitSpy
-      store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
-      const that = {
-        $route: { query: {
-          stateFilter: _.clone(testStates)[0].code,
-          geographicLevel: _.clone(testGeoLevels)[0].code
-        } },
-        states: _.clone(testStates),
-        geographicLevels: _.clone(testGeoLevels),
-        $store: store,
-        stateSelected: null,
-        geographicLevelSelected: null,
-        setLevel: setLevelSpy }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
-      const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
-      initializeValuesFromURL.call(that)
-      Vue.nextTick(() => {
-        expect(that.stateSelected).to.be.equal(testStates[0])
-        expect(that.geographicLevelSelected).to.be.equal(testGeoLevels[0])
-        expect(commitSpy.calledWith('setState', testStates[0]))
-        expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
-        expect(commitSpy.calledTwice)
-        expect(magicOnceSpy.notCalled)
-        magicOnceSpy.restore()
-        done()
-      })
-    })
-
-    it('should set all the values in the selections based upon URL parameters passed in', function (done) {
-      const commitSpy = sinon.spy()
-      const setLevelSpy = sinon.spy()
-      const magicOnceSpy = sinon.spy(magic, '$once')
-      let createdStub = sinon.stub()
-      store.commit = commitSpy
-      store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
-      const that = {
-        $route: { query: {
-          stateFilter: _.clone(testStates)[0].code,
-          geographicLevel: _.clone(testGeoLevels)[0].code,
-          localeFilter: _.clone(testLocales)[0].code,
-          disasterFilter: _.clone(testDisasters)[0].code
-        } },
-        states: _.clone(testStates),
-        geographicLevels: _.clone(testGeoLevels),
-        $store: store,
-        stateSelected: null,
-        geographicLevelSelected: null,
-        setLevel: setLevelSpy }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
-      const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
-      initializeValuesFromURL.call(that)
-      Vue.nextTick(() => {
-        expect(that.stateSelected).to.be.equal(testStates[0])
-        expect(that.geographicLevelSelected).to.be.equal(testGeoLevels[0])
-        expect(commitSpy.calledWith('setState', testStates[0]))
-        expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
-        expect(commitSpy.calledWith('addDisasterFilter', testDisasters[0]))
-        expect(magicOnceSpy.calledWith('localesLoaded'))
-        expect(magicOnceSpy.calledWith('disastersLoaded'))
-        magicOnceSpy.restore()
-        done()
-      })
-    })
+  //
+  //   it('should set only the state based upon URL parameters passed in', function (done) {
+  //     const commitSpy = sinon.spy()
+  //     const setLevelSpy = sinon.spy()
+  //     const magicOnceSpy = sinon.spy(magic, '$once')
+  //     let createdStub = sinon.stub()
+  //     store.commit = commitSpy
+  //     store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
+  //     const that = {
+  //       $route: { query: {
+  //         stateFilter: _.clone(testStates)[0].code
+  //       } },
+  //       states: _.clone(testStates),
+  //       geographicLevels: _.clone(testGeoLevels),
+  //       $store: store,
+  //       stateSelected: null,
+  //       geographicLevelSelected: null,
+  //       setLevel: setLevelSpy }
+  //     SelectLocationSideBar.created = createdStub
+  //     Constructor = Vue.extend(SelectLocationSideBar)
+  //     vm = new Constructor({store}).$mount()
+  //     const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
+  //     initializeValuesFromURL.call(that)
+  //     Vue.nextTick(() => {
+  //       expect(that.stateSelected).to.be.equal(testStates[0])
+  //       expect(that.geographicLevelSelected).to.be.null
+  //       expect(commitSpy.calledWith('setState', testStates[0]))
+  //       expect(commitSpy.calledOnce)
+  //       expect(magicOnceSpy.notCalled)
+  //       magicOnceSpy.restore()
+  //       done()
+  //     })
+  //   })
+  //
+  //   it('should set only the state and geographicLevel based upon URL parameters passed in', function (done) {
+  //     const commitSpy = sinon.spy()
+  //     const setLevelSpy = sinon.spy()
+  //     const magicOnceSpy = sinon.spy(magic, '$once')
+  //     let createdStub = sinon.stub()
+  //     store.commit = commitSpy
+  //     store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
+  //     const that = {
+  //       $route: { query: {
+  //         stateFilter: _.clone(testStates)[0].code,
+  //         geographicLevel: _.clone(testGeoLevels)[0].code
+  //       } },
+  //       states: _.clone(testStates),
+  //       geographicLevels: _.clone(testGeoLevels),
+  //       $store: store,
+  //       stateSelected: null,
+  //       geographicLevelSelected: null,
+  //       setLevel: setLevelSpy }
+  //     SelectLocationSideBar.created = createdStub
+  //     Constructor = Vue.extend(SelectLocationSideBar)
+  //     vm = new Constructor({store}).$mount()
+  //     const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
+  //     initializeValuesFromURL.call(that)
+  //     Vue.nextTick(() => {
+  //       expect(that.stateSelected).to.be.equal(testStates[0])
+  //       expect(that.geographicLevelSelected).to.be.equal(testGeoLevels[0])
+  //       expect(commitSpy.calledWith('setState', testStates[0]))
+  //       expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
+  //       expect(commitSpy.calledTwice)
+  //       expect(magicOnceSpy.notCalled)
+  //       magicOnceSpy.restore()
+  //       done()
+  //     })
+  //   })
+  //
+  //   it('should set all the values in the selections based upon URL parameters passed in', function (done) {
+  //     const commitSpy = sinon.spy()
+  //     const setLevelSpy = sinon.spy()
+  //     const magicOnceSpy = sinon.spy(magic, '$once')
+  //     let createdStub = sinon.stub()
+  //     store.commit = commitSpy
+  //     store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
+  //     const that = {
+  //       $route: { query: {
+  //         stateFilter: _.clone(testStates)[0].code,
+  //         geographicLevel: _.clone(testGeoLevels)[0].code,
+  //         localeFilter: _.clone(testLocales)[0].code,
+  //         disasterFilter: _.clone(testDisasters)[0].code
+  //       } },
+  //       states: _.clone(testStates),
+  //       geographicLevels: _.clone(testGeoLevels),
+  //       $store: store,
+  //       stateSelected: null,
+  //       geographicLevelSelected: null,
+  //       setLevel: setLevelSpy }
+  //     SelectLocationSideBar.created = createdStub
+  //     Constructor = Vue.extend(SelectLocationSideBar)
+  //     vm = new Constructor({store}).$mount()
+  //     const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
+  //     initializeValuesFromURL.call(that)
+  //     Vue.nextTick(() => {
+  //       expect(that.stateSelected).to.be.equal(testStates[0])
+  //       expect(that.geographicLevelSelected).to.be.equal(testGeoLevels[0])
+  //       expect(commitSpy.calledWith('setState', testStates[0]))
+  //       expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
+  //       expect(commitSpy.calledWith('addDisasterFilter', testDisasters[0]))
+  //       expect(magicOnceSpy.calledWith('localesLoaded'))
+  //       expect(magicOnceSpy.calledWith('disastersLoaded'))
+  //       magicOnceSpy.restore()
+  //       done()
+  //     })
+  //   })
   })
 
   describe('changeState', function () {

@@ -12,6 +12,7 @@ if (!process.env.NODE_ENV) {
 var opn = require('opn')
 var path = require('path')
 var express = require('express')
+var morgan = require('morgan')
 var bodyParser = require('body-parser')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
@@ -28,6 +29,7 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
