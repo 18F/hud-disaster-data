@@ -51,7 +51,7 @@ describe('SelectLocationSideBar component', function () {
     })
   })
 
-  describe.only('created event/initializeValuesFromURL', function () {
+  describe('created event/initializeValuesFromURL', function () {
     const testStates = [{ code: 'MZ', name: 'Manzana' }, { code: 'NR', name: 'Naranja' }, { code: 'PL', name: 'Platano' }]
     const testGeoLevels = [{ code: 'city', name: 'City' }, { code: 'county', name: 'County' }, { code: 'something', name: 'Else' }]
     const testLocales = [{ code: 'Jodar', name: 'Jodar' }, { code: 'Ubeda', name: 'Ubeda' }, { code: 'Madrid', name: 'Madrid' }]
@@ -72,6 +72,9 @@ describe('SelectLocationSideBar component', function () {
       const commitSpy = sinon.spy()
       const setLevelSpy = sinon.spy()
       const magicOnceSpy = sinon.spy(magic, '$once')
+      const changeStateSpy = sinon.spy()
+      const stateRefSpy = sinon.spy()
+      const geoSelectorSpy = sinon.spy()
       store.commit = commitSpy
       store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
@@ -84,21 +87,20 @@ describe('SelectLocationSideBar component', function () {
         stateSelected: null,
         geographicLevelSelected: null,
         setLevel: setLevelSpy,
-        changeState: function (val) { this.stateSelected = val },
+        changeState: changeStateSpy,
         $refs: {
-          stateSelector: { select: (state) => { return true } },
-          geographicLevelSelector: { select: (state) => { return true } }
+          stateSelector: { select: stateRefSpy },
+          geographicLevelSelector: { select: geoSelectorSpy }
         }
       }
 
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
-        expect(that.stateSelected).to.be.equal(testStates[0])
-        expect(that.geographicLevelSelected).to.be.null
-        expect(commitSpy.calledWith('setState', testStates[0]))
-        expect(commitSpy.calledOnce)
+        expect(changeStateSpy.calledOnce)
+        expect(geoSelectorSpy.notCalled)
         expect(magicOnceSpy.notCalled)
+        expect(stateRefSpy.calledOnce)
         magicOnceSpy.restore()
         done()
       })
@@ -108,7 +110,9 @@ describe('SelectLocationSideBar component', function () {
       const commitSpy = sinon.spy()
       const setLevelSpy = sinon.spy()
       const magicOnceSpy = sinon.spy(magic, '$once')
-
+      const changeStateSpy = sinon.spy()
+      const stateRefSpy = sinon.spy()
+      const geoSelectorSpy = sinon.spy()
       store.commit = commitSpy
       store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
@@ -122,21 +126,18 @@ describe('SelectLocationSideBar component', function () {
         stateSelected: null,
         geographicLevelSelected: null,
         setLevel: setLevelSpy,
-        changeState: function (val) { this.stateSelected = val },
+        changeState: changeStateSpy,
         $refs: {
-          stateSelector: { select: (state) => { return true } },
-          geographicLevelSelector: { select: (state) => { this.setLevel() } }
+          stateSelector: { select: stateRefSpy },
+          geographicLevelSelector: { select: geoSelectorSpy }
         }
       }
 
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
-        expect(that.stateSelected).to.be.equal(testStates[0])
-        expect(that.geographicLevelSelected).to.be.equal(testGeoLevels[0])
-        expect(commitSpy.calledWith('setState', testStates[0]))
-        expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
-        expect(commitSpy.calledTwice)
+        expect(changeStateSpy.calledOnce)
+        expect(geoSelectorSpy.calledOnce)
         expect(magicOnceSpy.notCalled)
         magicOnceSpy.restore()
         done()
@@ -147,6 +148,9 @@ describe('SelectLocationSideBar component', function () {
       const commitSpy = sinon.spy()
       const setLevelSpy = sinon.spy()
       const magicOnceSpy = sinon.spy(magic, '$once')
+      const changeStateSpy = sinon.spy()
+      const stateRefSpy = sinon.spy()
+      const geoSelectorSpy = sinon.spy()
       store.commit = commitSpy
       store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
@@ -162,19 +166,18 @@ describe('SelectLocationSideBar component', function () {
         stateSelected: null,
         geographicLevelSelected: null,
         setLevel: setLevelSpy,
-        changeState: function (val) { this.stateSelected = val },
+        changeState: changeStateSpy,
         $refs: {
-          stateSelector: { select: (state) => { return true } },
-          geographicLevelSelector: { select: (state) => { this.setLevel() } }
+          stateSelector: { select: stateRefSpy },
+          geographicLevelSelector: { select: geoSelectorSpy }
         }
       }
 
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
-        expect(that.stateSelected).to.be.equal(testStates[0])
-        expect(that.geographicLevelSelected).to.be.equal(testGeoLevels[0])
-        expect(commitSpy.calledWith('setState', testStates[0]))
+        expect(changeStateSpy.calledOnce)
+        expect(geoSelectorSpy.calledOnce)
         expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
         expect(commitSpy.calledWith('addDisasterFilter', testDisasters[0]))
         expect(magicOnceSpy.calledWith('localesLoaded'))
