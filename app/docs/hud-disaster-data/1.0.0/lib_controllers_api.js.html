@@ -42,7 +42,7 @@ const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
 const csv = require('express-csv')
-const dbApi = require('./dbApi')
+const hudApi = require('../middleware/hudApi')
 
 /**
 * Creates the routes for the backend functionality.
@@ -100,7 +100,7 @@ router.get('/export/:fileNamePart', function (req, res) {
   if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
   var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
-  var results = dbApi.getData([{damaged_state: states}, {disaster_id: numbers}])
+  var results = hudApi.getData([{damaged_state: states}, {disaster_id: numbers}])
   if (!results || results.length === 0) return res.status(204).send('No data found.')
   var columns = []
   for (var key in results[0]) columns.push(key)
@@ -132,7 +132,7 @@ router.get('/localequery/:state', function (req, res) {
   var selectCols = [desiredLocaleName]
   var summaryCols
   console.log(JSON.stringify(queryObj))
-  var data = dbApi.getData(queryObj, summaryCols, selectCols)
+  var data = hudApi.getData(queryObj, summaryCols, selectCols)
   var returnValue = ['no data found']
   if (data.length > 0) {
     var values = _.uniq(_.map(data, rec => rec[desiredLocaleName]))
@@ -216,7 +216,7 @@ router.get('/db', (req, res) => {
     arg[geoName] = geoArea
     queryObj.push(arg)
   }
-  var results = dbApi.getData(queryObj, summaryCols, selectCols)
+  var results = hudApi.getData(queryObj, summaryCols, selectCols)
   res.json(results)
 })
 
