@@ -106,7 +106,8 @@ export default {
     exportURI () {
       var csv = ''
       csv += `"Type","Amount"\n`
-      _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `"${key}", "${value}"\n` })
+      _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `"${key}","${value}"\n` })
+      debugger
       return 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv)
     },
     updateSummaryDisplay (data) {
