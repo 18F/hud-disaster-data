@@ -12,7 +12,7 @@ require('./lib/swagger')(app)
 // const controllers = require('./lib/controllers');
 // const mainController = controllers.main;
 
-app.use(morgan('combined'))
+app.use(morgan(/dev/.test(process.env.NODE_ENV) ? 'dev' : 'combined'))
 const dayInMillis = 24 * 60 * 60 * 1000
 app.use(cookieSession({
   secret: process.env.COOKIE_SECRET || 'secret!@#',

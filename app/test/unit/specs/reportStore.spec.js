@@ -156,7 +156,7 @@ describe('reportStore', function () {
       const commit = sinon.spy()
       const state = {geographicLevel: {name: 'Congressional District', code: 'CongrDist'}, stateFilter: {code: 'WI', name: 'WI'}}
       loadLocales({commit, state}, 'WI')
-      const expected = [{code: '1234567', name: '34-567'}, {code: '7654321', name: '54-321'}]
+      const expected = [{code: '1234567', name: '34'}, {code: '7654321', name: '54'}]
       moxios.wait(() => {
         should(commit.calledWith('updateLocaleList', expected)).be.true()
         should(commit.calledWith('resetStatus')).be.true()

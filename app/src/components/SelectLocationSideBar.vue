@@ -347,7 +347,7 @@ export default {
 
       .locale-selection-list, .disaster-selection-list {
         border:1px solid #353434;
-        border-top:0px;
+        /* border-top:0px; */
         height:160px;
         overflow-y:scroll;
       }
