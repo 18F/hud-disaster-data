@@ -8,7 +8,7 @@
           div.col-sm-12.col-md-4.col-lg-2
             a(href='https://portal.hud.gov/hudportal/HUD' target='_blank') HUD.gov
           div.col-sm-12.col-md-4.col-lg-2
-            a(href='https://www.hudexchange.info/programs/cdbg-dr/' target='_blank') DBG-DR Program Resources
+            a(href='https://www.hudexchange.info/programs/cdbg-dr/' target='_blank') CDBG-DR Program Resources
           div.col-sm-12.col-md-4.col-lg-2
             a(href='https://www.huduser.gov/portal/home.html' target='_blank') HUDUser.gov
           div.col-sm-12.col-md-4.col-lg-2
