@@ -191,6 +191,7 @@ export default {
       this.$refs.geographicLevelSelector.clearValue()
       this.clearLocales()
       this.checkDisabled()
+      this.filterDisasters()
     },
 
     clearLocales () {
@@ -204,6 +205,15 @@ export default {
       // DOING: Make a dry run of loading new disasters
       this.$store.commit('addLocaleFilter', this.localeSelected)
       this.$refs.localeSelect.clearValue()
+      this.filterDisasters()
+    },
+
+    filterDisasters () {
+      if (this.$store.getters.localeFilter.length > 0) {
+        this.$store.dispatch('loadFilteredDisasters')
+      } else {
+        this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
+      }
     },
 
     addDisaster () {
@@ -274,6 +284,7 @@ export default {
 
     removeLocale (locale) {
       this.$store.commit('removeLocaleFilter', locale)
+      this.filterDisasters()
     },
 
     initializeValuesFromURL () {

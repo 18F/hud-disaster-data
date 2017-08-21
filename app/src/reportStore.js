@@ -101,6 +101,26 @@ export const actions = {
     })
   },
 
+  loadFilteredDisasters: function ({ commit, state }, qry) {
+    let localType = state.geographicLevel.code.toLowerCase()
+    let stateCode = state.stateFilter.code
+    let locales = _.map(_.filter(state.localeList, 'selected'), locale => locale.name).join(',')
+    locales = encodeURI(locales)
+    let querystring = `/api/states/${stateCode}/disasters?${localType}=${locales}`
+
+    axios.get(querystring).then(response => {
+      commit('updateReportDisasterList', response.data)
+      if (response.data && response.data.length === 0) {
+        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+      }
+      magic.$emit('disastersLoaded')
+      commit('resetStatus')
+    }).catch(err => {
+      console.log(`Error fetching disaster list: ${err}`)
+      commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
+    })
+  },
+
   loadLocales: function ({ commit, state }, qry) {
     let localType = state.geographicLevel.code.toLowerCase()
     let querystring = `/api/states/${state.stateFilter.code}/${localType}`
