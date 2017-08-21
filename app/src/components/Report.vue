@@ -43,9 +43,9 @@
         .report-values(v-show="showReport")
           table
               tr(v-for='(amount, desc) in summaryRecords')
-                td
+                td.report-desc(tabindex=0)
                   | {{ desc }}
-                td(style="text-align:right;padding-right:10px;")
+                td.report-amount(tabindex=0)
                   | {{ amount }}
 </template>
 <script>
@@ -238,6 +238,10 @@ table { margin:0; }
           border-bottom: none;
         }
         td {
+          &.report-amount {
+            text-align:right;
+            padding-right:10px;
+          }
           &:first-child { width:65%; }
           padding:5px 0 5px 10px;
         }
