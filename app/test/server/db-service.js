@@ -4,21 +4,11 @@ const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
 const hudApi = require('../../lib/middleware/hudApi')
 
-describe('/api/db', function () {
+describe('/api/applicants/export', function () {
   this.timeout(10000)
 
-  it('should return failure code if not specifying a stateId', (done) => {
-    request(app).get('/api/db?disasterId=4269')
-    .expect(function (res) {
-      const message = res.text
-      message.should.be.equal('Invalid parameters sent. You must provide at least a stateId. Not Acceptable.')
-    })
-    .expect(406)
-    .expect('Content-Type', /text/, done)
-  })
-
-  it('should return data when specifying a stateId/disasterId combination', (done) => {
-    request(app).get('/api/db?stateId=IA&disasterId=4187')
+  it('should return data when specifying a state/disasters combination', (done) => {
+    request(app).get('/api/applicants/export?state=IA&disasters=4187')
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
@@ -29,8 +19,8 @@ describe('/api/db', function () {
     .expect('Content-Type', /json/, done)
   })
 
-  it('should return only columns that are specified as selectCols', (done) => {
-    request(app).get('/api/db?stateId=Tx&selectCols=dmge_city_name,dmge_state_cd')
+  it('should return only columns that are specified as cols', (done) => {
+    request(app).get('/api/applicants/export?state=Tx&cols=dmge_city_name,dmge_state_cd')
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
@@ -42,28 +32,28 @@ describe('/api/db', function () {
     .expect('Content-Type', /json/, done)
   })
 
-  it('should return failure code if specifying a geoName but not geoArea, or visa versa', (done) => {
-    request(app).get('/api/db?stateId=TX&geoName=city')
+  it('should return failure code if specifying a localeType but not locales, or visa versa', (done) => {
+    request(app).get('/api/applicants/export?state=TX&localeType=city')
     .expect(function (res) {
       const message = res.text
-      message.should.be.equal('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
+      message.should.be.equal('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
     })
     .expect(406)
     .expect('Content-Type', /text/, done)
   })
 
-  it('should return failure code if specifying a geoArea but not geoName, or visa versa', (done) => {
-    request(app).get('/api/db?stateId=TX&geoArea=Alamo')
+  it('should return failure code if specifying a locales but not localeType, or visa versa', (done) => {
+    request(app).get('/api/applicants/export?state=TX&locales=Alamo')
     .expect(function (res) {
       const message = res.text
-      message.should.be.equal('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
+      message.should.be.equal('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
     })
     .expect(406)
     .expect('Content-Type', /text/, done)
   })
 })
 
-describe('/api/db summarizeCols', function () {
+describe('/api/applicants/export summarizeCols', function () {
   this.timeout(10000)
 
   it('should return JSON with summarized column values', (done) => {
