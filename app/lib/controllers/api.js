@@ -7,7 +7,10 @@ const querystring = require('querystring')
 const csv = require('express-csv')
 const hudApi = require('../middleware/hudApi')
 const fema = require('../middleware/fema')
-
+const version = require('../../package.json').version
+router.get('/version', function (req, res) {
+  res.send(version)
+})
 router.get('/states/:state/disasters', function (req, res) {
   const state = req.params.state
   const queryParams = _.get(req, 'query')

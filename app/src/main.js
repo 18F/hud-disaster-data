@@ -13,11 +13,19 @@ import ValueSelector from './components/ValueSelector'
 import InputSelect from './components/InputSelect'
 import router from './router'
 import es6Promise from 'es6-promise'
+import util from './util'
 es6Promise.polyfill()
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.prototype.$http = Axios
+Axios.interceptors.request.use(function (config) {
+  config.url = `${util.contextRoot}${config.url}`
+  return config
+}, function (error) {
+  return Promise.reject(error)
+})
+
 /**
 * The main vue component.  All other components are children of this one.
 * @module components/App
