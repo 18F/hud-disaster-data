@@ -42,5 +42,4 @@ app.use(contextRoot,express.static(staticDir))
 
 // require('./lib/services/authenticate').init(app);
 
-
 module.exports = app

@@ -1,4 +1,5 @@
 require('./check-versions')()
+const contextRoot = require('../src/util').contextRoot
 /**
 *  Generated from the vue cli tool. We modified it slightly to fit our needs.  This is the part of the devops that runs the dev server.
 * @module build/dev-server
@@ -71,6 +72,7 @@ app.use(devMiddleware)
 app.use(hotMiddleware)
 
 app.use('/api', require('../lib/controllers/api'))
+app.use(`${contextRoot}/api`, require('../lib/controllers/api'))
 
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
