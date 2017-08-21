@@ -51,6 +51,23 @@ describe('SelectLocationSideBar component', function () {
     })
   })
 
+  describe('beforeDestroy', function () {
+    it('when invoked, do reset and clearStore', function (done) {
+      const resetSpy = sinon.spy()
+      const commitSpy = sinon.spy()
+      const that = {
+        reset: resetSpy,
+        $store: { commit: commitSpy }
+      }
+      const beforeDestroy = vm.$options.beforeDestroy[0]
+      beforeDestroy.call(that)
+      Vue.nextTick(() => {
+        expect(resetSpy.called).to.be.equal(true)
+        expect(commitSpy.calledWith('clearStore')).to.be.equal(true)
+        done()
+      })
+    })
+  })
   describe('created event/initializeValuesFromURL', function () {
     const testStates = [{ code: 'MZ', name: 'Manzana' }, { code: 'NR', name: 'Naranja' }, { code: 'PL', name: 'Platano' }]
     const testGeoLevels = [{ code: 'city', name: 'City' }, { code: 'county', name: 'County' }, { code: 'something', name: 'Else' }]
