@@ -46,7 +46,7 @@ router.get('/states/:state/disasters', function (req, res) {
 **/
 router.get('/states/:stateId/:localeType', (req, res) => {
   var stateId = req.params.stateId.toUpperCase()
-  var localeType = hudApi.decodeLocaleField(req.params.localeType)
+  var localeType = hudApi.decodeField(req.params.localeType)
   if (!localeType) return
   var selectCols = [localeType]
   var queryObj = []
@@ -119,7 +119,7 @@ router.get('/export/:fileNamePart', function (req, res) {
   if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
   var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
-  var results = hudApi.getData([{dmge_state_cd: states}, {dster_id: numbers}])
+  var results = hudApi.getData([{[hudApi.decodeField('state')]: states}, {[hudApi.decodeField('disaster')]: numbers}])
   if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
   var columns = []
   for (var key in results[0]) columns.push(key)
@@ -154,44 +154,48 @@ router.get('/disasternumber/:qry', function (req, res) {
 })
 
 /**
-* router.get('/db') <br/>
+* router.get('/applicants/export') <br/>
 * @function get
-* @param {disasterId}- a comma separated list of disaster id's
-* @param {stateId}- a comma separated list of state id's
-* @param {geoArea}- a comma separated list of geographic area's, requires specifying geoName
-* @param {selectCols}- a comma separated list of columns to be returned
-* @param {summaryCols}- a comma separated list of columns to be returned with the summed values
+* @param {disasters}- a comma separated list of disaster id's
+* @param {state}- a state id
+* @param {localeType}- a type of geographic area
+* @param {locales}- a comma separated list of geographic area's, requires specifying geoName
+* @param {cols}- a comma separated list of columns to be returned, or to be returned with the summed values
 **/
-router.get('/db', (req, res) => {
-  var disasterId = _.get(req.query, 'disasterId')
-  if (disasterId) disasterId = disasterId.split(',')
-  var stateId = _.get(req.query, 'stateId')
-  if (stateId) stateId = stateId.toUpperCase().split(',')
-  else {
-    res.status(406).send('Invalid parameters sent. You must provide at least a stateId. Not Acceptable.')
+router.get('/applicants/:queryType', (req, res) => {
+  var queryType = req.params.queryType
+  if (queryType !== 'export' && queryType !== 'summary') {
+    res.status(406).send('Invalid url. Not Acceptable.')
     return
   }
-  var selectCols = _.get(req.query, 'selectCols')
-  if (selectCols) selectCols = selectCols.split(',')
-  var geoArea = _.get(req.query, 'geoArea')
-  if (geoArea) {
-    geoArea = _.map(geoArea.split(','), area => {
+  var summaryCols
+  var selectCols
+  var cols = _.get(req.query, 'cols')
+  if (cols) cols = cols.split(',')
+  if (queryType === 'export') selectCols = cols
+  else summaryCols = cols
+
+  var disasters = _.get(req.query, 'disasters')
+  if (disasters) disasters = disasters.split(',')
+  var stateId = _.get(req.query, 'stateId')
+  if (stateId) stateId = stateId.toUpperCase().split(',')
+  var locales = _.get(req.query, 'locales')
+  if (locales) {
+    locales = _.map(locales.split(','), area => {
       return area
     })
   }
-  var geoName = hudApi.decodeLocaleField(_.get(req.query, 'geoName'))
-  if ((geoName && !geoArea) || (!geoName && geoArea)) {
-    res.status(406).send('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
+  var localeType = hudApi.decodeField(_.get(req.query, 'localeType'))
+  if ((localeType && !locales) || (!localeType && locales)) {
+    res.status(406).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
     return
   }
-  var summaryCols = _.get(req.query, 'summaryCols')
-  summaryCols = summaryCols ? summaryCols.split(',') : null
   var queryObj = []
-  if (disasterId) queryObj.push({'dster_id': disasterId})
-  if (stateId) queryObj.push({'dmge_state_cd': stateId})
-  if (geoName && geoArea) {
+  if (disasters) queryObj.push({[hudApi.decodeField('disaster')]: disasters})
+  if (stateId) queryObj.push({[hudApi.decodeField('state')]: stateId})
+  if (localeType && locales) {
     var arg = {}
-    arg[geoName] = geoArea
+    arg[localeType] = locales
     queryObj.push(arg)
   }
   var results = hudApi.getData(queryObj, summaryCols, selectCols)

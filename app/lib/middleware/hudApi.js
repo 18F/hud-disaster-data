@@ -8,6 +8,18 @@ const db = low('mock-data/REAC Modified Database.json', {
   storage: fileAsync
 })
 
+const databaseFieldReference = {
+  disaster: 'dster_id',
+  state: 'dmge_state_cd',
+  city: 'dmge_city_name',
+  county: 'cnty_name',
+  congrdist: 'fcd_fips91_cd'
+}
+
+const decodeField = (fieldname) => {
+  return databaseFieldReference[fieldname]
+}
+
 const getData = function (queryObj, summaryCols, selectCols) {
   console.log(JSON.stringify(queryObj))
   console.log(JSON.stringify(summaryCols))
@@ -54,7 +66,7 @@ const summarizeCols = function (data, summaryCols) {
 }
 
 const getDisasters = function({state, localeType, locales}, cb) {
-  const localeField = decodeLocaleField(localeType)
+  const localeField = decodeField(localeType)
   return db.get('disasterRecs').filter(rec => {
     if (rec.dmge_state_cd !== state) return false
     if (!localeField || !locales) return true
@@ -65,14 +77,4 @@ const getDisasters = function({state, localeType, locales}, cb) {
   .value()
 }
 
-const localeFields = {
-  city: 'dmge_city_name',
-  county: 'cnty_name',
-  congrdist: 'fcd_fips91_cd'
-}
-
-const decodeLocaleField = (fieldname) => {
-  return localeFields[fieldname]
-}
-
-module.exports = { getData, summarizeCols, getDisasters, decodeLocaleField }
+module.exports = { getData, summarizeCols, getDisasters, decodeField }
