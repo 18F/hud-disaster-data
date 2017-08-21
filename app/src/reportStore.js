@@ -103,7 +103,7 @@ export const actions = {
 
   loadLocales: function ({ commit, state }, qry) {
     let localType = state.geographicLevel.code.toLowerCase()
-    let querystring = `/api/locales/${state.stateFilter.code}/${localType}`
+    let querystring = `/api/states/${state.stateFilter.code}/${localType}`
     axios.get(querystring).then(response => {
       commit('updateLocaleList', _.map(response.data, (r) => {
         let name = (localType === 'congrdist') ? `${r.substring(2, 4)}` : r

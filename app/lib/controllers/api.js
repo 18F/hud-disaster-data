@@ -34,6 +34,25 @@ router.get('/states/:state/disasters', function (req, res) {
     res.json(disasters)
   })
 })
+
+/**
+* router.get('/states/:stateId/:localeType') <br/>
+* @function get
+* @param {stateId}- a state id
+* @param {localeType}- a geographic level (city, county, congrdist)
+**/
+router.get('/states/:stateId/:localeType', (req, res) => {
+  var stateId = req.params.stateId.toUpperCase()
+  var localeType = hudApi.decodeLocaleField(req.params.localeType)
+  if (!localeType) return
+  var selectCols = [localeType]
+  var queryObj = []
+  queryObj.push({'dmge_state_cd': [stateId]})
+  var data = hudApi.getData(queryObj, null, selectCols)
+  var results = _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
+  res.json(results)
+})
+
 /**
 * Creates the routes for the backend functionality.
 * @module lib/controllers/api
@@ -173,24 +192,6 @@ router.get('/db', (req, res) => {
     queryObj.push(arg)
   }
   var results = hudApi.getData(queryObj, summaryCols, selectCols)
-  res.json(results)
-})
-
-/**
-* router.get('/locales/:stateId/:localeType') <br/>
-* @function get
-* @param {stateId}- a state id
-* @param {localeType}- a geographic level (city, county, congrdist)
-**/
-router.get('/locales/:stateId/:localeType', (req, res) => {
-  var stateId = req.params.stateId.toUpperCase()
-  var localeType = hudApi.decodeLocaleField(req.params.localeType)
-  if (!localeType) return
-  var selectCols = [localeType]
-  var queryObj = []
-  queryObj.push({'dmge_state_cd': [stateId]})
-  var data = hudApi.getData(queryObj, null, selectCols)
-  var results = _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
   res.json(results)
 })
 
