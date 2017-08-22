@@ -58,9 +58,11 @@ export default {
       ref: 'inputSelectText',
       placeholder: 'type here',
       searchButtonTitle: 'Search magnifying glass icon',
-      searchInputLabel: '' // search for something
+      searchInputLabel: '', // search for something
+      beforeReset: this.onReset || function () { return true }
     }
   },
+
   computed: {
     hasItems () {
       return this.items && this.items.length > 0
@@ -108,7 +110,7 @@ export default {
         } else {
           // user has no matches to input
           // or user has hit enter when there are multiple matches
-          if (this.onReset()) {
+          if (this.beforeReset()) {
             this.$emit('clear', null)
           }
         }
@@ -120,7 +122,7 @@ export default {
       this.matchingItems = _.clone(this.items)
     },
     reset () {
-      if (this.queryValue && this.onReset()) {
+      if (this.queryValue && this.beforeReset()) {
         this.$emit('clear', null)
         this.clearValue()
       }
