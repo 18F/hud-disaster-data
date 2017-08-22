@@ -51,6 +51,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "body-parser": "^1.17.1",
+    "bowser": "^1.7.0",
     "cookie-session": "^2.0.0-beta.1",
     "express": "^4.15.2",
     "express-csv": "^0.6.0",
@@ -79,7 +80,6 @@
     "babel-preset-env": "^1.3.2",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.22.0",
-    "bowser": "^1.7.0",
     "boxy-jsdoc-template": "^1.3.0",
     "chai": "^3.5.0",
     "chalk": "^1.1.3",
