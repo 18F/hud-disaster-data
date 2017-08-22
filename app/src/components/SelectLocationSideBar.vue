@@ -14,6 +14,7 @@
                 label="name"
                 componentDescription="State Select"
                 :on-change="changeState"
+                :on-reset="openDialogue"
                 v-on:clear="reset"
                 style="background:#fff;"
                 ref="stateSelector"
@@ -83,7 +84,7 @@
                       button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                         icon(name='fa-times')
           div.rp-action-buttons
-            button.usa-button.alt-button(type="button" @click="reset" title="Clear all report parameters button")
+            button.usa-button.alt-button(type="button" @click="clearAll" title="Clear all report parameters button")
               | Clear
             button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create report button")
               | Create Report
@@ -228,6 +229,21 @@ export default {
       this.disasterSelected = null
       this.$store.commit('updateReportDisasterList', [])
       this.$refs.disasterSelect.clearValue()
+    },
+
+    clearAll () {
+      if (this.openDialogue()) {
+        this.reset()
+      }
+    },
+
+    openDialogue () {
+      // being used as a callback in inputselects that need a modal
+      if (confirm('This will clear all of your input selections. Proceed?')) {
+        return true
+      } else {
+        return false
+      }
     },
 
     reset () {
