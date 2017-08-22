@@ -372,7 +372,7 @@ describe('reportStore', function () {
     const filterParameter = {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX'}}
 
     it('should call commit for updateReportData when the data is loaded', function (done) {
-      moxios.stubRequest(/db/, {
+      moxios.stubRequest(/applicants/, {
         status: 200,
         response: _.clone(REPORT_SUMMARY)
       })
@@ -385,7 +385,7 @@ describe('reportStore', function () {
       })
     })
     it('should set status to "no results found" if result is empty', function (done) {
-      moxios.stubRequest(/db/, {
+      moxios.stubRequest(/applicants/, {
         status: 200,
         response: []
       })

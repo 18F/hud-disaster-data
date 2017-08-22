@@ -191,6 +191,9 @@ export default {
       this.$refs.geographicLevelSelector.clearValue()
       this.clearLocales()
       this.checkDisabled()
+      if (this.stateSelected) {
+        this.filterDisasters()
+      }
     },
 
     clearLocales () {
@@ -204,6 +207,15 @@ export default {
       // DOING: Make a dry run of loading new disasters
       this.$store.commit('addLocaleFilter', this.localeSelected)
       this.$refs.localeSelect.clearValue()
+      this.filterDisasters()
+    },
+
+    filterDisasters () {
+      if (this.$store.getters.localeFilter && this.$store.getters.localeFilter.length > 0) {
+        this.$store.dispatch('loadFilteredDisasters')
+      } else {
+        this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
+      }
     },
 
     addDisaster () {
@@ -257,8 +269,8 @@ export default {
       if (this.$store.getters.stateFilter) allFilters.stateId = this.$store.getters.stateFilter.code
       if (this.$store.getters.disasterFilter.length > 0) allFilters.disasterId = _.flatMap(this.$store.getters.disasterFilter, dstr => dstr.code.split('-')[1])
       if (this.$store.getters.geographicLevel && this.$store.getters.localeFilter.length > 0) {
-        allFilters.geoName = this.$store.getters.geographicLevel.code.toLowerCase()
-        allFilters.geoArea = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
+        allFilters.localeType = this.$store.getters.geographicLevel.code.toLowerCase()
+        allFilters.locales = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
       }
       this.$emit('updateSummaryDisplay', summaryDisplayData)
       this.$store.dispatch('loadReportData',
@@ -274,6 +286,7 @@ export default {
 
     removeLocale (locale) {
       this.$store.commit('removeLocaleFilter', locale)
+      this.filterDisasters()
     },
 
     initializeValuesFromURL () {
