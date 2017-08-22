@@ -10,11 +10,11 @@
         v-model='queryValue'
         @keydown.esc.prevent='reset'
         @keydown.enter='update'
+        @keydown.tab='update'
         @keydown.down.prevent="selectDown"
         @keydown.up.prevent="selectUp"
         @click='inputReaction'
         @keydown='inputReaction'
-        @focus='checkForReset'
         @blur="close"
         :class="isDisabled"
         :disabled="isDisabled"
@@ -126,9 +126,6 @@ export default {
         this.$emit('clear', null)
         this.clearValue()
       }
-    },
-    checkForReset () {
-      if (this.queryValue === '' && this.items.length > 0) this.reset()
     },
     toggleDropdown () {
       this.contentVisible = !this.contentVisible

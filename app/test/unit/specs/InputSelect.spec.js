@@ -113,19 +113,6 @@ describe('InputSelect', function () {
     })
   })
 
-  describe('checkForReset', function () {
-    it('should reset things if there is no queryValue and one or more items', function () {
-      vm.items = [{code: 'alpha', name: 'alpha'}, {code: 'beta', name: 'beta'}, {code: 'gamma', name: 'gamma'}]
-      vm.matchingItems = [{code: 'beta', name: 'beta'}]
-      vm.listIndex = 1
-      vm.queryValue = ''
-      vm.checkForReset()
-      should(vm.matchingItems.length).be.equal(vm.items.length)
-      should(vm.matchingItems[0].code).be.equal(vm.items[0].code)
-      should(vm.listIndex).be.equal(-1)
-    })
-  })
-
   describe('toggleDropdown', function () {
     it('should change contentVisible from false to true', function () {
       vm.contentVisible = false

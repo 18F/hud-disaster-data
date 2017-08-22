@@ -324,6 +324,17 @@ describe('SelectLocationSideBar component', function () {
         done()
       })
     })
+    it('should trigger disaster filter if locale is selected', function (done) {
+      vm.$store.getters.localeFilter = () => { return [{ code: 'HOUSTON', name: 'Houston' }] }
+      vm.localeSelected = {name: 'HOUSTON', code: 'HOUSTON'}
+      vm.stateSelected = {code: 'WI'}
+      let dispatchSpy = sinon.spy(vm.$store, 'dispatch')
+      vm.addLocale()
+      Vue.nextTick(() => {
+        should(dispatchSpy.calledWith('loadFilteredDisasters')).be.true()
+        done()
+      })
+    })
   })
   describe('setLevel', function () {
     it('should set the geographicLevel', function (done) {
@@ -370,6 +381,16 @@ describe('SelectLocationSideBar component', function () {
       vm.removeLocale(locale)
       Vue.nextTick(() => {
         should(commitSpy.calledWith('removeLocaleFilter')).be.true()
+        done()
+      })
+    })
+    it('should reset disaster filter on locale remove', function (done) {
+      let locale = 'something'
+      let dispatchSpy = sinon.spy(store, 'dispatch')
+      vm.stateSelected = {code: 'WI'}
+      vm.removeLocale(locale)
+      Vue.nextTick(() => {
+        should(dispatchSpy.calledWith('loadReportDisasterList')).be.true()
         done()
       })
     })
