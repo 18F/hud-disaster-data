@@ -195,9 +195,9 @@ export const getters = {
   },
   summaryRecords: state => {
     const numericConversionList = {
-      hud_unmt_need_amnt: {text: 'Number of households affected', format: '0,0'},
-      numberOfRecords: {text: 'Total FEMA verified real property loss', format: '$0,0.00'},
-      total_dmge_amnt: {text: 'HUD estimated unmet need', format: '$0,0.00'}
+      numberOfRecords: {text: 'Number of households affected', format: '0,0'},
+      total_dmge_amnt: {text: 'Total FEMA verified real property loss', format: '$0,0.00'},
+      hud_unmt_need_amnt: {text: 'HUD estimated unmet need', format: '$0,0.00'}
     }
     let newSummaryRecord = {}
     for (var key in state.summaryRecords) {

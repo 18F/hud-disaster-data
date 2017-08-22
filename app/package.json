@@ -131,6 +131,7 @@
     "pa11y-ci": "^1.2.0",
     "phantomjs-prebuilt": "^2.1.14",
     "raw-loader": "^0.5.1",
+    "request-promise": "^4.2.1",
     "rimraf": "^2.6.0",
     "sass-loader": "^6.0.5",
     "semver": "^5.3.0",
