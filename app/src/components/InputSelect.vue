@@ -8,7 +8,7 @@
         :placeholder='searchInputLabel'
         autocomplete='off'
         v-model='queryValue'
-        @keydown.esc='reset'
+        @keydown.esc.prevent='reset'
         @keydown.enter='update'
         @keydown.down.prevent="selectDown"
         @keydown.up.prevent="selectUp"
@@ -48,7 +48,7 @@ import adjustScroll from '../mixins/adjustScroll'
 export default {
   name: 'input-select',
   mixins: [adjustScroll],
-  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription', 'required'],
+  props: ['items', 'onChange', 'onReset', 'value', 'disabled', 'componentDescription', 'required'],
   data () {
     return {
       matchingItems: [],
@@ -108,7 +108,9 @@ export default {
         } else {
           // user has no matches to input
           // or user has hit enter when there are multiple matches
-          this.$emit('clear', null)
+          if (this.onReset()) {
+            this.$emit('clear', null)
+          }
         }
       }
     },
@@ -118,8 +120,10 @@ export default {
       this.matchingItems = _.clone(this.items)
     },
     reset () {
-      this.$emit('clear', null)
-      this.clearValue()
+      if (this.queryValue && this.onReset()) {
+        this.$emit('clear', null)
+        this.clearValue()
+      }
     },
     checkForReset () {
       if (this.queryValue === '' && this.items.length > 0) this.reset()

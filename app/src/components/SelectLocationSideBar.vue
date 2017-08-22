@@ -14,6 +14,7 @@
                 label="name"
                 componentDescription="State Select"
                 :on-change="changeState"
+                :on-reset="openDialogue"
                 v-on:clear="reset"
                 style="background:#fff;"
                 ref="stateSelector"
@@ -228,6 +229,15 @@ export default {
       this.disasterSelected = null
       this.$store.commit('updateReportDisasterList', [])
       this.$refs.disasterSelect.clearValue()
+    },
+
+    openDialogue () {
+      // being used as a callback in inputselects that need a modal
+      if (confirm('This will clear all of your input selections. Proceed?')) {
+        return true
+      } else {
+        return false
+      }
     },
 
     reset () {
