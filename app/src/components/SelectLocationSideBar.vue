@@ -191,7 +191,9 @@ export default {
       this.$refs.geographicLevelSelector.clearValue()
       this.clearLocales()
       this.checkDisabled()
-      this.filterDisasters()
+      if (this.stateSelected) {
+        this.filterDisasters()
+      }
     },
 
     clearLocales () {
@@ -209,7 +211,7 @@ export default {
     },
 
     filterDisasters () {
-      if (this.$store.getters.localeFilter.length > 0) {
+      if (this.$store.getters.localeFilter && this.$store.getters.localeFilter.length > 0) {
         this.$store.dispatch('loadFilteredDisasters')
       } else {
         this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)

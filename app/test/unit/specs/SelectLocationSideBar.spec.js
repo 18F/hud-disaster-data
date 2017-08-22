@@ -307,6 +307,7 @@ describe('SelectLocationSideBar component', function () {
   describe('addLocale', function () {
     it('should add the locale', function (done) {
       vm.localeSelected = {name: 'Alexandria', code: 'Alexandria'}
+      vm.filterDisasters = function () {}
       let commitSpy = sinon.spy(store, 'commit')
       vm.addLocale()
       Vue.nextTick(() => {
@@ -365,6 +366,7 @@ describe('SelectLocationSideBar component', function () {
     it('should call commit to remove the locale', function (done) {
       let locale = 'something'
       let commitSpy = sinon.spy(store, 'commit')
+      vm.filterDisasters = function () {}
       vm.removeLocale(locale)
       Vue.nextTick(() => {
         should(commitSpy.calledWith('removeLocaleFilter')).be.true()
