@@ -84,7 +84,7 @@
                       button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                         icon(name='fa-times')
           div.rp-action-buttons
-            button.usa-button.alt-button(type="button" @click="reset" title="Clear all report parameters button")
+            button.usa-button.alt-button(type="button" @click="clearAll" title="Clear all report parameters button")
               | Clear
             button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create report button")
               | Create Report
@@ -229,6 +229,12 @@ export default {
       this.disasterSelected = null
       this.$store.commit('updateReportDisasterList', [])
       this.$refs.disasterSelect.clearValue()
+    },
+
+    clearAll () {
+      if (this.openDialogue()) {
+        this.reset()
+      }
     },
 
     openDialogue () {
