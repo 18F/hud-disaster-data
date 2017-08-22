@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>src/reportStore.js - Documentation</title>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <span class="navicon"></span>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-build_dev-server.html">build/dev-server</a></li><li><a href="module-bus.html">bus</a></li><li><a href="module-components_App.html">components/App</a></li><li><a href="module-components_Disaster.html">components/Disaster</a></li><li><a href="module-components_DisasterSearch.html">components/DisasterSearch</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_DisasterSearch.html#~update">update</a></li></ul></li><li><a href="module-components_Header.html">components/Header</a></li><li><a href="module-components_Icon.html">components/Icon</a></li><li><a href="module-components_Message.html">components/Message</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_Message.html#~displayMessage">displayMessage</a></li></ul></li><li><a href="module-components_Report.html">components/Report</a></li><li><a href="module-components_SavedExtracts.html">components/SavedExtracts</a></li><li><a href="module-components_Sprites.html">components/Sprites</a></li><li><a href="module-lib_controllers_api.html">lib/controllers/api</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-lib_controllers_api.html#~get">get</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~get">get</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~get">get</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~get">get</a></li></ul></li><li><a href="module-reportStore.html">reportStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-reportStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-reportStore.html#~updateReportDisasterList">updateReportDisasterList</a></li></ul></li><li><a href="module-router.html">router</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-router.html#.beforeRouteEnter">beforeRouteEnter</a></li></ul></li><li><a href="module-searchStore.html">searchStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-searchStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-searchStore.html#~clearCurrentExtract">clearCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~clearSearch">clearSearch</a></li><li data-type='method'><a href="module-searchStore.html#~deleteExtract">deleteExtract</a></li><li data-type='method'><a href="module-searchStore.html#~loadExtract">loadExtract</a></li><li data-type='method'><a href="module-searchStore.html#~resetStatus">resetStatus</a></li><li data-type='method'><a href="module-searchStore.html#~saveExtract">saveExtract</a></li><li data-type='method'><a href="module-searchStore.html#~setSearchLoading">setSearchLoading</a></li><li data-type='method'><a href="module-searchStore.html#~setStatus">setStatus</a></li><li data-type='method'><a href="module-searchStore.html#~toggleCurrentExtract">toggleCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~updateDisasterList">updateDisasterList</a></li></ul></li><li><a href="module-store.html">store</a></li><li><a href="module-tour.html">tour</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-tour.html#~clearTabIndex">clearTabIndex</a></li><li data-type='method'><a href="module-tour.html#~removeObserver">removeObserver</a></li><li data-type='method'><a href="module-tour.html#~restoreTabIndex">restoreTabIndex</a></li></ul></li><li><a href="module-vueMixins.html">vueMixins</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-vueMixins.html#~iconName">iconName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#get">get</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/reportStore.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Vue from 'vue'
+import Vuex from 'vuex'
+import axios from 'axios'
+import _ from 'lodash'
+import es6Promise from 'es6-promise'
+import magic from '@/bus'
+import numeral from 'numeral'
+es6Promise.polyfill()
+Vue.use(Vuex)
+
+/**
+* Manages the state for client functions.
+* @module reportStore
+*/
+export const mutations = {
+/**
+  Update the disaster number list with fresh data
+  @function updateReportDisasterList
+  @param {Array} list - A list of disasters
+  */
+  updateReportDisasterList: function (state, list) {
+    state.disasterList = _.map(list, disaster => {
+      let name = `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`
+      return {name, code: name, data: disaster}
+    })
+  },
+
+  setShowReport: function (state, value) {
+    state.showReport = value
+  },
+
+  setShowReportSpinner: function (state, value) {
+    state.showReportSpinner = value
+  },
+
+  updateLocaleList: function (state, list) {
+    state.localeList = list
+  },
+
+  clearStore: function (state) {
+    state.disasterList = []
+    state.localeList = []
+    state.stateFilter = null
+    state.geographicLevel = null
+    state.summaryRecords = []
+    state.showReport = false
+    state.showReportSpinner = false
+  },
+
+  setState: function (state, chosenState) {
+    state.stateFilter = chosenState
+  },
+
+  addDisasterFilter: function (state, chosenDisaster) {
+    chosenDisaster.selected = true
+    let index = state.disasterList.indexOf(chosenDisaster)
+    state.disasterList.splice(index, 1, chosenDisaster)
+  },
+
+  addLocaleFilter: function (state, chosenLocale) {
+    chosenLocale.selected = true
+    let index = state.localeList.indexOf(chosenLocale)
+    state.localeList.splice(index, 1, chosenLocale)
+  },
+
+  removeDisasterFilter: function (state, disaster) {
+    disaster.selected = false
+    let index = _.findIndex(state.disasterList, {code: disaster.code})
+    state.disasterList.splice(index, 1, disaster)
+  },
+
+  removeLocaleFilter: function (state, locale) {
+    locale.selected = false
+    let index = _.findIndex(state.localeList, {code: locale.code})
+    state.localeList.splice(index, 1, locale)
+  },
+
+  setSelectedGeographicLevel: function (state, selectedGeographicLevel) {
+    state.geographicLevel = selectedGeographicLevel
+  },
+
+  updateReportData: function (state, list) {
+    state.summaryRecords = list
+  }
+}
+/**
+These are the vuex actions
+*/
+export const actions = {
+  loadReportDisasterList: function ({ commit }, qry) {
+    axios.get(`/api/disasterquery/${qry}`).then(response => {
+      commit('updateReportDisasterList', response.data)
+      if (response.data &amp;&amp; response.data.length === 0) {
+        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+      }
+      magic.$emit('disastersLoaded')
+      commit('resetStatus')
+    }).catch(err => {
+      console.log(`Error fetching disaster list: ${err}`)
+      commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
+    })
+  },
+
+  loadLocales: function ({ commit, state }, qry) {
+    let localType = state.geographicLevel.code.toLowerCase()
+    let querystring = `/api/states/${state.stateFilter.code}/${localType}`
+    axios.get(querystring).then(response => {
+      commit('updateLocaleList', _.map(response.data, (r) => {
+        let name = (localType === 'congrdist') ? `${r.substring(2, 4)}` : r
+        return { code: r, name }
+      }))
+      if (response.data &amp;&amp; response.data.length === 0) {
+        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+      }
+      magic.$emit('localesLoaded')
+      commit('resetStatus')
+    }).catch(err => {
+      console.log(`Error fetching locale list: ${err}`)
+      commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD locale data is unavailable at this time.  Try again later or contact your administrator.'})
+    })
+  },
+
+  loadReportData: function ({ commit }, {summaryCols, allFilters}) {
+  //  commit('setShowReport', false)
+    let formattedQuery
+    commit('setShowReportSpinner', true)
+    _.forIn(allFilters, (value, key) => {
+      if (formattedQuery) formattedQuery += `&amp;${key}=${value.toString()}`
+      else formattedQuery = `${key}=${value.toString()}`
+    })
+    axios.get(`/api/applicants/summary?${formattedQuery}&amp;cols=${summaryCols}`).then(response => {
+      commit('updateReportData', response.data)
+      commit('setShowReport', true)
+      commit('setShowReportSpinner', false)
+      if (response.data &amp;&amp; response.data.length === 0) {
+        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+      }
+      commit('resetStatus')
+    }).catch(err => {
+      console.log(`Error fetching FEMA data: ${err}`)
+      commit('setStatus', {type: 'error', scope: 'app', msg: 'FEMA report data is unavailable at this time.  Try again later or contact your administrator.'})
+    })
+  },
+
+  setSelectedState: function ({commit}, qry) {
+    commit('clearStore')
+    commit('setState', qry)
+  }
+}
+
+export const getters = {
+  disasterNumberResults: state => {
+    return state.disasterList
+  },
+  localeResults: state => {
+    return state.localeList
+  },
+  showReport: state => {
+    return state.showReport
+  },
+  showReportSpinner: state => {
+    return state.showReportSpinner
+  },
+  stateFilter: state => {
+    return state.stateFilter
+  },
+  localeFilter: state => {
+    return _.filter(state.localeList, 'selected')
+  },
+  disasterFilter: state => {
+    return _.filter(state.disasterList, 'selected')
+  },
+  geographicLevel: state => {
+    return state.geographicLevel || ''
+  },
+  summaryRecords: state => {
+    const numericConversionList = {
+      hud_unmt_need_amnt: {text: 'Number of households affected', format: '0,0'},
+      numberOfRecords: {text: 'Total FEMA verified real property loss', format: '$0,0.00'},
+      total_dmge_amnt: {text: 'HUD estimated unmet need', format: '$0,0.00'}
+    }
+    let newSummaryRecord = {}
+    for (var key in state.summaryRecords) {
+      let newKey = numericConversionList[key] ? numericConversionList[key].text : key
+      let format = numericConversionList[key] ? numericConversionList[key].format : null
+      let value = numericConversionList[key] ? Number(state.summaryRecords[key]) : state.summaryRecords[key]
+      if (format) newSummaryRecord[newKey] = numeral(value).format(format)
+      else newSummaryRecord[newKey] = value
+    }
+
+    return newSummaryRecord
+  },
+  stateUrlParameters: (state, getters) => {
+    if (!state.stateFilter) return ''
+    var parms = `?stateFilter=${state.stateFilter.code}`
+    if (getters.geographicLevel) parms += `&amp;geographicLevel=${getters.geographicLevel.code}`
+    if (getters.localeFilter.length > 0) parms += `&amp;localeFilter=${_.map(getters.localeFilter, l => l.code).join(',')}`
+    if (getters.disasterFilter.length > 0) parms += `&amp;disasterFilter=${_.map(getters.disasterFilter, d => d.code).join(',')}`
+    return parms
+  }
+}
+
+const reportStore = {
+  state: {
+    disasterList: [],
+    geographicLevel: null,
+    localeList: [],
+    stateFilter: null,
+    summaryRecords: [],
+    showReport: false,
+    showReportSpinner: false
+  },
+  actions,
+  mutations,
+  getters
+}
+
+export default reportStore
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc" target="_blank">JSDoc 3.5.3</a> on 7/21/2017 using the <a href="https://github.com/Grafluxe/boxy-jsdoc-template" target="_blank">boxy-jsdoc-template</a> theme.
+</footer>
+
+<script src="scripts/prettify/prettify.js"></script>
+<script src="scripts/prettify/lang-css.js"></script>
+<script src="scripts/script.js"></script>
+
+</body>
+</html>

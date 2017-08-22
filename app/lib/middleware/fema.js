@@ -3,10 +3,10 @@ const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
 
-const getDisasters = function({filter, orderBy, top}, cb) {
+const getDisasters = function ({filter, orderBy, top}, cb) {
   const qry = {$filter: filter}
   if (orderBy) qry.$orderby = orderBy
-  if (top) qry.$top= top
+  if (top) qry.$top = top
 
   const qs = querystring.stringify(qry)
   const validCols = ['id', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType', 'declaredCountyArea', 'title']
@@ -20,7 +20,7 @@ const getDisasters = function({filter, orderBy, top}, cb) {
         return key === 'declarationDate' ? moment(value).format('MMMM DD, YYYY') : value
       })
     } catch (e) {
-      e.satus = response.statusCode
+      e.status = response.statusCode
       return cb(e)
     }
     cb(null, rollUpData(data))
