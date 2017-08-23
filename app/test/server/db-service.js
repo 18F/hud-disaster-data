@@ -3,13 +3,15 @@ const request = require('supertest')
 const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
 const hudApi = require('../../lib/middleware/hudApi')
+const thrownErrMsg = 'Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.'
 
 describe('/api/applicants/export', function () {
   this.timeout(10000)
 
   it('should return data when specifying a state/disasters combination', (done) => {
-    request(app).get('/api/applicants/export?state=IA&disasters=4187')
+    request(app).get('/api/applicants/export?states=IA&disasters=4187')
     .expect(function (res) {
+      debugger
       const body = res.body
       body.should.be.an.Array()
       body[0].should.be.an.Object().and.have.property('dster_id').which.is.equal('4187')
@@ -20,7 +22,7 @@ describe('/api/applicants/export', function () {
   })
 
   it('should return only columns that are specified as cols', (done) => {
-    request(app).get('/api/applicants/export?state=Tx&cols=dmge_city_name,dmge_state_cd')
+    request(app).get('/api/applicants/export?states=Tx&cols=dmge_city_name,dmge_state_cd')
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
@@ -33,20 +35,20 @@ describe('/api/applicants/export', function () {
   })
 
   it('should return failure code if specifying a localeType but not locales, or visa versa', (done) => {
-    request(app).get('/api/applicants/export?state=TX&localeType=city')
+    request(app).get('/api/applicants/export?states=TX&localeType=city')
     .expect(function (res) {
       const message = res.text
-      message.should.be.equal('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
+      message.should.be.equal(thrownErrMsg)
     })
     .expect(406)
     .expect('Content-Type', /text/, done)
   })
 
   it('should return failure code if specifying a locales but not localeType, or visa versa', (done) => {
-    request(app).get('/api/applicants/export?state=TX&locales=Alamo')
+    request(app).get('/api/applicants/export?states=TX&locales=Alamo')
     .expect(function (res) {
       const message = res.text
-      message.should.be.equal('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
+      message.should.be.equal(thrownErrMsg)
     })
     .expect(406)
     .expect('Content-Type', /text/, done)

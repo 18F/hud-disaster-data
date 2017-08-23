@@ -282,8 +282,8 @@ export default {
         level: this.$store.getters.geographicLevel.name
       }
 
-      if (this.$store.getters.stateFilter) allFilters.stateId = this.$store.getters.stateFilter.code
-      if (this.$store.getters.disasterFilter.length > 0) allFilters.disasterId = _.flatMap(this.$store.getters.disasterFilter, dstr => dstr.code.split('-')[1])
+      if (this.$store.getters.stateFilter) allFilters.states = this.$store.getters.stateFilter.code
+      if (this.$store.getters.disasterFilter.length > 0) allFilters.disasters = _.flatMap(this.$store.getters.disasterFilter, dstr => dstr.code.split('-')[1])
       if (this.$store.getters.geographicLevel && this.$store.getters.localeFilter.length > 0) {
         allFilters.localeType = this.$store.getters.geographicLevel.code.toLowerCase()
         allFilters.locales = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)

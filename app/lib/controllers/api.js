@@ -8,9 +8,13 @@ const csv = require('express-csv')
 const hudApi = require('../middleware/hudApi')
 const fema = require('../middleware/fema')
 const version = require('../../package.json').version
+const port = process.env.PORT ? process.env.PORT : process.env.PORT || 3000
+const requestPromise = require('request-promise')
+
 router.get('/version', function (req, res) {
   res.send(version)
 })
+
 router.get('/states/:state/disasters', function (req, res) {
   const state = req.params.state
   const queryParams = _.get(req, 'query')
@@ -108,30 +112,6 @@ router.get('/disasterquery/:qry', function (req, res) {
 })
 
 /**
-* router.get('/export/:fileNamePart') <br/>
-*  Generates a CSV file with all the columns from the database<br/>
-* @function get
-* @param {qry} - a comma separated list of disaster id's
-*/
-router.get('/export/:fileNamePart', function (req, res) {
-  var fileName = `hud-fema-data-${req.params.fileNamePart}`
-  var disasterNumbers = _.get(req, 'query.disasters').split(',')
-  if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
-  var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
-  var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
-  var results = hudApi.getData([{[hudApi.decodeField('state')]: states}, {[hudApi.decodeField('disaster')]: numbers}])
-  if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
-  var columns = []
-  for (var key in results[0]) columns.push(key)
-  var resultSet = [ columns ]
-  _.map(results, rec => {
-    resultSet.push(_.map(columns, col => { return rec[col] }))
-  })
-  res.setHeader('Content-disposition', `attachment; filename="${fileName}.csv"`)
-  res.csv(resultSet)
-})
-
-/**
 * router.get('/disasternumber/:qry') <br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data for specific disasters
 * @function get
@@ -154,6 +134,38 @@ router.get('/disasternumber/:qry', function (req, res) {
 })
 
 /**
+* router.get('/export/:fileNamePart') <br/>
+*  Generates a CSV file with all the columns from the database<br/>
+* @function get
+* @param {qry} - a comma separated list of disaster id's
+*/
+router.get('/export/:fileNamePart', function (req, res) {
+  console.log('inside /export/:fileNamePart')
+  var fileName = `hud-fema-data-${req.params.fileNamePart}`
+  var disasterNumbers = _.get(req, 'query.disasters').split(',')
+  if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
+  var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
+  var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
+  var query = `states=${states.join(',')}&disasters=${numbers.join(',')}`
+  const uri = `http://localhost:${port}/api/applicants/export?${query}`
+  console.log(`url: ${uri}`)
+  var error
+  requestPromise({ method: 'GET', uri, json: true })
+  .then(function (results) {
+    if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
+    if (error) return res.status(502).send(JSON.stringify(error))
+    var columns = []
+    for (var key in results[0]) columns.push(key)
+    var resultSet = [ columns ]
+    _.map(results, rec => {
+      resultSet.push(_.map(columns, col => { return rec[col] }))
+    })
+    res.setHeader('Content-disposition', `attachment; filename="${fileName}.csv"`)
+    res.csv(resultSet)
+  })
+})
+
+/**
 * router.get('/applicants/export') <br/>
 * @function get
 * @param {disasters}- a comma separated list of disaster id's
@@ -165,8 +177,14 @@ router.get('/disasternumber/:qry', function (req, res) {
 router.get('/applicants/:queryType', (req, res) => {
   var queryType = req.params.queryType
   if (queryType !== 'export' && queryType !== 'summary') {
-    res.status(406).send('Invalid url. Not Acceptable.')
-    return
+    return res.status(406).send('Invalid url. Not Acceptable.')
+  }
+  var validKeys = ['disasters', 'states', 'locales', 'localeType', 'cols']
+  var passedKeys = _.keys(req.query)
+  for (var i in passedKeys) {
+    if (_.indexOf(validKeys, passedKeys[i]) === -1) {
+      return res.status(406).send(`Improper query parameters sent. You must only use ${validKeys}. Not Acceptable.`)
+    }
   }
   var summaryCols
   var selectCols
@@ -177,7 +195,7 @@ router.get('/applicants/:queryType', (req, res) => {
 
   var disasters = _.get(req.query, 'disasters')
   if (disasters) disasters = disasters.split(',')
-  var stateId = _.get(req.query, 'stateId')
+  var stateId = _.get(req.query, 'states')
   if (stateId) stateId = stateId.toUpperCase().split(',')
   var locales = _.get(req.query, 'locales')
   if (locales) {
@@ -187,8 +205,7 @@ router.get('/applicants/:queryType', (req, res) => {
   }
   var localeType = hudApi.decodeField(_.get(req.query, 'localeType'))
   if ((localeType && !locales) || (!localeType && locales)) {
-    res.status(406).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
-    return
+    return res.status(406).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
   }
   var queryObj = []
   if (disasters) queryObj.push({[hudApi.decodeField('disaster')]: disasters})

@@ -6,7 +6,8 @@ const app = require('../../app.js')
 describe('/api/export/:fileNamePart', function () {
   this.timeout(10000)
 
-  it('should return a document with a csv attachment', (done) => {
+  it.only('should return a document with a csv attachment', (done) => {
+    debugger
     request(app).get('/api/export/My_Document_Name?disasters=DR-4187-IA')
     .expect(function (res) {
       const headers = res.headers
