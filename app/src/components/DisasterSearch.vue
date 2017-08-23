@@ -95,4 +95,5 @@ export default {
   }
 }
 </script>
-<style src="../../public/assets/_scss/app.scss" lang="scss"/>
+<style src="../../public/assets/_scss/app.scss" lang="scss">
+</style>
