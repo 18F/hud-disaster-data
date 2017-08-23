@@ -10,11 +10,33 @@ const fema = require('../middleware/fema')
 const version = require('../../package.json').version
 const port = process.env.PORT ? process.env.PORT : process.env.PORT || 3000
 const requestPromise = require('request-promise')
+/**
+* Creates the routes for the backend functionality. <br/>
+*
+* @module lib/controllers/api
+*/
 
+/**
+* router.get('/version') <br/>
+* @returns  will display the version number of the application <br/>
+* @function /version
+*
+**/
 router.get('/version', function (req, res) {
   res.send(version)
 })
 
+/**
+* router.get('/states/:state/disasters') <br/>
+*  will return a list of disasters for a state, optionally filtered by a list locales <br/>
+* @function  /states/:state/disasters
+* @returns array of disaster numbers
+* @example // returns disaster array that is limited by the specified locales (in this case, the Wisconsin cities Madison and Monroe)
+*  get /states/WI/disasters?city=Madison,Monroe
+* @param {string} :state - a state id
+* @param {string} localeType - (optional) a geographic level (city, county, congrdist)
+* @param {string} locales - (optional) a comma separated list of locales by which to filter the disasters
+**/
 router.get('/states/:state/disasters', function (req, res) {
   const state = req.params.state
   const queryParams = _.get(req, 'query')
@@ -44,9 +66,13 @@ router.get('/states/:state/disasters', function (req, res) {
 
 /**
 * router.get('/states/:stateId/:localeType') <br/>
-* @function get
-* @param {stateId}- a state id
-* @param {localeType}- a geographic level (city, county, congrdist)
+*  will return a list of disasters for a state, optionally filtered by a list locales <br/>
+* @function  /states/:stateId/:localeType
+* @returns array of locales
+* @example // returns array of locales (in this case, the Texas Congressional Districts)
+*  get /states/TX/congrdist
+* @param {string} :stateId - a state id
+* @param {string} :localeType - a geographic level (city, county, congrdist)
 **/
 router.get('/states/:stateId/:localeType', (req, res) => {
   var stateId = req.params.stateId.toUpperCase()
@@ -60,10 +86,6 @@ router.get('/states/:stateId/:localeType', (req, res) => {
   res.json(results)
 })
 
-/**
-* Creates the routes for the backend functionality.
-* @module lib/controllers/api
-*/
 /**
 * @swagger
 * /disasterquery/{qry}:
@@ -89,9 +111,14 @@ router.get('/states/:stateId/:localeType', (req, res) => {
 /**
 * router.get('/disasterquery/:qry') <br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data
-* @function get
-* @param {qry} - one or more of: the disaster type, the disaster number, the state. If more than one, needs to start with disaster type,
+* @function  /disasterquery/:qry
+* @param {string} :qry - one or more of: the disaster type, the disaster number, the state. If more than one, needs to start with disaster type,
 * followed by a dash (-), followed by diaster number, optionally followed by another dash and the state abbreviation.
+* @example // returns array of disasters (in this case, of disasterType DR)
+*  get /disasterquery/DR
+*
+* // returns array of disasters (in this case, of disasterNumber 4311)
+*  get /disasterquery/4311
 */
 router.get('/disasterquery/:qry', function (req, res) {
   const qryParts = req.params.qry.replace(/-$/, '').toUpperCase().split('-')
@@ -114,8 +141,10 @@ router.get('/disasterquery/:qry', function (req, res) {
 /**
 * router.get('/disasternumber/:qry') <br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data for specific disasters
-* @function get
-* @param {qry}- a comma separated list of disaster id's
+* @function /disasternumber/:qry
+* @param {string} :qry - a comma separated list of disaster id's
+* @example // returns disaster array that is limited by the specified disasters (in this case, the Wisconsin cities Madison and Monroe)
+*  get /disasternumber/DR-4311-UT,FM-5130-UT,FM-5182-WA
 */
 router.get('/disasternumber/:qry', function (req, res) {
   const disasterNbrs = req.params.qry.toUpperCase().split(',')
@@ -136,8 +165,11 @@ router.get('/disasternumber/:qry', function (req, res) {
 /**
 * router.get('/export/:fileNamePart') <br/>
 *  Generates a CSV file with all the columns from the database<br/>
-* @function get
-* @param {qry} - a comma separated list of disaster id's
+* @function /export/:fileNamePart
+* @param {string} :fileNamePart - a string that will be appended to 'hud-fema-data-' to form the download filename
+* @param {string} disasters - a comma separated list of disaster id's
+* @example // returns CSV for disasters DR-4311-UT,FM-5130-UT, and FM-5182-WA with download filename set to hud-fema-data-MY_FILE_NAME
+*  get /export/MY_FILE_NAME?disasters=DR-4311-UT,FM-5130-UT,FM-5182-WA
 */
 router.get('/export/:fileNamePart', function (req, res) {
   console.log('inside /export/:fileNamePart')
@@ -166,13 +198,20 @@ router.get('/export/:fileNamePart', function (req, res) {
 })
 
 /**
-* router.get('/applicants/export') <br/>
-* @function get
-* @param {disasters}- a comma separated list of disaster id's
-* @param {state}- a state id
-* @param {localeType}- a type of geographic area
-* @param {locales}- a comma separated list of geographic area's, requires specifying geoName
-* @param {cols}- a comma separated list of columns to be returned, or to be returned with the summed values
+* router.get('/applicants/:queryType') <br/>
+*
+* @function /applicants/:queryType
+* @returns {JSON} - household level data or summary data, filtered by other parameters
+* @param {string} :queryType - either summary or export
+* @param {string} disasters - a comma separated list of disaster id's
+* @param {string} state - a state id
+* @param {string} localeType - a type of geographic area
+* @param {string} locales - a comma separated list of geographic area's, requires specifying geoName
+* @param {string} cols - a comma separated list of columns to be returned, or to be returned with the summed values
+* @example // returns JSON with all columns of household level data for disasters 4311,5130, and 5182
+*  get /applicants/export?disasters=4311,5130,5182
+* // returns JSON with summarized columns numberOfRecords (automatically added to returned columns for summary), total_dmge_amnt, and hud_unmt_need_amnt of household level data for Wisconsin cities Madison and Monroe
+*  get /applicants/summary?states=WI&localeType=city&locales=Madison,Monroe&cols=total_dmge_amnt,hud_unmt_need_amnt
 **/
 router.get('/applicants/:queryType', (req, res) => {
   var queryType = req.params.queryType
