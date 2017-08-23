@@ -350,7 +350,7 @@ export default {
   font-size:17px;
 
   .rp-container {
-    background:url('../../static/img/bg_50_opacity.png');
+    background:url('/femadata/static/img/bg_50_opacity.png');
     border-radius:10px;
     min-height:700px;
     padding:0 20px;
@@ -385,7 +385,7 @@ export default {
         min-height:300px;
 
         .locale {
-          background:url('/static/img/bg_25_opacity.png');
+          background:url('/femadata/static/img/bg_25_opacity.png');
           padding:10px;
 
           .add-locale {
@@ -415,7 +415,7 @@ export default {
           }
         }
         .disaster-selection-list {
-          background:url('/static/img/bg_25_opacity.png');
+          background:url('/femadata/static/img/bg_25_opacity.png');
           clear:left;
         }
       }

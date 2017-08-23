@@ -206,7 +206,7 @@ table { margin:0; }
   }
 
   .report-shell {
-    background: url('/static/img/bg_50_opacity.png');
+    background: url('/femadata/static/img/bg_50_opacity.png');
     /* border:1px solid #5b616b; */
     height:505px;
     padding-top:18%;

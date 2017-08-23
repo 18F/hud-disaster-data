@@ -325,7 +325,10 @@ describe('SelectLocationSideBar component', function () {
       })
     })
     it('should trigger disaster filter if locale is selected', function (done) {
-      vm.$store.getters.localeFilter = () => { return [{ code: 'HOUSTON', name: 'Houston' }] }
+      getters.localeFilter = () => { return [{ code: 'HOUSTON', name: 'Houston' }] }
+      store = new Vuex.Store({state: {}, mutations, getters, actions})
+      Constructor = Vue.extend(SelectLocationSideBar)
+      vm = new Constructor({store}).$mount()
       vm.localeSelected = {name: 'HOUSTON', code: 'HOUSTON'}
       vm.stateSelected = {code: 'WI'}
       let dispatchSpy = sinon.spy(vm.$store, 'dispatch')

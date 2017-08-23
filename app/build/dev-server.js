@@ -35,9 +35,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 var compiler = webpack(webpackConfig)
-
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
+  index: 'index.html',
   quiet: true
 })
 
@@ -61,9 +61,6 @@ Object.keys(proxyTable).forEach(function (context) {
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
-// handle fallback for HTML5 history API
-app.use(require('connect-history-api-fallback')())
-
 // serve webpack bundle output
 app.use(devMiddleware)
 
@@ -78,7 +75,10 @@ app.use(`${contextRoot}/api`, require('../lib/controllers/api'))
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
 
-var uri = 'http://localhost:' + port
+// handle fallback for HTML5 history API
+app.use(require('connect-history-api-fallback')())
+
+var uri = `http://localhost:${port}${contextRoot}/`
 
 var _resolve
 var readyPromise = new Promise(resolve => {
