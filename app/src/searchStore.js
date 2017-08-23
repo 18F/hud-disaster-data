@@ -72,6 +72,7 @@ export const mutations = {
   @param {String} name - Name of the list to load
   */
   loadExtract: function (state, name) {
+    if (!name) { return false }
     mutations.clearCurrentExtract(state, true)
     let savedExtracts = loadSavedExtracts()
     let disasterNumbers = _.find(savedExtracts, {name}).disasters.join()
