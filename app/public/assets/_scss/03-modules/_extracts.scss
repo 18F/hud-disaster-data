@@ -2,7 +2,7 @@
 
 /* Extract list styles --------------------------------- */
 .extracts {
-  background: url('/femadata/static/img/bg_50_opacity.png');
+  background: url('../../../static/img/bg_50_opacity.png');
   overflow:hidden;
   border-radius:10px;
   padding:20px;
@@ -114,7 +114,7 @@
   }
 
   div#list {
-    background: url('/femadata/static/img/bg_25_opacity.png');
+    background: url('../../../static/img/bg_25_opacity.png');
     border:1px solid #353434;
     clear:both;
     overflow-y:scroll;

@@ -21,9 +21,9 @@
 
 }
 
-@font-face {  
+@font-face {
     font-family: 'Source Sans Pro';
-    font-style: italic;          
+    font-style: italic;
     font-weight: 400;
     src: url('../fonts/sourcesanspro-italic-webfont.eot');
     src: url('../fonts/sourcesanspro-italic-webfont.eot?#iefix') format('embedded-opentype'),
@@ -57,9 +57,9 @@
 
 }
 
-@font-face {  
+@font-face {
     font-family: 'Merriweather';
-    font-style: normal;          
+    font-style: normal;
     font-weight: 400;
     src: url('../fonts/merriweather-regular-webfont.eot');
     src: url('../fonts/merriweather-regular-webfont.eot?#iefix') format('embedded-opentype'),
@@ -69,9 +69,9 @@
 
 }
 
-@font-face {  
+@font-face {
     font-family: 'Merriweather';
-    font-style: italic;          
+    font-style: italic;
     font-weight: 400;
     src: url('../fonts/merriweather-italic-webfont.eot');
     src: url('../fonts/merriweather-italic-webfont.eot?#iefix') format('embedded-opentype'),

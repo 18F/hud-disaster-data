@@ -1,14 +1,15 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
-var contextRoot = require('../src/util').contextRoot
+var contextRoot = '/femadata'
 
-module.exports = {
+const config = {
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: `${contextRoot}/`,
+    contextRoot: contextRoot,
+    assetsPublicPath: '../../',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -27,7 +28,8 @@ module.exports = {
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
-    assetsPublicPath: `${contextRoot}/`,
+    contextRoot: `${contextRoot}Dev`,
+    assetsPublicPath: '../../',
     proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
@@ -35,5 +37,23 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: false
+  },
+  test: {
+    contextRoot: `${contextRoot}Test`,
+    assetsPublicPath: '../../'
+  },
+  stage: {
+    contextRoot: `${contextRoot}Stage`,
+    assetsPublicPath: '../../'
   }
 }
+
+config.get = function () {
+  let env = process.env.NODE_ENV
+  if (/prod/.test(env)) return config.build
+  if (/stag/.test(env)) return config.stage
+  if (/test/.test(env)) return config.test
+  return config.dev
+}
+
+module.exports = config

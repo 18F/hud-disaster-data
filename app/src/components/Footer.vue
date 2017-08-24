@@ -18,6 +18,6 @@
       .container-block.signature
         div.row
             div.col-lg-2
-                img(src='/femadata/static/img/logo_global-blue.svg', alt='U.S. Department of Housing and Urban Development Logo')
+                img(src='static/img/logo_global-blue.svg', alt='U.S. Department of Housing and Urban Development Logo')
             div.col-lg-10
 </template>

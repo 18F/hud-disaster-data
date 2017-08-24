@@ -1,5 +1,5 @@
 require('./check-versions')()
-const contextRoot = require('../src/util').contextRoot
+const contextRoot = require('../config').get().contextRoot
 /**
 *  Generated from the vue cli tool. We modified it slightly to fit our needs.  This is the part of the devops that runs the dev server.
 * @module build/dev-server

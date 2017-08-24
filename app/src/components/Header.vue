@@ -17,7 +17,7 @@
           .row.gov-banner-inner
             .col-lg-6
               .col-lg-2.gov-banner-img
-                img(src='/femadata/static/img/icon-dot-gov.svg', alt='Official U.S.gov website seal')
+                img(src='static/img/icon-dot-gov.svg', alt='Official U.S.gov website seal')
               .col-lg-10.gov-banner-text
                 span(style='font-weight:bold;') The .gov means it’s official.
                 |                   Federal government websites always use a .gov or .mil domain. Before sharing sensitive
@@ -25,7 +25,7 @@
                 |                   address (or “location”) bar.
             .col-lg-6
               .col-lg-2.gov-banner-img
-                img(src='/femadata/static/img/icon-https.svg', alt='Official secure sockets layer endorsement seal')
+                img(src='static/img/icon-https.svg', alt='Official secure sockets layer endorsement seal')
               .col-lg-10.gov-banner-text
                 | This site is also protected by an SSL (Secure Sockets Layer) certificate that’s been signed
                 | by the U.S. government. The https:// means all transmitted data is encrypted  — in other

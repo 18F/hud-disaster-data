@@ -8,7 +8,7 @@ const cookieSession = require('cookie-session')
 const morgan = require('morgan')
 
 const apiController = require('./lib/controllers/api')
-const contextRoot = require('./src/util').contextRoot
+const contextRoot = require('./config').get().contextRoot
 require('./lib/swagger')(app)
 // const controllers = require('./lib/controllers');
 // const mainController = controllers.main;

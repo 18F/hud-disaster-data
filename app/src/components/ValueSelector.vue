@@ -101,7 +101,7 @@ export default {
 
     .summary-selection-list {
       //background-color:#000;
-      background: url("/femadata/static/img/bg_90_opacity.png");
+      background: url("../../static/img/bg_90_opacity.png");
       box-shadow:5px 5px 10px rgba(0,0,0,0.5);
       position: absolute;
       right:0;

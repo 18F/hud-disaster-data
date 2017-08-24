@@ -8,7 +8,7 @@ const cookieSession = require('cookie-session')
 const morgan = require('morgan')
 
 const apiController = require('./lib/controllers/api')
-const contextRoot = require('./src/util').contextRoot
+const contextRoot = require('./config').get().contextRoot
 require('./lib/swagger')(app)
 // const controllers = require('./lib/controllers');
 // const mainController = controllers.main;
@@ -34,6 +34,7 @@ app.use(`${contextRoot}/api`, apiController)
 app.use(require('connect-history-api-fallback')())
 
 const staticDir = path.join(__dirname, 'dist')
+
 app.use(express.static(staticDir))
 app.use(contextRoot,express.static(staticDir))
 // app.use(flash())
