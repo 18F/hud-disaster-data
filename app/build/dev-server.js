@@ -34,9 +34,12 @@ app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
+webpackConfig.output.publicPath = `${contextRoot}/`
 var compiler = webpack(webpackConfig)
+
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
+  // publicPath: `${contextRoot}/`,
   index: 'index.html',
   quiet: true
 })
@@ -72,8 +75,7 @@ app.use('/api', require('../lib/controllers/api'))
 app.use(`${contextRoot}/api`, require('../lib/controllers/api'))
 
 // serve pure static assets
-var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(staticPath, express.static('./static'))
+app.use(`${contextRoot}/static`, express.static('./static'))
 
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
