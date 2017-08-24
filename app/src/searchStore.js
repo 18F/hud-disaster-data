@@ -77,7 +77,6 @@ export const mutations = {
     mutations.clearCurrentExtract(state, true)
     let savedExtracts = loadSavedExtracts()
     let disasterNumbers = _.find(savedExtracts, {name}).disasters
-    debugger
     if (user.disasterids.length > 0) {
       _.remove(disasterNumbers, (d) => {
         return _.indexOf(user.disasterids, _.parseInt(d.split('-')[1])) === -1
