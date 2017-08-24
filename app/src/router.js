@@ -32,12 +32,13 @@ DisasterSearch.beforeRouteEnter = beforeRouteEnter
 Report.beforeRouteEnter = beforeRouteEnter
 
 const routes = [
-  { path: '/femadata/', name: 'disasterSearch', component: DisasterSearch },
-  { path: '/femadata/reports', name: 'reports', component: Report }
+  { path: '/', name: 'disasterSearch', component: DisasterSearch },
+  { path: '/reports', name: 'reports', component: Report }
 ]
 
 const router = new VueRouter({
   mode: 'history',
+  base: window.location.pathname,
   routes,
   linkExactActiveClass: 'selected'
 })

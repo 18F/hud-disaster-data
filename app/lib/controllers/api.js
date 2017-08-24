@@ -8,7 +8,6 @@ const csv = require('express-csv')
 const hudApi = require('../middleware/hudApi')
 const fema = require('../middleware/fema')
 const version = require('../../package.json').version
-const port = process.env.PORT ? process.env.PORT : process.env.PORT || 3000
 const requestPromise = require('request-promise')
 /**
 * Creates the routes for the backend functionality. <br/>
@@ -172,14 +171,13 @@ router.get('/disasternumber/:qry', function (req, res) {
 *  get /export/MY_FILE_NAME?disasters=DR-4311-UT,FM-5130-UT,FM-5182-WA
 */
 router.get('/export/:fileNamePart', function (req, res) {
-  console.log('inside /export/:fileNamePart')
   var fileName = `hud-fema-data-${req.params.fileNamePart}`
   var disasterNumbers = _.get(req, 'query.disasters').split(',')
   if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
   var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
   var query = `states=${states.join(',')}&disasters=${numbers.join(',')}`
-  const uri = `http://localhost:${port}/api/applicants/export?${query}`
+  const uri = `http://${req.headers.host}/api/applicants/export?${query}`
   console.log(`url: ${uri}`)
   var error
   requestPromise({ method: 'GET', uri, json: true })

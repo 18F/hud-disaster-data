@@ -12,7 +12,7 @@ span {
 }
 
 #opaque-bg {
-  background: url('/femadata/static/img/bg_50_opacity.png');
+  background: url('../../../static/img/bg_50_opacity.png');
   @include media($large-screen) {
     border-radius:10px 0 0 10px;
   }

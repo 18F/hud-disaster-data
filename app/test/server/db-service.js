@@ -11,7 +11,6 @@ describe('/api/applicants/export', function () {
   it('should return data when specifying a state/disasters combination', (done) => {
     request(app).get('/api/applicants/export?states=IA&disasters=4187')
     .expect(function (res) {
-      debugger
       const body = res.body
       body.should.be.an.Array()
       body[0].should.be.an.Object().and.have.property('dster_id').which.is.equal('4187')
