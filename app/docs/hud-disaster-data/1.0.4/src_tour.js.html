@@ -1,4 +1,41 @@
-import Shepherd from 'tether-shepherd'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>src/tour.js - Documentation</title>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <span class="navicon"></span>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-build_dev-server.html">build/dev-server</a></li><li><a href="module-bus.html">bus</a></li><li><a href="module-components_App.html">components/App</a></li><li><a href="module-components_Disaster.html">components/Disaster</a></li><li><a href="module-components_DisasterSearch.html">components/DisasterSearch</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_DisasterSearch.html#~update">update</a></li></ul></li><li><a href="module-components_Header.html">components/Header</a></li><li><a href="module-components_Icon.html">components/Icon</a></li><li><a href="module-components_Message.html">components/Message</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_Message.html#~displayMessage">displayMessage</a></li></ul></li><li><a href="module-components_Report.html">components/Report</a></li><li><a href="module-components_SavedExtracts.html">components/SavedExtracts</a></li><li><a href="module-components_Sprites.html">components/Sprites</a></li><li><a href="module-lib_controllers_api.html">lib/controllers/api</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-lib_controllers_api.html#~/applicants/:queryType">/applicants/:queryType</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/disasternumber/:qry">/disasternumber/:qry</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/disasterquery/:qry">/disasterquery/:qry</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/export/:fileNamePart">/export/:fileNamePart</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/states/:state/disasters">/states/:state/disasters</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/states/:stateId/:localeType">/states/:stateId/:localeType</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/version">/version</a></li></ul></li><li><a href="module-reportStore.html">reportStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-reportStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-reportStore.html#~updateReportDisasterList">updateReportDisasterList</a></li></ul></li><li><a href="module-router.html">router</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-router.html#.beforeRouteEnter">beforeRouteEnter</a></li></ul></li><li><a href="module-searchStore.html">searchStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-searchStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-searchStore.html#~clearCurrentExtract">clearCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~clearSearch">clearSearch</a></li><li data-type='method'><a href="module-searchStore.html#~deleteExtract">deleteExtract</a></li><li data-type='method'><a href="module-searchStore.html#~loadExtract">loadExtract</a></li><li data-type='method'><a href="module-searchStore.html#~resetStatus">resetStatus</a></li><li data-type='method'><a href="module-searchStore.html#~saveExtract">saveExtract</a></li><li data-type='method'><a href="module-searchStore.html#~setSearchLoading">setSearchLoading</a></li><li data-type='method'><a href="module-searchStore.html#~setStatus">setStatus</a></li><li data-type='method'><a href="module-searchStore.html#~toggleCurrentExtract">toggleCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~updateDisasterList">updateDisasterList</a></li></ul></li><li><a href="module-store.html">store</a></li><li><a href="module-tour.html">tour</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-tour.html#~clearTabIndex">clearTabIndex</a></li><li data-type='method'><a href="module-tour.html#~removeObserver">removeObserver</a></li><li data-type='method'><a href="module-tour.html#~restoreTabIndex">restoreTabIndex</a></li></ul></li><li><a href="module-vueMixins.html">vueMixins</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-vueMixins.html#~iconName">iconName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/tour.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Shepherd from 'tether-shepherd'
 import 'babel-polyfill'
 import magic from '@/bus'
 import _ from 'lodash'
@@ -36,7 +73,7 @@ const getTabIndex = function (node) {
   } else {
     if (index === -1) {
       var attr = node.getAttribute('tabindex')
-      if (attr == null || (attr === '' && !util.isGecko())) return null
+      if (attr == null || (attr === '' &amp;&amp; !util.isGecko())) return null
     }
   }
   return index
@@ -98,7 +135,7 @@ export const restoreElementTabIndex = function (el) {
 * @param {HTMLElement} target - Restore the tabIndex of target and it's descendents
 */
 export const restoreTabIndex = function (target) {
-  if (target && target.hasAttribute('data-tabindex')) restoreElementTabIndex(target)
+  if (target &amp;&amp; target.hasAttribute('data-tabindex')) restoreElementTabIndex(target)
   target = target || document
   let tabElements = target.querySelectorAll('[data-tabindex]')
   _.each(tabElements, restoreElementTabIndex)
@@ -121,7 +158,7 @@ const disasterSearchTour = new Shepherd.Tour({
       show: function () {
         _.each(document.querySelectorAll('.shepherd-cancel-link'), link => {
           link.textContent = ''
-          link.innerHTML = '<svg class="hdd-icon"><use xlink:href="#fa-times"></use></svg>'
+          link.innerHTML = '&lt;svg class="hdd-icon">&lt;use xlink:href="#fa-times">&lt;/use>&lt;/svg>'
           link.tabIndex = 0
         })
         _.each(document.querySelectorAll('.shepherd-button '), button => {
@@ -133,7 +170,7 @@ const disasterSearchTour = new Shepherd.Tour({
         _.each(document.querySelectorAll('.shepherd-content'), step => {
           setAccessiblityContent(step)
         })
-        if (this && typeof this.getAttachTo !== 'undefined') restoreTabIndex(this.getAttachTo().element)
+        if (this &amp;&amp; typeof this.getAttachTo !== 'undefined') restoreTabIndex(this.getAttachTo().element)
       }
     }
   }
@@ -159,31 +196,31 @@ let next = {
   }
 }
 let disasterLink = `
-    <p>
+    &lt;p>
     Don’t know the disaster ID?
-    Look it up in <a target="_blank" href="https://www.fema.gov/disasters" class="tabbable">FEMA’s disaster database</a>.
-    </p>`
+    Look it up in &lt;a target="_blank" href="https://www.fema.gov/disasters" class="tabbable">FEMA’s disaster database&lt;/a>.
+    &lt;/p>`
 disasterSearchTour.addStep('enter-search', {
   title: 'Search for a disaster',
   text: `
-    <div class="tour-message">
-      <p>
+    &lt;div class="tour-message">
+      &lt;p>
       Start here by typing in a FEMA disaster ID and clicking the magnifying glass icon.
-      </p>
-      <p>
+      &lt;/p>
+      &lt;p>
       These IDs follow the format "DR‐4272‐TX" But you can also type "4272".
-      </p>
-      <p>
+      &lt;/p>
+      &lt;p>
       If you want to see all the recent disasters in a state, type the 2-letter state code (examples, "TX", "CA", "FL").
-      </p>
+      &lt;/p>
       ${disasterLink}
-    </div>
-    <div class="tour-error" style="display:none;">
-      <p>
+    &lt;/div>
+    &lt;div class="tour-error" style="display:none;">
+      &lt;p>
       Please enter a valid state code or disaster ID, for example "4272". Then click the magnifying glass icon.
-      </p>
+      &lt;/p>
       ${disasterLink}
-    </div>
+    &lt;/div>
     `,
   attachTo: '.search-wrapper bottom',
   when: {
@@ -222,19 +259,19 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('select-disasters', {
   title: 'Select a disaster',
   text: `
-    <div class="tour-message">
-      <p>
+    &lt;div class="tour-message">
+      &lt;p>
       To select a disaster, click the checkbox located under the disaster ID.
-      </p>
-    </div>
-    <div class="tour-error" style="display:none;">
-      <p>
+      &lt;/p>
+    &lt;/div>
+    &lt;div class="tour-error" style="display:none;">
+      &lt;p>
       No disasters selected.
-      </p>
-      <p>
+      &lt;/p>
+      &lt;p>
       Please select a disaster.
-      </p>
-    </div>
+      &lt;/p>
+    &lt;/div>
     `,
   attachTo: '.disaster-list bottom',
   when: {
@@ -271,14 +308,14 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('selected-export-data', {
   title: 'Disaster selected',
   text: `
-  <p>
+  &lt;p>
   You’ve selected a disaster and it is now listed in the selected disasters list.
   You can export the associated FEMA data now or save this search to export the data in the future.
   You can also search for additional disasters to add to this list.
-  </p>
-  <p>
+  &lt;/p>
+  &lt;p>
   First, let’s try exporting the data.
-  </p>
+  &lt;/p>
   `,
   buttons: [back, next],
   attachTo: '#list bottom',
@@ -293,8 +330,8 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('export-data', {
   title: 'Export data',
   text: `
-  <p>To get household level data for the disaster selected, click the export button.</p>
-  <p>Your computer will download a CSV-formatted file.</p>
+  &lt;p>To get household level data for the disaster selected, click the export button.&lt;/p>
+  &lt;p>Your computer will download a CSV-formatted file.&lt;/p>
   `,
   attachTo: '#export-button bottom',
   buttons: [
@@ -315,17 +352,17 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('mutiple-enter-search', {
   title: 'Add to your list',
   text: `
-  <div class="tour-message">
-    <p>
+  &lt;div class="tour-message">
+    &lt;p>
     If you want to export data for multiple disasters at the same time, you can search for another disaster and add it to the list.
-    </p>
-    <p>
+    &lt;/p>
+    &lt;p>
     Try typing in the 2-letter state code for your state (example, "TX", "LA", "CA")
-    </p>
-  </div>
-  <div class="tour-error" style="display:none;">
+    &lt;/p>
+  &lt;/div>
+  &lt;div class="tour-error" style="display:none;">
     Please enter a valid 2-letter state code, such as "TX", and click the magnifying glass icon.
-  </div>
+  &lt;/div>
   `,
   attachTo: '.search-wrapper bottom',
   when: {
@@ -372,18 +409,18 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('multiple-select-disasters', {
   title: 'Select another disaster',
   text: `
-    <div class="tour-message">
-      <p>
+    &lt;div class="tour-message">
+      &lt;p>
       Here are all the recent disasters in your state.
       Select additional disasters by clicking the checkbox located under the disaster ID.
-      </p>
-    </div>
-    <div class="tour-error" style="display:none;">
-      <p>
+      &lt;/p>
+    &lt;/div>
+    &lt;div class="tour-error" style="display:none;">
+      &lt;p>
       Less than 2 disasters selected.
       Please select multiple disasters.
-      </p>
-    </div>
+      &lt;/p>
+    &lt;/div>
     `,
   attachTo: '.disaster-list bottom',
   when: {
@@ -405,7 +442,7 @@ disasterSearchTour.addStep('enter-search', {
       text: 'Next',
       action: () => {
         let step = disasterSearchTour.getCurrentStep()
-        if ($store.getters.currentExtract.length < 2) {
+        if ($store.getters.currentExtract.length &lt; 2) {
           step.hide()
           TourObject.showError()
           step.error = true
@@ -420,17 +457,17 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('save-search', {
   title: 'Name and save your list',
   text: `
-  <div class="tour-message">
-  <p>
+  &lt;div class="tour-message">
+  &lt;p>
   You now have multiple disasters listed within your selected disaster list.
-  </p>
-  <p>
+  &lt;/p>
+  &lt;p>
   Please enter a name in the name input field and click the save button to the right.
-  </p>
-  </div>
-  <div class="tour-error" style="display:none;">
+  &lt;/p>
+  &lt;/div>
+  &lt;div class="tour-error" style="display:none;">
     Please enter a unique name for your disaster list and click the save button.
-  </div>
+  &lt;/div>
   `,
   attachTo: '#saved_searches bottom',
   buttons: [back,
@@ -453,16 +490,16 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('use-saved-search', {
   title: 'Access saved disaster list',
   text: `
-    <p>
+    &lt;p>
     Congratulations!
-    </p>
-    <p>
+    &lt;/p>
+    &lt;p>
     You have successfully created a saved disaster list!
-    </p>
-    <p>
+    &lt;/p>
+    &lt;p>
     It can be now be be accessed at any time when selected in the "Saved Disaster Lists" dropdown selector.
-    </p>
-  </div>
+    &lt;/p>
+  &lt;/div>
   `,
   attachTo: '#saved_searches bottom',
   buttons: [back, next]
@@ -470,10 +507,10 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('deselect-disaster', {
   title: 'Remove from list',
   text: `
-    <p>
+    &lt;p>
     If you want to remove a specific disaster from your list, deselect it by clicking the checkbox under the disaster ID.
-    </p>
-  </div>
+    &lt;/p>
+  &lt;/div>
   `,
   attachTo: '#list bottom',
   buttons: [back, next]
@@ -481,10 +518,10 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('clear-current-extract', {
   title: 'Clear list',
   text: `
-    <p>
+    &lt;p>
     If you want to clear all the disasters in your list and start over, click the clear button.
-    </p>
-  </div>
+    &lt;/p>
+  &lt;/div>
   `,
   attachTo: '#clear-button top',
   buttons: [back,
@@ -500,10 +537,10 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('select-previous-search', {
   title: 'Select a previously saved list',
   text: `
-    <p>
+    &lt;p>
     If you want to select a previously saved list of disaster(s), select an option from the dropdown list.
-    </p>
-  </div>
+    &lt;/p>
+  &lt;/div>
   `,
   attachTo: '#saved_searches bottom',
   buttons: [back, next]
@@ -511,13 +548,13 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('delete-saved-search', {
   title: 'Delete previously saved list',
   text: `
-    <p>
+    &lt;p>
     If you want to delete a previously saved list of disaster(s), select an option from the dropdown to load, then click the delete button.
-    </p>
-    <p>
+    &lt;/p>
+    &lt;p>
     Warning: this will actually delete the list. If you do not want to delete a list, click Next.
-    </p>
-  </div>
+    &lt;/p>
+  &lt;/div>
   `,
   attachTo: '#saved_searches bottom',
   buttons: [back, next]
@@ -525,10 +562,10 @@ disasterSearchTour.addStep('enter-search', {
 .addStep('end-of-tour', {
   title: 'Complete',
   text: `
-    <p>
+    &lt;p>
     Congratulations, you have completed the guided experience. Click here (link: FAQ) if you have additional questions.
-    </p>
-  </div>
+    &lt;/p>
+  &lt;/div>
   `,
   buttons: [back,
     {
@@ -564,3 +601,25 @@ const TourObject = {
   getTabIndex
 }
 export default TourObject
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc" target="_blank">JSDoc 3.5.3</a> on 7/23/2017 using the <a href="https://github.com/Grafluxe/boxy-jsdoc-template" target="_blank">boxy-jsdoc-template</a> theme.
+</footer>
+
+<script src="scripts/prettify/prettify.js"></script>
+<script src="scripts/prettify/lang-css.js"></script>
+<script src="scripts/script.js"></script>
+
+</body>
+</html>

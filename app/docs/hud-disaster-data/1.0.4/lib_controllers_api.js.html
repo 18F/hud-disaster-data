@@ -1,4 +1,41 @@
-const express = require('express')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>lib/controllers/api.js - Documentation</title>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <span class="navicon"></span>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-build_dev-server.html">build/dev-server</a></li><li><a href="module-bus.html">bus</a></li><li><a href="module-components_App.html">components/App</a></li><li><a href="module-components_Disaster.html">components/Disaster</a></li><li><a href="module-components_DisasterSearch.html">components/DisasterSearch</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_DisasterSearch.html#~update">update</a></li></ul></li><li><a href="module-components_Header.html">components/Header</a></li><li><a href="module-components_Icon.html">components/Icon</a></li><li><a href="module-components_Message.html">components/Message</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_Message.html#~displayMessage">displayMessage</a></li></ul></li><li><a href="module-components_Report.html">components/Report</a></li><li><a href="module-components_SavedExtracts.html">components/SavedExtracts</a></li><li><a href="module-components_Sprites.html">components/Sprites</a></li><li><a href="module-lib_controllers_api.html">lib/controllers/api</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-lib_controllers_api.html#~/applicants/:queryType">/applicants/:queryType</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/disasternumber/:qry">/disasternumber/:qry</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/disasterquery/:qry">/disasterquery/:qry</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/export/:fileNamePart">/export/:fileNamePart</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/states/:state/disasters">/states/:state/disasters</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/states/:stateId/:localeType">/states/:stateId/:localeType</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/version">/version</a></li></ul></li><li><a href="module-reportStore.html">reportStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-reportStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-reportStore.html#~updateReportDisasterList">updateReportDisasterList</a></li></ul></li><li><a href="module-router.html">router</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-router.html#.beforeRouteEnter">beforeRouteEnter</a></li></ul></li><li><a href="module-searchStore.html">searchStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-searchStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-searchStore.html#~clearCurrentExtract">clearCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~clearSearch">clearSearch</a></li><li data-type='method'><a href="module-searchStore.html#~deleteExtract">deleteExtract</a></li><li data-type='method'><a href="module-searchStore.html#~loadExtract">loadExtract</a></li><li data-type='method'><a href="module-searchStore.html#~resetStatus">resetStatus</a></li><li data-type='method'><a href="module-searchStore.html#~saveExtract">saveExtract</a></li><li data-type='method'><a href="module-searchStore.html#~setSearchLoading">setSearchLoading</a></li><li data-type='method'><a href="module-searchStore.html#~setStatus">setStatus</a></li><li data-type='method'><a href="module-searchStore.html#~toggleCurrentExtract">toggleCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~updateDisasterList">updateDisasterList</a></li></ul></li><li><a href="module-store.html">store</a></li><li><a href="module-tour.html">tour</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-tour.html#~clearTabIndex">clearTabIndex</a></li><li data-type='method'><a href="module-tour.html#~removeObserver">removeObserver</a></li><li data-type='method'><a href="module-tour.html#~restoreTabIndex">restoreTabIndex</a></li></ul></li><li><a href="module-vueMixins.html">vueMixins</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-vueMixins.html#~iconName">iconName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">lib/controllers/api.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const express = require('express')
 const router = express.Router()
 const request = require('request')
 const moment = require('moment')
@@ -11,14 +48,14 @@ const version = require('../../package.json').version
 const port = process.env.PORT ? process.env.PORT : process.env.PORT || 3000
 const requestPromise = require('request-promise')
 /**
-* Creates the routes for the backend functionality. <br/>
+* Creates the routes for the backend functionality. &lt;br/>
 *
 * @module lib/controllers/api
 */
 
 /**
-* router.get('/version') <br/>
-* @returns  will display the version number of the application <br/>
+* router.get('/version') &lt;br/>
+* @returns  will display the version number of the application &lt;br/>
 * @function /version
 *
 **/
@@ -27,8 +64,8 @@ router.get('/version', function (req, res) {
 })
 
 /**
-* router.get('/states/:state/disasters') <br/>
-*  will return a list of disasters for a state, optionally filtered by a list locales <br/>
+* router.get('/states/:state/disasters') &lt;br/>
+*  will return a list of disasters for a state, optionally filtered by a list locales &lt;br/>
 * @function  /states/:state/disasters
 * @returns array of disaster numbers
 * @example // returns disaster array that is limited by the specified locales (in this case, the Wisconsin cities Madison and Monroe)
@@ -65,8 +102,8 @@ router.get('/states/:state/disasters', function (req, res) {
 })
 
 /**
-* router.get('/states/:stateId/:localeType') <br/>
-*  will return a list of disasters for a state, optionally filtered by a list locales <br/>
+* router.get('/states/:stateId/:localeType') &lt;br/>
+*  will return a list of disasters for a state, optionally filtered by a list locales &lt;br/>
 * @function  /states/:stateId/:localeType
 * @returns array of locales
 * @example // returns array of locales (in this case, the Texas Congressional Districts)
@@ -109,7 +146,7 @@ router.get('/states/:stateId/:localeType', (req, res) => {
 *             $ref: '#/definitions/Disaster'
 */
 /**
-* router.get('/disasterquery/:qry') <br/>
+* router.get('/disasterquery/:qry') &lt;br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data
 * @function  /disasterquery/:qry
 * @param {string} :qry - one or more of: the disaster type, the disaster number, the state. If more than one, needs to start with disaster type,
@@ -124,8 +161,8 @@ router.get('/disasterquery/:qry', function (req, res) {
   const qryParts = req.params.qry.replace(/-$/, '').toUpperCase().split('-')
   const tenYearsAgo = moment().subtract(10, 'years')
   let filter = `declarationDate gt '${tenYearsAgo.toString()}'`
-  if (qryParts.length === 1 && /^\d+$/.test(qryParts[0])) filter += ` and disasterNumber eq ${qryParts[0]}`
-  else if (qryParts.length === 1 && /^[A-Z]+$/.test(qryParts[0])) filter += ` and ( disasterType eq '${qryParts[0]}' or state eq '${qryParts[0]}')`
+  if (qryParts.length === 1 &amp;&amp; /^\d+$/.test(qryParts[0])) filter += ` and disasterNumber eq ${qryParts[0]}`
+  else if (qryParts.length === 1 &amp;&amp; /^[A-Z]+$/.test(qryParts[0])) filter += ` and ( disasterType eq '${qryParts[0]}' or state eq '${qryParts[0]}')`
   else if (qryParts.length === 2) filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]}`
   else filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' `
   fema.getDisasters({
@@ -139,7 +176,7 @@ router.get('/disasterquery/:qry', function (req, res) {
 })
 
 /**
-* router.get('/disasternumber/:qry') <br/>
+* router.get('/disasternumber/:qry') &lt;br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data for specific disasters
 * @function /disasternumber/:qry
 * @param {string} :qry - a comma separated list of disaster id's
@@ -163,8 +200,8 @@ router.get('/disasternumber/:qry', function (req, res) {
 })
 
 /**
-* router.get('/export/:fileNamePart') <br/>
-*  Generates a CSV file with all the columns from the database<br/>
+* router.get('/export/:fileNamePart') &lt;br/>
+*  Generates a CSV file with all the columns from the database&lt;br/>
 * @function /export/:fileNamePart
 * @param {string} :fileNamePart - a string that will be appended to 'hud-fema-data-' to form the download filename
 * @param {string} disasters - a comma separated list of disaster id's
@@ -178,7 +215,7 @@ router.get('/export/:fileNamePart', function (req, res) {
   if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
   var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
-  var query = `states=${states.join(',')}&disasters=${numbers.join(',')}`
+  var query = `states=${states.join(',')}&amp;disasters=${numbers.join(',')}`
   const uri = `http://localhost:${port}/api/applicants/export?${query}`
   console.log(`url: ${uri}`)
   var error
@@ -198,7 +235,7 @@ router.get('/export/:fileNamePart', function (req, res) {
 })
 
 /**
-* router.get('/applicants/:queryType') <br/>
+* router.get('/applicants/:queryType') &lt;br/>
 *
 * @function /applicants/:queryType
 * @returns {JSON} - household level data or summary data, filtered by other parameters
@@ -211,11 +248,11 @@ router.get('/export/:fileNamePart', function (req, res) {
 * @example // returns JSON with all columns of household level data for disasters 4311,5130, and 5182
 *  get /applicants/export?disasters=4311,5130,5182
 * // returns JSON with summarized columns numberOfRecords (automatically added to returned columns for summary), total_dmge_amnt, and hud_unmt_need_amnt of household level data for Wisconsin cities Madison and Monroe
-*  get /applicants/summary?states=WI&localeType=city&locales=Madison,Monroe&cols=total_dmge_amnt,hud_unmt_need_amnt
+*  get /applicants/summary?states=WI&amp;localeType=city&amp;locales=Madison,Monroe&amp;cols=total_dmge_amnt,hud_unmt_need_amnt
 **/
 router.get('/applicants/:queryType', (req, res) => {
   var queryType = req.params.queryType
-  if (queryType !== 'export' && queryType !== 'summary') {
+  if (queryType !== 'export' &amp;&amp; queryType !== 'summary') {
     return res.status(406).send('Invalid url. Not Acceptable.')
   }
   var validKeys = ['disasters', 'states', 'locales', 'localeType', 'cols']
@@ -243,13 +280,13 @@ router.get('/applicants/:queryType', (req, res) => {
     })
   }
   var localeType = hudApi.decodeField(_.get(req.query, 'localeType'))
-  if ((localeType && !locales) || (!localeType && locales)) {
+  if ((localeType &amp;&amp; !locales) || (!localeType &amp;&amp; locales)) {
     return res.status(406).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
   }
   var queryObj = []
   if (disasters) queryObj.push({[hudApi.decodeField('disaster')]: disasters})
   if (stateId) queryObj.push({[hudApi.decodeField('state')]: stateId})
-  if (localeType && locales) {
+  if (localeType &amp;&amp; locales) {
     var arg = {}
     arg[localeType] = locales
     queryObj.push(arg)
@@ -517,3 +554,25 @@ module.exports = router
 *       rc2kx:
 *         type: string
 */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc" target="_blank">JSDoc 3.5.3</a> on 7/23/2017 using the <a href="https://github.com/Grafluxe/boxy-jsdoc-template" target="_blank">boxy-jsdoc-template</a> theme.
+</footer>
+
+<script src="scripts/prettify/prettify.js"></script>
+<script src="scripts/prettify/lang-css.js"></script>
+<script src="scripts/script.js"></script>
+
+</body>
+</html>
