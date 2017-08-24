@@ -95,7 +95,7 @@ describe('store', function () {
         if (name === 'resetStatus') resetStatus = true
       })
 
-      loadDisasterList({ commit: commitStub }, 'DR')
+      loadDisasterList({ commit: commitStub }, {qry: 'DR', user: {type: 'HUD', disasterids: []}})
       moxios.wait(() => {
         expect(updateDisasterList).to.be.equal(true)
         expect(resetStatus).to.be.equal(true)
@@ -121,7 +121,7 @@ describe('store', function () {
           done()
         }
       }
-      loadDisasterList({ commit }, 'DR')
+      loadDisasterList({ commit }, {qry: 'DR', user: {type: 'HUD', disasterids: []}})
     })
     it('when loading the data, if no data is returned, set info status and proper message', function (done) {
       moxios.uninstall()
@@ -141,7 +141,7 @@ describe('store', function () {
           done()
         }
       }
-      loadDisasterList({ commit }, 'DR')
+      loadDisasterList({ commit }, {qry: 'DR', user: {type: 'HUD', disasterids: []}})
     })
   })
 
