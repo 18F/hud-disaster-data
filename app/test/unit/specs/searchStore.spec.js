@@ -6,7 +6,7 @@ import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions } from '../../../src/searchStore' // eslint-disable-line
 import sinon from 'sinon'
 const { toggleCurrentExtract, clearCurrentExtract, updateDisasterList, saveExtract,
-        loadExtract, deleteExtract, resetStatus, setStatus } = mutations
+        loadExtract, deleteExtract, resetStatus, setStatus, setSearchLoading } = mutations
 const { loadDisasterList } = actions
 
 const TWO_RECORDS = [
@@ -101,6 +101,14 @@ describe('store', function () {
         expect(resetStatus).to.be.equal(true)
         done()
       })
+    })
+
+    it('setSearchLoading should set the status of state.searchLoading', function (done) {
+      let status = 'my status'
+      let state = {searchLoading: null}
+      setSearchLoading(state, status)
+      expect(state.searchLoading).to.be.equal(status)
+      done()
     })
 
     it('when loading the data, if a non JSON result is returned, set error status and proper message', function (done) {
@@ -198,8 +206,60 @@ describe('store', function () {
           done()
         })
       })
+      localStorage.clear('saved-extracts')
       saveExtract(state, 'TESTSavedExtract')
       loadExtract(state, 'TESTSavedExtract')
+    })
+
+    it('loadExtract should return false if no name passed in', function (done) {
+      let returnCode = true
+      returnCode = loadExtract('bogus state', {name: null, user: 'bogus user'})
+      expect(returnCode).to.be.equal(false)
+      done()
+    })
+
+    it('loadExtract should return false if user.type not HUD or Grantee', function (done) {
+      let returnCode = true
+      returnCode = loadExtract('bogus state', {name: 'bogus name', user: {type: 'bogus user type'}})
+      expect(returnCode).to.be.equal(false)
+      done()
+    })
+
+    it('loadExtract should return undefined if there are no loaded disasters that are withing the allowed disasters for a user', function (done) {
+      moxios.install()
+      moxios.wait(function () {
+        let request = moxios.requests.mostRecent()
+        request.respondWith({
+          status: 200,
+          response: _.clone(TWO_RECORDS)
+        })
+      })
+      localStorage.clear('saved-extracts')
+      saveExtract(state, 'TESTSavedExtract')
+      let returnCode = true
+      returnCode = loadExtract(state, {name: 'TESTSavedExtract', user: {type: 'Grantee', disasterids: [0]}})
+      expect(returnCode).to.be.equal(undefined)
+      done()
+    })
+
+    it('loadExtract should return disasters if user data does not preclude it', function (done) {
+      moxios.install()
+      moxios.wait(function () {
+        let request = moxios.requests.mostRecent()
+        request.respondWith({
+          status: 200,
+          response: _.clone(TWO_RECORDS)
+        }).then(function () {
+          expect(state.savedExtracts.length).to.be.above(0)
+          expect(state.currentExtract.length).to.be.equal(2)
+          expect(state.newExtract).to.be.equal(false)
+          done()
+        })
+      })
+      state = { savedExtracts: [], currentExtract: disasters }
+      localStorage.clear('saved-extracts')
+      saveExtract(state, 'TESTSavedExtract')
+      loadExtract(state, {name: 'TESTSavedExtract', user: {type: 'Grantee', disasterids: [4281]}})
     })
 
     it('should delete saved extract from savedExtracts', function (done) {
