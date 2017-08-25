@@ -8,7 +8,7 @@ div.btn-group.user-selector
   div.user-state-list(v-show="showUserSelection")
     ul
       li(v-for="user in availableUsers" @click="selectUser(user)" style="text-align:center;" )
-        | {{ user.name }}
+        | {{ user.login }}
 </template>
 <script>
 export default {
@@ -20,10 +20,10 @@ export default {
     return {
       showUserSelection: false,
       availableUsers: [
-        {name: 'All locations user', username: 'ALL'},
-        {name: 'Iowa user', username: 'IA'},
-        {name: 'Wisconsin user', username: 'WI'},
-        {name: 'Texas user', username: 'TX'}
+        { 'login': 'HUD_HQ_User', 'disasterids': [], 'type': 'HUD', 'hq': true },
+        { 'login': 'HUD_Regional_User', 'disasterids': [4187, 4289, 1966], 'type': 'HUD', 'hq': false },
+        { 'login': 'Grantee_User', 'disasterids': [4223, 4272, 1791], 'type': 'Grantee', 'hq': false },
+        { 'login': 'Other_NoAuth_User', 'disasterids': [], 'type': 'Unauthorized', 'hq': false }
       ]
     }
   },
@@ -48,7 +48,7 @@ export default {
 </script>
 <style lang="scss">
 .user-selector {
-  display: none;
+  display: true;
   z-index: 2;
   position: absolute;
   top: 30px;

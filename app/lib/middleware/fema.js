@@ -3,7 +3,9 @@ const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
 
-const getDisasters = function ({filter, orderBy, top}, cb) {
+const getDisasters = function ({filter, authorizedDisasters, orderBy, top}, cb) {
+  var allowedDisasters
+  if (authorizedDisasters) allowedDisasters = authorizedDisasters.split(',')
   const qry = {$filter: filter}
   if (orderBy) qry.$orderby = orderBy
   if (top) qry.$top = top
@@ -23,7 +25,9 @@ const getDisasters = function ({filter, orderBy, top}, cb) {
       e.status = response.statusCode
       return cb(e)
     }
-    cb(null, rollUpData(data))
+    var rolledUpData = rollUpData(data)
+    if (allowedDisasters) rolledUpData = _.filter(rolledUpData, d => _.indexOf(allowedDisasters, d.disasterNumber.toString()) !== -1)
+    cb(null, rolledUpData)
   })
 }
 

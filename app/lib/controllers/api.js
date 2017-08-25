@@ -120,6 +120,7 @@ router.get('/states/:stateId/:localeType', (req, res) => {
 *  get /disasterquery/4311
 */
 router.get('/disasterquery/:qry', function (req, res) {
+  const authorizedDisasters = _.get(req, 'query.disasters')
   const qryParts = req.params.qry.replace(/-$/, '').toUpperCase().split('-')
   const tenYearsAgo = moment().subtract(10, 'years')
   let filter = `declarationDate gt '${tenYearsAgo.toString()}'`
@@ -129,6 +130,7 @@ router.get('/disasterquery/:qry', function (req, res) {
   else filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' `
   fema.getDisasters({
     filter: filter,
+    authorizedDisasters,
     orderBy: 'declarationDate desc',
     top: 250
   }, (err, data) => {
@@ -146,6 +148,7 @@ router.get('/disasterquery/:qry', function (req, res) {
 *  get /disasternumber/DR-4311-UT,FM-5130-UT,FM-5182-WA
 */
 router.get('/disasternumber/:qry', function (req, res) {
+  const authorizedDisasters = _.get(req, 'query.disasters')
   const disasterNbrs = req.params.qry.toUpperCase().split(',')
   var filter = ''
   for (var arg in disasterNbrs) {
@@ -154,7 +157,8 @@ router.get('/disasternumber/:qry', function (req, res) {
     filter += `( disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' )`
   }
   fema.getDisasters({
-    filter: `${filter}`
+    filter: `${filter}`,
+    authorizedDisasters
   }, (err, data) => {
     if (err) return res.send(503, {status: err.status, message: err.message})
     res.json(data)

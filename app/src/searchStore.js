@@ -71,13 +71,20 @@ export const mutations = {
   @function loadExtract
   @param {String} name - Name of the list to load
   */
-  loadExtract: function (state, name) {
+  loadExtract: function (state, {name, user}) {
     if (!name) { return false }
+    if (user.type !== 'HUD' && user.type !== 'Grantee') return false
     mutations.clearCurrentExtract(state, true)
     let savedExtracts = loadSavedExtracts()
-    let disasterNumbers = _.find(savedExtracts, {name}).disasters.join()
+    let disasterNumbers = _.find(savedExtracts, {name}).disasters
+    if (user.disasterids.length > 0) {
+      _.remove(disasterNumbers, (d) => {
+        return _.indexOf(user.disasterids, _.parseInt(d.split('-')[1])) === -1
+      })
+    }
+    if (disasterNumbers.length === 0) return
     state.extractLoading = true
-    axios.get(`/api/disasternumber/${disasterNumbers}`).then((response) => {
+    axios.get(`/api/disasternumber/${disasterNumbers.join(',')}`).then((response) => {
       state.currentExtract = _.map(response.data, (disaster) => {
         disaster.currentExtract = true
         return disaster
@@ -176,9 +183,12 @@ export const mutations = {
 These are the vuex actions
 */
 export const actions = {
-  loadDisasterList: function ({ commit }, qry) {
+  loadDisasterList: function ({ commit }, { qry, user }) {
     commit('setSearchLoading', true)
-    axios.get(`/api/disasterquery/${qry}`).then((response) => {
+    let url = `/api/disasterquery/${qry}`
+    if (user.type !== 'HUD' && user.type !== 'Grantee') url += `?disasters=0`
+    else if (user.disasterids.length > 0) url += `?disasters=${user.disasterids.join(',')}`
+    axios.get(url).then((response) => {
       commit('updateDisasterList', response.data)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
