@@ -264,6 +264,41 @@ describe('SelectLocationSideBar component', function () {
     })
   })
 
+  describe('clearAll', function () {
+    it('should call reset if the dialoge is open', function (done) {
+      let reset = sinon.spy(vm, 'reset')
+      let openDialogue = sinon.stub(vm, 'openDialogue').callsFake(() => { return true })
+      let that = {openDialogue, reset}
+      vm.clearAll.call(that)
+      should(openDialogue.called).be.true()
+      should(reset.called).be.true()
+      reset.restore()
+      openDialogue.restore()
+      done()
+    })
+  })
+
+  describe('openDialogue', function () {
+    it('should return true if confirm returns true', function (done) {
+      let confirm = sinon.stub(window, 'confirm').callsFake(() => { return true })
+      debugger
+      let returnCode = vm.openDialogue()
+      should(confirm.called).be.true()
+      should(returnCode).be.true()
+      confirm.restore()
+      done()
+    })
+
+    it('should return false if confirm returns false', function (done) {
+      let confirm = sinon.stub(window, 'confirm').callsFake(() => { return false })
+      let returnCode = vm.openDialogue()
+      should(confirm.called).be.true()
+      should(returnCode).be.false()
+      confirm.restore()
+      done()
+    })
+  })
+
   describe('reset', function () {
     it('should reset all the selected values to null and clear the store\'s state', function (done) {
       vm.localeSelected = 1
