@@ -31,7 +31,7 @@ app.use('/api', apiController)
 app.use(`${contextRoot}/api`, apiController)
 
 // handle fallback for HTML5 history API
-app.use(require('connect-history-api-fallback')())
+// app.use(require('connect-history-api-fallback')())
 
 const staticDir = path.join(__dirname, 'dist')
 

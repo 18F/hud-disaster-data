@@ -78,7 +78,7 @@ app.use(`${contextRoot}/api`, require('../lib/controllers/api'))
 app.use(`${contextRoot}/static`, express.static('./static'))
 
 // handle fallback for HTML5 history API
-app.use(require('connect-history-api-fallback')())
+// app.use(require('connect-history-api-fallback')())
 
 var uri = `http://localhost:${port}${contextRoot}/`
 

@@ -293,7 +293,7 @@ export default {
         { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
           allFilters
         })
-      window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
+      // window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
     },
 
     removeDisaster (disaster) {
