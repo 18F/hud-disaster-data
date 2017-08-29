@@ -21,4 +21,24 @@ describe('/api/export/:fileNamePart', function () {
     request(app).get('/api/export/My_Document_Name?disasters=')
     .expect(406, done)
   })
+
+  it('should return a 406 code and message that invalid disaster numbers were sent if bad disasters in query', (done) => {
+    request(app).get('/api/export/My_Document_Name?disasters=0')
+    .expect(function (res) {
+      const text = res.text
+      text.should.be.equal('Invalid disaster numbers sent. Not Acceptable.')
+    })
+    .expect(406)
+    .expect('Content-Type', /text/, done)
+  })
+
+  it('should return a 200 code and message that no data was found if no data is returned', (done) => {
+    request(app).get('/api/export/My_Document_Name?disasters=XX-1111-XX,YY-2222-YY')
+    .expect(function (res) {
+      const text = res.text.split('\r')[0]
+      text.should.be.equal('"No data found for any of the following: XX-1111-XX, YY-2222-YY"')
+    })
+    .expect(200)
+    .expect('Content-Type', /csv/, done)
+  })
 })
