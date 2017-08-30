@@ -8,11 +8,12 @@ const cookieSession = require('cookie-session')
 const morgan = require('morgan')
 
 const apiController = require('./lib/controllers/api')
-const contextRoot = require('./config').get().contextRoot
+const config = require('./config').get()
+const contextRoot = config.contextRoot
 require('./lib/swagger')(app)
 // const controllers = require('./lib/controllers');
 // const mainController = controllers.main;
-
+console.log('Starting DRDP with config:', config)
 app.use(morgan(/dev/.test(process.env.NODE_ENV) ? 'dev' : 'combined'))
 const dayInMillis = 24 * 60 * 60 * 1000
 app.use(cookieSession({
