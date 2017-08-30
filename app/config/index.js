@@ -1,6 +1,5 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
-var contextRoot = '/femadata'
 
 const config = {
   build: {
@@ -8,7 +7,6 @@ const config = {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    contextRoot: contextRoot,
     assetsPublicPath: '../../',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
@@ -28,7 +26,6 @@ const config = {
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
-    contextRoot: `${contextRoot}Dev`,
     assetsPublicPath: '../../',
     proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
@@ -39,11 +36,9 @@ const config = {
     cssSourceMap: false
   },
   test: {
-    contextRoot: `${contextRoot}Test`,
     assetsPublicPath: '../../'
   },
   stage: {
-    contextRoot: `${contextRoot}Stage`,
     assetsPublicPath: '../../'
   }
 }
