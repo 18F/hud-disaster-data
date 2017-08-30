@@ -50,6 +50,7 @@ const config = {
 
 config.get = function () {
   let env = process.env.NODE_ENV
+  console.log(process.env)
   if (/prod/.test(env)) return config.build
   if (/stag/.test(env)) return config.stage
   if (/test/.test(env)) return config.test
