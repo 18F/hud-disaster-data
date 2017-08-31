@@ -281,7 +281,6 @@ describe('SelectLocationSideBar component', function () {
   describe('openDialogue', function () {
     it('should return true if confirm returns true', function (done) {
       let confirm = sinon.stub(window, 'confirm').callsFake(() => { return true })
-      debugger
       let returnCode = vm.openDialogue()
       should(confirm.called).be.true()
       should(returnCode).be.true()

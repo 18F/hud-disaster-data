@@ -1,5 +1,6 @@
+require('../config/env')
 require('./check-versions')()
-const contextRoot = require('../config').get().contextRoot
+const contextRoot = process.env.CONTEXT_ROOT
 /**
 *  Generated from the vue cli tool. We modified it slightly to fit our needs.  This is the part of the devops that runs the dev server.
 * @module build/dev-server
@@ -75,7 +76,7 @@ app.use('/api', require('../lib/controllers/api'))
 app.use(`${contextRoot}/api`, require('../lib/controllers/api'))
 
 // serve pure static assets
-app.use(`${contextRoot}/static`, express.static('./static'))
+app.use(`${contextRoot}`, express.static('./static'))
 
 // handle fallback for HTML5 history API
 // app.use(require('connect-history-api-fallback')())

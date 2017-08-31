@@ -1,3 +1,4 @@
+require('./config/env')
 const express = require('express')
 const flash = require('express-flash')
 const path = require('path')
@@ -8,7 +9,7 @@ const cookieSession = require('cookie-session')
 const morgan = require('morgan')
 
 const apiController = require('./lib/controllers/api')
-const contextRoot = require('./config').get().contextRoot
+const contextRoot = process.env.CONTEXT_ROOT
 require('./lib/swagger')(app)
 // const controllers = require('./lib/controllers');
 // const mainController = controllers.main;
@@ -27,7 +28,6 @@ app.use(bodyParser.json())
 //   csrf: true,
 //   xssProtection: true
 // }));
-app.use('/api', apiController)
 app.use(`${contextRoot}/api`, apiController)
 
 // NOT USING THIS FOR TESTING OF API PURPOSES
@@ -35,7 +35,6 @@ app.use(`${contextRoot}/api`, apiController)
 // app.use(require('connect-history-api-fallback')())
 
 const staticDir = path.join(__dirname, 'dist')
-app.use(express.static(staticDir))
 app.use(contextRoot,express.static(staticDir))
 // app.use(flash())
 // app.set('view engine', 'pug');
