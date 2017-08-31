@@ -35,7 +35,6 @@ app.use(`${contextRoot}/api`, apiController)
 
 const staticDir = path.join(__dirname, 'dist')
 
-app.use(express.static(staticDir))
 app.use(contextRoot,express.static(staticDir))
 // app.use(flash())
 // app.set('view engine', 'pug');

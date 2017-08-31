@@ -28,7 +28,6 @@ app.use(bodyParser.json())
 //   csrf: true,
 //   xssProtection: true
 // }));
-app.use('/api', apiController)
 app.use(`${contextRoot}/api`, apiController)
 
 // NOT USING THIS FOR TESTING OF API PURPOSES
@@ -36,7 +35,6 @@ app.use(`${contextRoot}/api`, apiController)
 // app.use(require('connect-history-api-fallback')())
 
 const staticDir = path.join(__dirname, 'dist')
-app.use(express.static(staticDir))
 app.use(contextRoot,express.static(staticDir))
 // app.use(flash())
 // app.set('view engine', 'pug');

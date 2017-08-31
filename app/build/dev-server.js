@@ -76,7 +76,7 @@ app.use('/api', require('../lib/controllers/api'))
 app.use(`${contextRoot}/api`, require('../lib/controllers/api'))
 
 // serve pure static assets
-app.use(`${contextRoot}/static`, express.static('./static'))
+app.use(`${contextRoot}`, express.static('./static'))
 
 // handle fallback for HTML5 history API
 // app.use(require('connect-history-api-fallback')())
