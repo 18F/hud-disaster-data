@@ -1,6 +1,6 @@
 {
   "name": "hud-disaster-data",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.",
   "main": "index.js",
   "scripts": {
