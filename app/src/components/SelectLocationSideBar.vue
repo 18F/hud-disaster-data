@@ -14,6 +14,7 @@
                 label="name"
                 componentDescription="State Select"
                 :on-change="changeState"
+                :on-reset="openDialogue"
                 v-on:clear="reset"
                 style="background:#fff;"
                 ref="stateSelector"
@@ -83,7 +84,7 @@
                       button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                         icon(name='fa-times')
           div.rp-action-buttons
-            button.usa-button.alt-button(type="button" @click="reset" title="Clear all report parameters button")
+            button.usa-button.alt-button(type="button" @click="clearAll" title="Clear all report parameters button")
               | Clear
             button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create report button")
               | Create Report
@@ -100,15 +101,17 @@ import _ from 'lodash'
 export default {
   name: 'selectLocationSideBar',
   components: {inputselect},
-
-  created () {
+  mounted () {
     this.initializeValuesFromURL()
   },
-
+  beforeDestroy () {
+    this.reset()
+    this.$store.commit('clearStore', null)
+  },
   data () {
     return {
       stateSelected: null,
-      geographicLevelSelected: this.$store.getters.geographicLevel,
+      geographicLevelSelected: null,
       localeSelected: null,
       disasterSelected: null,
       disableLevels: true,
@@ -189,6 +192,9 @@ export default {
       this.$refs.geographicLevelSelector.clearValue()
       this.clearLocales()
       this.checkDisabled()
+      if (this.stateSelected) {
+        this.filterDisasters()
+      }
     },
 
     clearLocales () {
@@ -199,8 +205,18 @@ export default {
 
     addLocale () {
       if (!this.localeSelected) return
+      // DOING: Make a dry run of loading new disasters
       this.$store.commit('addLocaleFilter', this.localeSelected)
       this.$refs.localeSelect.clearValue()
+      this.filterDisasters()
+    },
+
+    filterDisasters () {
+      if (this.$store.getters.localeFilter && this.$store.getters.localeFilter.length > 0) {
+        this.$store.dispatch('loadFilteredDisasters')
+      } else {
+        this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
+      }
     },
 
     addDisaster () {
@@ -213,6 +229,21 @@ export default {
       this.disasterSelected = null
       this.$store.commit('updateReportDisasterList', [])
       this.$refs.disasterSelect.clearValue()
+    },
+
+    clearAll () {
+      if (this.openDialogue()) {
+        this.reset()
+      }
+    },
+
+    openDialogue () {
+      // being used as a callback in inputselects that need a modal
+      if (confirm('This will clear all of your input selections. Proceed?')) {
+        return true
+      } else {
+        return false
+      }
     },
 
     reset () {
@@ -251,18 +282,18 @@ export default {
         level: this.$store.getters.geographicLevel.name
       }
 
-      if (this.$store.getters.stateFilter) allFilters.stateId = this.$store.getters.stateFilter.code
-      if (this.$store.getters.disasterFilter.length > 0) allFilters.disasterId = _.flatMap(this.$store.getters.disasterFilter, dstr => dstr.code.split('-')[1])
+      if (this.$store.getters.stateFilter) allFilters.states = this.$store.getters.stateFilter.code
+      if (this.$store.getters.disasterFilter.length > 0) allFilters.disasters = _.flatMap(this.$store.getters.disasterFilter, dstr => dstr.code.split('-')[1])
       if (this.$store.getters.geographicLevel && this.$store.getters.localeFilter.length > 0) {
-        allFilters.geoName = this.$store.getters.geographicLevel.code.toLowerCase()
-        allFilters.geoArea = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
+        allFilters.localeType = this.$store.getters.geographicLevel.code.toLowerCase()
+        allFilters.locales = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
       }
       this.$emit('updateSummaryDisplay', summaryDisplayData)
       this.$store.dispatch('loadReportData',
-        { summaryCols: 'household_count,total_damages,hud_unmet_need',
+        { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
           allFilters
         })
-      window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
+      // window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
     },
 
     removeDisaster (disaster) {
@@ -271,19 +302,21 @@ export default {
 
     removeLocale (locale) {
       this.$store.commit('removeLocaleFilter', locale)
+      this.filterDisasters()
     },
 
     initializeValuesFromURL () {
-      if (this.$route.query && this.$route.query.stateFilter) {
+      if (this.$route && this.$route.query && this.$route.query.stateFilter) {
         let params = this.$route.query
         if (params.stateFilter) {
-          this.stateSelected = _.find(this.states, ['code', params.stateFilter])
-          this.$store.commit('setState', this.stateSelected)
+          let stateObj = _.find(this.states, ['code', params.stateFilter])
+          this.changeState(stateObj)
+          this.$refs.stateSelector.select(stateObj)
         }
 
         if (params.geographicLevel) {
-          this.geographicLevelSelected = _.find(this.geographicLevels, ['code', params.geographicLevel])
-          this.setLevel(this.geographicLevelSelected)
+          let level = _.find(this.geographicLevels, ['code', params.geographicLevel])
+          this.$refs.geographicLevelSelector.select(level)
         }
 
         if (params.localeFilter) {
@@ -297,7 +330,6 @@ export default {
         }
 
         if (params.disasterFilter) {
-          this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
           magic.$once('disastersLoaded', () => {
             let disasterNumberResults = this.$store.getters.disasterNumberResults
             const vm = this
@@ -344,7 +376,7 @@ export default {
 
       .locale-selection-list, .disaster-selection-list {
         border:1px solid #353434;
-        border-top:0px;
+        /* border-top:0px; */
         height:160px;
         overflow-y:scroll;
       }
@@ -353,7 +385,7 @@ export default {
         min-height:300px;
 
         .locale {
-          background:url('/static/img/bg_25_opacity.png');
+          background:url('../../static/img/bg_25_opacity.png');
           padding:10px;
 
           .add-locale {
@@ -383,7 +415,7 @@ export default {
           }
         }
         .disaster-selection-list {
-          background:url('/static/img/bg_25_opacity.png');
+          background:url('../../static/img/bg_25_opacity.png');
           clear:left;
         }
       }

@@ -102,7 +102,7 @@ export default {
       this.extractName = ''
     },
     loadExtract () {
-      this.$store.commit('loadExtract', this.selectedExtractName)
+      this.$store.commit('loadExtract', {name: this.selectedExtractName, user: this.$store.getters.user})
     }
   }
 }

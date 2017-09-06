@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>components/Disaster - Documentation</title>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <span class="navicon"></span>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-build_dev-server.html">build/dev-server</a></li><li><a href="module-bus.html">bus</a></li><li><a href="module-components_App.html">components/App</a></li><li><a href="module-components_Disaster.html">components/Disaster</a></li><li><a href="module-components_DisasterSearch.html">components/DisasterSearch</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_DisasterSearch.html#~update">update</a></li></ul></li><li><a href="module-components_Header.html">components/Header</a></li><li><a href="module-components_Icon.html">components/Icon</a></li><li><a href="module-components_Message.html">components/Message</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_Message.html#~displayMessage">displayMessage</a></li></ul></li><li><a href="module-components_Report.html">components/Report</a></li><li><a href="module-components_SavedExtracts.html">components/SavedExtracts</a></li><li><a href="module-components_Sprites.html">components/Sprites</a></li><li><a href="module-lib_controllers_api.html">lib/controllers/api</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-lib_controllers_api.html#~/applicants/:queryType">/applicants/:queryType</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/disasternumber/:qry">/disasternumber/:qry</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/disasterquery/:qry">/disasterquery/:qry</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/export/:fileNamePart">/export/:fileNamePart</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/states/:state/disasters">/states/:state/disasters</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/states/:stateId/:localeType">/states/:stateId/:localeType</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/version">/version</a></li></ul></li><li><a href="module-reportStore.html">reportStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-reportStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-reportStore.html#~updateReportDisasterList">updateReportDisasterList</a></li></ul></li><li><a href="module-router.html">router</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-router.html#.beforeRouteEnter">beforeRouteEnter</a></li></ul></li><li><a href="module-searchStore.html">searchStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-searchStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-searchStore.html#~clearCurrentExtract">clearCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~clearSearch">clearSearch</a></li><li data-type='method'><a href="module-searchStore.html#~deleteExtract">deleteExtract</a></li><li data-type='method'><a href="module-searchStore.html#~loadExtract">loadExtract</a></li><li data-type='method'><a href="module-searchStore.html#~resetStatus">resetStatus</a></li><li data-type='method'><a href="module-searchStore.html#~saveExtract">saveExtract</a></li><li data-type='method'><a href="module-searchStore.html#~setSearchLoading">setSearchLoading</a></li><li data-type='method'><a href="module-searchStore.html#~setStatus">setStatus</a></li><li data-type='method'><a href="module-searchStore.html#~toggleCurrentExtract">toggleCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~updateDisasterList">updateDisasterList</a></li></ul></li><li><a href="module-store.html">store</a></li><li><a href="module-tour.html">tour</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-tour.html#~clearTabIndex">clearTabIndex</a></li><li data-type='method'><a href="module-tour.html#~removeObserver">removeObserver</a></li><li data-type='method'><a href="module-tour.html#~restoreTabIndex">restoreTabIndex</a></li></ul></li><li><a href="module-vueMixins.html">vueMixins</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-vueMixins.html#~iconName">iconName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">components/Disaster</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    <span class="creds">
+      
+
+      
+    </span>
+
+    <hr>
+
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>A disaster info card.  Used for adding and removing disasters from an extract</p></div>
+        
+
+        
+            
+
+
+
+<div class="group" id="components/Disaster">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="src">Source: <a href="src_components_Disaster.vue.html">src/components/Disaster.vue</a>, <a href="src_components_Disaster.vue.html#line3">line 3</a></div>
+
+
+</div>
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc" target="_blank">JSDoc 3.5.3</a> on 7/23/2017 using the <a href="https://github.com/Grafluxe/boxy-jsdoc-template" target="_blank">boxy-jsdoc-template</a> theme.
+</footer>
+
+<script src="scripts/prettify/prettify.js"></script>
+<script src="scripts/prettify/lang-css.js"></script>
+<script src="scripts/script.js"></script>
+
+</body>
+</html>

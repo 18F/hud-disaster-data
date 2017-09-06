@@ -1,27 +1,27 @@
-results for get_locales: 'TX','CNTY_NAME','ALL',returnVal
+results for fema_data.get_locales(): 'TX','county','ALL',returnVal
 
 Galveston (County)
 Harris (County)
 Nueces (County)
 
 
-results for get_locales: stateid => 'IA', localetype => 'CNTY_NAME', disasterid =>'4187,4289', results => returnVal
+results for fema_data.get_locales(): stateid => 'IA', localetype => 'county', disasterid =>'4187,4289', results => returnVal
 
 Linn (County)
 Polk (County)
 
 
-results for get_locales: stateid => 'IA', localetype => 'DMGE_CITY_NAME', disasterid =>'4187,4289', results => returnVal
+results for fema_data.get_locales(): stateid => 'IA', localetype => 'city', disasterid =>'4187,4289', results => returnVal
 
 Cedar Rapids
 Des Moines
 
 
-results for get_locales: 'IA', 'DMGE_CITY_NAME', '4272,1791', returnVal
+results for fema_data.get_locales(): 'IA', 'city', '4272,1791', returnVal
 
 
 
-results for get_locales: 'TX', 'DMGE_CITY_NAME', '4272,1791', returnVal
+results for fema_data.get_locales(): 'TX', 'city', '4272,1791', returnVal
 
 Friendswood
 Galveston
@@ -29,13 +29,13 @@ Houston
 Katy
 
 
-results for get_locales: 'IA', 'FCD_FIPS91_CD', '4187,4289', returnVal
+results for fema_data.get_locales(): 'IA', 'congrdist', '4187,4289', returnVal
 
 1901115
 1903115
 
 
-results for get_locales: stateid => 'WI', localetype => 'FCD_FIPS91_CD', disasterid => 'ALL', results => returnVal
+results for fema_data.get_locales(): stateid => 'WI', localetype => 'congrdist', disasterid => 'ALL', results => returnVal
 
 5502115
 

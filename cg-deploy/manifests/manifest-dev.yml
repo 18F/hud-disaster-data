@@ -2,7 +2,7 @@
 applications:
 - name: hud-disaster-data-dev
   path: ../../app
-  memory: 64M
+  memory: 128M
   host: hud-disaster-data-dev
   buildpack: https://github.com/cloudfoundry/nodejs-buildpack
   env:
