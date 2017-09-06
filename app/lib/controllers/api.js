@@ -5,11 +5,86 @@ const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
 const csv = require('express-csv')
-const dbApi = require('./dbApi')
+const hudApi = require('../middleware/hudApi')
+const fema = require('../middleware/fema')
+const version = require('../../package.json').version
+const requestPromise = require('request-promise')
 /**
-* Creates the routes for the backend functionality.
+* Creates the routes for the backend functionality. <br/>
+*
 * @module lib/controllers/api
 */
+
+/**
+* router.get('/version') <br/>
+* @returns  will display the version number of the application <br/>
+* @function /version
+*
+**/
+router.get('/version', function (req, res) {
+  res.send(version)
+})
+
+/**
+* router.get('/states/:state/disasters') <br/>
+*  will return a list of disasters for a state, optionally filtered by a list locales <br/>
+* @function  /states/:state/disasters
+* @returns array of disaster numbers
+* @example // returns disaster array that is limited by the specified locales (in this case, the Wisconsin cities Madison and Monroe)
+*  get /states/WI/disasters?city=Madison,Monroe
+* @param {string} :state - a state id
+* @param {string} localeType - (optional) a geographic level (city, county, congrdist)
+* @param {string} locales - (optional) a comma separated list of locales by which to filter the disasters
+**/
+router.get('/states/:state/disasters', function (req, res) {
+  const state = req.params.state
+  const queryParams = _.get(req, 'query')
+  const validLocaleTypes = ['city', 'county', 'congrdist']
+  let localeType
+  let locales
+  let errMessage = 'Invalid parameters sent.  Use one of: city, county, or congrdist, with a comma separated list of values. Not Acceptable.'
+  if (!_.isEmpty(queryParams)) {
+    localeType = _.findKey(queryParams)
+    if (_.indexOf(validLocaleTypes, localeType) !== -1) locales = queryParams[localeType]
+    else return res.status(406).send(errMessage)
+    if (!locales) return res.status(406).send(errMessage)
+  }
+  let queryObj = {state: req.params.state}
+  if (localeType) {
+    queryObj.localeType = localeType
+    queryObj.locales = locales
+  }
+  const disasterIds = hudApi.getDisasters(queryObj)
+  const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
+  let filter = `state eq '${state}' and ${disasterCond}`
+  fema.getDisasters({filter}, (err, disasters) => {
+    if (err) return res.send(500, {err: err.message})
+    res.json(disasters)
+  })
+})
+
+/**
+* router.get('/states/:stateId/:localeType') <br/>
+*  will return a list of disasters for a state, optionally filtered by a list locales <br/>
+* @function  /states/:stateId/:localeType
+* @returns array of locales
+* @example // returns array of locales (in this case, the Texas Congressional Districts)
+*  get /states/TX/congrdist
+* @param {string} :stateId - a state id
+* @param {string} :localeType - a geographic level (city, county, congrdist)
+**/
+router.get('/states/:stateId/:localeType', (req, res) => {
+  var stateId = req.params.stateId.toUpperCase()
+  var localeType = hudApi.decodeField(req.params.localeType)
+  if (!localeType) return
+  var selectCols = [localeType]
+  var queryObj = []
+  queryObj.push({'dmge_state_cd': [stateId]})
+  var data = hudApi.getData(queryObj, null, selectCols)
+  var results = _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
+  res.json(results)
+})
+
 /**
 * @swagger
 * /disasterquery/{qry}:
@@ -35,12 +110,17 @@ const dbApi = require('./dbApi')
 /**
 * router.get('/disasterquery/:qry') <br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data
-* @function get
-* @param {qry} - one or more of: the disaster type, the disaster number, the state. If more than one, needs to start with disaster type,
+* @function  /disasterquery/:qry
+* @param {string} :qry - one or more of: the disaster type, the disaster number, the state. If more than one, needs to start with disaster type,
 * followed by a dash (-), followed by diaster number, optionally followed by another dash and the state abbreviation.
+* @example // returns array of disasters (in this case, of disasterType DR)
+*  get /disasterquery/DR
+*
+* // returns array of disasters (in this case, of disasterNumber 4311)
+*  get /disasterquery/4311
 */
 router.get('/disasterquery/:qry', function (req, res) {
-  const validCols = ['id', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType', 'declaredCountyArea', 'title']
+  const authorizedDisasters = _.get(req, 'query.disasters')
   const qryParts = req.params.qry.replace(/-$/, '').toUpperCase().split('-')
   const tenYearsAgo = moment().subtract(10, 'years')
   let filter = `declarationDate gt '${tenYearsAgo.toString()}'`
@@ -48,61 +128,27 @@ router.get('/disasterquery/:qry', function (req, res) {
   else if (qryParts.length === 1 && /^[A-Z]+$/.test(qryParts[0])) filter += ` and ( disasterType eq '${qryParts[0]}' or state eq '${qryParts[0]}')`
   else if (qryParts.length === 2) filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]}`
   else filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' `
-
-  const qs = querystring.stringify({
-    $filter: filter,
-    $orderby: 'declarationDate desc',
-    $top: 250
+  fema.getDisasters({
+    filter: filter,
+    authorizedDisasters,
+    orderBy: 'declarationDate desc',
+    top: 250
+  }, (err, data) => {
+    if (err) return res.send(503, {status: err.status, message: err.message})
+    res.json(data)
   })
-  const selectCols = `$select=${validCols.join()}` // Left out of stringify because it's excaping commas and FEMA API doesn't like it
-  const url = `https://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries?${qs}&${selectCols}`
-  console.log(url)
-  request(url, function (err, response, body) {
-    // TODO handle error for cases when FEMA API responds with body starting wth '<!DOCTYPE html>' +bug id:2 gh:9
-    var data
-    try {
-      data = JSON.parse(body, (key, value) => {
-        return key === 'declarationDate' ? moment(value).format('MMMM DD, YYYY') : value
-      })
-    } catch (e) {
-      return res.send(503, {status: response.statusCode, message: e.message})
-    }
-    var rolledUpData = rollUpData(data)
-    res.json(rolledUpData)
-  })
-})
-
-/**
-* router.get('/export/:fileNamePart') <br/>
-*  Generates a CSV file with all the columns from the database<br/>
-* @function get
-* @param {qry} - a comma separated list of disaster id's
-*/
-router.get('/export/:fileNamePart', function (req, res) {
-  var fileName = `hud-fema-data-${req.params.fileNamePart}`
-  var disasterNumbers = _.get(req, 'query.disasters').split(',')
-  if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
-  var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
-  var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
-  var results = dbApi.getData([{damaged_state: states}, {disaster_id: numbers}])
-  if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
-  var columns = []
-  for (var key in results[0]) columns.push(key)
-  var resultSet = [ columns ]
-  _.map(results, rec => {
-    resultSet.push(_.map(columns, col => { return rec[col] }))
-  })
-  res.setHeader('Content-disposition', `attachment; filename="${fileName}.csv"`)
-  res.csv(resultSet)
 })
 
 /**
 * router.get('/disasternumber/:qry') <br/>
 *  queries FEMA API  (https://www.fema.gov/api/open/v1), and returns disaster data for specific disasters
-* @function get
-* @param {qry}- a comma separated list of disaster id's
+* @function /disasternumber/:qry
+* @param {string} :qry - a comma separated list of disaster id's
+* @example // returns disaster array that is limited by the specified disasters (in this case, the Wisconsin cities Madison and Monroe)
+*  get /disasternumber/DR-4311-UT,FM-5130-UT,FM-5182-WA
 */
 router.get('/disasternumber/:qry', function (req, res) {
+  const authorizedDisasters = _.get(req, 'query.disasters')
   const disasterNbrs = req.params.qry.toUpperCase().split(',')
   var filter = ''
   for (var arg in disasterNbrs) {
@@ -110,128 +156,109 @@ router.get('/disasternumber/:qry', function (req, res) {
     if (arg > 0) filter += ' or '
     filter += `( disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' )`
   }
-  const qs = querystring.stringify({
-    $filter: `${filter}`
-  })
-  const url = `https://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries?${qs}`
-  console.log(url)
-  request(url, function (err, response, body) {
-    // TODO handle error for cases when FEMA API responds with body starting wth '<!DOCTYPE html>' +bug id:2 gh:9
-    var data
-    try {
-      data = JSON.parse(body, (key, value) => {
-        return key === 'declarationDate' ? moment(value).format('MMMM DD, YYYY') : value
-      })
-    } catch (e) {
-      return res.send(503, {status: response.statusCode, message: e.message})
-    }
-    var rolledUpData = rollUpData(data)
-    res.json(rolledUpData)
+  fema.getDisasters({
+    filter: `${filter}`,
+    authorizedDisasters
+  }, (err, data) => {
+    if (err) return res.send(503, {status: err.status, message: err.message})
+    res.json(data)
   })
 })
 
 /**
-* router.get('/db') <br/>
-* @function get
-* @param {disasterId}- a comma separated list of disaster id's
-* @param {stateId}- a comma separated list of state id's
-* @param {geoArea}- a comma separated list of geographic area's, requires specifying geoName
-* @param {selectCols}- a comma separated list of columns to be returned
-* @param {summaryCols}- a comma separated list of columns to be returned with the summed values
+* router.get('/export/:fileNamePart') <br/>
+*  Generates a CSV file with all the columns from the database<br/>
+* @function /export/:fileNamePart
+* @param {string} :fileNamePart - a string that will be appended to 'hud-fema-data-' to form the download filename
+* @param {string} disasters - a comma separated list of disaster id's
+* @example // returns CSV for disasters DR-4311-UT,FM-5130-UT, and FM-5182-WA with download filename set to hud-fema-data-MY_FILE_NAME
+*  get /export/MY_FILE_NAME?disasters=DR-4311-UT,FM-5130-UT,FM-5182-WA
+*/
+router.get('/export/:fileNamePart', function (req, res) {
+  var fileName = `hud-fema-data-${req.params.fileNamePart}`
+  var disasterNumbers = _.get(req, 'query.disasters').split(',')
+  if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
+  var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
+  var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
+  if (states[0] === undefined || numbers[0] === undefined) return res.status(406).send('Invalid disaster numbers sent. Not Acceptable.')
+  var query = `states=${states.join(',')}&disasters=${numbers.join(',')}`
+  const uri = `http://${req.headers.host}/api/applicants/export?${query}`
+  console.log(`url: ${uri}`)
+  requestPromise({ method: 'GET', uri, json: true })
+  .then(function (results) {
+    if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
+    var columns = []
+    for (var key in results[0]) columns.push(key)
+    var resultSet = [ columns ]
+    _.map(results, rec => {
+      resultSet.push(_.map(columns, col => { return rec[col] }))
+    })
+    res.setHeader('Content-disposition', `attachment; filename="${fileName}.csv"`)
+    res.csv(resultSet)
+  })
+})
+
+/**
+* router.get('/applicants/:queryType') <br/>
+*
+* @function /applicants/:queryType
+* @returns {JSON} - household level data or summary data, filtered by other parameters
+* @param {string} :queryType - either summary or export
+* @param {string} disasters - a comma separated list of disaster id's
+* @param {string} state - a state id
+* @param {string} localeType - a type of geographic area
+* @param {string} locales - a comma separated list of geographic area's, requires specifying geoName
+* @param {string} cols - a comma separated list of columns to be returned, or to be returned with the summed values
+* @example // returns JSON with all columns of household level data for disasters 4311,5130, and 5182
+*  get /applicants/export?disasters=4311,5130,5182
+* // returns JSON with summarized columns numberOfRecords (automatically added to returned columns for summary), total_dmge_amnt, and hud_unmt_need_amnt of household level data for Wisconsin cities Madison and Monroe
+*  get /applicants/summary?states=WI&localeType=city&locales=Madison,Monroe&cols=total_dmge_amnt,hud_unmt_need_amnt
 **/
-router.get('/db', (req, res) => {
-  var disasterId = _.get(req.query, 'disasterId')
-  if (disasterId) disasterId = disasterId.split(',')
-  var stateId = _.get(req.query, 'stateId')
-  if (stateId) stateId = stateId.toUpperCase().split(',')
-  else {
-    res.status(406).send('Invalid parameters sent. You must provide at least a stateId. Not Acceptable.')
-    return
+router.get('/applicants/:queryType', (req, res) => {
+  var queryType = req.params.queryType
+  if (queryType !== 'export' && queryType !== 'summary') {
+    return res.status(406).send('Invalid url. Not Acceptable.')
   }
-  var selectCols = _.get(req.query, 'selectCols')
-  if (selectCols) selectCols = selectCols.split(',')
-  var geoArea = _.get(req.query, 'geoArea')
-  if (geoArea) {
-    geoArea = _.map(geoArea.split(','), area => {
+  var validKeys = ['disasters', 'states', 'locales', 'localeType', 'cols']
+  var passedKeys = _.keys(req.query)
+  for (var i in passedKeys) {
+    if (_.indexOf(validKeys, passedKeys[i]) === -1) {
+      return res.status(406).send(`Improper query parameters sent. You must only use ${validKeys}. Not Acceptable.`)
+    }
+  }
+  var summaryCols
+  var selectCols
+  var cols = _.get(req.query, 'cols')
+  if (cols) cols = cols.split(',')
+  if (queryType === 'export') selectCols = cols
+  else summaryCols = cols
+
+  var disasters = _.get(req.query, 'disasters')
+  if (disasters) disasters = disasters.split(',')
+  var stateId = _.get(req.query, 'states')
+  if (stateId) stateId = stateId.toUpperCase().split(',')
+  var locales = _.get(req.query, 'locales')
+  if (locales) {
+    locales = _.map(locales.split(','), area => {
       return area
     })
   }
-  var geoName = decodeLocaleField(_.get(req.query, 'geoName'))
-  if ((geoName && !geoArea) || (!geoName && geoArea)) {
-    res.status(406).send('Improper query parameters sent. You must provide both geoName and values, or neither. Not Acceptable.')
-    return
+  var localeType = hudApi.decodeField(_.get(req.query, 'localeType'))
+  if ((localeType && !locales) || (!localeType && locales)) {
+    return res.status(406).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
   }
-  var summaryCols = _.get(req.query, 'summaryCols')
-  summaryCols = summaryCols ? summaryCols.split(',') : null
   var queryObj = []
-  if (disasterId) queryObj.push({'disaster_id': disasterId})
-  if (stateId) queryObj.push({'damaged_state': stateId})
-  if (geoName && geoArea) {
+  if (disasters) queryObj.push({[hudApi.decodeField('disaster')]: disasters})
+  if (stateId) queryObj.push({[hudApi.decodeField('state')]: stateId})
+  if (localeType && locales) {
     var arg = {}
-    arg[geoName] = geoArea
+    arg[localeType] = locales
     queryObj.push(arg)
   }
-  var results = dbApi.getData(queryObj, summaryCols, selectCols)
+  var results = hudApi.getData(queryObj, summaryCols, selectCols)
   res.json(results)
 })
 
-/**
-* router.get('/locales/:stateId/:localeType') <br/>
-* @function get
-* @param {stateId}- a state id
-* @param {localeType}- a geographic level (city, county, congrdist)
-**/
-router.get('/locales/:stateId/:localeType', (req, res) => {
-  var stateId = req.params.stateId.toUpperCase()
-  var localeType = decodeLocaleField(req.params.localeType)
-  if (!localeType) return
-  var selectCols = [localeType]
-  var queryObj = []
-  queryObj.push({'damaged_state': [stateId]})
-  var data = dbApi.getData(queryObj, null, selectCols)
-  var results = _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
-  res.json(results)
-})
-
-const decodeLocaleField = (fieldname) => {
-// Below is what it will eventually be:
-  // switch (fieldname) {
-  //   case 'city':
-  //     return 'DMGE_CITY_NAME'
-  //   case 'county':
-  //     return 'CNTY_NAME'
-  //   case 'congrdist':
-  //     return 'FCD_FIPS91_CD'
-  // }
-
-// this is what is is now for our dummy database
-  switch (fieldname) {
-    case 'city':
-      return 'damaged_city'
-    case 'county':
-      return 'county_name'
-    case 'congrdist':
-      return 'fcd_fips91'
-  }
-}
-
-const rollUpData = (data) => {
-  var rolledUpData = []
-  if (_.get(data, 'DisasterDeclarationsSummaries')) {
-    data.DisasterDeclarationsSummaries.forEach((record) => {
-      var disasterRecFound = false
-      for (var x in rolledUpData) {
-        var existingRecord = rolledUpData[x]
-        if (record.disasterNumber === existingRecord.disasterNumber) disasterRecFound = x
-      }
-      if (!disasterRecFound) {
-        record.declaredCountyArea = [record.declaredCountyArea]
-        rolledUpData.push(record)
-      } else rolledUpData[disasterRecFound].declaredCountyArea.push(record.declaredCountyArea)
-    })
-  }
-  return rolledUpData
-}
 module.exports = router
 
 /**
@@ -289,7 +316,7 @@ module.exports = router
 *   Grant:
 *     type: object
 *     properties:
-*       disaster_id:
+*       dster_id:
 *         type: integer
 *         format: int64
 *       disaster_type:
@@ -327,7 +354,7 @@ module.exports = router
 *         type: string
 *       damaged_city:
 *         type: string
-*       damaged_state:
+*       dmge_state_cd:
 *         type: string
 *       damaged_zip5:
 *         type: integer

@@ -5,11 +5,12 @@ import moxios from 'moxios' // eslint-disable-line
 import { mutations, actions, getters } from '@/reportStore' // eslint-disable-line
 import sinon from 'sinon'
 import should from 'should'
+import magic from '@/bus'
 const { updateReportDisasterList, updateLocaleList, clearStore,
   setState, addDisasterFilter, addLocaleFilter, removeDisasterFilter, removeLocaleFilter,
-  setShowReportSpinner, setSelectedGeographicLevel, updateReportData } = mutations
-const { loadReportDisasterList, loadLocales, setSelectedState, loadReportData } = actions
-const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords, stateUrlParameters } = getters
+  setShowReportSpinner, setSelectedGeographicLevel, updateReportData, setShowReport } = mutations
+const { loadReportDisasterList, loadLocales, setSelectedState, loadReportData, loadFilteredDisasters } = actions
+const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords, stateUrlParameters, showReport } = getters
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -104,6 +105,48 @@ describe('reportStore', function () {
     })
   })
 
+  describe('loadFilteredDisasters', function () {
+    let emit
+    beforeEach(function () {
+      emit = sinon.spy(magic, '$emit')
+    })
+    afterEach(function () {
+      emit.restore()
+    })
+
+    it('should call commit for updateReportDisasterList when the data is loaded', function (done) {
+      moxios.stubRequest(/IA/, {
+        status: 200,
+        response: _.clone(TWO_RECORDS)
+      })
+      const commit = sinon.spy()
+      let state = {geographicLevel: {code: 'city'}, stateFilter: {code: 'IA'}, localeList: [{name: 'Cedar Rapids'}]}
+      loadFilteredDisasters({commit, state}, 'IA')
+      moxios.wait(() => {
+        should(commit.calledWith('updateReportDisasterList')).be.true()
+        should(emit.calledWith('disastersLoaded')).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
+
+    it('should call commit for setStatus when no data is found', function (done) {
+      moxios.stubRequest(/IA/, {
+        status: 200,
+        response: []
+      })
+      const commit = sinon.spy()
+      let state = {geographicLevel: {code: 'city'}, stateFilter: {code: 'IA'}, localeList: [{name: 'NonExistant'}]}
+      loadFilteredDisasters({commit, state}, 'IA')
+      moxios.wait(() => {
+        should(commit.calledWith('updateReportDisasterList')).be.true()
+        should(emit.calledWith('disastersLoaded')).be.false()
+        should(commit.calledWith('setStatus'), {type: 'info', scope: 'app', msg: 'No results found!'}).be.true()
+        done()
+      })
+    })
+  })
+
   describe('loadLocales', function () {
     it('should call commit for updateLocaleList when the data is loaded', function (done) {
       moxios.stubRequest(/WI/, {
@@ -156,7 +199,7 @@ describe('reportStore', function () {
       const commit = sinon.spy()
       const state = {geographicLevel: {name: 'Congressional District', code: 'CongrDist'}, stateFilter: {code: 'WI', name: 'WI'}}
       loadLocales({commit, state}, 'WI')
-      const expected = [{code: '1234567', name: '34-567'}, {code: '7654321', name: '54-321'}]
+      const expected = [{code: '1234567', name: '34'}, {code: '7654321', name: '54'}]
       moxios.wait(() => {
         should(commit.calledWith('updateLocaleList', expected)).be.true()
         should(commit.calledWith('resetStatus')).be.true()
@@ -187,12 +230,21 @@ describe('reportStore', function () {
     })
   })
 
-  describe('setShowReportLoader', function () {
-    it('should set value of showReportLoader to true', function () {
+  describe('setShowReportSpinner', function () {
+    it('should set value of showReportSpinner to true', function () {
       let state = {showReportSpinner: false}
       setShowReportSpinner(state, true)
       should(state.showReportSpinner).be.equal(true)
       should(showReportSpinner(state)).be.equal(true)
+    })
+  })
+
+  describe('showReport', function () {
+    it('should set value of showReport to true', function () {
+      let state = {showReport: false}
+      setShowReport(state, true)
+      should(state.showReport).be.equal(true)
+      should(showReport(state)).be.equal(true)
     })
   })
 
@@ -208,9 +260,18 @@ describe('reportStore', function () {
   describe('updateReportData', function () {
     it('should set value of summaryRecords to proper value', function () {
       let state = {summaryRecords: null}
-      updateReportData(state, 'some data')
-      should(state.summaryRecords).be.equal('some data')
-      should(summaryRecords(state)).be.equal('some data')
+      let newSummaryRecord = {someField: 1000, someOtherField: 9000}
+      updateReportData(state, newSummaryRecord)
+      should(state.summaryRecords.someField).be.equal(newSummaryRecord.someField)
+      should(summaryRecords(state).someOtherField).be.equal(newSummaryRecord.someOtherField)
+    })
+
+    it('should set value of summaryRecords to proper formatted value', function () {
+      let state = {summaryRecords: null}
+      let newSummaryRecord = {numberOfRecords: 1000, total_dmge_amnt: 2000, hud_unmt_need_amnt: 3000}
+      updateReportData(state, newSummaryRecord)
+      should(state.summaryRecords.total_dmge_amnt).be.equal(newSummaryRecord.total_dmge_amnt)
+      should(summaryRecords(state)['Total FEMA verified real property loss']).be.equal('$2,000.00')
     })
   })
 
@@ -371,7 +432,7 @@ describe('reportStore', function () {
     const filterParameter = {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX'}}
 
     it('should call commit for updateReportData when the data is loaded', function (done) {
-      moxios.stubRequest(/db/, {
+      moxios.stubRequest(/applicants/, {
         status: 200,
         response: _.clone(REPORT_SUMMARY)
       })
@@ -384,7 +445,7 @@ describe('reportStore', function () {
       })
     })
     it('should set status to "no results found" if result is empty', function (done) {
-      moxios.stubRequest(/db/, {
+      moxios.stubRequest(/applicants/, {
         status: 200,
         response: []
       })

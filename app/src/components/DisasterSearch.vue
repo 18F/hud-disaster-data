@@ -86,7 +86,7 @@ export default {
       if (!this.query) return this.reset()
       if (/^\d+$/.test(this.query) && this.query.length < 4) return
       if (this.query.length < 2) return
-      this.$store.dispatch('loadDisasterList', this.query)
+      this.$store.dispatch('loadDisasterList', {qry: this.query, user: this.$store.getters.user})
     },
     reset () {
       this.query = ''
@@ -95,4 +95,5 @@ export default {
   }
 }
 </script>
-<style src="../../public/assets/_scss/app.scss" lang="scss"/>
+<style src="../../public/assets/_scss/app.scss" lang="scss">
+</style>

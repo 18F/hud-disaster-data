@@ -438,7 +438,7 @@ disasterSearchTour.addStep('enter-search', {
       text: 'Next',
       action: () => {
         let step = disasterSearchTour.getCurrentStep()
-        if ($store.getters.status.type !== 'success') {
+        if ($store.getters.status.type !== 'normal') {
           step.hide()
           TourObject.showError()
           step.error = true

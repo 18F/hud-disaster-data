@@ -2,7 +2,7 @@
 applications:
 - name: hud-disaster-data-staging
   path: ../../app
-  memory: 64M
+  memory: 128M
   host: hud-disaster-data-staging
   buildpack: https://github.com/cloudfoundry/nodejs-buildpack
   env:

@@ -40,8 +40,6 @@ describe('SelectLocationSideBar component', function () {
       loadReportData: sinon.stub()
     }
     store = new Vuex.Store({state: {}, mutations, getters, actions})
-    let createdStub = sinon.stub()
-    SelectLocationSideBar.created = createdStub
     Constructor = Vue.extend(SelectLocationSideBar)
     vm = new Constructor({store}).$mount()
   })
@@ -53,6 +51,23 @@ describe('SelectLocationSideBar component', function () {
     })
   })
 
+  describe('beforeDestroy', function () {
+    it('when invoked, do reset and clearStore', function (done) {
+      const resetSpy = sinon.spy()
+      const commitSpy = sinon.spy()
+      const that = {
+        reset: resetSpy,
+        $store: { commit: commitSpy }
+      }
+      const beforeDestroy = vm.$options.beforeDestroy[0]
+      beforeDestroy.call(that)
+      Vue.nextTick(() => {
+        expect(resetSpy.called).to.be.equal(true)
+        expect(commitSpy.calledWith('clearStore')).to.be.equal(true)
+        done()
+      })
+    })
+  })
   describe('created event/initializeValuesFromURL', function () {
     const testStates = [{ code: 'MZ', name: 'Manzana' }, { code: 'NR', name: 'Naranja' }, { code: 'PL', name: 'Platano' }]
     const testGeoLevels = [{ code: 'city', name: 'City' }, { code: 'county', name: 'County' }, { code: 'something', name: 'Else' }]
@@ -60,11 +75,7 @@ describe('SelectLocationSideBar component', function () {
     const testDisasters = [{ code: 'AA-1234-ZZ', name: 'AA-1234-ZZ' }, { code: 'BB-5678-YY', name: 'BB-5678-YY' }, { code: 'CC-0987-XX', name: 'CC-0987-XX' }]
 
     it('should set no values in the selections if no URL parameters are passed in', function (done) {
-      let createdStub = sinon.stub()
       const that = { $route: { query: null }, stateSelected: null, geographicLevelSelected: null }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
@@ -78,7 +89,9 @@ describe('SelectLocationSideBar component', function () {
       const commitSpy = sinon.spy()
       const setLevelSpy = sinon.spy()
       const magicOnceSpy = sinon.spy(magic, '$once')
-      let createdStub = sinon.stub()
+      const changeStateSpy = sinon.spy()
+      const stateRefSpy = sinon.spy()
+      const geoSelectorSpy = sinon.spy()
       store.commit = commitSpy
       store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
@@ -90,18 +103,21 @@ describe('SelectLocationSideBar component', function () {
         $store: store,
         stateSelected: null,
         geographicLevelSelected: null,
-        setLevel: setLevelSpy }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
+        setLevel: setLevelSpy,
+        changeState: changeStateSpy,
+        $refs: {
+          stateSelector: { select: stateRefSpy },
+          geographicLevelSelector: { select: geoSelectorSpy }
+        }
+      }
+
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
-        expect(that.stateSelected).to.be.equal(testStates[0])
-        expect(that.geographicLevelSelected).to.be.null
-        expect(commitSpy.calledWith('setState', testStates[0]))
-        expect(commitSpy.calledOnce)
+        expect(changeStateSpy.calledOnce)
+        expect(geoSelectorSpy.notCalled)
         expect(magicOnceSpy.notCalled)
+        expect(stateRefSpy.calledOnce)
         magicOnceSpy.restore()
         done()
       })
@@ -111,7 +127,9 @@ describe('SelectLocationSideBar component', function () {
       const commitSpy = sinon.spy()
       const setLevelSpy = sinon.spy()
       const magicOnceSpy = sinon.spy(magic, '$once')
-      let createdStub = sinon.stub()
+      const changeStateSpy = sinon.spy()
+      const stateRefSpy = sinon.spy()
+      const geoSelectorSpy = sinon.spy()
       store.commit = commitSpy
       store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
@@ -124,18 +142,19 @@ describe('SelectLocationSideBar component', function () {
         $store: store,
         stateSelected: null,
         geographicLevelSelected: null,
-        setLevel: setLevelSpy }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
+        setLevel: setLevelSpy,
+        changeState: changeStateSpy,
+        $refs: {
+          stateSelector: { select: stateRefSpy },
+          geographicLevelSelector: { select: geoSelectorSpy }
+        }
+      }
+
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
-        expect(that.stateSelected).to.be.equal(testStates[0])
-        expect(that.geographicLevelSelected).to.be.equal(testGeoLevels[0])
-        expect(commitSpy.calledWith('setState', testStates[0]))
-        expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
-        expect(commitSpy.calledTwice)
+        expect(changeStateSpy.calledOnce)
+        expect(geoSelectorSpy.calledOnce)
         expect(magicOnceSpy.notCalled)
         magicOnceSpy.restore()
         done()
@@ -146,7 +165,9 @@ describe('SelectLocationSideBar component', function () {
       const commitSpy = sinon.spy()
       const setLevelSpy = sinon.spy()
       const magicOnceSpy = sinon.spy(magic, '$once')
-      let createdStub = sinon.stub()
+      const changeStateSpy = sinon.spy()
+      const stateRefSpy = sinon.spy()
+      const geoSelectorSpy = sinon.spy()
       store.commit = commitSpy
       store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
@@ -161,16 +182,19 @@ describe('SelectLocationSideBar component', function () {
         $store: store,
         stateSelected: null,
         geographicLevelSelected: null,
-        setLevel: setLevelSpy }
-      SelectLocationSideBar.created = createdStub
-      Constructor = Vue.extend(SelectLocationSideBar)
-      vm = new Constructor({store}).$mount()
+        setLevel: setLevelSpy,
+        changeState: changeStateSpy,
+        $refs: {
+          stateSelector: { select: stateRefSpy },
+          geographicLevelSelector: { select: geoSelectorSpy }
+        }
+      }
+
       const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
       initializeValuesFromURL.call(that)
       Vue.nextTick(() => {
-        expect(that.stateSelected).to.be.equal(testStates[0])
-        expect(that.geographicLevelSelected).to.be.equal(testGeoLevels[0])
-        expect(commitSpy.calledWith('setState', testStates[0]))
+        expect(changeStateSpy.calledOnce)
+        expect(geoSelectorSpy.calledOnce)
         expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
         expect(commitSpy.calledWith('addDisasterFilter', testDisasters[0]))
         expect(magicOnceSpy.calledWith('localesLoaded'))
@@ -217,7 +241,7 @@ describe('SelectLocationSideBar component', function () {
       const dispatchSpy = sinon.spy(store, 'dispatch')
       vm.createReport()
       Vue.nextTick(() => {
-        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'damaged_city', 'geoArea': ['HOUSTON']}}))
+        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'city', 'geoArea': ['HOUSTON']}}))
         done()
       })
     })
@@ -237,6 +261,40 @@ describe('SelectLocationSideBar component', function () {
         expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': null, 'disasterId': [], 'geoName': 'county_name', 'geoArea': [{ code: 'HOUSTON', name: 'Houston' }]}}))
         done()
       })
+    })
+  })
+
+  describe('clearAll', function () {
+    it('should call reset if the dialoge is open', function (done) {
+      let reset = sinon.spy(vm, 'reset')
+      let openDialogue = sinon.stub(vm, 'openDialogue').callsFake(() => { return true })
+      let that = {openDialogue, reset}
+      vm.clearAll.call(that)
+      should(openDialogue.called).be.true()
+      should(reset.called).be.true()
+      reset.restore()
+      openDialogue.restore()
+      done()
+    })
+  })
+
+  describe('openDialogue', function () {
+    it('should return true if confirm returns true', function (done) {
+      let confirm = sinon.stub(window, 'confirm').callsFake(() => { return true })
+      let returnCode = vm.openDialogue()
+      should(confirm.called).be.true()
+      should(returnCode).be.true()
+      confirm.restore()
+      done()
+    })
+
+    it('should return false if confirm returns false', function (done) {
+      let confirm = sinon.stub(window, 'confirm').callsFake(() => { return false })
+      let returnCode = vm.openDialogue()
+      should(confirm.called).be.true()
+      should(returnCode).be.false()
+      confirm.restore()
+      done()
     })
   })
 
@@ -283,6 +341,7 @@ describe('SelectLocationSideBar component', function () {
   describe('addLocale', function () {
     it('should add the locale', function (done) {
       vm.localeSelected = {name: 'Alexandria', code: 'Alexandria'}
+      vm.filterDisasters = function () {}
       let commitSpy = sinon.spy(store, 'commit')
       vm.addLocale()
       Vue.nextTick(() => {
@@ -296,6 +355,20 @@ describe('SelectLocationSideBar component', function () {
       vm.addLocale()
       Vue.nextTick(() => {
         should(commitSpy.calledWith('addLocaleFilter')).be.false()
+        done()
+      })
+    })
+    it('should trigger disaster filter if locale is selected', function (done) {
+      getters.localeFilter = () => { return [{ code: 'HOUSTON', name: 'Houston' }] }
+      store = new Vuex.Store({state: {}, mutations, getters, actions})
+      Constructor = Vue.extend(SelectLocationSideBar)
+      vm = new Constructor({store}).$mount()
+      vm.localeSelected = {name: 'HOUSTON', code: 'HOUSTON'}
+      vm.stateSelected = {code: 'WI'}
+      let dispatchSpy = sinon.spy(vm.$store, 'dispatch')
+      vm.addLocale()
+      Vue.nextTick(() => {
+        should(dispatchSpy.calledWith('loadFilteredDisasters')).be.true()
         done()
       })
     })
@@ -341,9 +414,20 @@ describe('SelectLocationSideBar component', function () {
     it('should call commit to remove the locale', function (done) {
       let locale = 'something'
       let commitSpy = sinon.spy(store, 'commit')
+      vm.filterDisasters = function () {}
       vm.removeLocale(locale)
       Vue.nextTick(() => {
         should(commitSpy.calledWith('removeLocaleFilter')).be.true()
+        done()
+      })
+    })
+    it('should reset disaster filter on locale remove', function (done) {
+      let locale = 'something'
+      let dispatchSpy = sinon.spy(store, 'dispatch')
+      vm.stateSelected = {code: 'WI'}
+      vm.removeLocale(locale)
+      Vue.nextTick(() => {
+        should(dispatchSpy.calledWith('loadReportDisasterList')).be.true()
         done()
       })
     })
