@@ -33,7 +33,11 @@ Report.beforeRouteEnter = beforeRouteEnter
 
 const routes = [
   { path: '/', name: 'disasterSearch', component: DisasterSearch },
-  { path: '/reports', name: 'reports', component: Report }
+  { path: '/reports', name: 'reports', component: Report },
+  { path: '/reports/state/:stateId',
+    name: 'reportsWithParameter',
+    component: Report
+  }
 ]
 
 const router = new VueRouter({

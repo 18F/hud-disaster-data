@@ -239,6 +239,7 @@ describe('SelectLocationSideBar component', function () {
       Constructor = Vue.extend(SelectLocationSideBar)
       vm = new Constructor({store}).$mount()
       const dispatchSpy = sinon.spy(store, 'dispatch')
+      debugger
       vm.createReport()
       Vue.nextTick(() => {
         expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'city', 'geoArea': ['HOUSTON']}}))
@@ -299,11 +300,12 @@ describe('SelectLocationSideBar component', function () {
   })
 
   describe('reset', function () {
-    it('should reset all the selected values to null and clear the store\'s state', function (done) {
+    it(`should reset all the selected values to null and clear the store's state`, function (done) {
       vm.localeSelected = 1
       vm.disasterSelected = 1
       vm.stateSelected = 1
       let commitSpy = sinon.spy(vm.$store, 'commit')
+      debugger
       vm.reset()
       Vue.nextTick(() => {
         should(vm.localeSelected).be.null()

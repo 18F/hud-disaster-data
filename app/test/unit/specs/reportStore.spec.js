@@ -124,7 +124,7 @@ describe('reportStore', function () {
       loadFilteredDisasters({commit, state}, 'IA')
       moxios.wait(() => {
         should(commit.calledWith('updateReportDisasterList')).be.true()
-        should(emit.calledWith('disastersLoaded')).be.true()
+        should(emit.calledWith('filteredDisastersLoaded')).be.true()
         should(commit.calledWith('resetStatus')).be.true()
         done()
       })
@@ -140,7 +140,7 @@ describe('reportStore', function () {
       loadFilteredDisasters({commit, state}, 'IA')
       moxios.wait(() => {
         should(commit.calledWith('updateReportDisasterList')).be.true()
-        should(emit.calledWith('disastersLoaded')).be.false()
+        should(emit.calledWith('filteredDisastersLoaded')).be.false()
         should(commit.calledWith('setStatus'), {type: 'info', scope: 'app', msg: 'No results found!'}).be.true()
         done()
       })
@@ -372,12 +372,12 @@ describe('reportStore', function () {
   })
 
   describe('stateUrlParameters', () => {
-    it('should return an empty string if stateFilter doesn\'t exist', () => {
+    it(`should return an empty string if stateFilter doesn't exist`, () => {
       let state = {}
       let result = stateUrlParameters(state, {})
-      should(result).equal('')
+      should(result).equal('#/reports')
     })
-    it('should add geographicLevel to the querystring if geographicLevel exist\'s', () => {
+    it(`should add geographicLevel to the querystring if geographicLevel exist's`, () => {
       let state = {
         stateFilter: {
           code: 'TX'
@@ -391,7 +391,7 @@ describe('reportStore', function () {
         disasterFilter: []
       }
       let result = stateUrlParameters(state, getters)
-      should(result).equal('?stateFilter=TX&geographicLevel=City')
+      should(result).equal('#/reports/state/TX?geographicLevel=City')
     })
     it('should add localeFilter to the querystring if is at least one localeFilter', () => {
       let state = {
@@ -407,7 +407,7 @@ describe('reportStore', function () {
         disasterFilter: []
       }
       let result = stateUrlParameters(state, getters)
-      should(result).equal('?stateFilter=TX&geographicLevel=City&localeFilter=Far Far,Away')
+      should(result).equal('#/reports/state/TX?geographicLevel=City&localeFilter=Far Far,Away')
     })
     it('should add disasterFilter to the querystring if is at least one disasterFilter', () => {
       let state = {
@@ -423,7 +423,7 @@ describe('reportStore', function () {
         disasterFilter: [{code: '1234'}, {code: '5678'}]
       }
       let result = stateUrlParameters(state, getters)
-      should(result).equal('?stateFilter=TX&geographicLevel=City&localeFilter=Far Far,Away&disasterFilter=1234,5678')
+      should(result).equal('#/reports/state/TX?geographicLevel=City&localeFilter=Far Far,Away&disasterFilter=1234,5678')
     })
   })
 

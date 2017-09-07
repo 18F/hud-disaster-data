@@ -102,7 +102,18 @@ export default {
   name: 'selectLocationSideBar',
   components: {inputselect},
   mounted () {
-    this.initializeValuesFromURL()
+    this.$nextTick(function () {
+      this.initializeValuesFromURL()
+    })
+  },
+  watch: {
+    '$route' (to, from) {
+      if (to !== from) {
+        this.$nextTick(function () {
+          this.initializeValuesFromURL()
+        })
+      }
+    }
   },
   beforeDestroy () {
     this.reset()
@@ -137,7 +148,7 @@ export default {
         { name: 'Virgin Islands', code: 'VI' }, { name: 'Virginia', code: 'VA' }, { name: 'Washington', code: 'WA' }, { name: 'West Virginia', code: 'WV' },
         { name: 'Wisconsin', code: 'WI' }, { name: 'Wyoming', code: 'WY' }
       ],
-      geographicLevels: [{name: 'City', code: 'City'}, {name: 'County', code: 'County'}, {name: 'Congressional District', code: 'CongrDist'}],
+      geographicLevels: [{name: 'City', code: 'city'}, {name: 'County', code: 'county'}, {name: 'Congressional District', code: 'congrdist'}],
       queryValue: ''
     }
   },
@@ -154,6 +165,7 @@ export default {
 
   methods: {
     changeState (val) {
+      console.log('inside changeState()')
       if (val && val.code && val.code.length > 1) {
         if (!this.stateSelected || val.code !== this.stateSelected.code) {
           this.stateSelected = val
@@ -162,6 +174,7 @@ export default {
           this.clearLevel()
           this.clearDisaster()
           this.$store.dispatch('setSelectedState', val)
+          console.log('calling loadReportDisasterList')
           this.$store.dispatch('loadReportDisasterList', val.code)
         }
       }
@@ -187,6 +200,7 @@ export default {
     },
 
     clearLevel () {
+      console.log('inside clearLevel')
       this.geographicLevelSelected = null
       this.$store.commit('setSelectedGeographicLevel', null)
       this.$refs.geographicLevelSelector.clearValue()
@@ -204,6 +218,7 @@ export default {
     },
 
     addLocale () {
+      console.log('inside addLocale')
       if (!this.localeSelected) return
       // DOING: Make a dry run of loading new disasters
       this.$store.commit('addLocaleFilter', this.localeSelected)
@@ -212,9 +227,11 @@ export default {
     },
 
     filterDisasters () {
+      console.log('inside filterDisasters')
       if (this.$store.getters.localeFilter && this.$store.getters.localeFilter.length > 0) {
         this.$store.dispatch('loadFilteredDisasters')
       } else {
+        console.log('calling loadReportDisasterList')
         this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
       }
     },
@@ -226,6 +243,7 @@ export default {
     },
 
     clearDisaster () {
+      console.log('inside clearDisaster')
       this.disasterSelected = null
       this.$store.commit('updateReportDisasterList', [])
       this.$refs.disasterSelect.clearValue()
@@ -251,6 +269,9 @@ export default {
       this.clearLevel()
       this.clearDisaster()
       this.checkDisabled()
+      let baseUrl = location.origin
+      if (baseUrl.substr(baseUrl.length - 1) !== '/') baseUrl += '/'
+      window.history.replaceState(null, '', `${baseUrl}${this.$store.getters.stateUrlParameters}`)
     },
 
     checkDisabled () {
@@ -293,7 +314,9 @@ export default {
         { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
           allFilters
         })
-      // window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
+      let baseUrl = location.origin
+      if (baseUrl.substr(baseUrl.length - 1) !== '/') baseUrl += '/'
+      window.history.replaceState(null, '', `${baseUrl}${this.$store.getters.stateUrlParameters}`)
     },
 
     removeDisaster (disaster) {
@@ -306,38 +329,53 @@ export default {
     },
 
     initializeValuesFromURL () {
-      if (this.$route && this.$route.query && this.$route.query.stateFilter) {
-        let params = this.$route.query
-        if (params.stateFilter) {
-          let stateObj = _.find(this.states, ['code', params.stateFilter])
-          this.changeState(stateObj)
+      console.log('inside initializeValuesFromURL')
+      if (this.$route && this.$route.params && this.$route.params.stateId) {
+        let params = this.$route.params
+        let queryParams = this.$route.query
+        if (params.stateId) {
+          let stateObj = _.find(this.states, ['code', params.stateId])
+          console.log('setting stateSelector from initializeValuesFromURL')
           this.$refs.stateSelector.select(stateObj)
+          // this.changeState(stateObj)
         }
-
-        if (params.geographicLevel) {
-          let level = _.find(this.geographicLevels, ['code', params.geographicLevel])
+        console.log('after setting state')
+        if (queryParams && queryParams.geographicLevel !== undefined) {
+          let level = _.find(this.geographicLevels, ['code', queryParams.geographicLevel])
+          console.log('setting geographicLevelSelector from initializeValuesFromURL')
           this.$refs.geographicLevelSelector.select(level)
         }
+        console.log('after setting geographicLevel')
 
-        if (params.localeFilter) {
-          magic.$once('localesLoaded', () => {
+        if (queryParams && queryParams.localeFilter !== undefined) {
+          magic.$on('localesLoaded', () => {
             let localeResults = this.$store.getters.localeResults
             const vm = this
-            _.map(params.localeFilter.split(','), function (loc) {
-              vm.$store.commit('addLocaleFilter', _.find(localeResults, ['code', loc]))
+            _.map(queryParams.localeFilter.split(','), function (loc) {
+              console.log('setting locale ' + loc)
+              vm.$refs.localeSelect.select(_.find(localeResults, ['code', loc]))
+              vm.addLocale()
             })
           })
         }
+        console.log('after setting locale')
 
-        if (params.disasterFilter) {
-          magic.$once('disastersLoaded', () => {
+        if (queryParams && queryParams.disasterFilter !== undefined) {
+          magic.$on('disastersLoaded', () => {
+            console.log('inside magic.$on(\'disastersLoaded\')')
             let disasterNumberResults = this.$store.getters.disasterNumberResults
             const vm = this
-            _.map(params.disasterFilter.split(','), function (dstr) {
-              vm.$store.commit('addDisasterFilter', _.find(disasterNumberResults, ['code', dstr]))
+            _.map(queryParams.disasterFilter.split(','), function (dstr) {
+              console.log('setting disaster ' + dstr)
+              vm.$refs.disasterSelect.select(_.find(disasterNumberResults, ['code', dstr]))
+              vm.addDisaster()
             })
           })
         }
+        console.log('after setting disasters')
+        // this.$nextTick(function () {
+        //   this.createReport()
+        // })
       }
     }
   }

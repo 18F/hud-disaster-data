@@ -169,7 +169,7 @@ describe('InputSelect', function () {
   })
 
   describe('select', function () {
-    it('should deselect the item if it\'s already selected', function () {
+    it(`should deselect the item if it's already selected`, function () {
       let item = {selected: true, name: 'Colorado', code: 'CO'}
       should.exist(item.selected)
       vm.select(item)

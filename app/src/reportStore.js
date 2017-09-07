@@ -52,12 +52,14 @@ export const mutations = {
   },
 
   addDisasterFilter: function (state, chosenDisaster) {
+    console.log('inside addDisasterFilter')
     chosenDisaster.selected = true
     let index = state.disasterList.indexOf(chosenDisaster)
     state.disasterList.splice(index, 1, chosenDisaster)
   },
 
   addLocaleFilter: function (state, chosenLocale) {
+    console.log('inside addLocaleFilter')
     chosenLocale.selected = true
     let index = state.localeList.indexOf(chosenLocale)
     state.localeList.splice(index, 1, chosenLocale)
@@ -88,12 +90,13 @@ These are the vuex actions
 */
 export const actions = {
   loadReportDisasterList: function ({ commit }, qry) {
+    console.log('inside loadReportDisasterList')
     axios.get(`/api/disasterquery/${qry}`).then(response => {
       commit('updateReportDisasterList', response.data)
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
-      magic.$emit('disastersLoaded')
+      magic.$emit('disastersLoaded', qry)
       commit('resetStatus')
     }).catch(err => {
       console.log(`Error fetching disaster list: ${err}`)
@@ -102,6 +105,7 @@ export const actions = {
   },
 
   loadFilteredDisasters: function ({ commit, state }, qry) {
+    console.log('inside loadFilteredDisasters')
     let localType = state.geographicLevel.code.toLowerCase()
     let stateCode = state.stateFilter.code
     let locales = _.map(_.filter(state.localeList, 'selected'), locale => locale.name).join(',')
@@ -113,7 +117,7 @@ export const actions = {
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
-      magic.$emit('disastersLoaded')
+      magic.$emit('filteredDisastersLoaded', qry, state)
       commit('resetStatus')
     }).catch(err => {
       console.log(`Error fetching disaster list: ${err}`)
@@ -122,6 +126,7 @@ export const actions = {
   },
 
   loadLocales: function ({ commit, state }, qry) {
+    console.log('inside loadLocales')
     let localType = state.geographicLevel.code.toLowerCase()
     let querystring = `/api/states/${state.stateFilter.code}/${localType}`
     axios.get(querystring).then(response => {
@@ -132,7 +137,7 @@ export const actions = {
       if (response.data && response.data.length === 0) {
         return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
       }
-      magic.$emit('localesLoaded')
+      magic.$emit('localesLoaded', qry, state)
       commit('resetStatus')
     }).catch(err => {
       console.log(`Error fetching locale list: ${err}`)
@@ -163,6 +168,7 @@ export const actions = {
   },
 
   setSelectedState: function ({commit}, qry) {
+    console.log('inside setSelectedState')
     commit('clearStore')
     commit('setState', qry)
   }
@@ -211,11 +217,14 @@ export const getters = {
     return newSummaryRecord
   },
   stateUrlParameters: (state, getters) => {
-    if (!state.stateFilter) return ''
-    var parms = `?stateFilter=${state.stateFilter.code}`
-    if (getters.geographicLevel) parms += `&geographicLevel=${getters.geographicLevel.code}`
-    if (getters.localeFilter.length > 0) parms += `&localeFilter=${_.map(getters.localeFilter, l => l.code).join(',')}`
-    if (getters.disasterFilter.length > 0) parms += `&disasterFilter=${_.map(getters.disasterFilter, d => d.code).join(',')}`
+    var parms = `#/reports`
+    if (!state.stateFilter) return parms
+    parms += `/state/${state.stateFilter.code}`
+    var queryParms = []
+    if (getters.geographicLevel) queryParms.push(`geographicLevel=${getters.geographicLevel.code}`)
+    if (getters.localeFilter.length > 0) queryParms.push(`localeFilter=${_.map(getters.localeFilter, l => l.code).join(',')}`)
+    if (getters.disasterFilter.length > 0) queryParms.push(`disasterFilter=${_.map(getters.disasterFilter, d => d.code).join(',')}`)
+    if (queryParms.length > 0) parms += `?${queryParms.join('&')}`
     return parms
   }
 }

@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    selectLocationSideBar(v-on:updateSummaryDisplay='updateSummaryDisplay')
+    selectLocationSideBar(v-on:updateSummaryDisplay='updateSummaryDisplay' ref='selectLocationSideBar')
     div.col-xs-12.col-sm-12.col-md-8.col-lg-8.reports
       div.col-lg-12
         h1
