@@ -8,13 +8,13 @@
         :placeholder='searchInputLabel'
         autocomplete='off'
         v-model='queryValue'
-        @keydown.esc='reset'
+        @keydown.esc.prevent='reset'
         @keydown.enter='update'
+        @keydown.tab='update'
         @keydown.down.prevent="selectDown"
         @keydown.up.prevent="selectUp"
         @click='inputReaction'
         @keydown='inputReaction'
-        @focus='checkForReset'
         @blur="close"
         :class="isDisabled"
         :disabled="isDisabled"
@@ -48,7 +48,7 @@ import adjustScroll from '../mixins/adjustScroll'
 export default {
   name: 'input-select',
   mixins: [adjustScroll],
-  props: ['items', 'onChange', 'value', 'disabled', 'componentDescription', 'required'],
+  props: ['items', 'onChange', 'onReset', 'value', 'disabled', 'componentDescription', 'required'],
   data () {
     return {
       matchingItems: [],
@@ -58,9 +58,11 @@ export default {
       ref: 'inputSelectText',
       placeholder: 'type here',
       searchButtonTitle: 'Search magnifying glass icon',
-      searchInputLabel: '' // search for something
+      searchInputLabel: '', // search for something
+      beforeReset: this.onReset || function () { return true }
     }
   },
+
   computed: {
     hasItems () {
       return this.items && this.items.length > 0
@@ -108,7 +110,9 @@ export default {
         } else {
           // user has no matches to input
           // or user has hit enter when there are multiple matches
-          this.$emit('clear', null)
+          if (this.beforeReset()) {
+            this.$emit('clear', null)
+          }
         }
       }
     },
@@ -118,11 +122,10 @@ export default {
       this.matchingItems = _.clone(this.items)
     },
     reset () {
-      this.$emit('clear', null)
-      this.clearValue()
-    },
-    checkForReset () {
-      if (this.queryValue === '' && this.items.length > 0) this.reset()
+      if (this.queryValue && this.beforeReset()) {
+        this.$emit('clear', null)
+        this.clearValue()
+      }
     },
     toggleDropdown () {
       this.contentVisible = !this.contentVisible

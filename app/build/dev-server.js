@@ -1,3 +1,4 @@
+require('../config/env')
 require('./check-versions')()
 /**
 *  Generated from the vue cli tool. We modified it slightly to fit our needs.  This is the part of the devops that runs the dev server.
@@ -12,6 +13,7 @@ if (!process.env.NODE_ENV) {
 var opn = require('opn')
 var path = require('path')
 var express = require('express')
+var morgan = require('morgan')
 var bodyParser = require('body-parser')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
@@ -28,13 +30,15 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
-  publicPath: webpackConfig.output.publicPath,
+  publicPath: '/',
+  index: 'index.html',
   quiet: true
 })
 
@@ -58,9 +62,6 @@ Object.keys(proxyTable).forEach(function (context) {
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
-// handle fallback for HTML5 history API
-app.use(require('connect-history-api-fallback')())
-
 // serve webpack bundle output
 app.use(devMiddleware)
 
@@ -71,10 +72,12 @@ app.use(hotMiddleware)
 app.use('/api', require('../lib/controllers/api'))
 
 // serve pure static assets
-var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(staticPath, express.static('./static'))
+app.use(express.static('./static'))
 
-var uri = 'http://localhost:' + port
+// handle fallback for HTML5 history API
+// app.use(require('connect-history-api-fallback')())
+
+var uri = `http://localhost:${port}/`
 
 var _resolve
 var readyPromise = new Promise(resolve => {

@@ -433,7 +433,7 @@ describe('tour', () => {
         expect(showMessageStub.called).to.equal(false)
       })
       it('should go to next step in the disasterSearchTour if status is success', () => {
-        getters.status = function () { return {type: 'success'} }
+        getters.status = function () { return {type: 'normal'} }
         store = new Vuex.Store({state: {}, mutations, getters})
         tour.setStore(store)
         let disasterSearchTour = tour.tour

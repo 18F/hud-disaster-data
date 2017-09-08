@@ -43,10 +43,10 @@
         .report-values(v-show="showReport")
           table
               tr(v-for='(amount, desc) in summaryRecords')
-                td
+                td.report-desc(tabindex=0)
                   | {{ desc }}
-                td
-                  | {{ Math.round(amount * 100) / 100 }}
+                td.report-amount(tabindex=0)
+                  | {{ amount }}
 </template>
 <script>
 import selectLocationSideBar from './SelectLocationSideBar'
@@ -96,7 +96,7 @@ export default {
       return this.displaylevel
     },
     summaryRecords () {
-      return _.omit(this.$store.getters.summaryRecords, 'numberOfRecords')
+      return this.$store.getters.summaryRecords
     },
     getCreationDate () {
       return this.createdDate
@@ -105,9 +105,9 @@ export default {
   methods: {
     exportURI () {
       var csv = ''
-      csv += `Type,Amount\n`
-      _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `${key}, ${_.round(value, 2)}\n` })
-      return 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv)
+      csv += `"Type","Amount"\n`
+      _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `"${key}","${value}"\n` })
+      return 'data:application/csv;charset=utf-8,' + encodeURI(csv)
     },
     updateSummaryDisplay (data) {
       this.displaylevel = data.level
@@ -206,7 +206,7 @@ table { margin:0; }
   }
 
   .report-shell {
-    background: url('/static/img/bg_50_opacity.png');
+    background: url('../../static/img/bg_50_opacity.png');
     /* border:1px solid #5b616b; */
     height:505px;
     padding-top:18%;
@@ -238,6 +238,10 @@ table { margin:0; }
           border-bottom: none;
         }
         td {
+          &.report-amount {
+            text-align:right;
+            padding-right:10px;
+          }
           &:first-child { width:65%; }
           padding:5px 0 5px 10px;
         }

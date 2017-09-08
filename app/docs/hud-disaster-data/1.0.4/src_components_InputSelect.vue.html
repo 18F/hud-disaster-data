@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>src/components/InputSelect.vue - Documentation</title>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <span class="navicon"></span>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-build_dev-server.html">build/dev-server</a></li><li><a href="module-bus.html">bus</a></li><li><a href="module-components_App.html">components/App</a></li><li><a href="module-components_Disaster.html">components/Disaster</a></li><li><a href="module-components_DisasterSearch.html">components/DisasterSearch</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_DisasterSearch.html#~update">update</a></li></ul></li><li><a href="module-components_Header.html">components/Header</a></li><li><a href="module-components_Icon.html">components/Icon</a></li><li><a href="module-components_Message.html">components/Message</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-components_Message.html#~displayMessage">displayMessage</a></li></ul></li><li><a href="module-components_Report.html">components/Report</a></li><li><a href="module-components_SavedExtracts.html">components/SavedExtracts</a></li><li><a href="module-components_Sprites.html">components/Sprites</a></li><li><a href="module-lib_controllers_api.html">lib/controllers/api</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-lib_controllers_api.html#~/applicants/:queryType">/applicants/:queryType</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/disasternumber/:qry">/disasternumber/:qry</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/disasterquery/:qry">/disasterquery/:qry</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/export/:fileNamePart">/export/:fileNamePart</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/states/:state/disasters">/states/:state/disasters</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/states/:stateId/:localeType">/states/:stateId/:localeType</a></li><li data-type='method'><a href="module-lib_controllers_api.html#~/version">/version</a></li></ul></li><li><a href="module-reportStore.html">reportStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-reportStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-reportStore.html#~updateReportDisasterList">updateReportDisasterList</a></li></ul></li><li><a href="module-router.html">router</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-router.html#.beforeRouteEnter">beforeRouteEnter</a></li></ul></li><li><a href="module-searchStore.html">searchStore</a><ul class='members'><li class='list-title'>Members</li><li data-type='member'><a href="module-searchStore.html#.actions">actions</a></li></ul><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-searchStore.html#~clearCurrentExtract">clearCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~clearSearch">clearSearch</a></li><li data-type='method'><a href="module-searchStore.html#~deleteExtract">deleteExtract</a></li><li data-type='method'><a href="module-searchStore.html#~loadExtract">loadExtract</a></li><li data-type='method'><a href="module-searchStore.html#~resetStatus">resetStatus</a></li><li data-type='method'><a href="module-searchStore.html#~saveExtract">saveExtract</a></li><li data-type='method'><a href="module-searchStore.html#~setSearchLoading">setSearchLoading</a></li><li data-type='method'><a href="module-searchStore.html#~setStatus">setStatus</a></li><li data-type='method'><a href="module-searchStore.html#~toggleCurrentExtract">toggleCurrentExtract</a></li><li data-type='method'><a href="module-searchStore.html#~updateDisasterList">updateDisasterList</a></li></ul></li><li><a href="module-store.html">store</a></li><li><a href="module-tour.html">tour</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-tour.html#~clearTabIndex">clearTabIndex</a></li><li data-type='method'><a href="module-tour.html#~removeObserver">removeObserver</a></li><li data-type='method'><a href="module-tour.html#~restoreTabIndex">restoreTabIndex</a></li></ul></li><li><a href="module-vueMixins.html">vueMixins</a><ul class='methods'><li class='list-title'>Methods</li><li data-type='method'><a href="module-vueMixins.html#~iconName">iconName</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/components/InputSelect.vue</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template lang="pug">
+  .input-select
+    .search-wrapper.input-group(aria-live="assertive" v-bind:class="{ 'input-required': isRequired }")
+      label.sr-only(for='search-text') {{ searchInputLabel }}
+      input.search-text(
+        type='search'
+        :required='required'
+        :placeholder='searchInputLabel'
+        autocomplete='off'
+        v-model='queryValue'
+        @keydown.esc.prevent='reset'
+        @keydown.enter='update'
+        @keydown.tab='update'
+        @keydown.down.prevent="selectDown"
+        @keydown.up.prevent="selectUp"
+        @click='inputReaction'
+        @keydown='inputReaction'
+        @blur="close"
+        :class="isDisabled"
+        :disabled="isDisabled"
+        :title='`Text input for ${componentDescription}`')
+      icon.search-icon(name="fa-search")
+      button.clear-text(@click='reset'
+       v-if='isDirty'
+        :title='`Clear search text for ${componentDescription}`'
+        :class="isDisabled"
+        :disabled="isDisabled")
+        icon(classes='clear-text' name='fa-times')
+      span.input-group-btn
+        button.usa-button.btn.toggle-btn(type="button"
+          :title='`Toggle drop-down list for ${componentDescription}`'
+          @click="toggleDropdown"
+          :class="isDisabled"
+          :disabled="isDisabled"
+          @blur="close")
+          icon(v-show="contentVisible" name='fa-caret-up')
+          icon(v-show="!contentVisible" name='fa-caret-down')
+    .results-list(ref="dropdownMenu" v-if="contentVisible")
+      ul.dropdown-content(@blur="close")
+        li(v-for='(item, index) in unMatchedItems' :class="{ active: item.selected, highlight: index === listIndex }" @mouseover="listIndex = index")
+          span(@mousedown.prevent="select(item)")
+            | {{ item.name }}
+&lt;/template>
+&lt;script>
+import _ from 'lodash'
+import adjustScroll from '../mixins/adjustScroll'
+
+export default {
+  name: 'input-select',
+  mixins: [adjustScroll],
+  props: ['items', 'onChange', 'onReset', 'value', 'disabled', 'componentDescription', 'required'],
+  data () {
+    return {
+      matchingItems: [],
+      listIndex: -1,
+      queryValue: _.get(this, 'value.name'),
+      contentVisible: false,
+      ref: 'inputSelectText',
+      placeholder: 'type here',
+      searchButtonTitle: 'Search magnifying glass icon',
+      searchInputLabel: '', // search for something
+      beforeReset: this.onReset || function () { return true }
+    }
+  },
+
+  computed: {
+    hasItems () {
+      return this.items &amp;&amp; this.items.length > 0
+    },
+    isEmpty () {
+      return !this.queryValue
+    },
+    isDirty () {
+      return !!this.queryValue
+    },
+    isRequired () {
+      return !this.queryValue &amp;&amp; this.required
+    },
+    unMatchedItems () {
+      return _.reject(this.getMatchingItems(this.queryValue), 'selected')
+    },
+    isDisabled () {
+      return this.disabled ? 'disabled' : false
+    }
+  },
+  methods: {
+    /**
+    * Will submit queryValue to load items
+    * @function update
+    */
+    update () {
+      if (this.listIndex > -1) {
+        if (this.queryValue &amp;&amp; this.queryValue.length > 0) {
+          if (this.matchingItems &amp;&amp; this.matchingItems.length > 0) {
+            // use matchingItems if there is a queryValue text, and matching options
+            this.select(this.matchingItems[this.listIndex])
+          }
+        } else {
+          // use items array, as there is no queryValue text
+          this.select(this.items[this.listIndex])
+        }
+        this.close()
+      } else if (!this.queryValue || this.queryValue.length === 0) {
+        // no item selected in dropdown, no query text
+        this.$emit('clear', null)
+      } else if (this.matchingItems) {
+        if (this.matchingItems.length === 1) {
+          // user has only one match
+          this.select(this.matchingItems[0])
+        } else {
+          // user has no matches to input
+          // or user has hit enter when there are multiple matches
+          if (this.beforeReset()) {
+            this.$emit('clear', null)
+          }
+        }
+      }
+    },
+    clearValue () {
+      this.queryValue = ''
+      this.listIndex = -1
+      this.matchingItems = _.clone(this.items)
+    },
+    reset () {
+      if (this.queryValue &amp;&amp; this.beforeReset()) {
+        this.$emit('clear', null)
+        this.clearValue()
+      }
+    },
+    toggleDropdown () {
+      this.contentVisible = !this.contentVisible
+    },
+    close () {
+      this.contentVisible = false
+    },
+    select (item) {
+      if (this.isSelected(item)) {
+        this.deselect(item)
+      } else {
+        this.matchingItems = [item]
+        this.queryValue = item.name
+        if (this.onChange) this.onChange(item)
+        this.contentVisible = false
+        this.$emit('update:value', item)
+      }
+    },
+    selectDown () {
+      let checkItemsLength = this.matchingItems.length || this.items.length
+      if (this.listIndex &lt; checkItemsLength - 1) {
+        this.listIndex++
+      }
+    },
+    selectUp () {
+      if (this.listIndex > 0) {
+        this.listIndex--
+      }
+    },
+    isSelected (item) {
+      return item &amp;&amp; item.selected
+    },
+    deselect (item) {
+      delete item.selected
+    },
+    getMatchingItems (queryValue) {
+      if (!queryValue) {
+        this.matchingItems = this.items
+        this.listIndex = -1
+      } else {
+        this.matchingItems = []
+        this.items.forEach((i) => {
+          if (i.name.toUpperCase().includes(queryValue.toUpperCase())) {
+            this.matchingItems.push(i)
+          }
+        })
+      }
+      return this.matchingItems
+    },
+    inputReaction (event) {
+      if (event.type === 'keydown') {
+        if (this.filterInput(event)) {
+          if (event.which === 13 || event.keyCode === 13) {
+            this.contentVisible = false
+          } else {
+            this.contentVisible = true
+          }
+          return true
+        } else {
+          event.preventDefault()
+          return false
+        }
+      }
+      return true
+    },
+    filterInput (event) {
+      let keyCode = ('which' in event) ? event.which : event.keyCode
+      let isNumeric = (keyCode >= 48 &amp;&amp; keyCode &lt;= 57) || (keyCode >= 96 &amp;&amp; keyCode &lt;= 105)
+      let alpha = (keyCode >= 65 &amp;&amp; keyCode &lt;= 90)
+      let specialCodes = [ 17, 32, 13, 189, 8, 9, 35, 36, 37, 38, 39, 40, 46, 27, 91, 93 ]
+      let isSpecial = (specialCodes.indexOf(keyCode) > -1)
+      return isNumeric || alpha || isSpecial
+    }
+  }
+}
+&lt;/script>
+&lt;style lang="scss">
+.input-select {
+  /* -- default styles ------------------- */
+  border:0px;
+  position:relative;
+  width:100%;
+
+  ul {
+    margin-top:10px;
+    padding:0;
+    li:before { content: ""; }
+  }
+
+  .sr-only { color: #767676; }
+  .toggle-btn {
+    background: #fff;
+    border:none;
+    border-top-right-radius:0px;
+    border-bottom-right-radius:0px;
+    svg { fill:#000; }
+    &amp;.disabled, :disabled {
+    //  background-color:#ccc;
+    }
+  }
+
+  .search-text {
+    /* Override font for IE10+ ------------------------------ */
+    @media all and (-ms-high-contrast:none), (-ms-high-contrast:active) {
+      font-family: 'Arial', sans-serif !important;
+    }
+    margin: 0;
+    max-width:100%;
+    padding-left:35px;
+  }
+  .toggle-btn, .search-text {
+    border:none;
+    border-radius:0px;
+    height: 46px;
+    margin: 0;
+  }
+
+  .search-wrapper.input-group {
+    border-bottom:1px solid #ccc;
+    width:100%;
+    overflow:hidden;
+    position:relative;
+
+    .search-icon {
+      position:absolute;
+      top:14px;
+      left:10px;
+      fill:#a9a9a9;
+      padding:0;
+    }
+  }
+
+  .search-wrapper.input-group.input-required {
+    outline: 2px solid #f00;
+  }
+
+  button {
+    &amp;.clear-text {
+      background: none;
+      cursor:pointer;
+      float: right;
+      right:8px;
+      margin-top:-32px;
+      max-width: 24px;
+      padding: 0;
+      position: relative;
+      .hdd-icon { fill: #b0b0b0; }
+
+      /* hide input clear when disabled */
+      &amp;.disabled svg { display:none; }
+      &amp;:hover {
+        .hdd-icon { fill: #000; }
+      }
+
+    }
+  }
+
+  .results-list {
+    background: #fff;
+    color: black;
+    cursor:pointer;
+    list-style: none;
+    max-height: 195px;
+    overflow: auto;
+    position: absolute;
+    /* width: 89.5%; */
+    width:100%;
+    z-index: 100;
+    -moz-box-shadow:5px 5px 5px rgba(0,0,0,0.5);
+    -webkit-box-shadow:5px 5px 5px rgba(0,0,0,0.5);
+    box-shadow:5px 5px 5px rgba(0,0,0,0.5);
+
+    .dropdown-content {
+      width:100%;
+      padding:0;
+      margin:0;
+      li {
+        /* height:50px; */
+        &amp;:before { display:none;}
+
+        span {
+          padding:5px;
+          margin-top:5px;
+          width:100%;
+        }
+
+        &amp;.selected {
+          color: #000;
+          background-color: #ccc;
+        }
+        &amp;.highlight {
+          background-color: #E2F6FD;
+        }
+      }
+    }
+  }
+
+  /* -- disabled styles ------------------ */
+  &amp;.disabled{
+    input, button {
+      background-color:#f0f0f0;
+      border:0px;
+      color:#808080;
+      cursor: default;
+    }
+    .search-wrapper.input-group { border-bottom:1px solid transparent; }
+    .toggle-btn svg { fill:#ccc; }
+  }
+}
+
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc" target="_blank">JSDoc 3.5.3</a> on 7/23/2017 using the <a href="https://github.com/Grafluxe/boxy-jsdoc-template" target="_blank">boxy-jsdoc-template</a> theme.
+</footer>
+
+<script src="scripts/prettify/prettify.js"></script>
+<script src="scripts/prettify/lang-css.js"></script>
+<script src="scripts/script.js"></script>
+
+</body>
+</html>
