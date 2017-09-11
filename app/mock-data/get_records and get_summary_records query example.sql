@@ -1,20 +1,20 @@
 SET SERVEROUTPUT ON
 
 DECLARE
-  returnVal fema_data.recordArray;
-  summaryReturnVal fema_data.summaryArray;
-  disasterList fema_data.nbrParameterArray;
-  localevaluesList fema_data.charParameterArray;
+  returnVal recordArray;
+  summaryReturnVal summaryArray;
+  disasterList nbrParameterArray;
+  localevaluesList charParameterArray;
 
 BEGIN
 
-disasterList(1) := 4272;
-disasterList(2) := 1791;
+disasterList := nbrParameterArray(4272, 1791);
+localevaluesList := charParameterArray();
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[disasterid equiv to '4272,1791', results => returnVal]');
 DBMS_OUTPUT.NEW_LINE();
-fema_data.get_records(disasterid => disasterList, results => returnVal);
+fema_data.get_records(disasterid => disasterList, localevalues => localevaluesList, results => returnVal);
 dbms_output.put_line( 'DSTER_ID' || '   ' ||
                        'DSTER_TYPE_CD' || '   ' ||
                        'APPLT_LAST_NAME' || '   ' ||
@@ -57,11 +57,13 @@ for i in 1 .. returnVal.count loop
                         returnVal(i).CNTY_NAME);
 end loop;
 
+disasterList := nbrParameterArray();
+localevaluesList := charParameterArray();
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[stateid => 'TX', results => summaryReturnVal]');
 DBMS_OUTPUT.NEW_LINE();
-fema_data.get_summary_records(stateid => 'TX', results => summaryReturnVal);
+fema_data.get_summary_records(stateid => 'TX',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
 dbms_output.put_line( 'HSHD_SIZE_CNT' || '    ' ||
                      'DPNDNT_CNT' || '    ' ||
                      'INCM_AMNT' || '    ' ||
@@ -105,12 +107,13 @@ for i in 1 .. summaryReturnVal.count loop
                       summaryReturnVal(i).HUD_UNMT_NEED_AMNT);
 end loop;
 
-localevaluesList(1) := 'Dane (County)';
+disasterList := nbrParameterArray();
+localevaluesList := charParameterArray('Dane (County)');
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[having no disasterid value is equiv to 'ALL', stateid => 'WI', localetype => 'CNTY_NAME',   localevalues is equiv to 'Dane (County)']');
 DBMS_OUTPUT.NEW_LINE();
-fema_data.get_records(stateid => 'WI', localetype => 'county',   localevalues => localevaluesList, results => returnVal);
+fema_data.get_records(stateid => 'WI', localetype => 'county',  disasterid => disasterList, localevalues => localevaluesList, results => returnVal);
 
 dbms_output.put_line( 'DSTER_ID' || '   ' ||
                        'DSTER_TYPE_CD' || '   ' ||
@@ -149,13 +152,13 @@ dbms_output.put_line( 'DSTER_ID' || '   ' ||
                          returnVal(i).CNTY_NAME);
  end loop;
 
-localevaluesList(1) := 'Dane (County)';
-localevaluesList(2) := 'Polk (County)';
+disasterList := nbrParameterArray();
+localevaluesList := charParameterArray('Dane (County)', 'Polk (County)');
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[having no disasterid is equiv to saying all, stateid => 'WI', localetype => 'county',   localevalues equiv to 'Dane (County),Polk (County)', results => summaryReturnVal]');
 DBMS_OUTPUT.NEW_LINE();
-fema_data.get_summary_records(stateid => 'WI', localetype => 'county',   localevalues => localevaluesList, results => summaryReturnVal);
+fema_data.get_summary_records(stateid => 'WI', localetype => 'county',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
 dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
                      'TOTAL_ASSTN_AMNT' || '    ' ||
                      'HUD_UNMT_NEED_AMNT' );
@@ -165,13 +168,13 @@ for i in 1 .. summaryReturnVal.count loop
                         summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
 end loop;
 
-disasterList(1) := 4272;
-disasterList(2) := 1791;
+disasterList := nbrParameterArray(4272, 1791);
+localevaluesList := charParameterArray();
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[disasterid equiv to '4272,1791', results => returnVal]');
 DBMS_OUTPUT.NEW_LINE();
-fema_data.get_summary_records(disasterid => disasterList, results => summaryReturnVal);
+fema_data.get_summary_records( disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
 dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
                      'TOTAL_ASSTN_AMNT' || '    ' ||
                      'HUD_UNMT_NEED_AMNT' );
@@ -181,13 +184,13 @@ for i in 1 .. summaryReturnVal.count loop
                         summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
 end loop;
 
-localevaluesList(1) := 'Madison';
-localevaluesList(2) := 'Cedar Rapids';
+disasterList := nbrParameterArray();
+localevaluesList := charParameterArray('Madison', 'Cedar Rapids');
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[ having no disasterid value is equiv to 'ALL', localetype => 'city',   localevalues is equiv to 'Madison,Cedar Rapids']');
 DBMS_OUTPUT.NEW_LINE();
-fema_data.get_records(localetype => 'city',   localevalues => localevaluesList, results => returnVal);
+fema_data.get_records(localetype => 'city', disasterid => disasterList, localevalues => localevaluesList, results => returnVal);
 
 dbms_output.put_line( 'DSTER_ID' || '   ' ||
                        'DSTER_TYPE_CD' || '   ' ||

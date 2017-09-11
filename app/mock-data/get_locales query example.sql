@@ -1,12 +1,11 @@
 SET SERVEROUTPUT ON
 
 DECLARE
-  returnVal fema_data.localeArray;
-  disasterId fema_data.nbrParameterArray;
+  returnVal localeArray;
+  disasterId nbrParameterArray;
 
 BEGIN
-
-  disasterid.DELETE;
+  disasterid := nbrParameterArray();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['TX','county','ALL',returnVal]');
   DBMS_OUTPUT.NEW_LINE();
   fema_data.get_locales('TX','county', disasterId, returnVal);
@@ -15,8 +14,7 @@ BEGIN
    dbms_output.put_line(returnVal(i));
   end loop;
 
-  disasterId(1) := 4187;
-  disasterId(2) := 4289;
+  disasterId := nbrParameterArray(4187,4289);
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'[stateid => 'IA', localetype => 'county', disasterid =>'4187,4289', results => returnVal]');
@@ -27,8 +25,7 @@ BEGIN
    dbms_output.put_line(returnVal(i));
   end loop;
 
-  disasterId(1) := 4187;
-  disasterId(2) := 4289;
+  disasterId := nbrParameterArray(4187,4289);
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'[stateid => 'IA', localetype => 'city', disasterid =>'4187,4289', results => returnVal]');
@@ -39,8 +36,7 @@ BEGIN
    dbms_output.put_line(returnVal(i));
   end loop;
 
-  disasterId(1) := 4272;
-  disasterId(2) := 1791;
+  disasterId := nbrParameterArray(4272,1791);
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['IA', 'city', '4272,1791', returnVal]');
@@ -51,8 +47,7 @@ BEGIN
    dbms_output.put_line(returnVal(i));
   end loop;
 
-  disasterId(1) := 4272;
-  disasterId(2) := 1791;
+  disasterId := nbrParameterArray(4272,1791);
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['TX', 'city', '4272,1791', returnVal]');
@@ -63,8 +58,7 @@ BEGIN
    dbms_output.put_line(returnVal(i));
   end loop;
 
-  disasterId(1) := 4187;
-  disasterId(2) := 4289;
+  disasterId := nbrParameterArray(4187,4289);
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['IA', 'congrdist', '4187,4289', returnVal]');

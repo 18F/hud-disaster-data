@@ -1,6 +1,6 @@
 
 
-results for get_disasters: stateid => 'WI', localetype => 'something', results => returnVal
+results for get_disasters: stateid => 'WI', localetype => 'something', localevalues => localeList, results => returnVal
 
 
 
