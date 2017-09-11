@@ -5,6 +5,7 @@ require('./check-versions')()
 * @module build/dev-server
 */
 
+process.env.DRDP_LOCAL = true
 var config = require('../config')
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
@@ -73,9 +74,6 @@ app.use('/api', require('../lib/controllers/api'))
 
 // serve pure static assets
 app.use(express.static('./static'))
-
-// handle fallback for HTML5 history API
-// app.use(require('connect-history-api-fallback')())
 
 var uri = `http://localhost:${port}/`
 

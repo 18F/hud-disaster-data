@@ -1,6 +1,13 @@
 const _ = require('lodash')
+const axios = require('axios')
 const low = require('lowdb')
 const fileAsync = require('lowdb/lib/storages/file-async')
+
+const getUser = function(userid, cb) {
+  axios.get(`${process.env.HUD_API_BASE}/user/${userid}`)
+    .then(res => cb(null, res.data))
+    .catch(cb)
+}
 
 // Start database using file-async storage
 // For ease of use, read is synchronous
@@ -77,4 +84,4 @@ const getDisasters = function({state, localeType, locales}, cb) {
   .value()
 }
 
-module.exports = { getData, summarizeCols, getDisasters, decodeField }
+module.exports = { getData, summarizeCols, getDisasters, decodeField, getUser }

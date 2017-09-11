@@ -15,6 +15,8 @@ const requestPromise = require('request-promise')
 * @module lib/controllers/api
 */
 
+router.use(require('../middleware/authenticate'))
+
 /**
 * router.get('/version') <br/>
 * @returns  will display the version number of the application <br/>
