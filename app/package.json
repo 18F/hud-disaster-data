@@ -1,6 +1,6 @@
 {
   "name": "hud-disaster-data",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "start-cluster": "echo 'Start the server with pm2 cluster' && pm2 kill && pm2 start index.js --name=\"DRDP\" -i max --no-daemon",
     "build": "echo 'Run the tests, build the webpack bundle, and test for 508 compliance.' && npm test && node build/build.js && npm run 508-test",
     "unit": "echo 'Run the client side tests' && cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "server-unit": "echo 'Run the server side tests' && export DRDP_LOCAL=treu && mocha test/server && mocha test",
+    "server-unit": "echo 'Run the server side tests' && export DRDP_LOCAL=true && mocha test/server && mocha test",
     "test": "echo 'Run all tests' && npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
     "lint": "echo 'Run the linter' && eslint --ext .js,.vue src test/unit/specs",
     "508-test": "echo 'Run the 508 compliance tests' && bash ./508_Test.sh",
