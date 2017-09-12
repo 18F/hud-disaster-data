@@ -7,6 +7,7 @@ import Axios from 'axios'
 import store from './store' // This is our Vuex store.  It helps us manage state.
 import Sprites from './components/Sprites'
 import DisasterSearch from './components/DisasterSearch'
+import Report from './components/Report'
 import AppHeader from './components/Header'
 import AppFooter from './components/Footer'
 import ValueSelector from './components/ValueSelector'
@@ -41,6 +42,7 @@ new Vue({
     Sprites,
     AppHeader,
     DisasterSearch,
+    Report,
     ValueSelector,
     AppFooter,
     InputSelect

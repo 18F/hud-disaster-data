@@ -4,10 +4,22 @@ const low = require('lowdb')
 const fileAsync = require('lowdb/lib/storages/file-async')
 
 const getUser = function(userid, cb) {
-  axios.get(`${process.env.HUD_API_BASE}/user/${userid}`)
+  let config = {
+    headers: {
+      serviceConsumerData: JSON.stringify(process.env.SERVICE_CONSUMER_DATA)
+    }
+  }
+  axios.get(`${process.env.HUD_API_BASE}/user/${userid}`, config)
     .then(res => cb(null, res.data))
-    .catch(cb)
+    .catch(err => {
+      console.log('Error getting user', e)
+      cb(err)
+    })
 }
+
+// const getLocales = function(user, state, type) {
+//
+// }
 
 // Start database using file-async storage
 // For ease of use, read is synchronous
