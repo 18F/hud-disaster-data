@@ -81,6 +81,26 @@ export const mutations = {
     state.geographicLevel = selectedGeographicLevel
   },
 
+  setLocalesFilter: function (state, locales) {
+    _.map(locales, l => {
+      debugger
+      let chosenLocale = {code: l, name: l}
+      let index = _.findIndex(state.localeList, chosenLocale)
+      chosenLocale.selected = true
+      state.localeList.splice(index, 1, chosenLocale)
+    })
+  },
+
+  setDisastersFilter: function (state, disasters) {
+    _.map(disasters, d => {
+      debugger
+      let chosenDisaster = {code: d, name: d}
+      let index = _.findIndex(state.disasterList, chosenDisaster)
+      chosenDisaster.selected = true
+      state.disasterList.splice(index, 1, chosenDisaster)
+    })
+  },
+
   updateReportData: function (state, list) {
     state.summaryRecords = list
   }
@@ -215,17 +235,6 @@ export const getters = {
     }
 
     return newSummaryRecord
-  },
-  stateUrlParameters: (state, getters) => {
-    var parms = `#/reports`
-    if (!state.stateFilter) return parms
-    parms += `/state/${state.stateFilter.code}`
-    var queryParms = []
-    if (getters.geographicLevel) queryParms.push(`geographicLevel=${getters.geographicLevel.code}`)
-    if (getters.localeFilter.length > 0) queryParms.push(`localeFilter=${_.map(getters.localeFilter, l => l.code).join(',')}`)
-    if (getters.disasterFilter.length > 0) queryParms.push(`disasterFilter=${_.map(getters.disasterFilter, d => d.code).join(',')}`)
-    if (queryParms.length > 0) parms += `?${queryParms.join('&')}`
-    return parms
   }
 }
 

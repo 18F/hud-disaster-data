@@ -86,7 +86,7 @@
           div.rp-action-buttons
             button.usa-button.alt-button(type="button" @click="clearAll" title="Clear all report parameters button")
               | Clear
-            button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create report button")
+            button.usa-button.green(type="button" @click="pushReportUrl" :disabled="disableCreate" title="Create report button")
               | Create Report
               icon(name='fa-bar-chart')
 </template>
@@ -271,9 +271,6 @@ export default {
       this.clearLevel()
       this.clearDisaster()
       this.checkDisabled()
-      let baseUrl = location.origin
-      if (baseUrl.substr(baseUrl.length - 1) !== '/') baseUrl += '/'
-      window.history.replaceState(null, '', `${baseUrl}${this.$store.getters.stateUrlParameters}`)
     },
 
     checkDisabled () {
@@ -296,6 +293,16 @@ export default {
       }
     },
 
+    pushReportUrl () {
+      if (!this.$store.getters.stateFilter) return
+      let query = {}
+      if (this.$store.getters.stateFilter) query.stateFilter = this.$store.getters.stateFilter.code
+      if (this.$store.getters.geographicLevel) query.geographicLevel = this.$store.getters.geographicLevel.code
+      if (this.$store.getters.localeFilter.length > 0) query.localeFilter = _.map(this.$store.getters.localeFilter, l => l.code).join(',')
+      if (this.$store.getters.disasterFilter.length > 0) query.disasterFilter = _.map(this.$store.getters.disasterFilter, d => d.code).join(',')
+      this.$router.push({name: 'reports', query})
+    },
+
     createReport () {
       let allFilters = {}
       let summaryDisplayData = {
@@ -316,9 +323,6 @@ export default {
         { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
           allFilters
         })
-      let baseUrl = location.origin
-      if (baseUrl.substr(baseUrl.length - 1) !== '/') baseUrl += '/'
-      window.history.replaceState(null, '', `${baseUrl}${this.$store.getters.stateUrlParameters}`)
     },
 
     removeDisaster (disaster) {
@@ -332,74 +336,40 @@ export default {
 
     initializeValuesFromURL () {
       console.log('inside initializeValuesFromURL')
-      // magic.$off('localesLoaded')
-      // magic.$off('disastersLoaded')
-      // magic.$off('filteredDisastersLoaded')
-      // this.reset()
+      this.clearStateSelected()
+      this.clearLevel()
+      this.clearDisaster()
       const vm = this
-      let stateParam
-      if (this.$route && this.$route.params && this.$route.params.stateId) stateParam = this.$route.params.stateId
-      else return
       let queryParams = this.$route.query
+      let stateParam
+      if (queryParams && queryParams.stateFilter) stateParam = queryParams.stateFilter
+      else return
       let geographicLevelParam
-      let localeParam
-      let disasterParam
+      let localeParam = []
+      let disasterParam = []
       if (queryParams && queryParams.geographicLevel !== undefined) geographicLevelParam = queryParams.geographicLevel
-      if (queryParams && queryParams.localeFilter !== undefined) localeParam = queryParams.localeFilter
-      if (queryParams && queryParams.disasterFilter !== undefined) disasterParam = queryParams.disasterFilter
+      if (queryParams && queryParams.localeFilter !== undefined) localeParam = queryParams.localeFilter.split(',')
+      if (queryParams && queryParams.disasterFilter !== undefined) disasterParam = queryParams.disasterFilter.split(',')
 
-      if (this.$route && this.$route.params && this.$route.params.stateId) {
-        if (stateParam) {
-          let stateObj = _.find(this.states, ['code', stateParam])
-          console.log('setting stateSelector from initializeValuesFromURL')
-          this.$refs.stateSelector.select(stateObj)
-          // this.changeState(stateObj)
-        }
+      let stateObj = _.find(this.states, ['code', stateParam])
+      console.log('setting stateSelector from initializeValuesFromURL')
+      this.$refs.stateSelector.select(stateObj)
 
-        if (geographicLevelParam) {
-          let level = _.find(this.geographicLevels, ['code', geographicLevelParam])
-          console.log('setting geographicLevelSelector from initializeValuesFromURL')
-          this.$refs.geographicLevelSelector.select(level)
-        }
-
-        debugger
-        if (localeParam) {
-          magic.$once('localesLoaded', () => {
-            let localeResults = this.$store.getters.localeResults
-            _.map(localeParam.split(','), function (loc) {
-              console.log('setting locale ' + loc)
-              vm.$store.commit('addLocaleFilter', _.find(localeResults, ['code', loc]))
-            })
-          })
-          if (disasterParam) {
-            magic.$on('filteredDisastersLoaded', () => {
-              console.log('inside magic.$on(\'filteredDisastersLoaded\')')
-              let disasterNumberResults = vm.$store.getters.disasterNumberResults
-              debugger
-              _.map(disasterParam.split(','), function (dstr) {
-                console.log('setting disaster ' + JSON.stringify(_.find(disasterNumberResults, ['code', dstr])))
-                vm.$store.commit('addDisasterFilter', _.find(disasterNumberResults, ['code', dstr]))
-                console.log(`after addDisaster, disasterFilter: ${JSON.stringify(_.map(vm.$store.getters.disasterFilter, d => d.name))}`)
-              })
-            })
-          }
-        } else if (disasterParam) {
-          magic.$on('disastersLoaded', () => {
-            console.log('inside magic.$on(\'disastersLoaded\')')
-            let disasterNumberResults = this.$store.getters.disasterNumberResults
-            _.map(disasterParam.split(','), function (dstr) {
-              console.log('setting disaster ' + dstr)
-              vm.$store.commit('addDisasterFilter', _.find(disasterNumberResults, ['code', dstr]))
-              console.log(`after addDisaster, disasterFilter: ${JSON.stringify(_.map(vm.$store.getters.disasterFilter, d => d.name))}`)
-            })
-          })
-        }
-        // this.$nextTick(function () {
-        //   this.createReport()
-        // })
+      if (geographicLevelParam) {
+        let level = _.find(this.geographicLevels, ['code', geographicLevelParam])
+        console.log('setting geographicLevelSelector from initializeValuesFromURL')
+        this.$refs.geographicLevelSelector.select(level)
       }
-      this.$nextTick(function () {
-        console.log(`end of initializeValuesFromURL, disasterFilter: ${JSON.stringify(_.map(this.$store.getters.disasterFilter, d => d.name))}`)
+
+      magic.$once('localesLoaded', () => {
+        vm.$store.commit('setLocalesFilter', localeParam)
+        vm.$store.dispatch('loadFilteredDisasters')
+        magic.$once('disastersLoaded', () => {
+          vm.$store.commit('setDisastersFilter', disasterParam)
+          vm.$nextTick(function () {
+            vm.createReport()
+          })
+        })
       })
     }
   }
