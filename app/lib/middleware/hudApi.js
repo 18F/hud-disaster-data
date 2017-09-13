@@ -3,10 +3,11 @@ const axios = require('axios')
 const low = require('lowdb')
 const fileAsync = require('lowdb/lib/storages/file-async')
 const https = require('https')
+const fs = require('fs')
+const path = require('path')
 const client = axios.create({
-  httpsAgent: new https.Agent({
-    //ca: file content goes here
-    rejectUnauthorized: false
+  agent: new https.Agent({
+    ca: fs.readFileSync(path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer'))
   })
 })
 
