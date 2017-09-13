@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import _ from 'lodash'
 import es6Promise from 'es6-promise'
-import magic from '@/bus'
+// import magic from '@/bus'
 import numeral from 'numeral'
 es6Promise.polyfill()
 Vue.use(Vuex)
@@ -19,6 +19,7 @@ export const mutations = {
   @param {Array} list - A list of disasters
   */
   updateReportDisasterList: function (state, list) {
+    console.log(`inside updateReportDisasterList with ${JSON.stringify(_.map(list, d => d.disasterNumber))}`)
     state.disasterList = _.map(list, disaster => {
       let name = `${disaster.disasterType}-${disaster.disasterNumber}-${disaster.state}`
       return {name, code: name, data: disaster}
@@ -37,7 +38,8 @@ export const mutations = {
     state.localeList = list
   },
 
-  clearStore: function (state) {
+  initStore: function (state, stateVal) {
+    console.log('inside initStore with: ' + JSON.stringify(stateVal))
     state.disasterList = []
     state.localeList = []
     state.stateFilter = null
@@ -45,6 +47,7 @@ export const mutations = {
     state.summaryRecords = []
     state.showReport = false
     state.showReportSpinner = false
+    state.stateFilter = stateVal
   },
 
   setState: function (state, chosenState) {
@@ -82,8 +85,8 @@ export const mutations = {
   },
 
   setLocalesFilter: function (state, locales) {
+    console.log(`inside setLocalesFilter`)
     _.map(locales, l => {
-      debugger
       let chosenLocale = {code: l, name: l}
       let index = _.findIndex(state.localeList, chosenLocale)
       chosenLocale.selected = true
@@ -92,8 +95,8 @@ export const mutations = {
   },
 
   setDisastersFilter: function (state, disasters) {
+    console.log(`inside setDisastersFilter`)
     _.map(disasters, d => {
-      debugger
       let chosenDisaster = {code: d, name: d}
       let index = _.findIndex(state.disasterList, chosenDisaster)
       chosenDisaster.selected = true
@@ -109,88 +112,78 @@ export const mutations = {
 These are the vuex actions
 */
 export const actions = {
-  loadReportDisasterList: function ({ commit }, qry) {
-    console.log('inside loadReportDisasterList')
-    axios.get(`/api/disasterquery/${qry}`).then(response => {
-      commit('updateReportDisasterList', response.data)
-      if (response.data && response.data.length === 0) {
-        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
-      }
-      magic.$emit('disastersLoaded', qry)
-      commit('resetStatus')
-    }).catch(err => {
-      console.log(`Error fetching disaster list: ${err}`)
-      commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
+  loadFilteredDisasters: function ({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      let stateCode = state.stateFilter ? state.stateFilter.code : null
+      if (!stateCode) return commit('setStatus', {type: 'error', scope: 'app', msg: 'State not specified!'})
+      let localeType = state.geographicLevel ? state.geographicLevel.code.toLowerCase() : null
+      let locales = state.localeList.length > 0 ? _.map(_.filter(state.localeList, 'selected'), locale => locale.name).join(',') : null
+      let query = ''
+      if (stateCode && localeType && locales) query = `?${localeType}=${encodeURI(locales)}`
+      let querystring = `/api/states/${stateCode}/disasters${query}`
+
+      return axios.get(querystring).then(response => {
+        console.log(`calling updateReportDisasterList with ${JSON.stringify(_.map(response.data, d => d.disasterNumber))}`)
+        commit('updateReportDisasterList', response.data)
+        if (response.data && response.data.length === 0) {
+          return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+        }
+        commit('resetStatus')
+        resolve('completed successfully')
+      }).catch(err => {
+        console.log(`Error fetching disaster list: ${err}`)
+        commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
+        reject(err)
+      })
     })
   },
 
-  loadFilteredDisasters: function ({ commit, state }, qry) {
-    console.log('inside loadFilteredDisasters')
-    let localType = state.geographicLevel.code.toLowerCase()
-    let stateCode = state.stateFilter.code
-    let locales = _.map(_.filter(state.localeList, 'selected'), locale => locale.name).join(',')
-    locales = encodeURI(locales)
-    let querystring = `/api/states/${stateCode}/disasters?${localType}=${locales}`
-
-    axios.get(querystring).then(response => {
-      commit('updateReportDisasterList', response.data)
-      if (response.data && response.data.length === 0) {
-        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
-      }
-      magic.$emit('filteredDisastersLoaded', qry, state)
-      commit('resetStatus')
-    }).catch(err => {
-      console.log(`Error fetching disaster list: ${err}`)
-      commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
-    })
-  },
-
-  loadLocales: function ({ commit, state }, qry) {
-    console.log('inside loadLocales')
-    let localType = state.geographicLevel.code.toLowerCase()
-    let querystring = `/api/states/${state.stateFilter.code}/${localType}`
-    axios.get(querystring).then(response => {
-      commit('updateLocaleList', _.map(response.data, (r) => {
-        let name = (localType === 'congrdist') ? `${r.substring(2, 4)}` : r
-        return { code: r, name }
-      }))
-      if (response.data && response.data.length === 0) {
-        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
-      }
-      magic.$emit('localesLoaded', qry, state)
-      commit('resetStatus')
-    }).catch(err => {
-      console.log(`Error fetching locale list: ${err}`)
-      commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD locale data is unavailable at this time.  Try again later or contact your administrator.'})
+  loadLocales: function ({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      console.log(`inside loadLocales with state.stateFilter: ${JSON.stringify(state.stateFilter)}`)
+      let localType = state.geographicLevel.code.toLowerCase()
+      let querystring = `/api/states/${state.stateFilter.code}/${localType}`
+      return axios.get(querystring).then(response => {
+        commit('updateLocaleList', _.map(response.data, (r) => {
+          let name = (localType === 'congrdist') ? `${r.substring(2, 4)}` : r
+          return { code: r, name }
+        }))
+        if (response.data && response.data.length === 0) {
+          return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+        }
+        commit('resetStatus')
+        resolve('completed successfully')
+      }).catch(err => {
+        console.log(`Error fetching locale list: ${err}`)
+        commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD locale data is unavailable at this time.  Try again later or contact your administrator.'})
+        reject(err)
+      })
     })
   },
 
   loadReportData: function ({ commit }, {summaryCols, allFilters}) {
-  //  commit('setShowReport', false)
-    let formattedQuery
-    commit('setShowReportSpinner', true)
-    _.forIn(allFilters, (value, key) => {
-      if (formattedQuery) formattedQuery += `&${key}=${value.toString()}`
-      else formattedQuery = `${key}=${value.toString()}`
+    return new Promise((resolve, reject) => {
+      let formattedQuery
+      commit('setShowReportSpinner', true)
+      _.forIn(allFilters, (value, key) => {
+        if (formattedQuery) formattedQuery += `&${key}=${value.toString()}`
+        else formattedQuery = `${key}=${value.toString()}`
+      })
+      return axios.get(`/api/applicants/summary?${formattedQuery}&cols=${summaryCols}`).then(response => {
+        commit('updateReportData', response.data)
+        commit('setShowReport', true)
+        commit('setShowReportSpinner', false)
+        if (response.data && response.data.length === 0) {
+          return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
+        }
+        commit('resetStatus')
+        resolve('completed successfully')
+      }).catch(err => {
+        console.log(`Error fetching FEMA data: ${err}`)
+        commit('setStatus', {type: 'error', scope: 'app', msg: 'FEMA report data is unavailable at this time.  Try again later or contact your administrator.'})
+        reject(err)
+      })
     })
-    axios.get(`/api/applicants/summary?${formattedQuery}&cols=${summaryCols}`).then(response => {
-      commit('updateReportData', response.data)
-      commit('setShowReport', true)
-      commit('setShowReportSpinner', false)
-      if (response.data && response.data.length === 0) {
-        return commit('setStatus', {type: 'info', scope: 'app', msg: 'No results found!'})
-      }
-      commit('resetStatus')
-    }).catch(err => {
-      console.log(`Error fetching FEMA data: ${err}`)
-      commit('setStatus', {type: 'error', scope: 'app', msg: 'FEMA report data is unavailable at this time.  Try again later or contact your administrator.'})
-    })
-  },
-
-  setSelectedState: function ({commit}, qry) {
-    console.log('inside setSelectedState')
-    commit('clearStore')
-    commit('setState', qry)
   }
 }
 
