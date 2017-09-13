@@ -102,10 +102,8 @@ export default {
   name: 'selectLocationSideBar',
   components: {inputselect},
   mounted () {
-    this.$nextTick(function () {
-      console.log('firing initializeValuesFromURL from mounted()')
-      this.initializeValuesFromURL()
-    })
+    console.log('firing initializeValuesFromURL from mounted()')
+    this.initializeValuesFromURL()
   },
   watch: {
     '$route' (to, from) {
@@ -238,9 +236,10 @@ export default {
     },
 
     clearAll () {
-      if (this.openDialogue()) {
-        this.reset()
-      }
+      this.$router.push({name: 'reports'})
+      // if (this.openDialogue()) {
+      //   this.reset()
+      // }
     },
 
     openDialogue () {
@@ -325,6 +324,7 @@ export default {
       console.log('inside initializeValuesFromURL')
       this.clearStateSelected()
       const vm = this
+      if (!this.$route.query) return
       let queryParams = this.$route.query
       let stateParam
       if (queryParams && queryParams.stateFilter) stateParam = queryParams.stateFilter
@@ -351,24 +351,18 @@ export default {
           vm.$store.commit('setLocalesFilter', localeParam)
           vm.$store.dispatch('loadFilteredDisasters').then(result => {
             console.log('finished loadFilteredDisasters, inside disasterParam with result: ' + result)
-            this.$nextTick(function () {
-              vm.$store.commit('setDisastersFilter', disasterParam)
-              vm.createReport()
-            })
+            vm.$store.commit('setDisastersFilter', disasterParam)
+            vm.createReport()
           })
         })
       } else if (disasterParam) {
         vm.$store.dispatch('loadFilteredDisasters').then(result => {
           console.log('finished loadFilteredDisasters, inside disasterParam with result: ' + result)
-          this.$nextTick(function () {
-            vm.$store.commit('setDisastersFilter', disasterParam)
-            vm.createReport()
-          })
-        })
-      } else {
-        this.$nextTick(function () {
+          vm.$store.commit('setDisastersFilter', disasterParam)
           vm.createReport()
         })
+      } else {
+        vm.createReport()
       }
     }
   }
