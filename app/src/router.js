@@ -33,10 +33,8 @@ Report.beforeRouteEnter = beforeRouteEnter
 
 const routes = [
   { path: '/', name: 'disasterSearch', component: DisasterSearch },
-  { path: '/reports', name: 'reports', component: Report },
-  { path: '/reports/state/:stateId',
-    name: 'reportsWithParameter',
-    component: Report
+  { path: '/disasterSearch', name: 'disasterSearch', component: DisasterSearch },
+  { path: '/reports', name: 'reports', component: Report
   }
 ]
 

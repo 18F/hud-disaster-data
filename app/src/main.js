@@ -19,13 +19,15 @@ es6Promise.polyfill()
 Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.prototype.$http = Axios
-const contextRoot = window.location.pathname.replace(/\/$/, '')
-Axios.interceptors.request.use(function (config) {
-  config.url = `${contextRoot}${config.url}`
-  return config
-}, function (error) {
-  return Promise.reject(error)
-})
+// const contextRoot = window.location.pathname.replace(/\/$/, '')
+// Axios.interceptors.request.use(function (config) {
+//   config.url = `${contextRoot}${config.url}`
+//   console.log('returning : ' + JSON.stringify(config))
+//   return config
+// }, function (error) {
+//   console.log('returning : ' + JSON.stringify(error))
+//   return Promise.reject(error)
+// })
 
 /**
 * The main vue component.  All other components are children of this one.
