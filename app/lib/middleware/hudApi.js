@@ -2,6 +2,13 @@ const _ = require('lodash')
 const axios = require('axios')
 const low = require('lowdb')
 const fileAsync = require('lowdb/lib/storages/file-async')
+const https = require('https')
+const client = axios.create({
+  httpsAgent: new https.Agent({
+    //ca: file content goes here
+    rejectUnauthorized: false
+  })
+})
 
 const getUser = function(userid, cb) {
   let config = {
@@ -9,10 +16,10 @@ const getUser = function(userid, cb) {
       serviceConsumerData: JSON.stringify(process.env.SERVICE_CONSUMER_DATA)
     }
   }
-  axios.get(`${process.env.HUD_API_BASE}/user/${userid}`, config)
+  client.get(`${process.env.HUD_API_BASE}/user/${userid}`, config)
     .then(res => cb(null, res.data))
     .catch(err => {
-      console.log('Error getting user', e)
+      console.log('Error getting user', err)
       cb(err)
     })
 }
