@@ -8,7 +8,7 @@ const path = require('path')
 const cert = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
 console.log(`*** cert path: ${cert} ***`)
 const client = axios.create({
-  agent: new https.Agent({
+  httpsAgent: new https.Agent({
     ca: fs.readFileSync(cert)
   })
 })
