@@ -6,7 +6,6 @@ import sinon from 'sinon'
 const SelectLocationSideBar =  require('@/components/SelectLocationSideBar') // eslint-disable-line
 import _ from 'lodash' // eslint-disable-line
 import should from 'should'
-import magic from '@/bus'
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
@@ -232,24 +231,26 @@ describe('SelectLocationSideBar component', function () {
     })
   })
 
-  // describe('changeState', function () {
-  //   it('should reset locales and disaster numbers if state has changed', function (done) {
-  //     vm.stateSelected = {code: 'WI', name: 'Wisconsin'}
-  //     vm.localeSelected = ['this place', 'that other place']
-  //     vm.disasterSelected = ['this disaster', 'the next disaster']
-  //     const dispatchSpy = sinon.spy(store, 'dispatch')
-  //     const iowa = {code: 'IA', name: 'Iowa'}
-  //     vm.changeState(iowa)
-  //     Vue.nextTick(() => {
-  //       expect(vm.localeSelected).to.be.null
-  //       expect(vm.disasterSelected).to.be.null
-  //       expect(dispatchSpy.calledWith('setSelectedState', iowa))
-  //       expect(dispatchSpy.calledWith('loadLocales', iowa.code))
-  //       expect(dispatchSpy.calledWith('loadReportDisasterList', iowa.code))
-  //       done()
-  //     })
-  //   })
-  // })
+  describe('changeState', function () {
+    it('should reset locales and disaster numbers if state has changed', function (done) {
+      vm.stateSelected = {code: 'WI', name: 'Wisconsin'}
+      vm.localeSelected = ['this place', 'that other place']
+      vm.disasterSelected = ['this disaster', 'the next disaster']
+      const thenSpy = sinon.spy()
+      const dispatchSpy = sinon.stub().callsFake(() => { return {then: thenSpy} })
+      const iowa = {code: 'IA', name: 'Iowa'}
+      store.dispatch = dispatchSpy
+      vm.changeState(iowa)
+      Vue.nextTick(() => {
+        expect(vm.localeSelected).to.be.null
+        expect(vm.disasterSelected).to.be.null
+        expect(dispatchSpy.calledWith('setSelectedState', iowa))
+        expect(dispatchSpy.calledWith('loadLocales', iowa.code))
+        expect(dispatchSpy.calledWith('loadReportDisasterList', iowa.code))
+        done()
+      })
+    })
+  })
 
   describe('createReport', function () {
     it('should set parameters using geographicLevel "city" to proper values and pass them to loadReportData action', function (done) {
@@ -291,19 +292,29 @@ describe('SelectLocationSideBar component', function () {
     })
   })
 
-  // describe('clearAll', function () {
-  //   it('should call reset if the dialoge is open', function (done) {
-  //     let reset = sinon.spy(vm, 'reset')
-  //     let openDialogue = sinon.stub(vm, 'openDialogue').callsFake(() => { return true })
-  //     let that = {openDialogue, reset}
-  //     vm.clearAll.call(that)
-  //     should(openDialogue.called).be.true()
-  //     should(reset.called).be.true()
-  //     reset.restore()
-  //     openDialogue.restore()
-  //     done()
-  //   })
-  // })
+  describe('clearAll', function () {
+    it('should call $router.push(), reset(), initStore, $emit, and dispatch to clear out data and display empty report', function (done) {
+      let push = sinon.spy()
+      let reset = sinon.spy()
+      let commit = sinon.spy()
+      let dispatch = sinon.spy()
+      let $emit = sinon.spy()
+      const that = {
+        $router: {push},
+        reset,
+        $emit,
+        $store: {commit, dispatch}
+      }
+      const clearAll = vm.$options.methods.clearAll
+      clearAll.call(that)
+      should(reset.called).be.true()
+      should(push.calledWith({name: 'reports'})).be.true()
+      should(commit.calledWith('initStore')).be.true()
+      should($emit.calledWith('updateSummaryDisplay')).be.true()
+      should(dispatch.calledWith('loadReportData')).be.true()
+      done()
+    })
+  })
 
   describe('openDialogue', function () {
     it('should return true if confirm returns true', function (done) {
@@ -385,20 +396,26 @@ describe('SelectLocationSideBar component', function () {
         done()
       })
     })
-    // it('should trigger disaster filter if locale is selected', function (done) {
-    //   getters.localeFilter = () => { return [{ code: 'HOUSTON', name: 'Houston' }] }
-    //   store = new Vuex.Store({state: {}, mutations, getters, actions})
-    //   Constructor = Vue.extend(SelectLocationSideBar)
-    //   vm = new Constructor({store}).$mount()
-    //   vm.localeSelected = {name: 'HOUSTON', code: 'HOUSTON'}
-    //   vm.stateSelected = {code: 'WI'}
-    //   let dispatchSpy = sinon.spy(vm.$store, 'dispatch')
-    //   vm.addLocale()
-    //   Vue.nextTick(() => {
-    //     should(dispatchSpy.calledWith('loadFilteredDisasters')).be.true()
-    //     done()
-    //   })
-    // })
+    it('should trigger disaster filter if locale is selected', function (done) {
+      let commit = sinon.spy()
+      let clearValue = sinon.spy()
+      let filterDisasters = sinon.spy()
+      const that = {
+        localeSelected: {name: 'HOUSTON', code: 'HOUSTON'},
+        $store: {commit},
+        $refs: {localeSelect: {clearValue}},
+        filterDisasters
+      }
+
+      let addLocale = vm.$options.methods.addLocale
+      addLocale.call(that)
+      Vue.nextTick(() => {
+        should(commit.calledWith('addLocaleFilter')).be.true()
+        should(clearValue.called).be.true()
+        should(filterDisasters.called).be.true()
+        done()
+      })
+    })
   })
   // describe('setLevel', function () {
   //   it('should set the geographicLevel', function (done) {
