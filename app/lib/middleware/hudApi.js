@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const request = require('request')
+const request = require('request-promise')
 const low = require('lowdb')
 const fileAsync = require('lowdb/lib/storages/file-async')
 const fs = require('fs')
