@@ -1,14 +1,13 @@
 const _ = require('lodash')
-const axios = require('axios')
+const request = require('request')
 const low = require('lowdb')
 const fileAsync = require('lowdb/lib/storages/file-async')
-const https = require('https')
 const fs = require('fs')
 const path = require('path')
-const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
-console.log(`*** cert path: ${certPath} ***`)
-const cert = fs.readFileSync(certPath)
-console.log(`*** cert:\n ${cert} \n***`)
+// const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
+// console.log(`*** cert path: ${certPath} ***`)
+// const cert = fs.readFileSync(certPath)
+// console.log(`*** cert:\n ${cert} \n***`)
 
 const SERVICE_CONSUMER_DATA = {
     "auditCorrelationId":"17f24136-2494-4bf8-9d3b-9baafaae0cc9",
@@ -22,12 +21,13 @@ const SERVICE_CONSUMER_DATA = {
 
 const getUser = function(userid, cb) {
   let config = {
+    url: `${process.env.HUD_API_BASE}/user/${userid}`,
     headers: {
       serviceConsumerData: JSON.stringify(SERVICE_CONSUMER_DATA)
     },
-    cert
+    strictSSL: false
   }
-  client.get(`${process.env.HUD_API_BASE}/user/${userid}`, config)
+  request.get(config)
     .then(res => cb(null, res.data))
     .catch(err => {
       console.log('Error getting user', err)
