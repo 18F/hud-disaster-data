@@ -5,13 +5,11 @@ const fileAsync = require('lowdb/lib/storages/file-async')
 const https = require('https')
 const fs = require('fs')
 const path = require('path')
-const cert = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
-console.log(`*** cert path: ${cert} ***`)
-const client = axios.create({
-  httpsAgent: new https.Agent({
-    ca: fs.readFileSync(cert)
-  })
-})
+const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
+console.log(`*** cert path: ${certPath} ***`)
+const cert = fs.readFileSync(certPath)
+console.log(`*** cert:\n ${cert} \n***`)
+
 const SERVICE_CONSUMER_DATA = {
     "auditCorrelationId":"17f24136-2494-4bf8-9d3b-9baafaae0cc9",
     "serviceRequestTimestamp":"2017-01-01T12:00:00.000Z",
@@ -26,7 +24,8 @@ const getUser = function(userid, cb) {
   let config = {
     headers: {
       serviceConsumerData: JSON.stringify(SERVICE_CONSUMER_DATA)
-    }
+    },
+    cert
   }
   client.get(`${process.env.HUD_API_BASE}/user/${userid}`, config)
     .then(res => cb(null, res.data))
