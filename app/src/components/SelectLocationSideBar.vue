@@ -237,6 +237,19 @@ export default {
 
     clearAll () {
       this.$router.push({name: 'reports'})
+      this.reset()
+      this.$store.commit('initStore')
+      let summaryDisplayData = {
+        stateName: '',
+        disasters: [],
+        locales: [],
+        level: ''
+      }
+      this.$emit('updateSummaryDisplay', summaryDisplayData)
+      this.$store.dispatch('loadReportData',
+        { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
+          allFilters: {states: 'XXX'}
+        })
       // if (this.openDialogue()) {
       //   this.reset()
       // }
