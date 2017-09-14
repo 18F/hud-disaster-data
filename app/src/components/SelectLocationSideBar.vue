@@ -368,7 +368,7 @@ export default {
             vm.createReport()
           })
         })
-      } else if (disasterParam) {
+      } else if (disasterParam.length > 0) {
         vm.$store.dispatch('loadFilteredDisasters').then(result => {
           console.log('finished loadFilteredDisasters, inside disasterParam with result: ' + result)
           vm.$store.commit('setDisastersFilter', disasterParam)
