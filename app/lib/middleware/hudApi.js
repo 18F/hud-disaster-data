@@ -12,11 +12,20 @@ const client = axios.create({
     ca: fs.readFileSync(cert)
   })
 })
+const SERVICE_CONSUMER_DATA = {
+    "auditCorrelationId":"17f24136-2494-4bf8-9d3b-9baafaae0cc9",
+    "serviceRequestTimestamp":"2017-01-01T12:00:00.000Z",
+    "sourceSystem":"DRDP",
+    "endUserId":"drdp_user",
+    "authenticationId":"DRDPAccount",
+    "tenantId":"DRDP",
+    "locale":"English"
+  }
 
 const getUser = function(userid, cb) {
   let config = {
     headers: {
-      serviceConsumerData: JSON.stringify(process.env.SERVICE_CONSUMER_DATA)
+      serviceConsumerData: JSON.stringify(SERVICE_CONSUMER_DATA)
     }
   }
   client.get(`${process.env.HUD_API_BASE}/user/${userid}`, config)
