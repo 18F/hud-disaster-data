@@ -11,7 +11,7 @@ sleep 5
 
 ./node_modules/.bin/pa11y -i 'notice;warning' 'http://localhost:3000/'
 retCodeSearch=$?
-./node_modules/.bin/pa11y -i 'notice;warning' 'http://localhost:3000/reports'
+./node_modules/.bin/pa11y -i 'notice;warning' 'http://localhost:3000/#/reports'
 retCodeReports=$?
 if [[ $retCodeSearch = 0 && $retCodeReports = 0 ]]
 then
