@@ -7,10 +7,10 @@ module.exports = function(req, res, next) {
     req.user = LOCAL_USER
     return next()
   }
-  if (!userId) return res.send(401)
+  if (!userId) return res.sendStatus(401)
   hudApi.getUser(userId, (err, user) => {
     if (err) return next(err)
-    if (!user) return res.send(401)
+    if (!user) return res.sendStatus(401)
     console.log("Got user from API:", user)
     req.user = user
     next()
