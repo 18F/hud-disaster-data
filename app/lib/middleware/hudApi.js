@@ -4,6 +4,8 @@ const low = require('lowdb')
 const fileAsync = require('lowdb/lib/storages/file-async')
 const fs = require('fs')
 const path = require('path')
+const DRDP_API_BASE = `${process.env.HUD_API_BASE_URL}/drdp/api/v1.0`
+const DRGR_API_BASE = `${process.env.HUD_API_BASE_URL}/drgr/api/v1.0`
 // const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
 // console.log(`*** cert path: ${certPath} ***`)
 // const cert = fs.readFileSync(certPath)
@@ -18,16 +20,18 @@ const SERVICE_CONSUMER_DATA = {
     "tenantId":"DRDP",
     "locale":"English"
   }
-
-const getUser = function(userid, cb) {
-  let config = {
-    url: `${process.env.HUD_API_BASE}/user/${userid}`,
+const config = function (url) {
+  return {
+    url,
     headers: {
       serviceConsumerData: JSON.stringify(SERVICE_CONSUMER_DATA)
     },
     strictSSL: false
   }
-  request.get(config)
+}
+
+const getUser = function(userid, cb) {
+  request.get(config(`${DRGR_API_BASE}/user/${userid}`))
     .then(res => cb(null, res.data))
     .catch(err => {
       console.log('Error getting user', err)
