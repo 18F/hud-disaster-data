@@ -31,10 +31,13 @@ const config = function (url) {
 }
 
 const getUser = function(userid, cb) {
-  request.get(config(`${DRGR_API_BASE}/user/${userid}`))
-    .then(res => cb(null, res.data))
+  request.get(config(`${DRGR_API_BASE}/users/${userid}`))
+    .then(res => {
+      console.log('**** Response from drgr API **** :', response)
+      cb(null, res.data)
+    })
     .catch(err => {
-      console.log('Error getting user', err)
+      console.log('**** Error getting user **** :', err)
       cb(err)
     })
 }
