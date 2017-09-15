@@ -417,30 +417,47 @@ describe('SelectLocationSideBar component', function () {
       })
     })
   })
-  // describe('setLevel', function () {
-  //   it('should set the geographicLevel', function (done) {
-  //     const level = {name: 'City', code: 'city'}
-  //     const stateId = 'TX'
-  //     let commitSpy = sinon.spy(store, 'commit')
-  //     let dispatchSpy = sinon.spy(store, 'dispatch')
-  //     vm.stateSelected = {code: stateId, name: stateId}
-  //     vm.setLevel(level)
-  //     Vue.nextTick(() => {
-  //       should(commitSpy.calledWith('setSelectedGeographicLevel', level)).be.true()
-  //       should(dispatchSpy.calledWith('loadLocales', stateId)).be.true()
-  //       done()
-  //     })
-  //   })
-  //   it('should set geographicLevel to null if empty', function (done) {
-  //     let commitSpy = sinon.spy(store, 'commit')
-  //     vm.setLevel()
-  //     Vue.nextTick(() => {
-  //       should(commitSpy.calledWith('setSelectedGeographicLevel')).be.true()
-  //       expect(vm.geographicLevelSelected).to.be.null
-  //       done()
-  //     })
-  //   })
-  // })
+  describe('setLevel', function () {
+    it('should set the geographicLevel', function (done) {
+      const level = {name: 'City', code: 'city'}
+      const commit = sinon.spy()
+      const clearLocales = sinon.spy()
+      const filterDisasters = sinon.spy()
+      const checkDisabled = sinon.spy()
+      const then = sinon.spy()
+      const dispatch = sinon.stub().callsFake(() => { return {then} })
+      const that = {
+        stateSelected: 'XX',
+        geographicLevelSelected: null,
+        clearLocales,
+        filterDisasters,
+        checkDisabled,
+        $store: {commit, dispatch, getters: {stateFilter: 'Something'}}
+      }
+      const setLevel = vm.$options.methods.setLevel
+      setLevel.call(that, level)
+      Vue.nextTick(() => {
+        should(commit.calledWith('setSelectedGeographicLevel', level)).be.true()
+        should(clearLocales.called).be.true()
+        should(filterDisasters.called).be.true()
+        should(dispatch.calledWith('loadLocales')).be.true()
+        should(checkDisabled.called).be.true()
+        done()
+      })
+    })
+    it('should run clearValue on geographicLevel if empty', function (done) {
+      const commitSpy = sinon.spy(store, 'commit')
+      const clearValueSpy = sinon.spy(vm.$refs.geographicLevelSelector, 'clearValue')
+      vm.setLevel()
+      Vue.nextTick(() => {
+        should(commitSpy.calledWith('setSelectedGeographicLevel')).be.true()
+        should(clearValueSpy.called).be.true()
+        commitSpy.restore()
+        clearValueSpy.restore()
+        done()
+      })
+    })
+  })
 
   describe('removeDisaster', function () {
     it('should call commit to remove the disaster', function (done) {
@@ -465,15 +482,5 @@ describe('SelectLocationSideBar component', function () {
         done()
       })
     })
-    // it('should reset disaster filter on locale remove', function (done) {
-    //   let locale = 'something'
-    //   let dispatchSpy = sinon.spy(store, 'dispatch')
-    //   vm.stateSelected = {code: 'WI'}
-    //   vm.removeLocale(locale)
-    //   Vue.nextTick(() => {
-    //     should(dispatchSpy.calledWith('loadReportDisasterList')).be.true()
-    //     done()
-    //   })
-    // })
   })
 })
