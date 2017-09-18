@@ -68,6 +68,21 @@ describe('SelectLocationSideBar component', function () {
       })
     })
   })
+
+  describe('watch', function () {
+    it('will look at URL and fire initializeValuesFromURL if changed', function (done) {
+      debugger
+      const initializeValuesFromURL = sinon.spy()
+      const that = {initializeValuesFromURL}
+      const routeWatch = vm.$root._watchers[2].cb
+      routeWatch.call(that, 'this', 'that')
+      Vue.nextTick(() => {
+        expect(initializeValuesFromURL.called).to.be.equal(true)
+        done()
+      })
+    })
+  })
+
   describe('created event/initializeValuesFromURL', function () {
     const testStates = [{ code: 'MZ', name: 'Manzana' }, { code: 'NR', name: 'Naranja' }, { code: 'PL', name: 'Platano' }]
     const testGeoLevels = [{ code: 'city', name: 'City' }, { code: 'county', name: 'County' }, { code: 'something', name: 'Else' }]
@@ -376,6 +391,7 @@ describe('SelectLocationSideBar component', function () {
       })
     })
   })
+
   describe('addLocale', function () {
     it('should add the locale', function (done) {
       vm.localeSelected = {name: 'Alexandria', code: 'Alexandria'}
@@ -417,6 +433,21 @@ describe('SelectLocationSideBar component', function () {
       })
     })
   })
+
+  describe('filterDisasters', function () {
+    it('should load disasters, filtered by localeFilter', function (done) {
+      const thenSpy = sinon.spy()
+      const dispatchStub = sinon.stub().callsFake(() => { return {then: thenSpy} })
+      vm.$store.dispatch = dispatchStub
+      vm.filterDisasters()
+      Vue.nextTick(() => {
+        should(dispatchStub.calledWith('loadFilteredDisasters')).be.true()
+        should(thenSpy.called).be.true()
+        done()
+      })
+    })
+  })
+
   describe('setLevel', function () {
     it('should set the geographicLevel', function (done) {
       const level = {name: 'City', code: 'city'}
