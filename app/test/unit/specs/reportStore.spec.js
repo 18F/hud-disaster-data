@@ -7,9 +7,9 @@ import sinon from 'sinon'
 import should from 'should'
 import magic from '@/bus'
 const { updateReportDisasterList, updateLocaleList,
-  setState, addDisasterFilter, addLocaleFilter, removeDisasterFilter, removeLocaleFilter,
+  setState, addDisasterFilter, addLocaleFilter, removeDisasterFilter, removeLocaleFilter, setLocalesFilter, setDisastersFilter,
   setShowReportSpinner, setSelectedGeographicLevel, updateReportData, setShowReport, initStore } = mutations
-const { loadReportDisasterList, loadLocales, loadReportData, loadFilteredDisasters } = actions
+const { loadLocales, loadReportData, loadFilteredDisasters } = actions
 const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords, showReport } = getters
 
 const TWO_RECORDS = [
@@ -169,7 +169,6 @@ describe('reportStore', function () {
       let state = {
         disasterList: ['something'],
         localeList: ['somewhere'],
-        stateFilter: 'nothing',
         geographicLevel: 'nothing else',
         summaryRecords: ['sum thing'],
         showReport: 'not',
@@ -222,6 +221,24 @@ describe('reportStore', function () {
       setSelectedGeographicLevel(state, 'level two')
       should(state.geographicLevel).be.equal('level two')
       should(geographicLevel(state)).be.equal('level two')
+    })
+  })
+
+  describe('setLocalesFilter', function () {
+    it('should set values of locales', function () {
+      let state = {geographicLevel: {code: 'city', name: 'City'}, localeList: []}
+      setLocalesFilter(state, ['mylocale'])
+      should(state.localeList[0].code).be.equal('mylocale')
+      should(localeFilter(state)[0].name).be.equal('mylocale')
+    })
+  })
+
+  describe('setDisastersFilter', function () {
+    it('should set values of disasters', function () {
+      let state = {disasterList: []}
+      setDisastersFilter(state, ['mydisaster'])
+      should(state.disasterList[0].code).be.equal('mydisaster')
+      should(disasterFilter(state)[0].name).be.equal('mydisaster')
     })
   })
 
