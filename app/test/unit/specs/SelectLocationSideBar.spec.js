@@ -514,4 +514,36 @@ describe('SelectLocationSideBar component', function () {
       })
     })
   })
+
+  describe('pushReportUrl', function () {
+    it('should generate proper URL and push it with the router', function (done) {
+      const push = sinon.spy()
+      const that = {
+        $store: {
+          getters: {
+            stateFilter: {code: 'XX'},
+            geographicLevel: {code: 'YY'},
+            localeFilter: [{code: 'AA'}],
+            disasterFilter: [{code: 'BB'}]
+          }
+        },
+        $router: {push}
+      }
+      debugger
+      const pushReportUrl = vm.$options.methods.pushReportUrl
+      pushReportUrl.call(that)
+      Vue.nextTick(() => {
+        should(push.calledWith({
+          name: 'reports',
+          query: {
+            disasterFilter: 'BB',
+            geographicLevel: 'YY',
+            localeFilter: 'AA',
+            stateFilter: 'XX'
+          }
+        })).be.true()
+        done()
+      })
+    })
+  })
 })
