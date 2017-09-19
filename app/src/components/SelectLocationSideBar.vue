@@ -195,7 +195,7 @@ export default {
       this.clearLocales()
       if (this.$store.getters.stateFilter) {
         this.filterDisasters()
-        this.$store.dispatch('loadLocales').then(result => console.log(`finished loadLocales from setLevel() with result: ${result}`))
+        if (val) this.$store.dispatch('loadLocales').then(result => console.log(`finished loadLocales from setLevel() with result: ${result}`))
       }
       this.checkDisabled()
     },

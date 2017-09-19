@@ -15,7 +15,7 @@
         @keydown.up.prevent="selectUp"
         @click='inputReaction'
         @keydown='inputReaction'
-        @blur="close"
+        @blur="update"
         :class="isDisabled"
         :disabled="isDisabled"
         :title='`Text input for ${componentDescription}`')
@@ -103,6 +103,7 @@ export default {
       } else if (!this.queryValue || this.queryValue.length === 0) {
         // no item selected in dropdown, no query text
         this.$emit('clear', null)
+        this.close()
       } else if (this.matchingItems) {
         if (this.matchingItems.length === 1) {
           // user has only one match
