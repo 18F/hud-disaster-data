@@ -337,7 +337,8 @@ export default {
       console.log('inside initializeValuesFromURL')
       this.clearStateSelected()
       const vm = this
-      if (!this.$route.query) return
+      const query = _.get(this.$route, 'query')
+      if (!query) return
       let queryParams = this.$route.query
       let stateParam
       if (queryParams && queryParams.stateFilter) stateParam = queryParams.stateFilter
