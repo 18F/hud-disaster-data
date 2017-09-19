@@ -40,7 +40,6 @@ export const mutations = {
 
   initStore: function (state, stateVal) {
     console.log('inside initStore with: ' + JSON.stringify(stateVal))
-    debugger
     state.disasterList = []
     state.localeList = []
     state.geographicLevel = null
