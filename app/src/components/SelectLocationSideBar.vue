@@ -356,7 +356,11 @@ export default {
       if (queryParams && queryParams.disasterFilter !== undefined) disasterParam = queryParams.disasterFilter.split(',')
       if (queryParams && queryParams.summaryColumns !== undefined) summaryColumns = queryParams.summaryColumns.split(',')
 
-      _.map(summaryColumns, c => this.$store.commit('setSummaryColumn', {name: c, selected: true}))
+      _.map(summaryColumns, c => {
+        let thisColumn = _.find(this.$store.getters.summaryColumns, ['column', c])
+        thisColumn.selected = true
+        this.$store.commit('setSummaryColumn', thisColumn)
+      })
       let stateObj = _.find(this.states, ['code', stateParam])
       console.log('setting stateSelector from initializeValuesFromURL')
       this.$refs.stateSelector.select(stateObj)

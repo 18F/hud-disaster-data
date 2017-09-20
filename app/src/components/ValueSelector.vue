@@ -14,19 +14,19 @@
           tr.table-header
             td
               label.sr-only(for='SelectAllSummaryValues') Select all summary values
-              button(type="button" name="SelectAllSummaryValues" title="Select/Unselect all summary values" @click='toggleSelectAll')
+              button(type="button" name="SelectAllSummaryValues" title="Select/Unselect all summary values" @click='toggleSelectAll' style="padding-right:20px;")
                 icon.ico-md(name="fa-check-square-o" v-if="allSelected")
-                icon.ico-md(name="fa-square-o" v-if="!allSelected")            td
-              |All
+                icon.ico-md(name="fa-square-o" v-if="!allSelected")
+              | All
         .summary-values
           ul
-              li(v-for='(column, index) in summaryColumns')
-                label.sr-only(for=`column.name-select`) Select {{ column.name }}
-                button(type="button" name=`column.name-select` title=`column.name summary` @click="toggleColumnSelection(column)")
-                  icon.ico-md(name="fa-check-square-o" v-if="column.selected")
-                  icon.ico-md(name="fa-square-o" v-if="!column.selected")
-                span
-                  | {{ column.name }}
+            li(v-for='(column, index) in summaryColumns')
+              label.sr-only(for=`column.name-select`) Select {{ column.name }}
+              button(type="button" name=`column.name-select` title=`column.name summary` @click="toggleColumnSelection(column)")
+                icon.ico-md(name="fa-check-square-o" v-if="column.selected")
+                icon.ico-md(name="fa-square-o" v-if="!column.selected")
+              span
+                | {{ column.name }}
 </template>
 <script>
 export default {
