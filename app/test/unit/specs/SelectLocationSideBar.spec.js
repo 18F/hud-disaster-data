@@ -346,17 +346,19 @@ describe('SelectLocationSideBar component', function () {
       let localeFilter = [{ code: 'HOUSTON', name: 'Houston' }]
       let disasterFilter = [{ code: 'DR-4272-TX', name: 'DR-4272-TX', selected: true }]
       let geographicLevel = { code: 'city', name: 'city' }
+      let summaryColumns = ['total_damages', 'hud_unmet_need']
       getters.stateFilter = () => { return stateFilter }
       getters.localeFilter = () => { return localeFilter }
       getters.disasterFilter = () => { return disasterFilter }
       getters.geographicLevel = () => { return geographicLevel }
+      getters.selectedSummaryColumns = () => { return summaryColumns }
       store = new Vuex.Store({state: {}, mutations, getters, actions})
       Constructor = Vue.extend(SelectLocationSideBar)
       vm = new Constructor({store}).$mount()
       const dispatchSpy = sinon.spy(store, 'dispatch')
       vm.createReport()
       Vue.nextTick(() => {
-        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'city', 'geoArea': ['HOUSTON']}}))
+        expect(dispatchSpy.calledWith('loadReportData', {'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'city', 'geoArea': ['HOUSTON'], 'summaryCols': 'total_damages,hud_unmet_need'}}))
         done()
       })
     })
@@ -367,6 +369,7 @@ describe('SelectLocationSideBar component', function () {
       getters.localeFilter = () => { return [{ code: 'HOUSTON', name: 'Houston' }] }
       getters.disasterFilter = () => { return [] }
       getters.geographicLevel = () => { return { code: 'county', name: 'county' } }
+      getters.selectedSummaryColumns = () => ['total_damages', 'hud_unmet_need']
       store = new Vuex.Store({state: {}, mutations, getters, actions})
       Constructor = Vue.extend(SelectLocationSideBar)
       vm = new Constructor({store}).$mount()
@@ -646,7 +649,8 @@ describe('SelectLocationSideBar component', function () {
             stateFilter: {code: 'XX'},
             geographicLevel: {code: 'YY'},
             localeFilter: [{code: 'AA'}],
-            disasterFilter: [{code: 'BB'}]
+            disasterFilter: [{code: 'BB'}],
+            selectedSummaryColumns: ['JJ', 'KK']
           }
         },
         $router: {push}
@@ -660,7 +664,8 @@ describe('SelectLocationSideBar component', function () {
             disasterFilter: 'BB',
             geographicLevel: 'YY',
             localeFilter: 'AA',
-            stateFilter: 'XX'
+            stateFilter: 'XX',
+            summaryColumns: 'JJ,KK'
           }
         })).be.true()
         done()

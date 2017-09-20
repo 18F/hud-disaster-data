@@ -105,6 +105,11 @@ export const mutations = {
 
   updateReportData: function (state, list) {
     state.summaryRecords = list
+  },
+
+  setSummaryColumn: function (state, column) {
+    let index = _.findIndex(state.summaryColumns, ['name', column.name])
+    state.summaryColumns.splice(index, 1, column)
   }
 }
 /**
@@ -160,7 +165,7 @@ export const actions = {
     })
   },
 
-  loadReportData: function ({ commit }, {summaryCols, allFilters}) {
+  loadReportData: function ({ commit }, allFilters) {
     return new Promise((resolve, reject) => {
       let formattedQuery
       commit('setShowReportSpinner', true)
@@ -168,7 +173,7 @@ export const actions = {
         if (formattedQuery) formattedQuery += `&${key}=${value.toString()}`
         else formattedQuery = `${key}=${value.toString()}`
       })
-      return axios.get(`/api/applicants/summary?${formattedQuery}&cols=${summaryCols}`).then(response => {
+      return axios.get(`/api/applicants/summary?${formattedQuery}`).then(response => {
         commit('updateReportData', response.data)
         commit('setShowReport', true)
         commit('setShowReportSpinner', false)
@@ -227,6 +232,14 @@ export const getters = {
     }
 
     return newSummaryRecord
+  },
+
+  summaryColumns: state => {
+    return state.summaryColumns
+  },
+
+  selectedSummaryColumns: state => {
+    return _.map(_.filter(state.summaryColumns, 'selected'), c => c.name)
   }
 }
 
@@ -238,7 +251,29 @@ const reportStore = {
     stateFilter: null,
     summaryRecords: [],
     showReport: false,
-    showReportSpinner: false
+    showReportSpinner: false,
+    summaryColumns: [
+      { name: 'hshd_size_cnt', selected: false },
+      { name: 'dpndnt_cnt', selected: false },
+      { name: 'incm_amnt', selected: false },
+      { name: 'hzrd_insnc_amnt', selected: false },
+      { name: 'flood_insnc_amnt', selected: false },
+      { name: 'other_insnc_amnt', selected: false },
+      { name: 'real_prop_loss_amnt', selected: false },
+      { name: 'flood_dmge_amnt', selected: false },
+      { name: 'fndtn_dmge_amnt', selected: false },
+      { name: 'roof_dmge_amnt', selected: false },
+      { name: 'tmp_shltr_rcvd_amnt', selected: false },
+      { name: 'rent_asstn_amnt', selected: false },
+      { name: 'repr_amnt', selected: false },
+      { name: 'rpmt_amnt', selected: false },
+      { name: 'sba_rcvd_amnt', selected: false },
+      { name: 'prsnl_prop_asstn_amnt', selected: false },
+      { name: 'other_asstn_amnt', selected: false },
+      { name: 'total_dmge_amnt', selected: true },
+      { name: 'total_asstn_amnt', selected: false },
+      { name: 'hud_unmt_need_amnt', selected: true }
+    ]
   },
   actions,
   mutations,

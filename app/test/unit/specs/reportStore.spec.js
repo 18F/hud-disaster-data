@@ -133,7 +133,7 @@ describe('reportStore', function () {
         done()
       })
     })
-    it('should set status to error if server responds with error', function (done) {
+    it('should set status to error if server responds with error for loadLocales', function (done) {
       moxios.stubRequest(/WI/, {
         status: 500
       })
@@ -348,7 +348,7 @@ describe('reportStore', function () {
 
   describe('loadReportData', function () {
     const REPORT_SUMMARY = {numberOfRecords: 200, total_damages: 22000.50, hud_unmet_need: 10000.50}
-    const filterParameter = {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX'}}
+    const filterParameter = {'allFilters': {'stateId': 'TX'}, 'cols': 'total_damages,hud_unmet_need'}
 
     it('should call commit for updateReportData when the data is loaded', function (done) {
       moxios.stubRequest(/applicants/, {
@@ -377,8 +377,8 @@ describe('reportStore', function () {
         done()
       })
     })
-    it('should set status to error if server responds with error', function (done) {
-      moxios.stubRequest(/TX/, {
+    it('should set status to error if server responds with error for loadReportData', function (done) {
+      moxios.stubRequest(/summary/, {
         status: 500
       })
       const commit = sinon.spy()

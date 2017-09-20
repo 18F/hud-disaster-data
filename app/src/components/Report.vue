@@ -6,7 +6,7 @@
         h1
           |Summary Report
       div.col-lg-12.report-summary
-        value-selector.hidden(:showSummarySelections="false")
+        value-selector
         label.sr-only(for='Export') Export report
         a(:href="exportURI()" download='HUD_FEMA_Report_download.csv' tabindex='-1')
           button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton" :disabled="!showReport")

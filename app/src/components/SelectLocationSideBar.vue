@@ -246,10 +246,7 @@ export default {
         level: ''
       }
       this.$emit('updateSummaryDisplay', summaryDisplayData)
-      this.$store.dispatch('loadReportData',
-        { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
-          allFilters: {states: 'XXX'}
-        })
+      this.$store.dispatch('loadReportData', { allFilters: {states: 'NOMATCH'} })
       // if (this.openDialogue()) {
       //   this.reset()
       // }
@@ -298,11 +295,13 @@ export default {
       if (this.$store.getters.geographicLevel) query.geographicLevel = this.$store.getters.geographicLevel.code
       if (this.$store.getters.localeFilter.length > 0) query.localeFilter = _.map(this.$store.getters.localeFilter, l => l.code).join(',')
       if (this.$store.getters.disasterFilter.length > 0) query.disasterFilter = _.map(this.$store.getters.disasterFilter, d => d.code).join(',')
+      if (this.$store.getters.selectedSummaryColumns.length > 0) query.summaryColumns = this.$store.getters.selectedSummaryColumns.join(',')
       this.$router.push({name: 'reports', query})
     },
 
     createReport () {
-      console.log('inside createReport')
+      if (this.$store.getters.selectedSummaryColumns.length === 0) return
+      console.log(`inside createReport with selectedSummaryColumns: ${this.$store.getters.selectedSummaryColumns.join(',')}`)
       let allFilters = {}
       let summaryDisplayData = {
         stateName: this.$store.getters.stateFilter.name,
@@ -317,11 +316,9 @@ export default {
         allFilters.localeType = this.$store.getters.geographicLevel.code.toLowerCase()
         allFilters.locales = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
       }
+      if (this.$store.getters.selectedSummaryColumns) allFilters.cols = this.$store.getters.selectedSummaryColumns
       this.$emit('updateSummaryDisplay', summaryDisplayData)
-      this.$store.dispatch('loadReportData',
-        { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
-          allFilters
-        })
+      this.$store.dispatch('loadReportData', allFilters)
     },
 
     removeDisaster (disaster) {
@@ -346,10 +343,13 @@ export default {
       let geographicLevelParam
       let localeParam = []
       let disasterParam = []
+      let summaryColumns = []
       if (queryParams && queryParams.geographicLevel !== undefined) geographicLevelParam = queryParams.geographicLevel
       if (queryParams && queryParams.localeFilter !== undefined) localeParam = queryParams.localeFilter.split(',')
       if (queryParams && queryParams.disasterFilter !== undefined) disasterParam = queryParams.disasterFilter.split(',')
+      if (queryParams && queryParams.summaryColumns !== undefined) summaryColumns = queryParams.summaryColumns.split(',')
 
+      _.map(summaryColumns, c => this.$store.commit('setSummaryColumn', {name: c, selected: true}))
       let stateObj = _.find(this.states, ['code', stateParam])
       console.log('setting stateSelector from initializeValuesFromURL')
       this.$refs.stateSelector.select(stateObj)
