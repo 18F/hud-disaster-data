@@ -146,7 +146,14 @@ export default {
         { name: 'Virgin Islands', code: 'VI' }, { name: 'Virginia', code: 'VA' }, { name: 'Washington', code: 'WA' }, { name: 'West Virginia', code: 'WV' },
         { name: 'Wisconsin', code: 'WI' }, { name: 'Wyoming', code: 'WY' }
       ],
-      geographicLevels: [{name: 'City', code: 'city'}, {name: 'County', code: 'county'}, {name: 'Congressional District', code: 'congrdist'}],
+      geographicLevels: [
+        {name: 'City', code: 'city'},
+        {name: 'County', code: 'county'},
+        {name: 'Congressional District', code: 'congrdist'},
+        {name: 'Zip Code', code: 'zipcode'},
+        {name: 'Township', code: 'township'},
+        {name: 'Tract', code: 'tract'}
+      ],
       queryValue: ''
     }
   },

@@ -35,16 +35,16 @@ router.get('/version', function (req, res) {
 * @example // returns disaster array that is limited by the specified locales (in this case, the Wisconsin cities Madison and Monroe)
 *  get /states/WI/disasters?city=Madison,Monroe
 * @param {string} :state - a state id
-* @param {string} localeType - (optional) a geographic level (city, county, congrdist)
+* @param {string} localeType - (optional) a geographic level (city, county, congrdist, zipcode, township, tract )
 * @param {string} locales - (optional) a comma separated list of locales by which to filter the disasters
 **/
 router.get('/states/:state/disasters', function (req, res) {
   const state = req.params.state
   const queryParams = _.get(req, 'query')
-  const validLocaleTypes = ['city', 'county', 'congrdist']
+  const validLocaleTypes = ['city', 'county', 'congrdist', 'zipcode', 'township', 'tract']
   let localeType
   let locales
-  let errMessage = 'Invalid parameters sent.  Use one of: city, county, or congrdist, with a comma separated list of values. Not Acceptable.'
+  let errMessage = 'Invalid parameters sent.  Use one of: city, county, congrdist, zipcode, township, or tract with a comma separated list of values. Not Acceptable.'
   if (!_.isEmpty(queryParams)) {
     localeType = _.findKey(queryParams)
     if (_.indexOf(validLocaleTypes, localeType) !== -1) locales = queryParams[localeType]
@@ -73,7 +73,7 @@ router.get('/states/:state/disasters', function (req, res) {
 * @example // returns array of locales (in this case, the Texas Congressional Districts)
 *  get /states/TX/congrdist
 * @param {string} :stateId - a state id
-* @param {string} :localeType - a geographic level (city, county, congrdist)
+* @param {string} :localeType - a geographic level (city, county, congrdist, zipcode, township, tract )
 **/
 router.get('/states/:stateId/:localeType', (req, res) => {
   var stateId = req.params.stateId.toUpperCase()
