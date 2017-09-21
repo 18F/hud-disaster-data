@@ -12,6 +12,30 @@ Vue.use(Vuex)
 * Manages the state for client functions.
 * @module reportStore
 */
+const conversionList = [
+  {column: 'numberOfRecords', text: 'Number of households affected', format: '0,0', selected: false, notInList: true},
+  {column: 'total_dmge_amnt', text: 'Total FEMA verified real property loss', format: '$0,0.00', selected: true},
+  {column: 'hud_unmt_need_amnt', text: 'HUD estimated unmet need', format: '$0,0.00', selected: true},
+  {column: 'hshd_size_cnt', text: 'Household size', format: '0,0', selected: false},
+  {column: 'dpndnt_cnt', text: 'Dependents', format: '0,0', selected: false},
+  {column: 'incm_amnt', text: 'Income', format: '$0,0.00', selected: false},
+  {column: 'hzrd_insnc_amnt', text: 'Hazard insurance', format: '$0,0.00', selected: false},
+  {column: 'flood_insnc_amnt', text: 'Flood insurance', format: '$0,0.00', selected: false},
+  {column: 'other_insnc_amnt', text: 'Other insurance', format: '$0,0.00', selected: false},
+  {column: 'real_prop_loss_amnt', text: 'Real property loss', format: '$0,0.00', selected: false},
+  {column: 'flood_dmge_amnt', text: 'Flood damage', format: '$0,0.00', selected: false},
+  {column: 'fndtn_dmge_amnt', text: 'Foundation damage', format: '$0,0.00', selected: false},
+  {column: 'roof_dmge_amnt', text: 'Roof damage', format: '$0,0.00', selected: false},
+  {column: 'tmp_shltr_rcvd_amnt', text: 'Temp shelter received', format: '$0,0.00', selected: false},
+  {column: 'rent_asstn_amnt', text: 'Rent assistance', format: '$0,0.00', selected: false},
+  {column: 'repr_amnt', text: 'Repair', format: '$0,0.00', selected: false},
+  {column: 'rpmt_amnt', text: 'Replacement', format: '$0,0.00', selected: false},
+  {column: 'sba_rcvd_amnt', text: 'SBA received', format: '$0,0.00', selected: false},
+  {column: 'prsnl_prop_asstn_amnt', text: 'Personal property assistance', format: '$0,0.00', selected: false},
+  {column: 'other_asstn_amnt', text: 'Other assistance', format: '$0,0.00', selected: false},
+  {column: 'total_asstn_amnt', text: 'Total assistance', format: '$0,0.00', selected: false}
+]
+
 export const mutations = {
 /**
   Update the disaster number list with fresh data
@@ -42,7 +66,6 @@ export const mutations = {
     console.log('inside initStore with: ' + JSON.stringify(stateVal))
     state.disasterList = []
     state.localeList = []
-    state.stateFilter = null
     state.geographicLevel = null
     state.summaryRecords = []
     state.showReport = false
@@ -106,6 +129,11 @@ export const mutations = {
 
   updateReportData: function (state, list) {
     state.summaryRecords = list
+  },
+
+  setSummaryColumn: function (state, selectedCol) {
+    let index = _.findIndex(state.summaryColumns, ['column', selectedCol.column])
+    state.summaryColumns.splice(index, 1, selectedCol)
   }
 }
 /**
@@ -161,7 +189,7 @@ export const actions = {
     })
   },
 
-  loadReportData: function ({ commit }, {summaryCols, allFilters}) {
+  loadReportData: function ({ commit }, allFilters) {
     return new Promise((resolve, reject) => {
       let formattedQuery
       commit('setShowReportSpinner', true)
@@ -169,7 +197,7 @@ export const actions = {
         if (formattedQuery) formattedQuery += `&${key}=${value.toString()}`
         else formattedQuery = `${key}=${value.toString()}`
       })
-      return axios.get(`/api/applicants/summary?${formattedQuery}&cols=${summaryCols}`).then(response => {
+      return axios.get(`/api/applicants/summary?${formattedQuery}`).then(response => {
         commit('updateReportData', response.data)
         commit('setShowReport', true)
         commit('setShowReportSpinner', false)
@@ -213,21 +241,26 @@ export const getters = {
     return state.geographicLevel || ''
   },
   summaryRecords: state => {
-    const numericConversionList = {
-      numberOfRecords: {text: 'Number of households affected', format: '0,0'},
-      total_dmge_amnt: {text: 'Total FEMA verified real property loss', format: '$0,0.00'},
-      hud_unmt_need_amnt: {text: 'HUD estimated unmet need', format: '$0,0.00'}
-    }
     let newSummaryRecord = {}
     for (var key in state.summaryRecords) {
-      let newKey = numericConversionList[key] ? numericConversionList[key].text : key
-      let format = numericConversionList[key] ? numericConversionList[key].format : null
-      let value = numericConversionList[key] ? Number(state.summaryRecords[key]) : state.summaryRecords[key]
-      if (format) newSummaryRecord[newKey] = numeral(value).format(format)
-      else newSummaryRecord[newKey] = value
+      let value = state.summaryRecords[key]
+      let matchingColumn = _.find(conversionList, ['column', key])
+      if (matchingColumn) {
+        newSummaryRecord[matchingColumn.text] = matchingColumn.format ? numeral(value).format(matchingColumn.format) : value
+      } else {
+        newSummaryRecord[key] = value
+      }
     }
 
     return newSummaryRecord
+  },
+
+  summaryColumns: state => {
+    return state.summaryColumns
+  },
+
+  selectedSummaryColumns: state => {
+    return _.map(_.filter(state.summaryColumns, 'selected'), c => c.column)
   }
 }
 
@@ -239,7 +272,10 @@ const reportStore = {
     stateFilter: null,
     summaryRecords: [],
     showReport: false,
-    showReportSpinner: false
+    showReportSpinner: false,
+    summaryColumns: _.map(_.filter(conversionList, c => !c.notInList), sc => {
+      return {column: sc.column, name: sc.text, selected: sc.selected}
+    })
   },
   actions,
   mutations,

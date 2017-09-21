@@ -146,7 +146,14 @@ export default {
         { name: 'Virgin Islands', code: 'VI' }, { name: 'Virginia', code: 'VA' }, { name: 'Washington', code: 'WA' }, { name: 'West Virginia', code: 'WV' },
         { name: 'Wisconsin', code: 'WI' }, { name: 'Wyoming', code: 'WY' }
       ],
-      geographicLevels: [{name: 'City', code: 'city'}, {name: 'County', code: 'county'}, {name: 'Congressional District', code: 'congrdist'}],
+      geographicLevels: [
+        {name: 'City', code: 'city'},
+        {name: 'County', code: 'county'},
+        {name: 'Congressional District', code: 'congrdist'},
+        {name: 'Zip Code', code: 'zipcode'},
+        {name: 'Township', code: 'township'},
+        {name: 'Tract', code: 'tract'}
+      ],
       queryValue: ''
     }
   },
@@ -195,7 +202,7 @@ export default {
       this.clearLocales()
       if (this.$store.getters.stateFilter) {
         this.filterDisasters()
-        this.$store.dispatch('loadLocales').then(result => console.log(`finished loadLocales from setLevel() with result: ${result}`))
+        if (val) this.$store.dispatch('loadLocales').then(result => console.log(`finished loadLocales from setLevel() with result: ${result}`))
       }
       this.checkDisabled()
     },
@@ -246,10 +253,7 @@ export default {
         level: ''
       }
       this.$emit('updateSummaryDisplay', summaryDisplayData)
-      this.$store.dispatch('loadReportData',
-        { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
-          allFilters: {states: 'XXX'}
-        })
+      this.$store.dispatch('loadReportData', { allFilters: {states: 'NOMATCH'} })
       // if (this.openDialogue()) {
       //   this.reset()
       // }
@@ -298,11 +302,13 @@ export default {
       if (this.$store.getters.geographicLevel) query.geographicLevel = this.$store.getters.geographicLevel.code
       if (this.$store.getters.localeFilter.length > 0) query.localeFilter = _.map(this.$store.getters.localeFilter, l => l.code).join(',')
       if (this.$store.getters.disasterFilter.length > 0) query.disasterFilter = _.map(this.$store.getters.disasterFilter, d => d.code).join(',')
+      if (this.$store.getters.selectedSummaryColumns.length > 0) query.summaryColumns = this.$store.getters.selectedSummaryColumns.join(',')
       this.$router.push({name: 'reports', query})
     },
 
     createReport () {
-      console.log('inside createReport')
+      if (this.$store.getters.selectedSummaryColumns.length === 0) return
+      console.log(`inside createReport with selectedSummaryColumns: ${this.$store.getters.selectedSummaryColumns.join(',')}`)
       let allFilters = {}
       let summaryDisplayData = {
         stateName: this.$store.getters.stateFilter.name,
@@ -317,11 +323,9 @@ export default {
         allFilters.localeType = this.$store.getters.geographicLevel.code.toLowerCase()
         allFilters.locales = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
       }
+      if (this.$store.getters.selectedSummaryColumns) allFilters.cols = this.$store.getters.selectedSummaryColumns
       this.$emit('updateSummaryDisplay', summaryDisplayData)
-      this.$store.dispatch('loadReportData',
-        { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
-          allFilters
-        })
+      this.$store.dispatch('loadReportData', allFilters)
     },
 
     removeDisaster (disaster) {
@@ -337,7 +341,8 @@ export default {
       console.log('inside initializeValuesFromURL')
       this.clearStateSelected()
       const vm = this
-      if (!this.$route.query) return
+      const query = _.get(this.$route, 'query')
+      if (!query) return
       let queryParams = this.$route.query
       let stateParam
       if (queryParams && queryParams.stateFilter) stateParam = queryParams.stateFilter
@@ -345,10 +350,17 @@ export default {
       let geographicLevelParam
       let localeParam = []
       let disasterParam = []
+      let summaryColumns = []
       if (queryParams && queryParams.geographicLevel !== undefined) geographicLevelParam = queryParams.geographicLevel
       if (queryParams && queryParams.localeFilter !== undefined) localeParam = queryParams.localeFilter.split(',')
       if (queryParams && queryParams.disasterFilter !== undefined) disasterParam = queryParams.disasterFilter.split(',')
+      if (queryParams && queryParams.summaryColumns !== undefined) summaryColumns = queryParams.summaryColumns.split(',')
 
+      _.map(summaryColumns, c => {
+        let thisColumn = _.find(this.$store.getters.summaryColumns, ['column', c])
+        thisColumn.selected = true
+        this.$store.commit('setSummaryColumn', thisColumn)
+      })
       let stateObj = _.find(this.states, ['code', stateParam])
       console.log('setting stateSelector from initializeValuesFromURL')
       this.$refs.stateSelector.select(stateObj)

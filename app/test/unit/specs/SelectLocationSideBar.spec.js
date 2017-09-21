@@ -9,7 +9,7 @@ import should from 'should'
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
-
+Vue.config.silent = true
 describe('SelectLocationSideBar component', function () {
   let store
   let mutations
@@ -40,6 +40,7 @@ describe('SelectLocationSideBar component', function () {
       loadReportData: sinon.stub()
     }
     store = new Vuex.Store({state: {}, mutations, getters, actions})
+
     Constructor = Vue.extend(SelectLocationSideBar)
     vm = new Constructor({store}).$mount()
   })
@@ -68,7 +69,21 @@ describe('SelectLocationSideBar component', function () {
       })
     })
   })
-  describe('created event/initializeValuesFromURL', function () {
+
+  describe('watch', function () {
+    it('will look at URL and fire initializeValuesFromURL if changed', function (done) {
+      const initializeValuesFromURL = sinon.spy()
+      const that = {initializeValuesFromURL}
+      const routeWatch = vm.$root._watchers[2].cb
+      routeWatch.call(that, 'this', 'that')
+      Vue.nextTick(() => {
+        expect(initializeValuesFromURL.called).to.be.equal(true)
+        done()
+      })
+    })
+  })
+
+  describe('initializeValuesFromURL', function () {
     const testStates = [{ code: 'MZ', name: 'Manzana' }, { code: 'NR', name: 'Naranja' }, { code: 'PL', name: 'Platano' }]
     const testGeoLevels = [{ code: 'city', name: 'City' }, { code: 'county', name: 'County' }, { code: 'something', name: 'Else' }]
     const testLocales = [{ code: 'Jodar', name: 'Jodar' }, { code: 'Ubeda', name: 'Ubeda' }, { code: 'Madrid', name: 'Madrid' }]
@@ -186,14 +201,14 @@ describe('SelectLocationSideBar component', function () {
       const geoSelectorSpy = sinon.spy()
       const clearStateSelectedSpy = sinon.spy()
       const checkDisabledSpy = sinon.spy()
-      const thenSpy = sinon.spy()
       const createReportSpy = sinon.spy()
-      const dispatchSpy = sinon.stub().callsFake(() => { return {then: thenSpy} })
+      const then = function (cb) { cb() }
+      const dispatchSpy = sinon.stub().callsFake(() => { return {then} })
       const newStore = new Vuex.Store({state: {}, mutations, getters, actions})
 
-      store.commit = commitSpy
-      store.dispatch = dispatchSpy
-      store.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
+      newStore.commit = commitSpy
+      newStore.dispatch = dispatchSpy
+      newStore.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
       const that = {
         $route: { query: {
           stateFilter: _.clone(testStates)[0].code,
@@ -224,8 +239,80 @@ describe('SelectLocationSideBar component', function () {
         expect(geoSelectorSpy.calledOnce)
         expect(clearStateSelectedSpy.calledOnce)
         expect(checkDisabledSpy.calledOnce)
+        expect(createReportSpy.calledOnce)
         expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
         expect(commitSpy.calledWith('addDisasterFilter', testDisasters[0]))
+        expect(commitSpy.calledWith('setDisasterFilter', testDisasters[0]))
+        expect(dispatchSpy.calledWith('loadFilteredDisasters'))
+        expect(dispatchSpy.calledWith('loadLocales'))
+        done()
+      })
+    })
+
+    it('should set all the supplied values in the selections based upon URL parameters passed in, except geographicLevel parameter', function (done) {
+      const commitSpy = sinon.spy()
+      const setLevelSpy = sinon.spy()
+      const changeStateSpy = sinon.spy()
+      const stateRefSpy = sinon.spy()
+      const geoSelectorSpy = sinon.spy()
+      const clearStateSelectedSpy = sinon.spy()
+      const checkDisabledSpy = sinon.spy()
+      const createReportSpy = sinon.spy()
+      const then = function (cb) { cb() }
+      const dispatchSpy = sinon.stub().callsFake(() => { return {then} })
+      const newStore = new Vuex.Store({state: {}, mutations, getters, actions})
+
+      newStore.commit = commitSpy
+      newStore.dispatch = dispatchSpy
+      newStore.getters = { localeResults: _.clone(testLocales), disasterNumberResults: _.clone(testDisasters) }
+      const that = {
+        $route: { query: {
+          stateFilter: _.clone(testStates)[0].code,
+          geographicLevel: undefined,
+          localeFilter: undefined,
+          disasterFilter: _.clone(testDisasters)[0].code
+        } },
+        states: _.clone(testStates),
+        geographicLevels: _.clone(testGeoLevels),
+        $store: newStore,
+        stateSelected: null,
+        geographicLevelSelected: null,
+        setLevel: setLevelSpy,
+        changeState: changeStateSpy,
+        createReport: createReportSpy,
+        clearStateSelected: clearStateSelectedSpy,
+        checkDisabled: checkDisabledSpy,
+        $refs: {
+          stateSelector: { select: stateRefSpy },
+          geographicLevelSelector: { select: geoSelectorSpy }
+        }
+      }
+
+      const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
+      initializeValuesFromURL.call(that)
+      Vue.nextTick(() => {
+        expect(changeStateSpy.calledOnce)
+        expect(geoSelectorSpy.calledOnce)
+        expect(clearStateSelectedSpy.calledOnce)
+        expect(checkDisabledSpy.calledOnce)
+        expect(createReportSpy.calledOnce)
+        expect(commitSpy.calledWith('addLocaleFilter', testLocales[0]))
+        expect(commitSpy.calledWith('addDisasterFilter', testDisasters[0]))
+        expect(dispatchSpy.calledWith('loadFilteredDisasters'))
+        expect(commitSpy.calledWith('setDisasterFilter', testDisasters[0]))
+        done()
+      })
+    })
+
+    it('should set none of the values in the selections when no stateFilter URL parameter passed in', function (done) {
+      const clearStateSelected = sinon.spy()
+      const that = { $route: { query: { stateFilter: null } }, clearStateSelected }
+
+      const initializeValuesFromURL = vm.$options.methods.initializeValuesFromURL
+      initializeValuesFromURL.call(that)
+      Vue.nextTick(() => {
+        expect(clearStateSelected.called)
+        expect(vm.stateParam).to.be.equal(undefined)
         done()
       })
     })
@@ -259,17 +346,19 @@ describe('SelectLocationSideBar component', function () {
       let localeFilter = [{ code: 'HOUSTON', name: 'Houston' }]
       let disasterFilter = [{ code: 'DR-4272-TX', name: 'DR-4272-TX', selected: true }]
       let geographicLevel = { code: 'city', name: 'city' }
+      let summaryColumns = ['total_damages', 'hud_unmet_need']
       getters.stateFilter = () => { return stateFilter }
       getters.localeFilter = () => { return localeFilter }
       getters.disasterFilter = () => { return disasterFilter }
       getters.geographicLevel = () => { return geographicLevel }
+      getters.selectedSummaryColumns = () => { return summaryColumns }
       store = new Vuex.Store({state: {}, mutations, getters, actions})
       Constructor = Vue.extend(SelectLocationSideBar)
       vm = new Constructor({store}).$mount()
       const dispatchSpy = sinon.spy(store, 'dispatch')
       vm.createReport()
       Vue.nextTick(() => {
-        expect(dispatchSpy.calledWith('loadReportData', {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'city', 'geoArea': ['HOUSTON']}}))
+        expect(dispatchSpy.calledWith('loadReportData', {'allFilters': {'stateId': 'TX', 'disasterId': ['4272'], 'geoName': 'city', 'geoArea': ['HOUSTON'], 'summaryCols': 'total_damages,hud_unmet_need'}}))
         done()
       })
     })
@@ -280,6 +369,7 @@ describe('SelectLocationSideBar component', function () {
       getters.localeFilter = () => { return [{ code: 'HOUSTON', name: 'Houston' }] }
       getters.disasterFilter = () => { return [] }
       getters.geographicLevel = () => { return { code: 'county', name: 'county' } }
+      getters.selectedSummaryColumns = () => ['total_damages', 'hud_unmet_need']
       store = new Vuex.Store({state: {}, mutations, getters, actions})
       Constructor = Vue.extend(SelectLocationSideBar)
       vm = new Constructor({store}).$mount()
@@ -376,6 +466,7 @@ describe('SelectLocationSideBar component', function () {
       })
     })
   })
+
   describe('addLocale', function () {
     it('should add the locale', function (done) {
       vm.localeSelected = {name: 'Alexandria', code: 'Alexandria'}
@@ -417,30 +508,62 @@ describe('SelectLocationSideBar component', function () {
       })
     })
   })
-  // describe('setLevel', function () {
-  //   it('should set the geographicLevel', function (done) {
-  //     const level = {name: 'City', code: 'city'}
-  //     const stateId = 'TX'
-  //     let commitSpy = sinon.spy(store, 'commit')
-  //     let dispatchSpy = sinon.spy(store, 'dispatch')
-  //     vm.stateSelected = {code: stateId, name: stateId}
-  //     vm.setLevel(level)
-  //     Vue.nextTick(() => {
-  //       should(commitSpy.calledWith('setSelectedGeographicLevel', level)).be.true()
-  //       should(dispatchSpy.calledWith('loadLocales', stateId)).be.true()
-  //       done()
-  //     })
-  //   })
-  //   it('should set geographicLevel to null if empty', function (done) {
-  //     let commitSpy = sinon.spy(store, 'commit')
-  //     vm.setLevel()
-  //     Vue.nextTick(() => {
-  //       should(commitSpy.calledWith('setSelectedGeographicLevel')).be.true()
-  //       expect(vm.geographicLevelSelected).to.be.null
-  //       done()
-  //     })
-  //   })
-  // })
+
+  describe('filterDisasters', function () {
+    it('should load disasters, filtered by localeFilter', function (done) {
+      const thenSpy = sinon.spy()
+      const dispatchStub = sinon.stub().callsFake(() => { return {then: thenSpy} })
+      vm.$store.dispatch = dispatchStub
+      vm.filterDisasters()
+      Vue.nextTick(() => {
+        should(dispatchStub.calledWith('loadFilteredDisasters')).be.true()
+        should(thenSpy.called).be.true()
+        done()
+      })
+    })
+  })
+
+  describe('setLevel', function () {
+    it('should set the geographicLevel', function (done) {
+      const level = {name: 'City', code: 'city'}
+      const commit = sinon.spy()
+      const clearLocales = sinon.spy()
+      const filterDisasters = sinon.spy()
+      const checkDisabled = sinon.spy()
+      const then = sinon.spy()
+      const dispatch = sinon.stub().callsFake(() => { return {then} })
+      const that = {
+        stateSelected: 'XX',
+        geographicLevelSelected: null,
+        clearLocales,
+        filterDisasters,
+        checkDisabled,
+        $store: {commit, dispatch, getters: {stateFilter: 'Something'}}
+      }
+      const setLevel = vm.$options.methods.setLevel
+      setLevel.call(that, level)
+      Vue.nextTick(() => {
+        should(commit.calledWith('setSelectedGeographicLevel', level)).be.true()
+        should(clearLocales.called).be.true()
+        should(filterDisasters.called).be.true()
+        should(dispatch.calledWith('loadLocales')).be.true()
+        should(checkDisabled.called).be.true()
+        done()
+      })
+    })
+    it('should run clearValue on geographicLevel if empty', function (done) {
+      const commitSpy = sinon.spy(store, 'commit')
+      const clearValueSpy = sinon.spy(vm.$refs.geographicLevelSelector, 'clearValue')
+      vm.setLevel()
+      Vue.nextTick(() => {
+        should(commitSpy.calledWith('setSelectedGeographicLevel')).be.true()
+        should(clearValueSpy.called).be.true()
+        commitSpy.restore()
+        clearValueSpy.restore()
+        done()
+      })
+    })
+  })
 
   describe('removeDisaster', function () {
     it('should call commit to remove the disaster', function (done) {
@@ -465,15 +588,88 @@ describe('SelectLocationSideBar component', function () {
         done()
       })
     })
-    // it('should reset disaster filter on locale remove', function (done) {
-    //   let locale = 'something'
-    //   let dispatchSpy = sinon.spy(store, 'dispatch')
-    //   vm.stateSelected = {code: 'WI'}
-    //   vm.removeLocale(locale)
-    //   Vue.nextTick(() => {
-    //     should(dispatchSpy.calledWith('loadReportDisasterList')).be.true()
-    //     done()
-    //   })
-    // })
+  })
+
+  describe('checkDisabled', function () {
+    it('should set disabled to true for all fields when no state selected', function (done) {
+      vm.stateSelected = null
+      vm.disableLocales = false
+      vm.disableCreate = false
+      vm.disableDisasters = false
+      vm.disableLevels = false
+      vm.checkDisabled()
+      Vue.nextTick(() => {
+        should(vm.disableLocales).be.true()
+        should(vm.disableCreate).be.true()
+        should(vm.disableDisasters).be.true()
+        should(vm.disableLevels).be.true()
+        done()
+      })
+    })
+    it('should set disabled to false for all fields when state and geographicLevel are selected', function (done) {
+      vm.stateSelected = 'XX'
+      vm.geographicLevelSelected = 'YY'
+      vm.disableLocales = false
+      vm.disableCreate = false
+      vm.disableDisasters = false
+      vm.disableLevels = false
+      vm.checkDisabled()
+      Vue.nextTick(() => {
+        should(vm.disableLocales).be.false()
+        should(vm.disableCreate).be.false()
+        should(vm.disableDisasters).be.false()
+        should(vm.disableLevels).be.false()
+        done()
+      })
+    })
+    it('should set disabled to false for all fields but disableLocales when state is selected, but geographicLevel is not', function (done) {
+      vm.stateSelected = 'XX'
+      vm.geographicLevelSelected = null
+      vm.disableLocales = false
+      vm.disableCreate = false
+      vm.disableDisasters = false
+      vm.disableLevels = false
+      vm.checkDisabled()
+      Vue.nextTick(() => {
+        should(vm.disableLocales).be.true()
+        should(vm.disableCreate).be.false()
+        should(vm.disableDisasters).be.false()
+        should(vm.disableLevels).be.false()
+        done()
+      })
+    })
+  })
+
+  describe('pushReportUrl', function () {
+    it('should generate proper URL and push it with the router', function (done) {
+      const push = sinon.spy()
+      const that = {
+        $store: {
+          getters: {
+            stateFilter: {code: 'XX'},
+            geographicLevel: {code: 'YY'},
+            localeFilter: [{code: 'AA'}],
+            disasterFilter: [{code: 'BB'}],
+            selectedSummaryColumns: ['JJ', 'KK']
+          }
+        },
+        $router: {push}
+      }
+      const pushReportUrl = vm.$options.methods.pushReportUrl
+      pushReportUrl.call(that)
+      Vue.nextTick(() => {
+        should(push.calledWith({
+          name: 'reports',
+          query: {
+            disasterFilter: 'BB',
+            geographicLevel: 'YY',
+            localeFilter: 'AA',
+            stateFilter: 'XX',
+            summaryColumns: 'JJ,KK'
+          }
+        })).be.true()
+        done()
+      })
+    })
   })
 })

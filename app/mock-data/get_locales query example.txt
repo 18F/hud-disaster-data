@@ -40,5 +40,46 @@ results for fema_data.get_locales(): stateid => 'WI', localetype => 'congrdist',
 5502115
 
 
+results for fema_data.get_locales(): 'TX', 'zipcode', '77550,77546', returnVal
+
+77002
+77493
+77546
+77550
+78401
+
+
+results for fema_data.get_locales(): stateid => 'WI', localetype => 'zipcode', disasterid => 'ALL', results => returnVal
+
+77550
+
+
+results for fema_data.get_locales(): 'TX', 'township', '77550,77546', returnVal
+
+Corpus Christi
+Galveston
+Houston
+Texas City-League City
+
+
+results for fema_data.get_locales(): stateid => 'WI', localetype => 'township', disasterid => 'ALL', results => returnVal
+
+Madison
+
+
+results for fema_data.get_locales(): 'TX', 'tract', '77550,77546', returnVal
+
+100000
+1100  
+542700
+720301
+724500
+
+
+results for fema_data.get_locales(): stateid => 'WI', localetype => 'tract', disasterid => 'ALL', results => returnVal
+
+724500
+
+
 PL/SQL procedure successfully completed.
 

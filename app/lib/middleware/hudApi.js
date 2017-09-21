@@ -49,7 +49,10 @@ const databaseFieldReference = {
   state: 'dmge_state_cd',
   city: 'dmge_city_name',
   county: 'cnty_name',
-  congrdist: 'fcd_fips91_cd'
+  congrdist: 'fcd_fips91_cd',
+  zipcode: 'std_basc_zip_cd',
+  township: 'cnty_sub_divn_cur_name',
+  tract: 'tract_census_2010_cd'
 }
 
 const decodeField = (fieldname) => {
