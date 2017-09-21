@@ -35,7 +35,6 @@
         .logo.logo--block
           span.logo-img(alt='U.S. Department of Housing and Urban Development logo')
           h1(ref='title') {{title}}
-        user-selector
         #burger.hidden-md.hidden-lg.pull-right.padding-top(@click='toggleBurger' style="margin-right:20px;")
           icon(name='fa-bars' classes='ico-lg fill-black')
         #burger-menu.hidden-md.hidden-lg.hidden(ref='burgerMenu')
@@ -69,14 +68,12 @@
 
 <script>
 import tour from '../tour'
-import UserSelector from '@/components/UserSelector'
 /**
 * The standard header for the site.  Contains official logo, government site statement, and tabs for navigation.
 * @module components/Header
 */
 
 export default {
-  components: {UserSelector},
   data () {
     return {
       title: 'Disaster Data Portal',

@@ -24,7 +24,6 @@ describe('/api/disasternumber/:qry', function () {
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      debugger
       body[0].should.be.an.Object().and.have.property('disasterType').which.is.equal('DR')
       body[0].should.be.an.Object().and.have.property('disasterNumber').which.is.equal(1999)
       body[0].should.be.an.Object().and.have.property('state').which.is.equal('TX')

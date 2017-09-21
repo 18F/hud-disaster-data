@@ -18,6 +18,7 @@ var morgan = require('morgan')
 var bodyParser = require('body-parser')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
+const auth = require('../lib/middleware/auth')
 var webpackConfig = process.env.NODE_ENV === 'testing'
   ? require('./webpack.prod.conf')
   : require('./webpack.dev.conf')
@@ -62,6 +63,8 @@ Object.keys(proxyTable).forEach(function (context) {
   }
   app.use(proxyMiddleware(options.filter || context, options))
 })
+
+app.use(auth.authenticate)
 
 // serve webpack bundle output
 app.use(devMiddleware)

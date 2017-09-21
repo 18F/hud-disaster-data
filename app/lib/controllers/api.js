@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const request = require('request')
-const auth = require('../middleware/auth')
 const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
@@ -17,8 +16,6 @@ const isHUDHQUser = require('../middleware/auth').isHUDHQUser
 *
 * @module lib/controllers/api
 */
-
-router.use(auth.authenticate)
 
 /**
 * router.get('/version') <br/>
@@ -153,7 +150,6 @@ router.get('/disasterquery/:qry', function (req, res) {
 */
 router.get('/disasternumber/:qry', function (req, res) {
   let disasterNbrs = req.params.qry.toUpperCase().split(',')
-  debugger
   if (req.user.disasterids && !isHUDHQUser(req)) {
     disasterNbrs = _.filter(disasterNbrs, disasterNumber => {
       let parts = disasterNumber.split('-')
@@ -162,6 +158,7 @@ router.get('/disasternumber/:qry', function (req, res) {
       return false
     })
   }
+  if (!disasterNbrs.length) return res.json([])
   var filter = ''
   for (var arg in disasterNbrs) {
     var qryParts = disasterNbrs[arg].split('-')
