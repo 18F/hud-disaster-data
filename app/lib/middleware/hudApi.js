@@ -30,16 +30,8 @@ const config = function (url) {
   }
 }
 
-const getUser = function(userid, cb) {
-  request.get(config(`${DRGR_API_BASE}/users/${userid}`))
-    .then(res => {
-      console.log('**** Response from drgr API **** :', response)
-      cb(null, res.data)
-    })
-    .catch(err => {
-      console.log('**** Error getting user **** :', err)
-      cb(err)
-    })
+const getUser = function(userid) {
+  return request.get(config(`${DRGR_API_BASE}/users/${userid}`))
 }
 
 // const getLocales = function(user, state, type) {

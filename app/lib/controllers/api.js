@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const request = require('request')
+const auth = require('../middleware/auth')
 const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
@@ -9,13 +10,15 @@ const hudApi = require('../middleware/hudApi')
 const fema = require('../middleware/fema')
 const version = require('../../package.json').version
 const requestPromise = require('request-promise')
+const isHUDHQUser = require('../middleware/auth').isHUDHQUser
+
 /**
 * Creates the routes for the backend functionality. <br/>
 *
 * @module lib/controllers/api
 */
 
-router.use(require('../middleware/authenticate'))
+router.use(auth.authenticate)
 
 /**
 * router.get('/version') <br/>
@@ -122,19 +125,18 @@ router.get('/states/:stateId/:localeType', (req, res) => {
 *  get /disasterquery/4311
 */
 router.get('/disasterquery/:qry', function (req, res) {
-  const authorizedDisasters = _.get(req, 'query.disasters')
   const qryParts = req.params.qry.replace(/-$/, '').toUpperCase().split('-')
-  const tenYearsAgo = moment().subtract(10, 'years')
-  let filter = `declarationDate gt '${tenYearsAgo.toString()}'`
-  if (qryParts.length === 1 && /^\d+$/.test(qryParts[0])) filter += ` and disasterNumber eq ${qryParts[0]}`
-  else if (qryParts.length === 1 && /^[A-Z]+$/.test(qryParts[0])) filter += ` and ( disasterType eq '${qryParts[0]}' or state eq '${qryParts[0]}')`
-  else if (qryParts.length === 2) filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]}`
-  else filter += ` and disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' `
+  let filter
+  if (qryParts.length === 1 && /^\d+$/.test(qryParts[0])) filter = `disasterNumber eq ${qryParts[0]}`
+  else if (qryParts.length === 1 && /^[A-Z]+$/.test(qryParts[0])) filter = `(disasterType eq '${qryParts[0]}' or state eq '${qryParts[0]}')`
+  else if (qryParts.length === 2) filter = `disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]}`
+  else filter = `disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' `
+  if (req.user.disasterids && !isHUDHQUser(req)) {
+    filter += ` and (disasterNumber eq ${req.user.disasterids.join(' or disasterNumber eq ')})`
+  }
   fema.getDisasters({
     filter: filter,
-    authorizedDisasters,
-    orderBy: 'declarationDate desc',
-    top: 250
+    orderBy: 'declarationDate desc'
   }, (err, data) => {
     if (err) return res.send(503, {status: err.status, message: err.message})
     res.json(data)
@@ -150,8 +152,16 @@ router.get('/disasterquery/:qry', function (req, res) {
 *  get /disasternumber/DR-4311-UT,FM-5130-UT,FM-5182-WA
 */
 router.get('/disasternumber/:qry', function (req, res) {
-  const authorizedDisasters = _.get(req, 'query.disasters')
-  const disasterNbrs = req.params.qry.toUpperCase().split(',')
+  let disasterNbrs = req.params.qry.toUpperCase().split(',')
+  debugger
+  if (req.user.disasterids && !isHUDHQUser(req)) {
+    disasterNbrs = _.filter(disasterNbrs, disasterNumber => {
+      let parts = disasterNumber.split('-')
+      let id = parts[1]
+      if (req.user.disasterids.includes(id)) return true
+      return false
+    })
+  }
   var filter = ''
   for (var arg in disasterNbrs) {
     var qryParts = disasterNbrs[arg].split('-')
@@ -159,8 +169,7 @@ router.get('/disasternumber/:qry', function (req, res) {
     filter += `( disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' )`
   }
   fema.getDisasters({
-    filter: `${filter}`,
-    authorizedDisasters
+    filter: `${filter}`
   }, (err, data) => {
     if (err) return res.send(503, {status: err.status, message: err.message})
     res.json(data)
