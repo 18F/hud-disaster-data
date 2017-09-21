@@ -28,5 +28,23 @@ results for get_disasters: stateid => 'TX', localetype => 'congrdist', localeval
 4272
 
 
+results for get_disasters: stateid => 'TX', localetype => 'zipcode', localevalues => '77550,77546', results => returnVal
+
+1791
+
+
+results for get_disasters: stateid => 'TX', localetype => 'township', localevalues => 'Texas City-League City,Corpus Christi', results => returnVal
+
+1791
+4223
+
+
+results for get_disasters: stateid => 'TX', localetype => 'tract', localevalues => 'Texas City-League City,Corpus Christi', results => returnVal
+
+1791
+4223
+4272
+
+
 PL/SQL procedure successfully completed.
 

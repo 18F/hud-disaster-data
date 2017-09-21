@@ -13,6 +13,7 @@
 ** 1         08/16/2017   Dave Hannon, Flexion Inc   initial version
 ** 2         08/18/2017   Dave Hannon, Flexion Inc   improved code to condense logic
 ** 3         09/08/2017   Dave Hannon, Flexion Inc   moved TABLE declarations outside package
+** 4         09/21/2017   Dave Hannon, Flexion Inc   added new locale types: zipcode, township, and tract
 *******************************/
 CREATE TYPE charParameterArray IS TABLE OF VARCHAR2(32767);
 /
@@ -231,6 +232,31 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
        WHERE fhdh.DMGE_STATE_CD = stateid
        AND ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
        ORDER BY 1;
+    ELSIF localetype = 'zipcode'
+    THEN
+     SELECT UNIQUE STD_BASC_ZIP_CD AS zipcode
+        BULK COLLECT INTO results
+        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
+       WHERE fhdh.DMGE_STATE_CD = stateid
+       AND ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
+       ORDER BY 1;
+    ELSIF localetype = 'township'
+    THEN
+     SELECT UNIQUE CNTY_SUB_DIVN_CURR_NAME AS township
+        BULK COLLECT INTO results
+        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
+       WHERE fhdh.DMGE_STATE_CD = stateid
+       AND ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
+       ORDER BY 1;
+    ELSIF localetype = 'tract'
+    THEN
+     SELECT UNIQUE TRACT_CENSUS_2010_CD AS tract
+        BULK COLLECT INTO results
+        FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
+       WHERE fhdh.DMGE_STATE_CD = stateid
+       AND ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
+       ORDER BY 1;
+
     END IF;
     EXCEPTION
       WHEN no_data_found THEN
@@ -259,6 +285,12 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
           ( localetype = 'county' AND fhdh.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
           OR
           ( localetype = 'congrdist' AND fhdh.FCD_FIPS_91_CD IN (SELECT * FROM TABLE(localevalues)) )
+          OR
+          ( localetype = 'zipcode' AND fhdh.STD_BASC_ZIP_CD IN (SELECT * FROM TABLE(localevalues)) )
+          OR
+          ( localetype = 'township' AND fhdh.CNTY_SUB_DIVN_CURR_NAME IN (SELECT * FROM TABLE(localevalues)) )
+          OR
+          ( localetype = 'tract' AND fhdh.TRACT_CENSUS_2010_CD IN (SELECT * FROM TABLE(localevalues)) )
         )
      ORDER BY 1;
   EXCEPTION
@@ -393,6 +425,12 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
        ( localetype = 'county' AND fhdh.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
        OR
        ( localetype = 'congrdist' AND fhdh.FCD_FIPS_91_CD IN (SELECT * FROM TABLE(localevalues)) )
+       OR
+       ( localetype = 'zipcode' AND fhdh.STD_BASC_ZIP_CD IN (SELECT * FROM TABLE(localevalues)) )
+       OR
+       ( localetype = 'township' AND fhdh.CNTY_SUB_DIVN_CURR_NAME IN (SELECT * FROM TABLE(localevalues)) )
+       OR
+       ( localetype = 'tract' AND fhdh.TRACT_CENSUS_2010_CD IN (SELECT * FROM TABLE(localevalues)) )
      );
 
   EXCEPTION
@@ -444,6 +482,12 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
          ( localetype = 'county' AND fhdh.CNTY_NAME IN (SELECT * FROM TABLE(localevalues)) )
          OR
          ( localetype = 'congrdist' AND fhdh.FCD_FIPS_91_CD IN (SELECT * FROM TABLE(localevalues)) )
+         OR
+         ( localetype = 'zipcode' AND fhdh.STD_BASC_ZIP_CD IN (SELECT * FROM TABLE(localevalues)) )
+         OR
+         ( localetype = 'township' AND fhdh.CNTY_SUB_DIVN_CURR_NAME IN (SELECT * FROM TABLE(localevalues)) )
+         OR
+         ( localetype = 'tract' AND fhdh.TRACT_CENSUS_2010_CD IN (SELECT * FROM TABLE(localevalues)) )
        );
   EXCEPTION
     WHEN no_data_found THEN

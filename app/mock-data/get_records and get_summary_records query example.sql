@@ -229,5 +229,189 @@ dbms_output.put_line( 'DSTER_ID' || '   ' ||
                          returnVal(i).CNTY_NAME);
  end loop;
 
+ disasterList := nbrParameterArray();
+ localevaluesList := charParameterArray('77002','77493');
+ DBMS_OUTPUT.NEW_LINE();
+ DBMS_OUTPUT.NEW_LINE();
+ DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[having no disasterid value is equiv to 'ALL', stateid => 'TX', localetype => 'zipcode',   localevalues is equiv to '77002,77493']');
+ DBMS_OUTPUT.NEW_LINE();
+ fema_data.get_records(stateid => 'TX', localetype => 'zipcode',  disasterid => disasterList, localevalues => localevaluesList, results => returnVal);
+
+ dbms_output.put_line( 'DSTER_ID' || '   ' ||
+                        'DSTER_TYPE_CD' || '   ' ||
+                        'APPLT_LAST_NAME' || '   ' ||
+                        'APPLT_FIRST_NAME' || '   ' ||
+                        'CPLCNT_FIRST_NAME' || '   ' ||
+                        'CPLCNT_LAST_NAME' || '   ' ||
+                        'APPLT_SSN_ID' || '   ' ||
+                        'PHN_AREA_NUM' || '   ' ||
+                        'PHN_NUM' || '   ' ||
+                        'ALTNT_PHN_AREA_NUM' || '   ' ||
+                        'ALTNT_PHN_NUM' || '   ' ||
+                        'DMGE_ADDR_LINE_TEXT' || '   ' ||
+                        'DMGE_CITY_NAME' || '   ' ||
+                        'DMGE_STATE_CD' || '   ' ||
+                        'DMGE_BASC_ZIP_CD' || '   ' ||
+                        'DMGE_ZIP_EXTN_CD' || '   ' ||
+                        'CNTY_NAME');
+  for i in 1 .. returnVal.count loop
+    dbms_output.put_line(returnVal(i).DSTER_ID || '   ' ||
+                          returnVal(i).DSTER_TYPE_CD || '   ' ||
+                          returnVal(i).APPLT_LAST_NAME || '   ' ||
+                          returnVal(i).APPLT_FIRST_NAME || '   ' ||
+                          returnVal(i).CPLCNT_FIRST_NAME || '   ' ||
+                          returnVal(i).CPLCNT_LAST_NAME || '   ' ||
+                          returnVal(i).APPLT_SSN_ID || '   ' ||
+                          returnVal(i).PHN_AREA_NUM || '   ' ||
+                          returnVal(i).PHN_NUM || '   ' ||
+                          returnVal(i).ALTNT_PHN_AREA_NUM || '   ' ||
+                          returnVal(i).ALTNT_PHN_NUM || '   ' ||
+                          returnVal(i).DMGE_ADDR_LINE_TEXT || '   ' ||
+                          returnVal(i).DMGE_CITY_NAME || '   ' ||
+                          returnVal(i).DMGE_STATE_CD || '   ' ||
+                          returnVal(i).DMGE_BASC_ZIP_CD || '   ' ||
+                          returnVal(i).DMGE_ZIP_EXTN_CD || '   ' ||
+                          returnVal(i).CNTY_NAME);
+  end loop;
+
+ disasterList := nbrParameterArray();
+ localevaluesList := charParameterArray('77002','77493');
+ DBMS_OUTPUT.NEW_LINE();
+ DBMS_OUTPUT.NEW_LINE();
+ DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[having no disasterid is equiv to saying all, stateid => 'TX', localetype => 'zipcode',   localevalues equiv to '77002','77493', results => summaryReturnVal]');
+ DBMS_OUTPUT.NEW_LINE();
+ fema_data.get_summary_records(stateid => 'TX', localetype => 'zipcode',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
+ dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
+                      'TOTAL_ASSTN_AMNT' || '    ' ||
+                      'HUD_UNMT_NEED_AMNT' );
+ for i in 1 .. summaryReturnVal.count loop
+    dbms_output.put_line( summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
+                         summaryReturnVal(i).TOTAL_ASSTN_AMNT || '    ' ||
+                         summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
+ end loop;
+
+ disasterList := nbrParameterArray();
+ localevaluesList := charParameterArray('Des Moines','Cedar Rapids');
+ DBMS_OUTPUT.NEW_LINE();
+ DBMS_OUTPUT.NEW_LINE();
+ DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[having no disasterid value is equiv to 'ALL', localetype => 'township',   localevalues is equiv to 'Des Moines','Cedar Rapids']');
+ DBMS_OUTPUT.NEW_LINE();
+ fema_data.get_records(localetype => 'township',  disasterid => disasterList, localevalues => localevaluesList, results => returnVal);
+
+ dbms_output.put_line( 'DSTER_ID' || '   ' ||
+                        'DSTER_TYPE_CD' || '   ' ||
+                        'APPLT_LAST_NAME' || '   ' ||
+                        'APPLT_FIRST_NAME' || '   ' ||
+                        'CPLCNT_FIRST_NAME' || '   ' ||
+                        'CPLCNT_LAST_NAME' || '   ' ||
+                        'APPLT_SSN_ID' || '   ' ||
+                        'PHN_AREA_NUM' || '   ' ||
+                        'PHN_NUM' || '   ' ||
+                        'ALTNT_PHN_AREA_NUM' || '   ' ||
+                        'ALTNT_PHN_NUM' || '   ' ||
+                        'DMGE_ADDR_LINE_TEXT' || '   ' ||
+                        'DMGE_CITY_NAME' || '   ' ||
+                        'DMGE_STATE_CD' || '   ' ||
+                        'DMGE_BASC_ZIP_CD' || '   ' ||
+                        'DMGE_ZIP_EXTN_CD' || '   ' ||
+                        'CNTY_NAME');
+  for i in 1 .. returnVal.count loop
+    dbms_output.put_line(returnVal(i).DSTER_ID || '   ' ||
+                          returnVal(i).DSTER_TYPE_CD || '   ' ||
+                          returnVal(i).APPLT_LAST_NAME || '   ' ||
+                          returnVal(i).APPLT_FIRST_NAME || '   ' ||
+                          returnVal(i).CPLCNT_FIRST_NAME || '   ' ||
+                          returnVal(i).CPLCNT_LAST_NAME || '   ' ||
+                          returnVal(i).APPLT_SSN_ID || '   ' ||
+                          returnVal(i).PHN_AREA_NUM || '   ' ||
+                          returnVal(i).PHN_NUM || '   ' ||
+                          returnVal(i).ALTNT_PHN_AREA_NUM || '   ' ||
+                          returnVal(i).ALTNT_PHN_NUM || '   ' ||
+                          returnVal(i).DMGE_ADDR_LINE_TEXT || '   ' ||
+                          returnVal(i).DMGE_CITY_NAME || '   ' ||
+                          returnVal(i).DMGE_STATE_CD || '   ' ||
+                          returnVal(i).DMGE_BASC_ZIP_CD || '   ' ||
+                          returnVal(i).DMGE_ZIP_EXTN_CD || '   ' ||
+                          returnVal(i).CNTY_NAME);
+  end loop;
+
+ disasterList := nbrParameterArray();
+ localevaluesList := charParameterArray('Des Moines','Cedar Rapids');
+ DBMS_OUTPUT.NEW_LINE();
+ DBMS_OUTPUT.NEW_LINE();
+ DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[having no disasterid is equiv to saying all, localetype => 'township',   localevalues equiv to 'Des Moines','Cedar Rapids', results => summaryReturnVal]');
+ DBMS_OUTPUT.NEW_LINE();
+ fema_data.get_summary_records(localetype => 'township',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
+ dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
+                      'TOTAL_ASSTN_AMNT' || '    ' ||
+                      'HUD_UNMT_NEED_AMNT' );
+ for i in 1 .. summaryReturnVal.count loop
+    dbms_output.put_line( summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
+                         summaryReturnVal(i).TOTAL_ASSTN_AMNT || '    ' ||
+                         summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
+ end loop;
+
+
+  disasterList := nbrParameterArray();
+  localevaluesList := charParameterArray('1100  ');
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for get_records: ' || q'[having no disasterid value is equiv to 'ALL', localetype => 'tract',   localevalues is equiv to '1100  ']');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_records(localetype => 'tract',  disasterid => disasterList, localevalues => localevaluesList, results => returnVal);
+
+  dbms_output.put_line( 'DSTER_ID' || '   ' ||
+                         'DSTER_TYPE_CD' || '   ' ||
+                         'APPLT_LAST_NAME' || '   ' ||
+                         'APPLT_FIRST_NAME' || '   ' ||
+                         'CPLCNT_FIRST_NAME' || '   ' ||
+                         'CPLCNT_LAST_NAME' || '   ' ||
+                         'APPLT_SSN_ID' || '   ' ||
+                         'PHN_AREA_NUM' || '   ' ||
+                         'PHN_NUM' || '   ' ||
+                         'ALTNT_PHN_AREA_NUM' || '   ' ||
+                         'ALTNT_PHN_NUM' || '   ' ||
+                         'DMGE_ADDR_LINE_TEXT' || '   ' ||
+                         'DMGE_CITY_NAME' || '   ' ||
+                         'DMGE_STATE_CD' || '   ' ||
+                         'DMGE_BASC_ZIP_CD' || '   ' ||
+                         'DMGE_ZIP_EXTN_CD' || '   ' ||
+                         'CNTY_NAME');
+   for i in 1 .. returnVal.count loop
+     dbms_output.put_line(returnVal(i).DSTER_ID || '   ' ||
+                           returnVal(i).DSTER_TYPE_CD || '   ' ||
+                           returnVal(i).APPLT_LAST_NAME || '   ' ||
+                           returnVal(i).APPLT_FIRST_NAME || '   ' ||
+                           returnVal(i).CPLCNT_FIRST_NAME || '   ' ||
+                           returnVal(i).CPLCNT_LAST_NAME || '   ' ||
+                           returnVal(i).APPLT_SSN_ID || '   ' ||
+                           returnVal(i).PHN_AREA_NUM || '   ' ||
+                           returnVal(i).PHN_NUM || '   ' ||
+                           returnVal(i).ALTNT_PHN_AREA_NUM || '   ' ||
+                           returnVal(i).ALTNT_PHN_NUM || '   ' ||
+                           returnVal(i).DMGE_ADDR_LINE_TEXT || '   ' ||
+                           returnVal(i).DMGE_CITY_NAME || '   ' ||
+                           returnVal(i).DMGE_STATE_CD || '   ' ||
+                           returnVal(i).DMGE_BASC_ZIP_CD || '   ' ||
+                           returnVal(i).DMGE_ZIP_EXTN_CD || '   ' ||
+                           returnVal(i).CNTY_NAME);
+   end loop;
+
+  disasterList := nbrParameterArray();
+  localevaluesList := charParameterArray('1100  ');
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[having no disasterid is equiv to saying all, localetype => 'tract',   localevalues equiv to '1100  ', results => summaryReturnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_summary_records(localetype => 'tract',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
+  dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
+                       'TOTAL_ASSTN_AMNT' || '    ' ||
+                       'HUD_UNMT_NEED_AMNT' );
+  for i in 1 .. summaryReturnVal.count loop
+     dbms_output.put_line( summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
+                          summaryReturnVal(i).TOTAL_ASSTN_AMNT || '    ' ||
+                          summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
+  end loop;
+
 END;
 /

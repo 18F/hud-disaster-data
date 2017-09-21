@@ -62,5 +62,39 @@ BEGIN
    dbms_output.put_line(returnVal(i));
   end loop;
 
+  localeList := charParameterArray('77550', '77546');
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for get_disasters: ' || q'[stateid => 'TX', localetype => 'zipcode', localevalues => '77550,77546', results => returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_disasters(stateid => 'TX', localetype => 'zipcode', localevalues => localeList, results => returnVal);
+
+  for i in 1 .. returnVal.count loop
+   dbms_output.put_line(returnVal(i));
+  end loop;
+
+
+  localeList := charParameterArray('Texas City-League City', 'Corpus Christi');
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for get_disasters: ' || q'[stateid => 'TX', localetype => 'township', localevalues => 'Texas City-League City,Corpus Christi', results => returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_disasters(stateid => 'TX', localetype => 'township', localevalues => localeList, results => returnVal);
+
+  for i in 1 .. returnVal.count loop
+   dbms_output.put_line(returnVal(i));
+  end loop;
+
+  localeList := charParameterArray('724500', '542700');
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for get_disasters: ' || q'[stateid => 'TX', localetype => 'tract', localevalues => 'Texas City-League City,Corpus Christi', results => returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_disasters(stateid => 'TX', localetype => 'tract', localevalues => localeList, results => returnVal);
+
+  for i in 1 .. returnVal.count loop
+   dbms_output.put_line(returnVal(i));
+  end loop;
+
 END;
 /
