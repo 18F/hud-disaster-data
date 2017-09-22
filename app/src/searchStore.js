@@ -75,8 +75,8 @@ export const mutations = {
     if (!name) { return false }
     mutations.clearCurrentExtract(state, true)
     let savedExtracts = loadSavedExtracts()
-    let disasterNumbers = _.find(savedExtracts, {name}).disasters
-    if (disasterNumbers.length === 0) return
+    let disasterNumbers = _.get(_.find(savedExtracts, {name}), 'disasters')
+    if (!disasterNumbers) return
     state.extractLoading = true
     axios.get(`/api/disasternumber/${disasterNumbers.join(',')}`).then((response) => {
       state.currentExtract = _.map(response.data, (disaster) => {

@@ -8,9 +8,9 @@ import should from 'should'
 import magic from '@/bus'
 const { updateReportDisasterList, updateLocaleList,
   setState, addDisasterFilter, addLocaleFilter, removeDisasterFilter, removeLocaleFilter, setLocalesFilter, setDisastersFilter,
-  setShowReportSpinner, setSelectedGeographicLevel, updateReportData, setShowReport, initStore } = mutations
+  setShowReportSpinner, setSelectedGeographicLevel, updateReportData, setShowReport, initStore, setSummaryColumn } = mutations
 const { loadLocales, loadReportData, loadFilteredDisasters } = actions
-const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords, showReport } = getters
+const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords, showReport, summaryColumns, selectedSummaryColumns } = getters
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -85,6 +85,16 @@ describe('reportStore', function () {
         done()
       })
     })
+
+    // it('should call commit for setStatus when no stateFilter parameter is passed in', function (done) {
+    //   const commit = sinon.stub().callsFake((mutn, msg) => {
+    //     expect(mutn).to.be.equal('setStatus')
+    //     expect(msg).to.be.equal({type: 'error', scope: 'app', msg: 'State not specified!'})
+    //     done()
+    //   })
+    //   let state = {stateFilter: null}
+    //   loadFilteredDisasters({commit, state})
+    // })
 
     it('should call commit for setStatus when no data is found', function (done) {
       moxios.stubRequest(/IA/, {
@@ -389,6 +399,24 @@ describe('reportStore', function () {
         should(commit.calledWith('setStatus')).be.true()
         done()
       })
+    })
+  })
+  describe('setSummaryColumn', function () {
+    it('should set summaryColumns to proper values', function () {
+      const selectedCol = {column: 'col1', name: 'column 1', selected: true}
+      const state = {
+        summaryColumns: [
+          {column: 'col1', name: 'column 1', selected: false},
+          {column: 'col1', name: 'column 1', selected: false},
+          {column: 'col1', name: 'column 1', selected: false}
+        ]
+      }
+      should(selectedSummaryColumns(state)).be.an.Array().and.have.length(0)
+      setSummaryColumn(state, selectedCol)
+      const summaryColumnsVal = summaryColumns(state)
+      const selectedSummaryColumnsVal = selectedSummaryColumns(state)
+      should(summaryColumnsVal).be.an.Array().and.have.length(3)
+      should(selectedSummaryColumnsVal).be.an.Array().and.have.length(1)
     })
   })
 })
