@@ -211,6 +211,39 @@ describe('store', function () {
       loadExtract(state, 'TESTSavedExtract')
     })
 
+    it('loadExtract should return undefined if no disasters returned from loadSavedExtracts', function (done) {
+      let returnCode = true
+      const clearCurrentExtract = sinon.stub(mutations, 'clearCurrentExtract')
+      returnCode = loadExtract('bogus state', {name: 'some name'})
+      expect(clearCurrentExtract.called).to.be.equal(true)
+      expect(returnCode).to.be.equal(undefined)
+      clearCurrentExtract.restore()
+      done()
+    })
+
+    it('loadExtract should set currentExtract to contain disasters returned from loadSavedExtracts', function (done) {
+      const clearCurrentExtract = sinon.stub(mutations, 'clearCurrentExtract')
+      const state = {extractLoading: 'nonsense', currentExtract: _.clone(TWO_RECORDS), savedExtracts: []}
+      saveExtract(state, 'TESTSavedExtract')
+      moxios.install()
+      moxios.wait(function () {
+        let request = moxios.requests.mostRecent()
+        request.respondWith({
+          status: 200,
+          response: _.clone(TWO_RECORDS)
+        }).then(function () {
+          expect(clearCurrentExtract.called).to.be.equal(true)
+          expect(state.extractLoading).to.be.equal(false)
+          expect(state.newExtract).to.be.equal(false)
+          expect(state.currentExtract.length).to.be.equal(2)
+          expect(state.currentExtract[0].currentExtract).to.be.equal(true)
+          clearCurrentExtract.restore()
+          done()
+        })
+      })
+      loadExtract(state, {name: 'TESTSavedExtract'})
+    })
+
     it('loadExtract should return false if no name passed in', function (done) {
       let returnCode = true
       returnCode = loadExtract('bogus state', {name: null})
