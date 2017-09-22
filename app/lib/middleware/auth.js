@@ -11,6 +11,7 @@ module.exports = {
   authenticate: function (req, res, next) {
     if (_.get(req, 'session.user')) {
       req.user = req.session.user
+      console.log('user:', req.user)
       return next()
     }
     // TODO: store the user in the session and expire after 1 min

@@ -128,6 +128,7 @@ router.get('/disasterquery/:qry', function (req, res) {
   else if (qryParts.length === 1 && /^[A-Z]+$/.test(qryParts[0])) filter = `(disasterType eq '${qryParts[0]}' or state eq '${qryParts[0]}')`
   else if (qryParts.length === 2) filter = `disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]}`
   else filter = `disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' `
+  console.log('*** Getting disasters for user: ', req.user)
   if (req.user.disasterids && !isHUDHQUser(req)) {
     filter += ` and (disasterNumber eq ${req.user.disasterids.join(' or disasterNumber eq ')})`
   }
