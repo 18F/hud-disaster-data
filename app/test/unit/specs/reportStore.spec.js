@@ -86,15 +86,17 @@ describe('reportStore', function () {
       })
     })
 
-    // it('should call commit for setStatus when no stateFilter parameter is passed in', function (done) {
-    //   const commit = sinon.stub().callsFake((mutn, msg) => {
-    //     expect(mutn).to.be.equal('setStatus')
-    //     expect(msg).to.be.equal({type: 'error', scope: 'app', msg: 'State not specified!'})
-    //     done()
-    //   })
-    //   let state = {stateFilter: null}
-    //   loadFilteredDisasters({commit, state})
-    // })
+    it('should call commit for setStatus when no stateFilter parameter is passed in', function (done) {
+      const commit = sinon.stub().callsFake((mutn, msg) => {
+        expect(mutn).to.be.equal('setStatus')
+        expect(msg.type).to.be.equal('error')
+        expect(msg.scope).to.be.equal('app')
+        expect(msg.msg).to.be.equal('State not specified!')
+        done()
+      })
+      let state = {stateFilter: null}
+      loadFilteredDisasters({commit, state})
+    })
 
     it('should call commit for setStatus when no data is found', function (done) {
       moxios.stubRequest(/IA/, {
