@@ -19,6 +19,7 @@ var bodyParser = require('body-parser')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 const auth = require('../lib/middleware/auth')
+const cookieSession = require('cookie-session')
 var webpackConfig = process.env.NODE_ENV === 'testing'
   ? require('./webpack.prod.conf')
   : require('./webpack.dev.conf')
@@ -33,6 +34,10 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 app.use(morgan('dev'))
+app.use(cookieSession({
+  secret: process.env.COOKIE_SECRET || 'secret!@#',
+  maxAge: 60000
+}))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 

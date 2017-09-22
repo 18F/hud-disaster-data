@@ -9,7 +9,6 @@ const lusca = require('lusca')
 const cookieSession = require('cookie-session')
 const morgan = require('morgan')
 const apiController = require('./lib/controllers/api')
-const dayInMillis = 24 * 60 * 60 * 1000
 require('./lib/swagger')(app)
 
 app.use(morgan(/dev/.test(process.env.NODE_ENV) ? 'dev' : 'combined'))
@@ -19,7 +18,7 @@ app.use(function (req, res, next) {
 })
 app.use(cookieSession({
   secret: process.env.COOKIE_SECRET || 'secret!@#',
-  maxAge: dayInMillis
+  maxAge: 60000
 }))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())

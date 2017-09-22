@@ -9,14 +9,21 @@ const USERS = {
 
 module.exports = {
   authenticate: function (req, res, next) {
+    if (_.get(req, 'session.user')) {
+      req.user = req.session.user
+      next()
+    }
+    // TODO: store the user in the session and expire after 1 min
     let userId = req.headers['dr-userid']
     if (!userId && process.env.DRDP_LOCAL) {
+      req.session.user = req.user
       req.user = USERS.GRANTEE
       return next()
     }
     hudApi.getUser(userId)
       .then(user => {
         if (!user || user.type === 'Unauthorized') return res.sendStatus(401)
+        req.session.user = user
         req.user = user
         next()
       })
