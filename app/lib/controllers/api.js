@@ -122,6 +122,7 @@ router.get('/states/:stateId/:localeType', (req, res) => {
 *  get /disasterquery/4311
 */
 router.get('/disasterquery/:qry', function (req, res) {
+  const hqUser = isHUDHQUser(req)
   const qryParts = req.params.qry.replace(/-$/, '').toUpperCase().split('-')
   let filter
   if (qryParts.length === 1 && /^\d+$/.test(qryParts[0])) filter = `disasterNumber eq ${qryParts[0]}`
@@ -129,9 +130,12 @@ router.get('/disasterquery/:qry', function (req, res) {
   else if (qryParts.length === 2) filter = `disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]}`
   else filter = `disasterType eq '${qryParts[0]}' and disasterNumber eq ${qryParts[1]} and state eq '${qryParts[2]}' `
   console.log('*** Getting disasters for user: ', req.user)
-  if (req.user.disasterids && !isHUDHQUser(req)) {
+  if (!req.user.disasterids.length && !hqUser) return res.json([])
+  if (req.user.disasterids && !hqUser) {
+    console.log('*** Adding a filter for user allowed disasters')
     filter += ` and (disasterNumber eq ${req.user.disasterids.join(' or disasterNumber eq ')})`
   }
+  console.log('*** filter:', filter)
   fema.getDisasters({
     filter: filter,
     orderBy: 'declarationDate desc'
