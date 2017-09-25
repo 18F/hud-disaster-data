@@ -4,6 +4,8 @@ const low = require('lowdb')
 const fileAsync = require('lowdb/lib/storages/file-async')
 const fs = require('fs')
 const path = require('path')
+const moment = require('moment')
+const uuid = require('uuid/v4')
 const DRDP_API_BASE = `${process.env.HUD_API_BASE_URL}/drdp/api/v1.0`
 const DRGR_API_BASE = `${process.env.HUD_API_BASE_URL}/drgr/api/v1.0`
 // const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
@@ -15,18 +17,23 @@ const SERVICE_CONSUMER_DATA = {
     "auditCorrelationId":"17f24136-2494-4bf8-9d3b-9baafaae0cc9",
     "serviceRequestTimestamp":"2017-01-01T12:00:00.000Z",
     "sourceSystem":"DRDP",
-    "endUserId":"drdp_user",
-    "authenticationId":"DRDPAccount",
+    "endUserId":"X0DRDP",
+    "authenticationId":"X0DRDP",
     "tenantId":"DRDP",
     "locale":"English"
   }
 const config = function (url) {
+  const consumerData = _.assign(_.clone(SERVICE_CONSUMER_DATA), {
+    auditCorrelationId: uuid(),
+    serviceRequestTimestamp: moment().toISOString()
+  })
   return {
     url,
     headers: {
-      serviceConsumerData: JSON.stringify(SERVICE_CONSUMER_DATA)
+      serviceConsumerData: JSON.stringify(consumerData)
     },
-    strictSSL: false
+    strictSSL: false,
+    json: true
   }
 }
 
@@ -34,9 +41,9 @@ const getUser = function(userid) {
   return request.get(config(`${DRGR_API_BASE}/users/${userid}`))
 }
 
-// const getLocales = function(user, state, type) {
-//
-// }
+const getLocales = function(user, state, type) {
+  return request.get(config(`${DRDP_API_BASE}/state/${state}/${type}`))
+}
 
 // Start database using file-async storage
 // For ease of use, read is synchronous

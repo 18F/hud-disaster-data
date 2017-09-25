@@ -23,7 +23,6 @@ module.exports = {
     }
     hudApi.getUser(userId)
       .then(user => {
-        if (_.isString(user)) user = JSON.parse(user)
         if (!user || user.type === 'Unauthorized') return res.sendStatus(401)
         req.session.user = user
         req.user = user

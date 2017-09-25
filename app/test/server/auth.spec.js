@@ -30,16 +30,16 @@ describe('middleware/auth', () => {
         done()
       })
     })
-    it(`should parse JSON if string passed back from getUser(), and set the session user and user in req`, (done) => {
-      const grantee = '{ "type": "Grantee" }'
+    it(`should set the session user and user in req`, (done) => {
+      const grantee = { "type": "Grantee" }
       var req = { headers: { 'dr-userid': 'T071GA' },
         session: {}
       }
       const getUserStub = sinon.stub(hudApi, 'getUser').resolves(grantee)
       auth.authenticate(req, null, function () {
         should(getUserStub.called).be.true()
-        should(req.session.user.type).be.equal(JSON.parse(grantee).type)
-        should(req.user.type).be.equal(JSON.parse(grantee).type)
+        should(req.session.user.type).be.equal(grantee.type)
+        should(req.user.type).be.equal(grantee.type)
         getUserStub.restore()
         done()
       })
