@@ -77,10 +77,11 @@ router.get('/states/:state/disasters', function (req, res) {
 **/
 router.get('/states/:stateId/:localeType', (req, res, next) => {
   var stateId = req.params.stateId.toUpperCase()
-  var localeType = hudApi.decodeField(req.params.localeType)
+  let localeType = req.params.localeType
   if (!localeType) return
 
   if (process.env.DRDP_LOCAL) {
+    localeType = hudApi.decodeField(localeType)
     var selectCols = [localeType]
     var queryObj = []
     queryObj.push({'dmge_state_cd': [stateId]})
