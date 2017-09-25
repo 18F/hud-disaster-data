@@ -2,7 +2,7 @@
 const request = require('supertest')
 const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
-const hudApi = require('../../lib/middleware/hudApi')
+const localAPI = require('../../lib/middleware/localAPI')
 const thrownErrMsg = 'Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.'
 
 describe('/api/applicants/export', function () {
@@ -80,7 +80,7 @@ describe('/api/applicants/export summarizeCols', function () {
       hud_unmet_need: 270.65
     }]
     let summaryCols = ['total_damages', 'hud_unmet_need']
-    let summarizedCols = hudApi.summarizeCols(data, summaryCols)
+    let summarizedCols = localAPI.summarizeCols(data, summaryCols)
     summarizedCols.total_damages.should.be.equal(3789.92 + 3930.31 + 270.65)
     summarizedCols.hud_unmet_need.should.be.equal(1624.76 + 0 + 270.65)
     done()
@@ -88,7 +88,7 @@ describe('/api/applicants/export summarizeCols', function () {
   it('should return false no data is passed in', (done) => {
     let data = null
     let summaryCols = ['total_damages', 'hud_unmet_need']
-    let summarizedCols = hudApi.summarizeCols(data, summaryCols)
+    let summarizedCols = localAPI.summarizeCols(data, summaryCols)
     summarizedCols.should.be.equal(false)
     done()
   })

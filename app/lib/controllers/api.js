@@ -57,7 +57,7 @@ router.get('/states/:state/disasters', function (req, res) {
     queryObj.localeType = localeType
     queryObj.locales = locales
   }
-  const disasterIds = hudApi.getDisasters(queryObj)
+  const disasterIds = localAPI.getDisasters(queryObj)
   const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
   let filter = `state eq '${state}' and ${disasterCond}`
   fema.getDisasters({filter}, (err, disasters) => {
@@ -248,7 +248,7 @@ router.get('/applicants/:queryType', (req, res) => {
     arg[localeType] = locales
     queryObj.push(arg)
   }
-  var results = hudApi.getData(queryObj, summaryCols, selectCols)
+  var results = localAPI.getData(queryObj, summaryCols, selectCols)
   res.json(results)
 })
 
