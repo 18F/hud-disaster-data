@@ -6,6 +6,7 @@ const _ = require('lodash')
 const querystring = require('querystring')
 const csv = require('express-csv')
 const hudApi = require('../middleware/hudApi')
+const localAPI = require('../middleware/localAPI')
 const fema = require('../middleware/fema')
 const version = require('../../package.json').version
 const requestPromise = require('request-promise')
@@ -78,16 +79,9 @@ router.get('/states/:state/disasters', function (req, res) {
 router.get('/states/:stateId/:localeType', (req, res, next) => {
   var stateId = req.params.stateId.toUpperCase()
   let localeType = req.params.localeType
-  if (!localeType) return
 
   if (process.env.DRDP_LOCAL) {
-    localeType = hudApi.decodeField(localeType)
-    var selectCols = [localeType]
-    var queryObj = []
-    queryObj.push({'dmge_state_cd': [stateId]})
-    var data = hudApi.getData(queryObj, null, selectCols)
-    var results = _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
-    res.json(results)
+    res.json(localAPI.getLocales(stateId, localeType))
   } else {
     hudApi.getLocales(req.user, stateId, localeType)
       .then(locales => res.json(locales))
