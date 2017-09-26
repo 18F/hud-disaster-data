@@ -84,7 +84,7 @@ router.get('/states/:stateId/:localeType', (req, res, next) => {
     res.json(localAPI.getLocales(stateId, localeType))
   } else {
     hudApi.getLocales(req.user, stateId, localeType)
-      .then(locales => res.json(locales))
+      .then(locales => res.json(_.map(locales, 'name'))
       .catch(err => {
         console.log('Error calling getLocales:', err)
         next(err)
