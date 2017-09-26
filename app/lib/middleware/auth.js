@@ -32,5 +32,6 @@ module.exports = {
   },
   isHUDHQUser: function(req) {
     return (req.user.type === 'HUD' && req.user.hq === true)
-  }
+  },
+  TEST_USERS: USERS
 }
