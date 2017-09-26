@@ -65,8 +65,6 @@
     "pug": "^2.0.0-rc.1",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
-    "swagger-jsdoc": "^1.9.7",
-    "swagger-ui-express": "^2.0.4",
     "uuid": "^3.1.0",
     "webpack-merge": "^4.1.0",
     "yamljs": "^0.3.0"
