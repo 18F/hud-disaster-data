@@ -12,7 +12,7 @@
     "server-unit": "echo 'Run the server side tests' && export DRDP_LOCAL=true && mocha test/server && mocha test",
     "test": "echo 'Run all tests' && npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
     "lint": "echo 'Run the linter' && eslint --ext .js,.vue src test/unit/specs",
-    "508-test": "echo 'Run the 508 compliance tests' && bash ./508_Test.sh",
+    "508-test": "echo 'Run the 508 compliance tests' && export DRDP_LOCAL=true && bash ./508_Test.sh",
     "doc": "echo 'Run jsdoc and produce documentation' && jsdoc src build package.json -r -c jsdoc.conf.json -d docs"
   },
   "repository": {
