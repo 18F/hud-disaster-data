@@ -39,7 +39,7 @@ router.get('/version', function (req, res) {
 * @param {string} localeType - (optional) a geographic level (city, county, congrdist, zipcode, township, tract )
 * @param {string} locales - (optional) a comma separated list of locales by which to filter the disasters
 **/
-router.get('/states/:state/disasters', function (req, res) {
+router.get('/states/:state/disasters', function (req, res, next) {
   const state = req.params.state
   const queryParams = _.get(req, 'query')
   const validLocaleTypes = ['city', 'county', 'congrdist', 'zipcode', 'township', 'tract']
@@ -49,21 +49,15 @@ router.get('/states/:state/disasters', function (req, res) {
   if (!_.isEmpty(queryParams)) {
     localeType = _.findKey(queryParams)
     if (_.indexOf(validLocaleTypes, localeType) !== -1) locales = queryParams[localeType]
-    else return res.status(406).send(errMessage)
-    if (!locales) return res.status(406).send(errMessage)
+    else return res.status(404).send(errMessage)
+    if (!locales) return res.status(404).send(errMessage)
   }
-  let queryObj = {state: req.params.state}
-  if (localeType) {
-    queryObj.localeType = localeType
-    queryObj.locales = locales
+
+  if (process.env.DRDP_LOCAL) {
+    localAPI.getDisastersByLocale(req.params.state, localeType, locales)
+      .then(disasters => res.json(disasters))
+      .catch(next)
   }
-  const disasterIds = localAPI.getDisasters(queryObj)
-  const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
-  let filter = `state eq '${state}' and ${disasterCond}`
-  fema.getDisasters({filter}, (err, disasters) => {
-    if (err) return res.send(500, {err: err.message})
-    res.json(disasters)
-  })
 })
 
 /**
@@ -84,7 +78,7 @@ router.get('/states/:stateId/:localeType', (req, res, next) => {
     res.json(localAPI.getLocales(stateId, localeType))
   } else {
     hudApi.getLocales(req.user, stateId, localeType)
-      .then(locales => res.json(_.map(locales, 'name'))
+      .then(locales => res.json(_.map(locales, 'name')))
       .catch(err => {
         console.log('Error calling getLocales:', err)
         next(err)

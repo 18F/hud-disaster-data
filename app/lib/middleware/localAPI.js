@@ -5,6 +5,7 @@ const fileAsync = require('lowdb/lib/storages/file-async')
 const fs = require('fs')
 const path = require('path')
 const hudApi = require('./hudApi')
+const fema = require('./fema')
 
 const getLocales = function(stateId, localeType) {
   localeType = hudApi.decodeField(localeType)
@@ -78,4 +79,22 @@ const getDisasters = function({state, localeType, locales}, cb) {
   .value()
 }
 
-module.exports = { getData, summarizeCols, getDisasters, getLocales }
+const getDisastersByLocale = function (state, localeType, locales) {
+  let queryObj = {state}
+  if (localeType) {
+    queryObj.localeType = localeType
+    queryObj.locales = locales
+  }
+  const disasterIds = this.getDisasters(queryObj)
+  const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
+  let filter = `state eq '${state}' and ${disasterCond}`
+  return new Promise((resolve, reject) => {
+    fema.getDisasters({filter}, (err, disasters) => {
+      if (err) return reject(err)
+      resolve(disasters)
+    })
+  })
+}
+
+
+module.exports = { getData, summarizeCols, getDisasters, getDisastersByLocale, getLocales }
