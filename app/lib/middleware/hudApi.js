@@ -38,7 +38,7 @@ const getUser = function(userid) {
 }
 
 const getLocales = function(user, state, type) {
-  return request.get(config(`${DRDP_API_BASE}/state/${state}/${type}`))
+  return request.get(config(`${DRDP_API_BASE}/states/${state}/${type}`))
 }
 
 const databaseFieldReference = {
