@@ -53,11 +53,10 @@ router.get('/states/:state/disasters', function (req, res, next) {
     if (!locales) return res.status(404).send(errMessage)
   }
 
-  if (process.env.DRDP_LOCAL) {
-    localAPI.getDisastersByLocale(req.params.state, localeType, locales)
+  const api = (process.env.DRDP_LOCAL) ? localAPI : hudApi
+  api.getDisastersByLocale(req.params.state, localeType, locales)
       .then(disasters => res.json(disasters))
       .catch(next)
-  }
 })
 
 /**

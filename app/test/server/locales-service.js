@@ -1,4 +1,5 @@
 /* global describe, it, */
+const _ = require('lodash')
 const request = require('supertest')
 const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
@@ -32,7 +33,7 @@ describe('/states/:stateId/:localeType', function () {
 
   it('should call hudApi.getLocales if DRDP_LOCAL is not set', (done) => {
     delete process.env.DRDP_LOCAL
-    const locales = ['a', 'b']
+    const locales = [{name:'a'}, {name:'b'}]
     const stub = sinon.stub(requestpromise, 'get').callsFake(opts => {
       should.exist(opts.url)
       if (/users/.test(opts.url)) return new Promise(resolve => resolve(USERS.GRANTEE))
@@ -42,7 +43,7 @@ describe('/states/:stateId/:localeType', function () {
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.equal(locales[0])
+      body[0].should.equal(_.map(locales,'name')[0])
       stub.restore()
       process.env.DRDP_LOCAL = true
     })

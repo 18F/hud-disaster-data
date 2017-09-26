@@ -64,4 +64,20 @@ const decodeField = (fieldname) => {
   return databaseFieldReference[fieldname]
 }
 
-module.exports = { decodeField, getUser, getLocales }
+const getDisastersByLocale = function (state, type, locales) {
+  return new Promise((resolve, reject) => {
+    request.get(config(`${DRDP_API_BASE}/states/${state}/disasters?${LOCALE_TYPES[type]}=${locales.join(',')}`))
+      .then(disasterIds => {
+        console.log('***** Got disasterIds:', disasterIds)
+        const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
+        let filter = `state eq '${state}' and ${disasterCond}`
+        fema.getDisasters({filter}, (err, disasters) => {
+          if (err) return reject(err)
+          resolve(disasters)
+        })
+      })
+      .catch(reject)
+  })
+}
+
+module.exports = { decodeField, getUser, getLocales, getDisastersByLocale }
