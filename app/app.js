@@ -9,7 +9,6 @@ const lusca = require('lusca')
 const cookieSession = require('cookie-session')
 const morgan = require('morgan')
 const apiController = require('./lib/controllers/api')
-require('./lib/swagger')(app)
 
 app.use(morgan(/dev/.test(process.env.NODE_ENV) ? 'dev' : 'combined'))
 app.use(function (req, res, next) {

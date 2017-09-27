@@ -12,7 +12,7 @@
     "server-unit": "echo 'Run the server side tests' && export DRDP_LOCAL=true && mocha test/server && mocha test",
     "test": "echo 'Run all tests' && npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
     "lint": "echo 'Run the linter' && eslint --ext .js,.vue src test/unit/specs",
-    "508-test": "echo 'Run the 508 compliance tests' && bash ./508_Test.sh",
+    "508-test": "echo 'Run the 508 compliance tests' && export DRDP_LOCAL=true && bash ./508_Test.sh",
     "doc": "echo 'Run jsdoc and produce documentation' && jsdoc src build package.json -r -c jsdoc.conf.json -d docs"
   },
   "repository": {
@@ -65,8 +65,6 @@
     "pug": "^2.0.0-rc.1",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
-    "swagger-jsdoc": "^1.9.7",
-    "swagger-ui-express": "^2.0.4",
     "uuid": "^3.1.0",
     "webpack-merge": "^4.1.0",
     "yamljs": "^0.3.0"
