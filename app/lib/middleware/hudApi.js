@@ -2,6 +2,7 @@ const _ = require('lodash')
 const request = require('request-promise')
 const moment = require('moment')
 const uuid = require('uuid/v4')
+const fema = require('./fema')
 const DRDP_API_BASE = `${process.env.HUD_API_BASE_URL}/drdp/api/v1.0`
 const DRGR_API_BASE = `${process.env.HUD_API_BASE_URL}/drgr/api/v1.0`
 // const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
@@ -66,7 +67,7 @@ const decodeField = (fieldname) => {
 
 const getDisastersByLocale = function (state, type, locales) {
   return new Promise((resolve, reject) => {
-    request.get(config(`${DRDP_API_BASE}/states/${state}/disasters?${LOCALE_TYPES[type]}=${locales.join(',')}`))
+    request.get(config(`${DRDP_API_BASE}/states/${state}/disasters?localeType=${type}&locales=${locales.join(',')}`))
       .then(disasterIds => {
         console.log('***** Got disasterIds:', disasterIds)
         const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`

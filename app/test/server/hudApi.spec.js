@@ -1,0 +1,71 @@
+require('../../config/env')
+const hudApi = require('../../lib/middleware/hudApi')
+const fema = require('../../lib/middleware/fema')
+const requestpromise = require('request-promise')
+const sinon = require('sinon')
+const should = require('should')
+const url = require('url')
+
+describe('hudApi', () => {
+  describe('getDisastersByLocale', done => {
+    it('should call the HUD API with the correct url pattern', done => {
+      const disasters = ['12345', '23456']
+      const state = 'CO'
+      const type = 'city'
+      const locales = ['Boulder', 'Fort Collins', 'Denver']
+
+      const getDisastersStub = sinon.stub(fema, 'getDisasters').callsFake(function ({filter, orderBy, top}, cb) {
+        should(/CO/.test(filter)).be.true()
+        should(/12345/.test(filter)).be.true()
+        should(/23456/.test(filter)).be.true()
+        cb(null, disasters)
+      })
+      const getStub = sinon.stub(requestpromise, 'get').callsFake(opts => {
+        should.exist(opts.url)
+        const parsedUrl = url.parse(opts.url, true)
+        should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/states/${state}/disasters`)
+        should(parsedUrl.query.localeType).equal(type)
+        should(parsedUrl.query.locales).equal(locales.join(','))
+        return new Promise(resolve => resolve(disasters))
+      })
+
+      hudApi.getDisastersByLocale(state, type, locales).then(disasters => {
+        sinon.assert.calledOnce(getStub)
+        sinon.assert.calledOnce(getDisastersStub)
+
+        getStub.restore()
+        getDisastersStub.restore()
+        done()
+      }).catch(done)
+    })
+    it('should be rejected if the fema api errors', done => {
+      const disasters = ['12345', '23456']
+      const state = 'CO'
+      const type = 'city'
+      const locales = ['Boulder', 'Fort Collins', 'Denver']
+
+      const getDisastersStub = sinon.stub(fema, 'getDisasters').callsFake(function ({filter, orderBy, top}, cb) {
+        should(/CO/.test(filter)).be.true()
+        should(/12345/.test(filter)).be.true()
+        should(/23456/.test(filter)).be.true()
+        cb('boom')
+      })
+      const getStub = sinon.stub(requestpromise, 'get').callsFake(opts => {
+        should.exist(opts.url)
+        const parsedUrl = url.parse(opts.url, true)
+        should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/states/${state}/disasters`)
+        should(parsedUrl.query.localeType).equal(type)
+        should(parsedUrl.query.locales).equal(locales.join(','))
+        return new Promise(resolve => resolve(disasters))
+      })
+
+      hudApi.getDisastersByLocale(state, type, locales).catch(err => {
+        should(err).equal('boom')
+        getStub.restore()
+        getDisastersStub.restore()
+        done()
+      }).catch(done)
+    })
+
+  })
+})

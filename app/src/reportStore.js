@@ -150,7 +150,7 @@ export const actions = {
       if (stateCode && localeType && locales) query = `?${localeType}=${encodeURI(locales)}`
       let querystring = `/api/states/${stateCode}/disasters${query}`
 
-      return axios.get(querystring).then(response => {
+      axios.get(querystring).then(response => {
         console.log(`calling updateReportDisasterList with ${JSON.stringify(_.map(response.data, d => d.disasterNumber))}`)
         commit('updateReportDisasterList', response.data)
         if (response.data && response.data.length === 0) {
