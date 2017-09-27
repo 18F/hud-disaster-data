@@ -64,7 +64,8 @@ DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[stateid => 'TX', results => summaryReturnVal]');
 DBMS_OUTPUT.NEW_LINE();
 fema_data.get_summary_records(stateid => 'TX',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
-dbms_output.put_line( 'HSHD_SIZE_CNT' || '    ' ||
+dbms_output.put_line('NUMBER_OF_RECORDS' || '    ' ||
+                     'HSHD_SIZE_CNT' || '    ' ||
                      'DPNDNT_CNT' || '    ' ||
                      'INCM_AMNT' || '    ' ||
                      'HZRD_INSNC_AMNT' || '    ' ||
@@ -85,7 +86,8 @@ dbms_output.put_line( 'HSHD_SIZE_CNT' || '    ' ||
                      'TOTAL_ASSTN_AMNT' || '    ' ||
                      'HUD_UNMT_NEED_AMNT');
 for i in 1 .. summaryReturnVal.count loop
-  dbms_output.put_line(summaryReturnVal(i).HSHD_SIZE_CNT || '    ' ||
+  dbms_output.put_line(summaryReturnVal(i).NUMBER_OF_RECORDS || '    ' ||
+                      summaryReturnVal(i).HSHD_SIZE_CNT || '    ' ||
                       summaryReturnVal(i).DPNDNT_CNT || '    ' ||
                       summaryReturnVal(i).INCM_AMNT || '    ' ||
                       summaryReturnVal(i).HZRD_INSNC_AMNT || '    ' ||
@@ -159,11 +161,13 @@ DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[having no disasterid is equiv to saying all, stateid => 'WI', localetype => 'county',   localevalues equiv to 'Dane (County),Polk (County)', results => summaryReturnVal]');
 DBMS_OUTPUT.NEW_LINE();
 fema_data.get_summary_records(stateid => 'WI', localetype => 'county',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
-dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
+dbms_output.put_line('NUMBER_OF_RECORDS' || '    ' ||
+                     'TOTAL_DMGE_AMNT' || '    ' ||
                      'TOTAL_ASSTN_AMNT' || '    ' ||
                      'HUD_UNMT_NEED_AMNT' );
 for i in 1 .. summaryReturnVal.count loop
-   dbms_output.put_line( summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
+   dbms_output.put_line(summaryReturnVal(i).NUMBER_OF_RECORDS || '    ' ||
+                        summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
                         summaryReturnVal(i).TOTAL_ASSTN_AMNT || '    ' ||
                         summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
 end loop;
@@ -175,11 +179,13 @@ DBMS_OUTPUT.NEW_LINE();
 DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[disasterid equiv to '4272,1791', results => returnVal]');
 DBMS_OUTPUT.NEW_LINE();
 fema_data.get_summary_records( disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
-dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
+dbms_output.put_line('NUMBER_OF_RECORDS' || '    ' ||
+                     'TOTAL_DMGE_AMNT' || '    ' ||
                      'TOTAL_ASSTN_AMNT' || '    ' ||
                      'HUD_UNMT_NEED_AMNT' );
 for i in 1 .. summaryReturnVal.count loop
-   dbms_output.put_line( summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
+   dbms_output.put_line(summaryReturnVal(i).NUMBER_OF_RECORDS || '    ' ||
+                        summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
                         summaryReturnVal(i).TOTAL_ASSTN_AMNT || '    ' ||
                         summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
 end loop;
@@ -281,11 +287,13 @@ dbms_output.put_line( 'DSTER_ID' || '   ' ||
  DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[having no disasterid is equiv to saying all, stateid => 'TX', localetype => 'zipcode',   localevalues equiv to '77002','77493', results => summaryReturnVal]');
  DBMS_OUTPUT.NEW_LINE();
  fema_data.get_summary_records(stateid => 'TX', localetype => 'zipcode',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
- dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
+ dbms_output.put_line('NUMBER_OF_RECORDS' || '    ' ||
+                      'TOTAL_DMGE_AMNT' || '    ' ||
                       'TOTAL_ASSTN_AMNT' || '    ' ||
                       'HUD_UNMT_NEED_AMNT' );
  for i in 1 .. summaryReturnVal.count loop
-    dbms_output.put_line( summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
+    dbms_output.put_line(summaryReturnVal(i).NUMBER_OF_RECORDS || '    ' ||
+                         summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
                          summaryReturnVal(i).TOTAL_ASSTN_AMNT || '    ' ||
                          summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
  end loop;
@@ -342,11 +350,13 @@ dbms_output.put_line( 'DSTER_ID' || '   ' ||
  DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[having no disasterid is equiv to saying all, localetype => 'township',   localevalues equiv to 'Des Moines','Cedar Rapids', results => summaryReturnVal]');
  DBMS_OUTPUT.NEW_LINE();
  fema_data.get_summary_records(localetype => 'township',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
- dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
+ dbms_output.put_line('NUMBER_OF_RECORDS' || '    ' ||
+                      'TOTAL_DMGE_AMNT' || '    ' ||
                       'TOTAL_ASSTN_AMNT' || '    ' ||
                       'HUD_UNMT_NEED_AMNT' );
  for i in 1 .. summaryReturnVal.count loop
-    dbms_output.put_line( summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
+    dbms_output.put_line(summaryReturnVal(i).NUMBER_OF_RECORDS || '    ' ||
+                         summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
                          summaryReturnVal(i).TOTAL_ASSTN_AMNT || '    ' ||
                          summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
  end loop;
@@ -404,11 +414,13 @@ dbms_output.put_line( 'DSTER_ID' || '   ' ||
   DBMS_OUTPUT.PUT_LINE('results for get_summary_records: ' || q'[having no disasterid is equiv to saying all, localetype => 'tract',   localevalues equiv to '1100  ', results => summaryReturnVal]');
   DBMS_OUTPUT.NEW_LINE();
   fema_data.get_summary_records(localetype => 'tract',  disasterid => disasterList, localevalues => localevaluesList, results => summaryReturnVal);
-  dbms_output.put_line( 'TOTAL_DMGE_AMNT' || '    ' ||
+  dbms_output.put_line('NUMBER_OF_RECORDS' || '    ' ||
+                       'TOTAL_DMGE_AMNT' || '    ' ||
                        'TOTAL_ASSTN_AMNT' || '    ' ||
                        'HUD_UNMT_NEED_AMNT' );
   for i in 1 .. summaryReturnVal.count loop
-     dbms_output.put_line( summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
+     dbms_output.put_line(summaryReturnVal(i).NUMBER_OF_RECORDS || '    ' ||
+                          summaryReturnVal(i).TOTAL_DMGE_AMNT || '    ' ||
                           summaryReturnVal(i).TOTAL_ASSTN_AMNT || '    ' ||
                           summaryReturnVal(i).HUD_UNMT_NEED_AMNT );
   end loop;

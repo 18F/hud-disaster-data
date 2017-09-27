@@ -14,6 +14,7 @@
 ** 2         08/18/2017   Dave Hannon, Flexion Inc   improved code to condense logic
 ** 3         09/08/2017   Dave Hannon, Flexion Inc   moved TABLE declarations outside package
 ** 4         09/21/2017   Dave Hannon, Flexion Inc   added new locale types: zipcode, township, and tract
+** 5         09/26/2017   Dave Hannon, Flexion Inc   added column number_of_records
 *******************************/
 CREATE TYPE charParameterArray IS TABLE OF VARCHAR2(32767);
 /
@@ -43,7 +44,8 @@ CREATE TYPE summaryRec AS OBJECT (
     OTHER_ASSTN_AMNT      NUMBER(13,2),
     TOTAL_DMGE_AMNT       NUMBER(13,2),
     TOTAL_ASSTN_AMNT      NUMBER(13,2),
-    HUD_UNMT_NEED_AMNT    NUMBER(13,2)
+    HUD_UNMT_NEED_AMNT    NUMBER(13,2),
+    NUMBER_OF_RECORDS     NUMBER(10)
   );
 /
 CREATE TYPE summaryArray IS TABLE OF summaryRec;
@@ -469,7 +471,8 @@ CREATE OR REPLACE PACKAGE BODY fema_data AS
                   SUM( OTHER_ASSTN_AMNT ),
                   SUM( TOTAL_DMGE_AMNT ),
                   SUM( TOTAL_ASSTN_AMNT ),
-                  SUM( HUD_UNMT_NEED_AMNT )  )
+                  SUM( HUD_UNMT_NEED_AMNT ),
+                  COUNT( * )  )
       BULK COLLECT INTO results
       FROM FEMA_HOUSEHOLD_DATA_HOUSEHOLD fhdh
      WHERE ( disasterParmCount = 0 OR fhdh.DSTER_ID IN (SELECT * FROM TABLE(disasterid)) )
