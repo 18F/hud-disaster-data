@@ -298,7 +298,7 @@ export default {
     pushReportUrl () {
       if (!this.$store.getters.stateFilter) return
       let query = {}
-      if (this.$store.getters.stateFilter) query.stateFilter = this.$store.getters.stateFilter.code
+      query.stateFilter = this.$store.getters.stateFilter.code
       if (this.$store.getters.geographicLevel) query.geographicLevel = this.$store.getters.geographicLevel.code
       if (this.$store.getters.localeFilter.length > 0) query.localeFilter = _.map(this.$store.getters.localeFilter, l => l.code).join(',')
       if (this.$store.getters.disasterFilter.length > 0) query.disasterFilter = _.map(this.$store.getters.disasterFilter, d => d.code).join(',')
