@@ -2,6 +2,7 @@ const _ = require('lodash')
 const request = require('request-promise')
 const moment = require('moment')
 const uuid = require('uuid/v4')
+const URL = require('url')
 const fema = require('./fema')
 const DRDP_API_BASE = `${process.env.HUD_API_BASE_URL}/drdp/api/v1.0`
 const DRGR_API_BASE = `${process.env.HUD_API_BASE_URL}/drgr/api/v1.0`
@@ -38,7 +39,7 @@ const SERVICE_CONSUMER_DATA = {
     "tenantId":"DRDP",
     "locale":"English"
   }
-const config = function (url) {
+const requestOptions = function (url) {
   const consumerData = _.assign(_.clone(SERVICE_CONSUMER_DATA), {
     auditCorrelationId: uuid(),
     serviceRequestTimestamp: moment().toISOString()
@@ -54,20 +55,25 @@ const config = function (url) {
 }
 
 const getUser = function(userid) {
-  return request.get(config(`${DRGR_API_BASE}/users/${userid}`))
+  const opts = requestOptions(`${DRGR_API_BASE}/users/${userid}`)
+  return request.get(opts)
 }
 
 const getLocales = function(user, state, type) {
-  return request.get(config(`${DRDP_API_BASE}/states/${state}/${LOCALE_TYPES[type]}`))
+  const opts = requestOptions(`${DRDP_API_BASE}/states/${state}/${LOCALE_TYPES[type]}`);
+  return request.get(opts)
 }
 
 const decodeField = (fieldname) => {
   return databaseFieldReference[fieldname]
 }
 
-const getDisastersByLocale = function (state, type, locales) {
+const getDisastersByLocale = function (state, localeType, locales) {
   return new Promise((resolve, reject) => {
-    request.get(config(`${DRDP_API_BASE}/states/${state}/disasters?localeType=${type}&locales=${locales.join(',')}`))
+    if (!state) reject(new Error('state is a required parameter'))
+    let hudAPIURL = URL.parse(`${DRDP_API_BASE}/states/${state}/disasters`)
+    if (localeType && locales && locales.length) hudAPIURL.query = {localeType, locales: locales.join(',')}
+    request.get(requestOptions(URL.format(hudAPIURL)))
       .then(disasterIds => {
         console.log('***** Got disasterIds:', disasterIds)
         const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
