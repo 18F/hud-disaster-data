@@ -44,13 +44,13 @@ router.get('/states/:state/disasters', function (req, res, next) {
   const queryParams = _.get(req, 'query')
   const validLocaleTypes = ['city', 'county', 'congrdist', 'zipcode', 'township', 'tract']
   let localeType
-  let locales
+  let locales = []
   let errMessage = 'Invalid parameters sent.  Use one of: city, county, congrdist, zipcode, township, or tract with a comma separated list of values. Not Acceptable.'
   if (!_.isEmpty(queryParams)) {
     localeType = _.findKey(queryParams)
     if (_.indexOf(validLocaleTypes, localeType) !== -1) locales = queryParams[localeType]
     else return res.status(404).send(errMessage)
-    if (!locales) return res.status(404).send(errMessage)
+    if (!locales.length) return res.status(404).send(errMessage)
   }
 
   const api = (process.env.DRDP_LOCAL) ? localAPI : hudApi

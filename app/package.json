@@ -1,6 +1,6 @@
 {
   "name": "hud-disaster-data",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "build": "echo 'Run the tests, build the webpack bundle, and test for 508 compliance.' && npm test && node build/build.js && npm run 508-test",
     "unit": "echo 'Run the client side tests' && cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "server-unit": "echo 'Run the server side tests' && export DRDP_LOCAL=true && mocha test/server && mocha test",
-    "test": "echo 'Run all tests' && npm run unit && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
+    "server-coverage": "echo 'Run the server side tests and report coverage' && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
+    "test": "echo 'Run all tests' && npm run unit && npm run server-coverage",
     "lint": "echo 'Run the linter' && eslint --ext .js,.vue src test/unit/specs",
     "508-test": "echo 'Run the 508 compliance tests' && export DRDP_LOCAL=true && bash ./508_Test.sh",
     "doc": "echo 'Run jsdoc and produce documentation' && jsdoc src build package.json -r -c jsdoc.conf.json -d docs"
@@ -65,6 +66,7 @@
     "pug": "^2.0.0-rc.1",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
+    "url": "^0.11.0",
     "uuid": "^3.1.0",
     "webpack-merge": "^4.1.0",
     "yamljs": "^0.3.0"
@@ -140,7 +142,6 @@
     "standard": "^10.0.2",
     "supertest": "^3.0.0",
     "tether-shepherd": "^1.8.1",
-    "url": "^0.11.0",
     "url-loader": "^0.5.8",
     "vue": "^2.2.6",
     "vue-loader": "11.3.4",

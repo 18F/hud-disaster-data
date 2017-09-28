@@ -64,8 +64,15 @@ describe('hudApi', () => {
         getStub.restore()
         getDisastersStub.restore()
         done()
-      }).catch(done)
+      })
     })
+    it('should be rejected if the state is not provided', done => {
+      const disasters = ['12345', '23456']
 
+      hudApi.getDisastersByLocale().catch(err => {
+        should(err).exist
+        done()
+      })
+    })
   })
 })
