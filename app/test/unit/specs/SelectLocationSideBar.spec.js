@@ -561,7 +561,6 @@ describe('SelectLocationSideBar component', function () {
       $refs: {geographicLevelSelector: {clearValue}}
     }
     const level = {name: 'City', code: 'city'}
-    debugger
     const setLevel = SelectLocationSideBar.methods.setLevel
 
     it('should set the geographicLevel', function (done) {
