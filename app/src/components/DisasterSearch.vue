@@ -84,7 +84,7 @@ export default {
     */
     update () {
       if (!this.query) return this.reset()
-      if (/^\d+$/.test(this.query) && this.query.length < 4) return
+      if (/^\d+$/.test(this.query) && this.query < 1000) return
       if (this.query.length < 2) return
       this.$store.dispatch('loadDisasterList', {qry: this.query, user: this.$store.getters.user})
     },
