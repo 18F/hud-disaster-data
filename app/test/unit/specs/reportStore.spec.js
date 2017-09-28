@@ -86,6 +86,36 @@ describe('reportStore', function () {
       })
     })
 
+    it('should call commit for updateReportDisasterList when the data is loaded and a locale is selected', function (done) {
+      moxios.stubRequest(/IA/, {
+        status: 200,
+        response: _.clone(TWO_RECORDS)
+      })
+      const commit = sinon.spy()
+      let state = {geographicLevel: {code: 'city'}, stateFilter: {code: 'IA'}, localeList: [{name: 'Cedar Rapids', selected: true}]}
+      loadFilteredDisasters({commit, state}, 'IA')
+      moxios.wait(() => {
+        should(commit.calledWith('updateReportDisasterList')).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
+
+    it('should call commit for updateReportDisasterList when the data is loaded, when no localeList or geographicLevel is set', function (done) {
+      moxios.stubRequest(/IA/, {
+        status: 200,
+        response: _.clone(TWO_RECORDS)
+      })
+      const commit = sinon.spy()
+      let state = {geographicLevel: null, stateFilter: {code: 'IA'}, localeList: []}
+      loadFilteredDisasters({commit, state}, 'IA')
+      moxios.wait(() => {
+        should(commit.calledWith('updateReportDisasterList')).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
+
     it('should call commit for setStatus when no stateFilter parameter is passed in', function (done) {
       const commit = sinon.stub().callsFake((mutn, msg) => {
         expect(mutn).to.be.equal('setStatus')
