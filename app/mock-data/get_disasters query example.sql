@@ -88,7 +88,7 @@ BEGIN
   localeList := charParameterArray('724500', '542700');
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
-  DBMS_OUTPUT.PUT_LINE('results for get_disasters: ' || q'[stateid => 'TX', localetype => 'tract', localevalues => 'Texas City-League City,Corpus Christi', results => returnVal]');
+  DBMS_OUTPUT.PUT_LINE('results for get_disasters: ' || q'[stateid => 'TX', localetype => 'tract', localevalues => '724500', '542700', results => returnVal]');
   DBMS_OUTPUT.NEW_LINE();
   fema_data.get_disasters(stateid => 'TX', localetype => 'tract', localevalues => localeList, results => returnVal);
 

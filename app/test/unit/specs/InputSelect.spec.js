@@ -168,6 +168,40 @@ describe('InputSelect', function () {
     })
   })
 
+  describe('reset', function () {
+    it(`should emit clear and run clearValue()`, function (done) {
+      const reset = vm.$options.methods.reset
+      const $emit = sinon.spy()
+      const clearValue = sinon.spy()
+      const that = {
+        queryValue: 'something',
+        beforeReset: function () { return true },
+        $emit,
+        clearValue
+      }
+      reset.call(that)
+      expect($emit.calledWith('clear'))
+      expect(clearValue.called)
+      done()
+    })
+
+    it(`should not emit clear or run clearValue() if no queryValue or beforeReset() not true`, function (done) {
+      const reset = vm.$options.methods.reset
+      const $emit = sinon.spy()
+      const clearValue = sinon.spy()
+      const that = {
+        queryValue: 'something',
+        beforeReset: function () { return false },
+        $emit,
+        clearValue
+      }
+      reset.call(that)
+      expect($emit.notCalled)
+      expect(clearValue.notCalled)
+      done()
+    })
+  })
+
   describe('select', function () {
     it(`should deselect the item if it's already selected`, function () {
       let item = {selected: true, name: 'Colorado', code: 'CO'}
