@@ -6,6 +6,7 @@ const sinon = require('sinon')
 const should = require('should')
 const async = require('async')
 const url = require('url')
+const _ = require('lodash')
 
 describe('hudApi', () => {
   describe('getDisastersByLocale', done => {
@@ -26,7 +27,8 @@ describe('hudApi', () => {
             should(opts.url).exist
             const parsedUrl = url.parse(opts.url, true)
             should(parsedUrl.query).not.exist
-            return new Promise(resolve => resolve(disasters))
+            const disasterObjects = _.map(disasters, disaster => {return {id:disaster}})
+            return new Promise(resolve => resolve(disasterObjects))
           })
 
           hudApi.getDisastersByLocale(state, type, locales).then(disasters => {
@@ -62,7 +64,8 @@ describe('hudApi', () => {
         should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/states/${state}/disasters`)
         should(parsedUrl.query.localeType).equal(type)
         should(parsedUrl.query.locales).equal(locales.join(','))
-        return new Promise(resolve => resolve(disasters))
+        const disasterObjects = _.map(disasters, disaster => {return {id:disaster}})
+        return new Promise(resolve => resolve(disasterObjects))
       })
 
       hudApi.getDisastersByLocale(state, type, locales).then(disasters => {
@@ -92,7 +95,8 @@ describe('hudApi', () => {
         should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/states/${state}/disasters`)
         should(parsedUrl.query.localeType).equal(type)
         should(parsedUrl.query.locales).equal(locales.join(','))
-        return new Promise(resolve => resolve(disasters))
+        const disasterObjects = _.map(disasters, disaster => {return {id:disaster}})
+        return new Promise(resolve => resolve(disasterObjects))
       })
 
       hudApi.getDisastersByLocale(state, type, locales).catch(err => {
