@@ -77,6 +77,7 @@ const getDisastersByLocale = function (state, localeType, locales) {
       .then(disasterIds => {
         if (!_.isArray(disasterIds) || _.isEmpty(disasterIds)) return resolve([]);
         console.log('***** Got disasterIds:', disasterIds)
+        disasterIds = _.map(disasterIds, 'id')
         const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
         let filter = `state eq '${state}' and ${disasterCond}`
         fema.getDisasters({filter}, (err, disasters) => {
