@@ -115,4 +115,23 @@ describe('hudApi', () => {
       })
     })
   })
+  describe('getSummaryRecords', () => {
+    it('should call /applicants/summary with no parameters', done => {
+      const getStub = sinon.stub(requestpromise, 'get').callsFake(opts => {
+        should.exist(opts.url)
+        const parsedUrl = url.parse(opts.url, true)
+        should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/applicants/summary`)
+        should(parsedUrl.query).be.empty()
+        return new Promise(resolve => resolve({one: 1}))
+      })
+      hudApi.getSummaryRecords({}).then(result => {
+        should(result).be.empty()
+        getStub.restore()
+        done()
+      }).catch(err => {
+        getStub.restore()
+        done(err)
+      })
+    })
+  })
 })

@@ -206,21 +206,19 @@ router.get('/export/:fileNamePart', function (req, res) {
 * // returns JSON with summarized columns numberOfRecords (automatically added to returned columns for summary), total_dmge_amnt, and hud_unmt_need_amnt of household level data for Wisconsin cities Madison and Monroe
 *  get /applicants/summary?states=WI&localeType=city&locales=Madison,Monroe&cols=total_dmge_amnt,hud_unmt_need_amnt
 **/
-router.get('/applicants/:queryType', (req, res) => {
+router.get('/applicants/:queryType', (req, res, next) => {
   var queryType = req.params.queryType
   if (queryType !== 'export' && queryType !== 'summary') {
     return res.status(406).send('Invalid url. Not Acceptable.')
   }
   var validKeys = ['disasters', 'states', 'locales', 'localeType', 'cols']
   var passedKeys = _.keys(req.query)
-  for (var i in passedKeys) {
-    if (_.indexOf(validKeys, passedKeys[i]) === -1) {
-      return res.status(406).send(`Improper query parameters sent. You must only use ${validKeys}. Not Acceptable.`)
-    }
-  }
+  passedKeys.forEach(key => {
+    if (!validKeys.includes(key)) return res.status(400).send(`Improper query parameters sent. You must only use ${validKeys}. Not Acceptable.`)
+  })
   var summaryCols
   var selectCols
-  var cols = _.get(req.query, 'cols')
+  var cols = _.get(req, 'query.cols')
   if (cols) cols = cols.split(',')
   if (queryType === 'export') selectCols = cols
   else summaryCols = cols
@@ -237,7 +235,7 @@ router.get('/applicants/:queryType', (req, res) => {
   }
   var localeType = hudApi.decodeField(_.get(req.query, 'localeType'))
   if ((localeType && !locales) || (!localeType && locales)) {
-    return res.status(406).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
+    return res.status(400).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
   }
   var queryObj = []
   if (disasters) queryObj.push({[hudApi.decodeField('disaster')]: disasters})
@@ -247,8 +245,15 @@ router.get('/applicants/:queryType', (req, res) => {
     arg[localeType] = locales
     queryObj.push(arg)
   }
-  var results = localAPI.getData(queryObj, summaryCols, selectCols)
-  res.json(results)
+
+  if (process.env.DRDP_LOCAL) {
+    const results = localAPI.getData(queryObj, summaryCols, selectCols)
+    return res.json(results)
+  }
+
+  hudApi.getSummaryRecords({state: stateId, localeType, locales, disasters, cols})
+      .then(results => res.json(results))
+      .catch(next)
 })
 
 module.exports = router

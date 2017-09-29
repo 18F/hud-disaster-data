@@ -90,4 +90,25 @@ const getDisastersByLocale = function (state, localeType, locales) {
   })
 }
 
-module.exports = { decodeField, getUser, getLocales, getDisastersByLocale }
+const getSummaryRecords = function({state, localeType, locales, disasters, cols}) {
+  let hudAPIURL = URL.parse(`${DRDP_API_BASE}/applicants/summary`)
+  hudAPIURL.query = {}
+  if (state) {
+    hudAPIURL.query.state = state
+    if (_.isString(localeType) && _.isArray(locales) && !_.isEmpty(locales)) {
+      hudAPIURL.query.localeType = localeType
+      hudAPIURL.query.locales = locales.join(',')
+    }
+  }
+  if (_.isArray(disasters) && !_.isEmpty(disasters)) hudAPIURL.query.disasters = disasters.join(',')
+
+  const opts = requestOptions(URL.format(hudAPIURL))
+
+  return new Promise((resolve, reject) => {
+    request.get(opts).then(response => {
+      resolve(_.pick(response, cols))
+    }).catch(reject)
+  })
+}
+
+module.exports = { decodeField, getUser, getLocales, getDisastersByLocale, getSummaryRecords }

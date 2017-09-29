@@ -39,7 +39,7 @@ describe('/api/applicants/export', function () {
       const message = res.text
       message.should.be.equal(thrownErrMsg)
     })
-    .expect(406)
+    .expect(400)
     .expect('Content-Type', /text/, done)
   })
 
@@ -49,7 +49,7 @@ describe('/api/applicants/export', function () {
       const message = res.text
       message.should.be.equal(thrownErrMsg)
     })
-    .expect(406)
+    .expect(400)
     .expect('Content-Type', /text/, done)
   })
 })
