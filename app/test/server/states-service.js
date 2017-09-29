@@ -1,4 +1,5 @@
 /* global describe, it, */
+const async = require('async')
 const request = require('supertest')
 const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
@@ -14,6 +15,15 @@ describe('/api/states/:state/disasters', function () {
       res.body.should.be.an.Array()
       done()
     })
+  })
+  it('should return a 400 if the querystring is present, but incorrect', (done) => {
+    const queries = ['badstuff', 'badderstuff=2', 'realbadstuff=-,,||2', 'bad=123&stuff=poiq}{}', 'city=', 'city', 'CITY=county']
+    async.eachSeries(queries, (query, next) => {
+      console.log(`Testing with query: ${query}`)
+      request(app).get(`/api/states/TX/disasters?${query}`)
+      .expect(400)
+      .end(next)
+    }, done)
   })
 })
 

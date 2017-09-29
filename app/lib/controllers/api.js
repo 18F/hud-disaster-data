@@ -12,6 +12,8 @@ const version = require('../../package.json').version
 const requestPromise = require('request-promise')
 const isHUDHQUser = require('../middleware/auth').isHUDHQUser
 
+const validLocaleTypes = ['city', 'county', 'congrdist', 'zipcode', 'township', 'tract']
+
 /**
 * Creates the routes for the backend functionality. <br/>
 *
@@ -41,16 +43,17 @@ router.get('/version', function (req, res) {
 **/
 router.get('/states/:state/disasters', function (req, res, next) {
   const state = req.params.state
-  const queryParams = _.get(req, 'query')
-  const validLocaleTypes = ['city', 'county', 'congrdist', 'zipcode', 'township', 'tract']
+  const queryParams = req.query
   let localeType
   let locales = []
   let errMessage = 'Invalid parameters sent.  Use one of: city, county, congrdist, zipcode, township, or tract with a comma separated list of values. Not Acceptable.'
   if (!_.isEmpty(queryParams)) {
-    localeType = _.findKey(queryParams)
-    if (_.indexOf(validLocaleTypes, localeType) !== -1) locales = queryParams[localeType]
-    else return res.status(404).send(errMessage)
-    if (!locales.length) return res.status(404).send(errMessage)
+    localeType = _.keys(queryParams)
+    if (localeType.length > 1) return res.status(400).send(errMessage)
+    else localeType = localeType[0]
+    if (_.indexOf(validLocaleTypes, localeType) > -1) locales = queryParams[localeType]
+    else return res.status(400).send(errMessage)
+    if (_.isEmpty(locales)) return res.status(400).send(errMessage)
   }
 
   const api = (process.env.DRDP_LOCAL) ? localAPI : hudApi
