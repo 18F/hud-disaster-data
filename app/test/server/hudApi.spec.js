@@ -133,5 +133,43 @@ describe('hudApi', () => {
         done(err)
       })
     })
+    it('should call /applicants/summary with a state parameter', done => {
+      const query = {state: 'TX'}
+      const getStub = sinon.stub(requestpromise, 'get').callsFake(opts => {
+        should.exist(opts.url)
+        const parsedUrl = url.parse(opts.url, true)
+        should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/applicants/summary`)
+        should(parsedUrl.query.state).be.equal(query.state)
+        return new Promise(resolve => resolve({one: 1}))
+      })
+      hudApi.getSummaryRecords(query).then(result => {
+        should(result).be.empty()
+        getStub.restore()
+        done()
+      }).catch(err => {
+        getStub.restore()
+        done(err)
+      })
+    })
+    it('should call /applicants/summary with state, localeType, and locales parameters', done => {
+      const query = {state: 'TX', localeType: 'somewhere', locales: ['one', 'two', 'three']}
+      const getStub = sinon.stub(requestpromise, 'get').callsFake(opts => {
+        should.exist(opts.url)
+        const parsedUrl = url.parse(opts.url, true)
+        should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/applicants/summary`)
+        should(parsedUrl.query.state).be.equal(query.state)
+        should(parsedUrl.query.localeType).be.equal(query.localeType)
+        should(parsedUrl.query.locales).be.equal(query.locales.join(','))
+        return new Promise(resolve => resolve({one: 1}))
+      })
+      hudApi.getSummaryRecords(query).then(result => {
+        should(result).be.empty()
+        getStub.restore()
+        done()
+      }).catch(err => {
+        getStub.restore()
+        done(err)
+      })
+    })
   })
 })
