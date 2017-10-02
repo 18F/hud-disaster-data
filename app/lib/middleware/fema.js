@@ -3,10 +3,9 @@ const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
 
-const getDisasters = function ({filter, orderBy, top}, cb) {
+const getDisasters = function ({filter, orderBy}, cb) {
   const qry = {$filter: filter}
   if (orderBy) qry.$orderby = orderBy
-  if (top) qry.$top = top
 
   const qs = querystring.stringify(qry)
   const validCols = ['id', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType', 'declaredCountyArea', 'title']
