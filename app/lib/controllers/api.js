@@ -220,18 +220,15 @@ router.get('/applicants/:queryType', (req, res, next) => {
   passedKeys.forEach(key => {
     if (!validKeys.includes(key)) return res.status(400).send(`Improper query parameters sent. You must only use ${validKeys}. Not Acceptable.`)
   })
-  var summaryCols
-  var selectCols
+
   var cols = queryString.cols
   if (cols) cols = cols.split(',')
-  if (queryType === 'export') selectCols = cols
-  else summaryCols = cols
 
   var disasters = queryString.disasters
   if (disasters) disasters = disasters.split(',')
 
-  var stateId = queryString.states
-  if (stateId) stateId = stateId.toUpperCase().split(',')
+  var state = queryString.states
+  if (state) state = state.toUpperCase().split(',')
 
   var locales = queryString.locales
   if (locales) locales = _.map(locales.split(','), area => area)
@@ -242,21 +239,10 @@ router.get('/applicants/:queryType', (req, res, next) => {
   }
 
   if (process.env.DRDP_LOCAL) {
-    var queryObj = []
-    if (disasters) queryObj.push({[hudApi.decodeField('disaster')]: disasters})
-    if (stateId) queryObj.push({[hudApi.decodeField('state')]: stateId})
-    if (localeType && locales) {
-      localeType = hudApi.decodeField(localeType)
-      var arg = {}
-      arg[localeType] = locales
-      queryObj.push(arg)
-    }
-
-    const results = localAPI.getData(queryObj, summaryCols, selectCols)
-    return res.json(results)
+    return res.json(localAPI.getSummaryRecords({state, localeType, locales, disasters, cols, queryType}))
   }
 
-  hudApi.getSummaryRecords({state: stateId, localeType, locales, disasters, cols})
+  hudApi.getSummaryRecords({state, localeType, locales, disasters, cols})
       .then(results => res.json(results))
       .catch(next)
 })

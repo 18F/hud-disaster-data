@@ -103,6 +103,7 @@ const getSummaryRecords = function({state, localeType, locales, disasters, cols}
   if (_.isArray(disasters) && !_.isEmpty(disasters)) hudAPIURL.query.disasters = disasters.join(',')
 
   const opts = requestOptions(URL.format(hudAPIURL))
+  console.log('request opts:', opts)
 
   return new Promise((resolve, reject) => {
     request.get(opts).then(response => {

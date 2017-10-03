@@ -22,6 +22,25 @@ const db = low('mock-data/REAC Modified Database.json', {
   storage: fileAsync
 })
 
+const getSummaryRecords = function ({state, localeType, locales, disasters, cols, queryType}) {
+  var queryObj = []
+  var summaryCols
+  var selectCols
+  if (queryType === 'export') selectCols = cols
+  else summaryCols = cols
+
+  if (disasters) queryObj.push({[hudApi.decodeField('disaster')]: disasters})
+  if (state) queryObj.push({[hudApi.decodeField('state')]: state})
+  if (localeType && locales) {
+    localeType = hudApi.decodeField(localeType)
+    var arg = {}
+    arg[localeType] = locales
+    queryObj.push(arg)
+  }
+
+  return getData(queryObj, summaryCols, selectCols)
+}
+
 const getData = function (queryObj, summaryCols, selectCols) {
   console.log(JSON.stringify(queryObj))
   console.log(JSON.stringify(summaryCols))
@@ -97,4 +116,4 @@ const getDisastersByLocale = function (state, localeType, locales) {
 }
 
 
-module.exports = { getData, summarizeCols, getDisasters, getDisastersByLocale, getLocales }
+module.exports = { getData, getSummaryRecords, summarizeCols, getDisasters, getDisastersByLocale, getLocales }
