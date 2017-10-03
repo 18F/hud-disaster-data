@@ -1,4 +1,4 @@
-const request = require('request')
+var request = require('request') // Using var to make this mockable with rewire
 const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
