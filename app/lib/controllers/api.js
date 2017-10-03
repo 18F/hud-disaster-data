@@ -42,7 +42,7 @@ router.get('/version', function (req, res) {
 * @param {string} locales - (optional) a comma separated list of locales by which to filter the disasters
 **/
 router.get('/states/:state/disasters', function (req, res, next) {
-  const state = req.params.state
+  debugger
   const queryParams = req.query
   let localeType
   let locales = []
