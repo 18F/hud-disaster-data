@@ -211,42 +211,47 @@ router.get('/applicants/:queryType', (req, res, next) => {
   if (queryType !== 'export' && queryType !== 'summary') {
     return res.status(406).send('Invalid url. Not Acceptable.')
   }
+  var queryString = req.query
+  if (_.isEmpty(queryString)) return res.status(400).send('A query string is required')
+
   var validKeys = ['disasters', 'states', 'locales', 'localeType', 'cols']
-  var passedKeys = _.keys(req.query)
+  var passedKeys = _.keys(queryString)
+
   passedKeys.forEach(key => {
     if (!validKeys.includes(key)) return res.status(400).send(`Improper query parameters sent. You must only use ${validKeys}. Not Acceptable.`)
   })
   var summaryCols
   var selectCols
-  var cols = _.get(req, 'query.cols')
+  var cols = queryString.cols
   if (cols) cols = cols.split(',')
   if (queryType === 'export') selectCols = cols
   else summaryCols = cols
 
-  var disasters = _.get(req.query, 'disasters')
+  var disasters = queryString.disasters
   if (disasters) disasters = disasters.split(',')
-  var stateId = _.get(req.query, 'states')
+
+  var stateId = queryString.states
   if (stateId) stateId = stateId.toUpperCase().split(',')
-  var locales = _.get(req.query, 'locales')
-  if (locales) {
-    locales = _.map(locales.split(','), area => {
-      return area
-    })
-  }
-  var localeType = hudApi.decodeField(_.get(req.query, 'localeType'))
+
+  var locales = queryString.locales
+  if (locales) locales = _.map(locales.split(','), area => area)
+
+  var localeType = queryString.localeType
   if ((localeType && !locales) || (!localeType && locales)) {
     return res.status(400).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
   }
-  var queryObj = []
-  if (disasters) queryObj.push({[hudApi.decodeField('disaster')]: disasters})
-  if (stateId) queryObj.push({[hudApi.decodeField('state')]: stateId})
-  if (localeType && locales) {
-    var arg = {}
-    arg[localeType] = locales
-    queryObj.push(arg)
-  }
 
   if (process.env.DRDP_LOCAL) {
+    var queryObj = []
+    if (disasters) queryObj.push({[hudApi.decodeField('disaster')]: disasters})
+    if (stateId) queryObj.push({[hudApi.decodeField('state')]: stateId})
+    if (localeType && locales) {
+      localeType = hudApi.decodeField(localeType)
+      var arg = {}
+      arg[localeType] = locales
+      queryObj.push(arg)
+    }
+
     const results = localAPI.getData(queryObj, summaryCols, selectCols)
     return res.json(results)
   }
