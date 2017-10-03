@@ -46,6 +46,29 @@ describe('hudApi', () => {
         }, next)
       }, done)
     })
+    it('should return empty array if no disasters are returned', done => {
+      const disasters = []
+      const state = 'CO'
+      const type = 'city'
+      const locales = ['Nowhere', 'Boondocks', 'Ghosttown']
+
+      const getStub = sinon.stub(requestpromise, 'get').callsFake(opts => {
+        should.exist(opts.url)
+        const parsedUrl = url.parse(opts.url, true)
+        should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/states/${state}/disasters`)
+        should(parsedUrl.query.localeType).equal(type)
+        should(parsedUrl.query.locales).equal(locales.join(','))
+        const disasterObjects = _.map(disasters, disaster => { return {id: disaster} })
+        return new Promise(resolve => resolve(disasterObjects))
+      })
+
+      hudApi.getDisastersByLocale(state, type, locales).then(disasters => {
+        sinon.assert.calledOnce(getStub)
+        should(disasters.length).be.equal(0)
+        getStub.restore()
+        done()
+      }).catch(done)
+    })
     it('should call the HUD API with the correct url pattern', done => {
       const disasters = ['12345', '23456']
       const state = 'CO'
@@ -140,6 +163,25 @@ describe('hudApi', () => {
         const parsedUrl = url.parse(opts.url, true)
         should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/applicants/summary`)
         should(parsedUrl.query.state).be.equal(query.state)
+        return new Promise(resolve => resolve({one: 1}))
+      })
+      hudApi.getSummaryRecords(query).then(result => {
+        should(result).be.empty()
+        getStub.restore()
+        done()
+      }).catch(err => {
+        getStub.restore()
+        done(err)
+      })
+    })
+    it('should call /applicants/summary with a state parameter and disasters parameter', done => {
+      const query = {state: 'TX', disasters: [1234, 5678, 9012]}
+      const getStub = sinon.stub(requestpromise, 'get').callsFake(opts => {
+        should.exist(opts.url)
+        const parsedUrl = url.parse(opts.url, true)
+        should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/applicants/summary`)
+        should(parsedUrl.query.state).be.equal(query.state)
+        should(parsedUrl.query.disasters).be.equal(query.disasters.join(','))
         return new Promise(resolve => resolve({one: 1}))
       })
       hudApi.getSummaryRecords(query).then(result => {

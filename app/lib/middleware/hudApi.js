@@ -76,7 +76,7 @@ const getDisastersByLocale = function (state, localeType, locales) {
     const opts = requestOptions(URL.format(hudAPIURL))
     request.get(opts)
       .then(disasterIds => {
-        if (!_.isArray(disasterIds) || _.isEmpty(disasterIds)) return resolve([]);
+        if (!_.isArray(disasterIds) || _.isEmpty(disasterIds)) return resolve([])
         console.log('***** Got disasterIds:', disasterIds)
         disasterIds = _.map(disasterIds, 'id')
         const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
