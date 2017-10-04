@@ -49,6 +49,21 @@ describe('/states/:stateId/:localeType', function () {
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
+  })
 
+  it('should handle error returned by hudApi.getLocales', (done) => {
+    delete process.env.DRDP_LOCAL
+    const stub = sinon.stub(requestpromise, 'get').callsFake((resolve, reject) => {
+      return new Promise((resolve, reject) => reject())
+    })
+    request(app).get('/api/states/ia/congrdist')
+    .expect(function (res) {
+      const error = res.error
+      error.message.should.be.equal('cannot GET /api/states/ia/congrdist (404)')
+      stub.restore()
+      process.env.DRDP_LOCAL = true
+    })
+    .expect(404)
+    .expect('Content-Type', /text/, done)
   })
 })
