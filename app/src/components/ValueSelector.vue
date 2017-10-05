@@ -1,13 +1,13 @@
 <template lang="pug">
-  .value-selector
+  .value-selector(id="value-selector" @click="nothing")
     div.report-actions
       div.btn-group
         label.sr-only(for='SummariesSelector') Show summary values selector
-        button(type="button" @click="toggleSummarySelection" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded")
+        button(type="button" @click="toggleSummarySelection" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded" ref="toggleSummarySelectionButton")
           icon(name='fa-columns' classes="columns")
           icon(name="fa-caret-up" v-show="showSelectionList")
           icon(name="fa-caret-down" v-show="!showSelectionList")
-      div.summary-selection-list(v-show="showSelectionList")
+      div.summary-selection-list(v-show="showSelectionList" tabindex="0" ref="summarySelectionList"  @focusout="hideSummarySelection")
         span
           |Summary Values
         table
@@ -38,8 +38,18 @@ export default {
     }
   },
   methods: {
+    nothing () {
+      // alert('doing nothing')
+    },
+    hideSummarySelection (e) {
+      if (e.relatedTarget === this.$refs.toggleSummarySelectionButton) return
+      if (!this.$refs.summarySelectionList.contains(e.relatedTarget)) this.showSelectionList = false
+    },
     toggleSummarySelection () {
       this.showSelectionList = !this.showSelectionList
+      this.$nextTick(() => {
+        if (this.showSelectionList) this.$refs.summarySelectionList.focus()
+      })
     },
     toggleColumnSelection (column) {
       column.selected = !column.selected
