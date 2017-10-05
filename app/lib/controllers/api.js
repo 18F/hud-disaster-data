@@ -55,7 +55,6 @@ router.get('/states/:state/disasters', function (req, res, next) {
     if (_.isEmpty(locales)) return res.status(400).send(errMessage)
   }
 
-  debugger
   const api = (process.env.DRDP_LOCAL) ? localAPI : hudApi
   api.getDisastersByLocale(req.params.state, localeType, locales)
       .then(disasters => res.json(disasters))
