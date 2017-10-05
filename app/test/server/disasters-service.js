@@ -35,7 +35,7 @@ describe('/api/states/:state/disasters', function () {
 
   it('should call hudApi.getDisastersByLocale if DRDP_LOCAL is not set', (done) => {
     delete process.env.DRDP_LOCAL
-    const disasters = [{id:1, name: 'abc'}, {id:2, name: 'def'}]
+    const disasters = [{id: 1, name: 'abc'}, {id: 2, name: 'def'}]
     const stub = sinon.stub(requestpromise, 'get').callsFake(opts => {
       should.exist(opts.url)
       if (/users/.test(opts.url)) return new Promise(resolve => resolve(USERS.GRANTEE))
@@ -44,9 +44,8 @@ describe('/api/states/:state/disasters', function () {
     const femaStub = sinon.stub(femaAPI, 'getDisasters').callsFake((filter, cb) => cb(null, disasters))
     request(app).get('/api/states/TX/disasters')
     .expect(function (res) {
-      const body = res.body
-      body.should.be.an.Array()
-      (body[0].name).should.equal(disasters[0].name)
+      res.body.should.be.an.Array()
+      res.body[0].name.should.equal(disasters[0].name)
       stub.restore()
       femaStub.restore()
       process.env.DRDP_LOCAL = true
