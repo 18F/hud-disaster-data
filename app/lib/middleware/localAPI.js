@@ -26,6 +26,7 @@ const getSummaryRecords = function ({state, localeType, locales, disasters, cols
   var queryObj = []
   var summaryCols
   var selectCols
+  cols = cols.join(',').toLowerCase().split(',')
   if (queryType === 'export') selectCols = cols
   else summaryCols = cols
 

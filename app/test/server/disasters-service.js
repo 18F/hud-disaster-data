@@ -6,6 +6,9 @@ const app = require('../../app.js')
 const requestpromise = require('request-promise')
 const sinon = require('sinon')
 const _ = require('lodash')
+const USERS = require('../../lib/middleware/auth').TEST_USERS
+const femaAPI = require('../../lib/middleware/fema')
+
 
 describe('/api/states/:state/disasters', function () {
   this.timeout(10000)
@@ -30,27 +33,27 @@ describe('/api/states/:state/disasters', function () {
     }, done)
   })
 
-  // it.only('should call hudApi.getDisastersByLocale if DRDP_LOCAL is not set', (done) => {
-  //   debugger
-  //   delete process.env.DRDP_LOCAL
-  //   const disasters = [{name: 'abc'}, {name: 'def'}]
-  //   const stub = sinon.stub(requestpromise, 'get').callsFake(opts => {
-  //     debugger
-  //     should.exist(opts.url)
-  //     return new Promise(resolve => resolve(disasters))
-  //   })
-  //   request(app).get('/api/states/TX/disasters')
-  //   .expect(function (res) {
-  //     debugger
-  //     const body = res.body
-  //     body.should.be.an.Array()
-  //     body[0].should.equal(_.map(disasters, 'name')[0])
-  //     stub.restore()
-  //     process.env.DRDP_LOCAL = true
-  //   })
-  //   .expect(200)
-  //   .expect('Content-Type', /json/, done)
-  // })
+  it('should call hudApi.getDisastersByLocale if DRDP_LOCAL is not set', (done) => {
+    delete process.env.DRDP_LOCAL
+    const disasters = [{id:1, name: 'abc'}, {id:2, name: 'def'}]
+    const stub = sinon.stub(requestpromise, 'get').callsFake(opts => {
+      should.exist(opts.url)
+      if (/users/.test(opts.url)) return new Promise(resolve => resolve(USERS.GRANTEE))
+      return new Promise(resolve => resolve(disasters))
+    })
+    const femaStub = sinon.stub(femaAPI, 'getDisasters').callsFake((filter, cb) => cb(null, disasters))
+    request(app).get('/api/states/TX/disasters')
+    .expect(function (res) {
+      const body = res.body
+      body.should.be.an.Array()
+      (body[0].name).should.equal(disasters[0].name)
+      stub.restore()
+      femaStub.restore()
+      process.env.DRDP_LOCAL = true
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
 })
 
 describe('/api/states/:state/disasters?[localeparams]', function () {

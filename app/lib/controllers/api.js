@@ -222,7 +222,7 @@ router.get('/applicants/:queryType', (req, res, next) => {
   })
 
   var cols = queryString.cols
-  if (cols) cols = cols.split(',')
+  if (cols) cols = cols.toUpperCase().split(',')
 
   var disasters = queryString.disasters
   if (disasters) disasters = disasters.split(',')
