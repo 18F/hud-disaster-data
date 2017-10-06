@@ -124,4 +124,4 @@ const getDisastersByLocale = function (state, localeType, locales) {
 }
 
 
-module.exports = { getData, getSummaryRecords, summarizeCols, getDisasters, getDisastersByLocale, getLocales }
+module.exports = { getData, getSummaryRecords, summarizeCols, getDisasters, getDisastersByLocale, getLocales, getExport }

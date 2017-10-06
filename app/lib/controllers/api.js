@@ -165,17 +165,14 @@ router.get('/disasternumber/:qry', function (req, res) {
 * @example // returns CSV for disasters DR-4311-UT,FM-5130-UT, and FM-5182-WA with download filename set to hud-fema-data-MY_FILE_NAME
 *  get /export/MY_FILE_NAME?disasters=DR-4311-UT,FM-5130-UT,FM-5182-WA
 */
-router.get('/export/:fileNamePart', function (req, res) {
+router.get('/export/:fileNamePart', function (req, res, next) {
   var fileName = `hud-fema-data-${req.params.fileNamePart}`
   var disasterNumbers = _.get(req, 'query.disasters').split(',')
   if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
   if (numbers[0] === undefined) return res.status(406).send('Invalid disaster numbers sent. Not Acceptable.')
-  var query = `disasters=${numbers.join(',')}`
-  const uri = `http://${req.headers.host}/api/applicants/export?${query}`
-  console.log(`url: ${uri}`)
-  requestPromise({ method: 'GET', uri, json: true })
-  .then(function (results) {
+
+  const processResult = function (results) {
     if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
     var columns = []
     for (var key in results[0]) columns.push(key)
@@ -185,7 +182,13 @@ router.get('/export/:fileNamePart', function (req, res) {
     })
     res.setHeader('Content-disposition', `attachment; filename="${fileName}.csv"`)
     res.csv(resultSet)
-  })
+  }
+
+  if (process.env.DRDP_LOCAL) {
+    localAPI.getExport(req.headers.host, numbers)
+      .then(processResult)
+      .catch(next)
+  }
 })
 
 /**
