@@ -13,27 +13,27 @@ Vue.use(Vuex)
 * @module reportStore
 */
 const conversionList = [
-  {column: 'NUMBEROFRECORDS', text: 'Number of households affected', format: '0,0', selected: false, notInList: true},
-  {column: 'TOTAL_DMGE_AMNT', text: 'Total FEMA verified real property loss', format: '$0,0.00', selected: true},
-  {column: 'HUD_UNMT_NEED_AMNT', text: 'HUD estimated unmet need', format: '$0,0.00', selected: true},
-  {column: 'HSHD_SIZE_CNT', text: 'Household size', format: '0,0', selected: false},
-  {column: 'DPNDNT_CNT', text: 'Dependents', format: '0,0', selected: false},
-  {column: 'INCM_AMNT', text: 'Income', format: '$0,0.00', selected: false},
-  {column: 'HZRD_INSNC_AMNT', text: 'Hazard insurance', format: '$0,0.00', selected: false},
-  {column: 'FLOOD_INSNC_AMNT', text: 'Flood insurance', format: '$0,0.00', selected: false},
-  {column: 'OTHER_INSNC_AMNT', text: 'Other insurance', format: '$0,0.00', selected: false},
-  {column: 'REAL_PROP_LOSS_AMNT', text: 'Real property loss', format: '$0,0.00', selected: false},
-  {column: 'FLOOD_DMGE_AMNT', text: 'Flood damage', format: '$0,0.00', selected: false},
-  {column: 'FNDTN_DMGE_AMNT', text: 'Foundation damage', format: '$0,0.00', selected: false},
-  {column: 'ROOF_DMGE_AMNT', text: 'Roof damage', format: '$0,0.00', selected: false},
-  {column: 'TMP_SHLTR_RCVD_AMNT', text: 'Temp shelter received', format: '$0,0.00', selected: false},
-  {column: 'RENT_ASSTN_AMNT', text: 'Rent assistance', format: '$0,0.00', selected: false},
-  {column: 'REPR_AMNT', text: 'Repair', format: '$0,0.00', selected: false},
-  {column: 'RPMT_AMNT', text: 'Replacement', format: '$0,0.00', selected: false},
-  {column: 'SBA_RCVD_AMNT', text: 'SBA received', format: '$0,0.00', selected: false},
-  {column: 'PRSNL_PROP_ASSTN_AMNT', text: 'Personal property assistance', format: '$0,0.00', selected: false},
-  {column: 'OTHER_ASSTN_AMNT', text: 'Other assistance', format: '$0,0.00', selected: false},
-  {column: 'TOTAL_ASSTN_AMNT', text: 'Total assistance', format: '$0,0.00', selected: false}
+  {column: 'numberOfRecords', text: 'Number of households affected', format: '0,0', selected: false, notInList: true},
+  {column: 'total_dmge_amnt', text: 'Total FEMA verified real property loss', format: '$0,0.00', selected: true},
+  {column: 'hud_unmt_need_amnt', text: 'HUD estimated unmet need', format: '$0,0.00', selected: true},
+  {column: 'hshd_size_cnt', text: 'Household size', format: '0,0', selected: false},
+  {column: 'dpndnt_cnt', text: 'Dependents', format: '0,0', selected: false},
+  {column: 'incm_amnt', text: 'Income', format: '$0,0.00', selected: false},
+  {column: 'hzrd_insnc_amnt', text: 'Hazard insurance', format: '$0,0.00', selected: false},
+  {column: 'flood_insnc_amnt', text: 'Flood insurance', format: '$0,0.00', selected: false},
+  {column: 'other_insnc_amnt', text: 'Other insurance', format: '$0,0.00', selected: false},
+  {column: 'real_prop_loss_amnt', text: 'Real property loss', format: '$0,0.00', selected: false},
+  {column: 'flood_dmge_amnt', text: 'Flood damage', format: '$0,0.00', selected: false},
+  {column: 'fndtn_dmge_amnt', text: 'Foundation damage', format: '$0,0.00', selected: false},
+  {column: 'roof_dmge_amnt', text: 'Roof damage', format: '$0,0.00', selected: false},
+  {column: 'tmp_shltr_rcvd_amnt', text: 'Temp shelter received', format: '$0,0.00', selected: false},
+  {column: 'rent_asstn_amnt', text: 'Rent assistance', format: '$0,0.00', selected: false},
+  {column: 'repr_amnt', text: 'Repair', format: '$0,0.00', selected: false},
+  {column: 'rpmt_amnt', text: 'Replacement', format: '$0,0.00', selected: false},
+  {column: 'sba_rcvd_amnt', text: 'SBA received', format: '$0,0.00', selected: false},
+  {column: 'prsnl_prop_asstn_amnt', text: 'Personal property assistance', format: '$0,0.00', selected: false},
+  {column: 'other_asstn_amnt', text: 'Other assistance', format: '$0,0.00', selected: false},
+  {column: 'total_asstn_amnt', text: 'Total assistance', format: '$0,0.00', selected: false}
 ]
 
 export const mutations = {
