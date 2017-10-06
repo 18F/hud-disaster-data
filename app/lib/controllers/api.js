@@ -10,7 +10,8 @@ const localAPI = require('../middleware/localAPI')
 const fema = require('../middleware/fema')
 const version = require('../../package.json').version
 const requestPromise = require('request-promise')
-const isHUDHQUser = require('../middleware/auth').isHUDHQUser
+const auth = require('../middleware/auth')
+const isHUDHQUser = auth.isHUDHQUser
 
 const validLocaleTypes = ['city', 'county', 'congrdist', 'zipcode', 'township', 'tract']
 
@@ -172,8 +173,16 @@ router.get('/export/:fileNamePart', function (req, res, next) {
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
   if (numbers[0] === undefined) return res.status(406).send('Invalid disaster numbers sent. Not Acceptable.')
 
-  const processResult = function (results) {
-    if (!results || results.length === 0) return res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
+  const noDataFound = () => res.status(200).csv([[`No data found for any of the following: ${disasterNumbers.join(', ')}`]])
+
+  numbers = auth.filterAuthorizedDisasterIds(req, numbers)
+
+  if (_.isEmpty(numbers)) return noDataFound()
+
+  const promise = (process.env.DRDP_LOCAL) ? localAPI.getExport(req.headers.host, numbers) : hudApi.getExport(numbers)
+
+  promise.then(function (results) {
+    if (!results || results.length === 0) return noDataFound()
     var columns = []
     for (var key in results[0]) columns.push(key)
     var resultSet = [ columns ]
@@ -182,13 +191,7 @@ router.get('/export/:fileNamePart', function (req, res, next) {
     })
     res.setHeader('Content-disposition', `attachment; filename="${fileName}.csv"`)
     res.csv(resultSet)
-  }
-
-  if (process.env.DRDP_LOCAL) {
-    localAPI.getExport(req.headers.host, numbers)
-      .then(processResult)
-      .catch(next)
-  }
+  }).catch(next)
 })
 
 /**
