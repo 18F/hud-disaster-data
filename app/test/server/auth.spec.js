@@ -18,6 +18,25 @@ describe('middleware/auth', () => {
     })
   })
 
+  describe('filterAuthorizedDisasterIds', () => {
+    it('should return all the disasterIds if the user is a HUD hq user', () => {
+      const req = {
+        user: auth.TEST_USERS.HUD_HQ
+      }
+      const disasterIds = ['1', '2', '3']
+      should(auth.filterAuthorizedDisasterIds(req, disasterIds)).be.equal(disasterIds)
+    })
+    it('should only return the disasterIds alowed for the user', () => {
+      const req = {
+        user: auth.TEST_USERS.GRANTEE2
+      }
+      const disasterIds = [ "1606", "1791", "1999", "4029", "4223", "4245", "4266", "4269", "4272"]
+      const result = auth.filterAuthorizedDisasterIds(req, disasterIds).join(',')
+      should(result).be.equal(req.user.disasterids.join(','))
+    })
+
+  })
+
   describe('authenticate', () => {
     it(`should set the user to the session user in req and return`, (done) => {
       var req = {

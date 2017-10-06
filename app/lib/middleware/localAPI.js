@@ -42,6 +42,13 @@ const getSummaryRecords = function ({state, localeType, locales, disasters, cols
   return getData(queryObj, summaryCols, selectCols)
 }
 
+const getExport = function (host, disasterIds) {
+  var query = `disasters=${disasterIds.join(',')}`
+  const uri = `http://${host}/api/applicants/export?${query}`
+  console.log(`url: ${uri}`)
+  return request({ method: 'GET', uri, json: true })
+}
+
 const getData = function (queryObj, summaryCols, selectCols) {
   console.log(JSON.stringify(queryObj))
   console.log(JSON.stringify(summaryCols))

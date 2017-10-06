@@ -33,5 +33,9 @@ module.exports = {
   isHUDHQUser: function(req) {
     return (req.user.type === 'HUD' && req.user.hq === true)
   },
+  filterAuthorizedDisasterIds: function (req, disasterids) {
+    if (this.isHUDHQUser(req)) return disasterids
+    return _.intersection(disasterids, req.user.disasterids)
+  },
   TEST_USERS: USERS
 }

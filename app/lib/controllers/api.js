@@ -169,10 +169,9 @@ router.get('/export/:fileNamePart', function (req, res) {
   var fileName = `hud-fema-data-${req.params.fileNamePart}`
   var disasterNumbers = _.get(req, 'query.disasters').split(',')
   if (!disasterNumbers || disasterNumbers[0].length === 0) return res.status(406).send('No disaster numbers sent. Not Acceptable.')
-  var states = _.uniq(_.map(disasterNumbers, d => d.split('-')[2]))
   var numbers = _.uniq(_.map(disasterNumbers, d => d.split('-')[1]))
-  if (states[0] === undefined || numbers[0] === undefined) return res.status(406).send('Invalid disaster numbers sent. Not Acceptable.')
-  var query = `states=${states.join(',')}&disasters=${numbers.join(',')}`
+  if (numbers[0] === undefined) return res.status(406).send('Invalid disaster numbers sent. Not Acceptable.')
+  var query = `disasters=${numbers.join(',')}`
   const uri = `http://${req.headers.host}/api/applicants/export?${query}`
   console.log(`url: ${uri}`)
   requestPromise({ method: 'GET', uri, json: true })
