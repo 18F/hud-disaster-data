@@ -116,7 +116,8 @@ const getExport = function (disasterIds) {
   if (_.isEmpty(disasterIds)) return Promise.reject(new Error('disasterIds is required'))
   var query = `disasters=${disasterIds.join(',')}`
   const uri = `${DRDP_API_BASE}/applicants/export?${query}`
-  return request({ method: 'GET', uri, simple: true, json: true })
+  const opts = _.apply(requestOptions(uri),{method: 'GET', simple: true})
+  return request(opts)
 }
 
 module.exports = { decodeField, getUser, getLocales, getDisastersByLocale, getSummaryRecords, getExport }
