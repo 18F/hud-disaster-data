@@ -214,4 +214,16 @@ describe('hudApi', () => {
       })
     })
   })
+
+  describe('getExport', () => {
+    it('should set the headers required for authentication', () => {
+      const getSpy = sinon.spy(require('request-promise'), 'get')
+      const ids = ['123','456']
+      hudApi.getExport(ids)
+      should(getSpy.calledOnce).be.true()
+      const consumerData = _.get(getSpy.getCall(0).args[0], 'headers.serviceConsumerData')
+      should(consumerData).not.be.null
+      getSpy.restore()
+    })
+  })
 })
