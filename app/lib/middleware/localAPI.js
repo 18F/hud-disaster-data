@@ -2,16 +2,16 @@ const _ = require('lodash')
 const request = require('request-promise')
 const low = require('lowdb')
 const fileAsync = require('lowdb/lib/storages/file-async')
-const fs = require('fs')
-const path = require('path')
+// const fs = require('fs')
+// const path = require('path')
 const hudApi = require('./hudApi')
 const fema = require('./fema')
 
-const getLocales = function(stateId, localeType) {
+const getLocales = function (stateId, localeType) {
   localeType = hudApi.decodeField(localeType)
   var selectCols = [localeType]
   var queryObj = []
-  queryObj.push({'dmge_state_cd': [stateId]})
+  queryObj.push({'DMGE_STATE_CD': [stateId]})
   var data = getData(queryObj, null, selectCols)
   return _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
 }
@@ -22,11 +22,23 @@ const db = low('mock-data/REAC Modified Database.json', {
   storage: fileAsync
 })
 
+const keysToUpper = function (records) {
+  var newData = []
+  _.forEach(records, rec => {
+    var upperRec = {}
+    _.forEach(rec, (val, key) => {
+      upperRec[key.toUpperCase()] = val
+    })
+    newData.push(upperRec)
+  })
+  return newData
+}
+
 const getSummaryRecords = function ({state, localeType, locales, disasters, cols, queryType}) {
   var queryObj = []
   var summaryCols
   var selectCols
-  if (cols) cols = cols.join(',').toLowerCase().split(',')
+  // if (cols) cols = cols.join(',').toLowerCase().split(',')
   if (queryType === 'export') selectCols = cols
   else summaryCols = cols
 
@@ -53,7 +65,8 @@ const getData = function (queryObj, summaryCols, selectCols) {
   console.log(JSON.stringify(queryObj))
   console.log(JSON.stringify(summaryCols))
   console.log(JSON.stringify(selectCols))
-  var result = db.get('disasterRecs').value()
+  var result = keysToUpper(db.get('disasterRecs').value())
+  debugger
   for (var phrase in queryObj) {
     var query = queryObj[phrase]
     var column = _.keys(query)[0]
@@ -89,14 +102,14 @@ const summarizeCols = function (data, summaryCols) {
   var numberOfRecords = data.length
   var summary = {numberOfRecords}
   _.forEach(summaryCols, (col) => {
-    summary[col] = _.sumBy(data, rec => rec[col])
+    summary[col.toUpperCase()] = _.sumBy(data, rec => rec[col])
   })
   return summary
 }
 
-const getDisasters = function({state, localeType, locales}, cb) {
+const getDisasters = function ({state, localeType, locales}) {
   const localeField = hudApi.decodeField(localeType)
-  return db.get('disasterRecs').filter(rec => {
+  const filteredData = db.get('disasterRecs').filter(rec => {
     if (rec.dmge_state_cd !== state) return false
     if (!localeField || !locales) return true
     return locales.includes(rec[localeField])
@@ -104,6 +117,7 @@ const getDisasters = function({state, localeType, locales}, cb) {
   .map('dster_id')
   .uniq()
   .value()
+  return filteredData
 }
 
 const getDisastersByLocale = function (state, localeType, locales) {
@@ -112,9 +126,11 @@ const getDisastersByLocale = function (state, localeType, locales) {
     queryObj.localeType = localeType
     queryObj.locales = locales
   }
-  const disasterIds = this.getDisasters(queryObj)
+  const disasterIds = getDisasters(queryObj)
+  if (_.isEmpty(disasterIds)) return Promise.resolve([])
   const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
   let filter = `state eq '${state}' and ${disasterCond}`
+  debugger
   return new Promise((resolve, reject) => {
     fema.getDisasters({filter}, (err, disasters) => {
       if (err) return reject(err)
@@ -122,6 +138,5 @@ const getDisastersByLocale = function (state, localeType, locales) {
     })
   })
 }
-
 
 module.exports = { getData, getSummaryRecords, summarizeCols, getDisasters, getDisastersByLocale, getLocales, getExport }

@@ -295,9 +295,9 @@ describe('reportStore', function () {
 
     it('should set value of summaryRecords to proper formatted value', function () {
       let state = {summaryRecords: null}
-      let newSummaryRecord = {numberofrecords: 1000, total_dmge_amnt: 2000, hud_unmt_need_amnt: 3000}
+      let newSummaryRecord = {numberOfRecords: 1000, TOTAL_DMGE_AMNT: 2000, HUD_UNMT_NEED_AMNT: 3000}
       updateReportData(state, newSummaryRecord)
-      should(state.summaryRecords.total_dmge_amnt).be.equal(newSummaryRecord.total_dmge_amnt)
+      should(state.summaryRecords.TOTAL_DMGE_AMNT).be.equal(newSummaryRecord.TOTAL_DMGE_AMNT)
       should(summaryRecords(state)['Total FEMA verified real property loss']).be.equal('$2,000.00')
     })
   })

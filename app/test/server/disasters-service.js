@@ -58,12 +58,12 @@ describe('/api/states/:state/disasters', function () {
 describe('/api/states/:state/disasters?[localeparams]', function () {
   this.timeout(10000)
   const errorMessage = 'Invalid parameters sent.  Use one of: city, county, congrdist, zipcode, township, or tract with a comma separated list of values. Not Acceptable.'
-  it('should return a list of disasters for city of Houston', (done) => {
+  it.only('should return a list of disasters for city of Houston', (done) => {
     request(app).get('/api/states/TX/disasters?city=Houston')
     .expect(200)
     .expect('Content-Type', /json/)
     .end((err, res) => {
-      res.body.should.be.an.Array()
+      res.body.should.be.an.Array().and.not.be.empty
       'Harris (County)'.should.be.oneOf(res.body[0].declaredCountyArea)
       done(err)
     })
