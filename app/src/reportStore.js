@@ -13,7 +13,7 @@ Vue.use(Vuex)
 * @module reportStore
 */
 const conversionList = [
-  {column: 'numberOfRecords', text: 'Number of households affected', format: '0,0', selected: false, notInList: true},
+  {column: 'NUMBER_OF_RECORDS', text: 'Number of households affected', format: '0,0', selected: false, notInList: true},
   {column: 'TOTAL_DMGE_AMNT', text: 'Total FEMA verified real property loss', format: '$0,0.00', selected: true},
   {column: 'HUD_UNMT_NEED_AMNT', text: 'HUD estimated unmet need', format: '$0,0.00', selected: true},
   {column: 'HSHD_SIZE_CNT', text: 'Household size', format: '0,0', selected: false},
