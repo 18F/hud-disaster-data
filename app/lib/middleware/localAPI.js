@@ -99,10 +99,11 @@ const getData = function (queryObj, summaryCols, selectCols) {
 const summarizeCols = function (data, summaryCols) {
   if (!data || summaryCols.length === 0) return false
   var numberOfRecords = data.length
-  var summary = {NUMBER_OF_RECORDS: numberOfRecords}
+  var summary = {}
   _.forEach(summaryCols, (col) => {
     summary[col.toUpperCase()] = _.sumBy(data, rec => rec[col])
   })
+  summary['NUMBER_OF_RECORDS'] = numberOfRecords
   return summary
 }
 
