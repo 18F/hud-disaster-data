@@ -198,7 +198,6 @@ export const actions = {
         else formattedQuery = `${key}=${value.toString()}`
       })
       return axios.get(`/api/applicants/summary?${formattedQuery}`).then(response => {
-        debugger
         commit('updateReportData', response.data)
         commit('setShowReport', true)
         commit('setShowReportSpinner', false)

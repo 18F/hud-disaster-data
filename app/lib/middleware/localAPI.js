@@ -66,7 +66,6 @@ const getData = function (queryObj, summaryCols, selectCols) {
   console.log(JSON.stringify(summaryCols))
   console.log(JSON.stringify(selectCols))
   var result = keysToUpper(db.get('disasterRecs').value())
-  debugger
   for (var phrase in queryObj) {
     var query = queryObj[phrase]
     var column = _.keys(query)[0]
@@ -108,7 +107,7 @@ const summarizeCols = function (data, summaryCols) {
 }
 
 const getDisasters = function ({state, localeType, locales}) {
-  const localeField = hudApi.decodeField(localeType)
+  const localeField = _.toLower(hudApi.decodeField(localeType))
   const filteredData = db.get('disasterRecs').filter(rec => {
     if (rec.dmge_state_cd !== state) return false
     if (!localeField || !locales) return true
@@ -130,7 +129,6 @@ const getDisastersByLocale = function (state, localeType, locales) {
   if (_.isEmpty(disasterIds)) return Promise.resolve([])
   const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
   let filter = `state eq '${state}' and ${disasterCond}`
-  debugger
   return new Promise((resolve, reject) => {
     fema.getDisasters({filter}, (err, disasters) => {
       if (err) return reject(err)
