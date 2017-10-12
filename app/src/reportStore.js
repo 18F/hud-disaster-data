@@ -127,8 +127,24 @@ export const mutations = {
     })
   },
 
-  updateReportData: function (state, list) {
-    state.summaryRecords = list
+  updateReportData: function (state, data) {
+    let newSummaryRecord = []
+    for (var key in data) {
+      let newObj = {}
+      let value = data[key]
+      let matchingColumn = _.find(conversionList, ['column', key])
+      if (matchingColumn) {
+        newObj.name = matchingColumn.text
+        newObj.column = key
+        newObj.value = matchingColumn.format ? numeral(value).format(matchingColumn.format) : value
+      } else {
+        newObj.name = key
+        newObj.column = key
+        newObj.value = value
+      }
+      newSummaryRecord.push(newObj)
+    }
+    state.summaryRecords = newSummaryRecord
   },
 
   setSummaryColumn: function (state, selectedCol) {
@@ -191,11 +207,10 @@ export const actions = {
 
   loadReportData: function ({ commit }, allFilters) {
     return new Promise((resolve, reject) => {
-      let formattedQuery
+      let formattedQuery = 'cols=' + _.map(conversionList, c => c.column).join(',')
       commit('setShowReportSpinner', true)
       _.forIn(allFilters, (value, key) => {
-        if (formattedQuery) formattedQuery += `&${key}=${value.toString()}`
-        else formattedQuery = `${key}=${value.toString()}`
+        if (key !== 'cols') formattedQuery += `&${key}=${value.toString()}`
       })
       return axios.get(`/api/applicants/summary?${formattedQuery}`).then(response => {
         commit('updateReportData', response.data)
@@ -240,25 +255,16 @@ export const getters = {
   geographicLevel: state => {
     return state.geographicLevel || ''
   },
-  summaryRecords: state => {
-    let newSummaryRecord = {}
-    for (var key in state.summaryRecords) {
-      let value = state.summaryRecords[key]
-      let matchingColumn = _.find(conversionList, ['column', key])
-      if (matchingColumn) {
-        newSummaryRecord[matchingColumn.text] = matchingColumn.format ? numeral(value).format(matchingColumn.format) : value
-      } else {
-        newSummaryRecord[key] = value
-      }
-    }
-
-    return newSummaryRecord
+  summaryRecords: (state, getters) => {
+    let newRec = {}
+    _.map(state.summaryRecords, c => {
+      if (_.indexOf(getters.selectedSummaryColumns, c.column) > -1) newRec[c.name] = c.value
+    })
+    return newRec
   },
-
   summaryColumns: state => {
     return state.summaryColumns
   },
-
   selectedSummaryColumns: state => {
     return _.map(_.filter(state.summaryColumns, 'selected'), c => c.column)
   }

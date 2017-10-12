@@ -356,6 +356,7 @@ export default {
       if (queryParams && queryParams.disasterFilter !== undefined) disasterParam = queryParams.disasterFilter.split(',')
       if (queryParams && queryParams.summaryColumns !== undefined) summaryColumns = queryParams.summaryColumns.split(',')
 
+      _.map(this.$store.getters.summaryColumns, c => { c.selected = false })
       _.map(summaryColumns, c => {
         let thisColumn = _.find(this.$store.getters.summaryColumns, ['column', c])
         thisColumn.selected = true

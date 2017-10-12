@@ -103,7 +103,7 @@ const summarizeCols = function (data, summaryCols) {
   _.forEach(summaryCols, (col) => {
     summary[col.toUpperCase()] = _.sumBy(data, rec => rec[col])
   })
-  summary['NUMBER_OF_RECORDS'] = numberOfRecords
+  if (_.indexOf(summaryCols, 'NUMBER_OF_RECORDS') > -1) summary['NUMBER_OF_RECORDS'] = numberOfRecords
   return summary
 }
 
