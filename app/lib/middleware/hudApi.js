@@ -4,6 +4,7 @@ const moment = require('moment')
 const uuid = require('uuid/v4')
 const URL = require('url')
 const fema = require('./fema')
+const oauth2 = require('./oauth2')
 const DRDP_API_BASE = `${process.env.HUD_API_BASE_URL}/drdp/api/v1.0`
 const DRGR_API_BASE = `${process.env.HUD_API_BASE_URL}/drgr/api/v1.0`
 // const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
@@ -19,7 +20,7 @@ const LOCALE_TYPES = {
   tract: 'tracts'
 }
 
-const databaseFieldReference = {
+const DATABASEFIELDREFERENCE = {
   disaster: 'DSTER_ID',
   state: 'DMGE_STATE_CD',
   city: 'DMGE_CITY_NAME',
@@ -45,7 +46,7 @@ const requestOptions = function (url) {
     serviceRequestTimestamp: moment().toISOString()
   })
   return {
-    url,
+    `&${oauth2.getOAuth2TokenParam()}`,
     headers: {
       serviceConsumerData: JSON.stringify(consumerData)
     },
@@ -65,7 +66,7 @@ const getLocales = function(user, state, type) {
 }
 
 const decodeField = (fieldname) => {
-  return databaseFieldReference[fieldname]
+  return DATABASEFIELDREFERENCE[fieldname]
 }
 
 const getDisastersByLocale = function (state, localeType, locales) {
