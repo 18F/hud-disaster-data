@@ -40,29 +40,36 @@ const SERVICE_CONSUMER_DATA = {
     "tenantId":"DRDP",
     "locale":"English"
   }
-const requestOptions = function (url) {
+const requestOptions = function (url, scope) {
   const consumerData = _.assign(_.clone(SERVICE_CONSUMER_DATA), {
     auditCorrelationId: uuid(),
     serviceRequestTimestamp: moment().toISOString()
   })
-  return {
-    url: `${url}&${oauth2.getOAuth2TokenParam()}`,
-    headers: {
-      serviceConsumerData: JSON.stringify(consumerData)
-    },
-    strictSSL: false,
-    json: true
-  }
+  let newUrl = _.replace(url, 'undefined', 'FLANHQ')
+  return oauth2.getOAuth2TokenParam(scope).then(param => {
+    const appendParam = _.indexOf(newUrl, '?') > -1 ? `&${param}` : `?${param}`
+    let options = {
+      url: `${newUrl}${appendParam}`,
+      headers: {
+        serviceConsumerData: JSON.stringify(consumerData)
+      },
+      strictSSL: false,
+      json: true
+    }
+    return options
+  })
 }
 
 const getUser = function(userid) {
-  const opts = requestOptions(`${DRGR_API_BASE}/users/${userid}`)
-  return request.get(opts)
+  return requestOptions(`${DRGR_API_BASE}/users/${userid}`, 'DRGR').then(opts => {
+    return request.get(opts)
+  })
 }
 
 const getLocales = function(user, state, type) {
-  const opts = requestOptions(`${DRDP_API_BASE}/states/${state}/${LOCALE_TYPES[type]}`);
-  return request.get(opts)
+  return requestOptions(`${DRDP_API_BASE}/states/${state}/${LOCALE_TYPES[type]}`, 'DRDP').then(opts => {
+    return request.get(opts)
+  })
 }
 
 const decodeField = (fieldname) => {
@@ -74,20 +81,21 @@ const getDisastersByLocale = function (state, localeType, locales) {
     if (!state) reject(new Error('state is a required parameter'))
     let hudAPIURL = URL.parse(`${DRDP_API_BASE}/states/${state}/disasters`)
     if (_.isString(localeType) && _.isArray(locales) && !_.isEmpty(locales)) hudAPIURL.query = {localeType, locales: locales.join(',')}
-    const opts = requestOptions(URL.format(hudAPIURL))
-    request.get(opts)
-      .then(disasterIds => {
-        if (!_.isArray(disasterIds) || _.isEmpty(disasterIds)) return resolve([])
-        console.log('***** Got disasterIds:', disasterIds)
-        disasterIds = _.map(disasterIds, 'id')
-        const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
-        let filter = `state eq '${state}' and ${disasterCond}`
-        fema.getDisasters({filter}, (err, disasters) => {
-          if (err) return reject(err)
-          resolve(disasters)
+    return requestOptions(URL.format(hudAPIURL), 'DRDP').then(opts => {
+      request.get(opts)
+        .then(disasterIds => {
+          if (!_.isArray(disasterIds) || _.isEmpty(disasterIds)) return resolve([])
+          console.log('***** Got disasterIds:', disasterIds)
+          disasterIds = _.map(disasterIds, 'id')
+          const disasterCond = `(disasterNumber eq ${disasterIds.join(' or disasterNumber eq ')})`
+          let filter = `state eq '${state}' and ${disasterCond}`
+          fema.getDisasters({filter}, (err, disasters) => {
+            if (err) return reject(err)
+            resolve(disasters)
+          })
         })
-      })
-      .catch(reject)
+        .catch(reject)
+    })
   })
 }
 
@@ -103,13 +111,14 @@ const getSummaryRecords = function({state, localeType, locales, disasters, cols}
   }
   if (_.isArray(disasters) && !_.isEmpty(disasters)) hudAPIURL.query.disasters = disasters.join(',')
 
-  const opts = requestOptions(URL.format(hudAPIURL))
-  console.log('request opts:', opts)
+  return requestOptions(URL.format(hudAPIURL), 'DRDP').then(opts => {
+    console.log('request opts:', opts)
 
-  return new Promise((resolve, reject) => {
-    request.get(opts).then(response => {
-      resolve(_.pick(response, cols))
-    }).catch(reject)
+    return new Promise((resolve, reject) => {
+      request.get(opts).then(response => {
+        resolve(_.pick(response, cols))
+      }).catch(reject)
+    })
   })
 }
 
@@ -117,9 +126,10 @@ const getExport = function (disasterIds) {
   if (_.isEmpty(disasterIds)) return Promise.reject(new Error('disasterIds is required'))
   var query = `disasters=${disasterIds.join(',')}`
   const uri = `${DRDP_API_BASE}/applicants/export?${query}`
-  const opts = requestOptions(uri)
-  opts.simple = true
-  return request.get(opts)
+  return requestOptions(uri, 'DRDP').then(opts => {
+    opts.simple = true
+    return request.get(opts)
+  })
 }
 
 module.exports = { decodeField, getUser, getLocales, getDisastersByLocale, getSummaryRecords, getExport }
