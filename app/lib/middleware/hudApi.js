@@ -46,7 +46,7 @@ const requestOptions = function (url) {
     serviceRequestTimestamp: moment().toISOString()
   })
   return {
-    `&${oauth2.getOAuth2TokenParam()}`,
+    url: `${url}&${oauth2.getOAuth2TokenParam()}`,
     headers: {
       serviceConsumerData: JSON.stringify(consumerData)
     },
