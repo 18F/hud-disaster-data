@@ -11,6 +11,21 @@ const DRGR_API_BASE = `${process.env.HUD_API_BASE_URL}/drgr/api/v1.0`
 // console.log(`*** cert path: ${certPath} ***`)
 // const cert = fs.readFileSync(certPath)
 // console.log(`*** cert:\n ${cert} \n***`)
+const oauthTokens = {}
+
+const getTokens = Promise.all(
+  [
+    oauth2.getOAuth2TokenParam('DRGR'),
+    oauth2.getOAuth2TokenParam('DRDP')
+  ])
+  .then(token => {
+    _.forEach(token, rec => {
+      _.forEach(rec, (value, key) => {
+      oauthTokens[key] = value
+    })
+  })
+})
+
 const LOCALE_TYPES = {
   city: 'cities',
   county: 'counties',
@@ -40,24 +55,41 @@ const SERVICE_CONSUMER_DATA = {
     "tenantId":"DRDP",
     "locale":"English"
   }
+
+  const hudGet = function (url, scope) {
+   var opts = requestOptions(url, scope)
+   return new Promise((resolve, reject) => {
+     request.get(opts)
+       .then(resolve)
+       .catch(err => {
+         if (err.code === 400) {
+           return getTokens().then( result => {
+             opts = requestOptions(url, scope)
+             resolve(request.get(opts))
+           })
+         }
+         reject(err)
+       })
+   })
+  }
+
 const requestOptions = function (url, scope) {
   const consumerData = _.assign(_.clone(SERVICE_CONSUMER_DATA), {
     auditCorrelationId: uuid(),
     serviceRequestTimestamp: moment().toISOString()
   })
-  let newUrl = _.replace(url, 'undefined', 'FLANHQ')
-  return oauth2.getOAuth2TokenParam(scope).then(param => {
-    const appendParam = _.indexOf(newUrl, '?') > -1 ? `&${param}` : `?${param}`
-    let options = {
-      url: `${newUrl}${appendParam}`,
-      headers: {
-        serviceConsumerData: JSON.stringify(consumerData)
-      },
-      strictSSL: false,
-      json: true
-    }
-    return options
-  })
+  let newUrl = process.env.DRDP_TESTING === 'true' ? _.replace(url, 'undefined', 'FLANHQ') : url
+  const param = oauthTokens[scope]
+  const appendParam = _.indexOf(newUrl, '?') > -1 ? `&${param}` : `?${param}`
+  let options = {
+    url: `${newUrl}${appendParam}`,
+    headers: {
+      serviceConsumerData: JSON.stringify(consumerData)
+    },
+    strictSSL: false,
+    json: true
+  }
+  return Promise.resolve(options)
 }
 
 const getUser = function(userid) {

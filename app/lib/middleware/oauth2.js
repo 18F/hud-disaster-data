@@ -32,8 +32,6 @@ module.exports = {
       else reject(new Error(`${scope} is not valid.  Should be DRGR or DRDP`))
       let message = `&response_type=id_token%20token&save_consent=1&decision=Allow&scope=openid%20profile%20${chosenScope}&nonce=1234&client_id=${oAuth2ClientId}&redirect_uri=${redirectUri}`
       request(cookieReqOptions).then(results => {
-        console.log(`got results.tokenId: >> ${results.tokenId} <<\n\n\n`)
-        console.log(`got results: >> ${JSON.stringify(results)} <<\n\n\n`)
         let tokenReqOptions = {
           url: tokenUrl + message,
           method: 'POST',
@@ -44,16 +42,17 @@ module.exports = {
           rejectUnauthorized: false
         }
         request(tokenReqOptions).then(res => {
-          console.log(`res: ${res}`)
           reject(res)
         },
         err => {
           if (err.response.statusCode === 302) {
             const accessTokenResponse = _.get(err, 'response.headers.location')
             const accessTokenString = accessTokenResponse.split('#')[1].split('&')[0]
-            console.log(accessTokenString)
-            resolve(accessTokenString)
-          } else resolve(err)
+            let resObj = {}
+            resObj[scope] = accessTokenString
+            console.log('getOAuth2TokenParam returning: ' + JSON.stringify(resObj))
+            resolve(resObj)
+          } else reject(err)
         })
       })
     })
