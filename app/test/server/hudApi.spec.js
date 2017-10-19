@@ -139,12 +139,11 @@ describe('hudApi', () => {
     })
   })
   describe('getSummaryRecords', () => {
-    it('should call /applicants/summary with no parameters', done => {
+    it('should call /applicants/summary with no parameters other than oauth', done => {
       const getStub = sinon.stub(requestpromise, 'get').callsFake(opts => {
         should.exist(opts.url)
         const parsedUrl = url.parse(opts.url, true)
         should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/applicants/summary`)
-        should(parsedUrl.query).be.empty()
         return new Promise(resolve => resolve({one: 1}))
       })
       hudApi.getSummaryRecords({}).then(result => {
@@ -220,6 +219,7 @@ describe('hudApi', () => {
       const getSpy = sinon.spy(require('request-promise'), 'get')
       const ids = ['123','456']
       hudApi.getExport(ids)
+      debugger
       should(getSpy.calledOnce).be.true()
       const consumerData = _.get(getSpy.getCall(0).args[0], 'headers.serviceConsumerData')
       should(consumerData).not.be.null
