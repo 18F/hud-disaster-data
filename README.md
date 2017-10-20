@@ -59,9 +59,28 @@ This project includes a [.travis.yml](.travis.yml) file that will facilitate the
 
 | Repo                      | Branch updated | Build deployed to                   | URL
 |:--------------------------|:---------------|:------------------------------------|:------------------------------|
-| flexion/hud-disaster-data | sprint-*       | cloud.gov hud-disaster-data dev     |https://hud-disaster-data-dev.app.cloud.gov/#/ |
-| flexion/hud-disaster-data | master         | cloud.gov hud-disaster-data staging |https://hud-disaster-data-staging.app.cloud.gov/#/ |
-| 18F/hud-disaster-data     | master         | cloud.gov hud-disaster-data prod    | TBD  |
+| flexion/hud-disaster-data | sprint-*       | nowhere      |none |
+| flexion/hud-disaster-data | master         | nowhere  |none |
+| 18F/hud-disaster-data     | master         | nowhere    | TBD  |
+| http://gitlab/hhq/hud.dev/DRDP  | develop         |  dev    | https://hudappsint.hud.gov/femadataDev   |
+| http://gitlab/hhq/hud.dev/DRDP  | master         |  test    | https://hudappsint.hud.gov/femadataTest   |
+
+
+#### Config for application
+##### (app root directory)/env.json
+The contents of this file should be:
+```
+{
+  "COOKIE_SECRET": "secret!@#",
+  "HUD_API_BASE_URL": "https://esbapi-dev.hhq.hud.dev/hud-esb",    // URL for ESB Mule services for this environment
+  "HUD_OPENAM_BASE_URL": "https://esboam-dev.hhq.hud.dev/openam",  // URL for OAuth for this environment
+  "oamUserId": "XIDSetForThisEnvironment",
+  "oamPassword": "PasswordSetForThisEnvironment",
+  "DRDPOAuth2Scope": "urn:hud:esb:api:fema:get:disaster",
+  "DRGROAuth2Scope": "urn:hud:esb:api:drgr:get:user:authorization",
+  "oAuth2ClientId": "DrdpOAuth2Client"
+}
+```
 
 For more information about the deploy piece read [CG_DEPLOY](./CG_DEPLOY.md)
 
