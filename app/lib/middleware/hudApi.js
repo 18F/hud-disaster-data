@@ -57,8 +57,8 @@ const SERVICE_CONSUMER_DATA = {
 }
 
 const hudGet = function (url, scope) {
-  var opts = requestOptions(url, scope)
   return new Promise((resolve, reject) => {
+    let opts = requestOptions(url, scope)
     request.get(opts)
     .then(resolve)
     .catch(err => {
@@ -89,7 +89,7 @@ const requestOptions = function (url, scope) {
     strictSSL: false,
     json: true
   }
-  return Promise.resolve(options)
+  return options
 }
 
 const getUser = function (userid) {
