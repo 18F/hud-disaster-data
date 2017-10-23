@@ -58,7 +58,6 @@ describe('/states/:stateId/:localeType', function () {
     })
     request(app).get('/api/states/ia/congrdist')
     .expect(function (res) {
-      debugger
       const error = res.error
       error.message.should.be.equal('cannot GET /api/states/ia/congrdist (500)')
       stub.restore()

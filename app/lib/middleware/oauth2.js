@@ -31,7 +31,7 @@ module.exports = {
       else if (scope === 'DRDP') chosenScope = DRDPOAuth2Scope
       else reject(new Error(`${scope} is not valid.  Should be DRGR or DRDP`))
       let message = `&response_type=id_token%20token&save_consent=1&decision=Allow&scope=openid%20profile%20${chosenScope}&nonce=1234&client_id=${oAuth2ClientId}&redirect_uri=${redirectUri}`
-      request(cookieReqOptions).then(results => {
+      request.post(cookieReqOptions).then(results => {
         let tokenReqOptions = {
           url: tokenUrl + message,
           method: 'POST',
@@ -41,7 +41,7 @@ module.exports = {
           },
           rejectUnauthorized: false
         }
-        request(tokenReqOptions).then(res => {
+        request.post(tokenReqOptions).then(res => {
           reject(res)
         },
         err => {
