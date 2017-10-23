@@ -99,7 +99,7 @@ describe('Message component', function () {
     vm.hideMessage()
     expect(mutations.resetStatus.called).to.be.equal(true)
   })
-  // TODO: Put this in a helper
+  // TODO: Put this in a helper id:7 gh:80
   function dispatchEvent ($el, name, opts) {
     var event = new Event(name, {
       'bubbles': true,
