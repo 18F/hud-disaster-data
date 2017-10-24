@@ -7,24 +7,15 @@ const fema = require('./fema')
 const oauth2 = require('./oauth2')
 const DRDP_API_BASE = `${process.env.HUD_API_BASE_URL}/drdp/api/v1.0`
 const DRGR_API_BASE = `${process.env.HUD_API_BASE_URL}/drgr/api/v1.0`
-// const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.cer')
-// console.log(`*** cert path: ${certPath} ***`)
-// const cert = fs.readFileSync(certPath)
-// console.log(`*** cert:\n ${cert} \n***`)
-const oauthTokens = {}
+let oauthTokens = {}
 
-const getTokens = Promise.all(
+const getTokens = () => {
+  return Promise.all(
   [
     oauth2.getOAuth2TokenParam('DRGR'),
     oauth2.getOAuth2TokenParam('DRDP')
   ])
-  .then(token => {
-    _.forEach(token, rec => {
-      _.forEach(rec, (value, key) => {
-        oauthTokens[key] = value
-      })
-    })
-  })
+}
 
 const LOCALE_TYPES = {
   city: 'cities',
@@ -62,8 +53,9 @@ const hudGet = function (url, scope) {
     request.get(opts)
     .then(resolve)
     .catch(err => {
-      if (err.code === 400) {
+      if (err.statusCode === 400) {
         return getTokens().then(result => {
+          oauthTokens = result
           opts = requestOptions(url, scope)
           resolve(request.get(opts))
         })
@@ -79,7 +71,7 @@ const requestOptions = function (url, scope) {
     serviceRequestTimestamp: moment().toISOString()
   })
   let newUrl = process.env.DRDP_TESTING === 'true' ? _.replace(url, 'undefined', 'FLANHQ') : url
-  const param = oauthTokens[scope]
+  const param = _.get(_.find(oauthTokens, {scope}), 'param')
   const appendParam = _.indexOf(newUrl, '?') > -1 ? `&${param}` : `?${param}`
   let options = {
     url: `${newUrl}${appendParam}`,
