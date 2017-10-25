@@ -9,6 +9,12 @@ const DRDPOAuth2Scope = process.env.DRDPOAuth2Scope
 const DRGROAuth2Scope = process.env.DRGROAuth2Scope
 const oAuth2ClientId = process.env.oAuth2ClientId
 const redirectUri = 'http://localhost:8000'
+// const path = require('path')
+// const fs = require('fs')
+// const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.pem')
+// console.log(`*** cert path: ${certPath} ***`)
+// const cert = fs.readFileSync(certPath)
+// console.log(`*** cert:\n ${cert} \n***`)
 
 let cookieReqOptions = {
   url: cookieUrl,
@@ -18,7 +24,7 @@ let cookieReqOptions = {
     'X-OpenAM-Username': oamUserId,
     'X-OpenAM-Password': oamPassword
   },
-  rejectUnauthorized: false,
+  strictSSL: false,
   simple: true,
   json: true
 }
@@ -39,7 +45,7 @@ module.exports = {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Cookie': `iPlanetDirectoryPro=${results.tokenId}`
           },
-          rejectUnauthorized: false
+          strictSSL: false
         }
         request.post(tokenReqOptions).then(res => {
           reject(res)
@@ -48,8 +54,7 @@ module.exports = {
           if (err.response.statusCode === 302) {
             const accessTokenResponse = _.get(err, 'response.headers.location')
             const accessTokenString = accessTokenResponse.split('#')[1].split('&')[0]
-            let resObj = {}
-            resObj[scope] = accessTokenString
+            let resObj = {scope, param: accessTokenString}
             console.log('getOAuth2TokenParam returning: ' + JSON.stringify(resObj))
             resolve(resObj)
           } else reject(err)
