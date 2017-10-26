@@ -9,12 +9,12 @@ const DRDPOAuth2Scope = process.env.DRDPOAuth2Scope
 const DRGROAuth2Scope = process.env.DRGROAuth2Scope
 const oAuth2ClientId = process.env.oAuth2ClientId
 const redirectUri = 'http://localhost:8000'
-// const path = require('path')
-// const fs = require('fs')
-// const certPath = path.join(__dirname,'..','..','certs','esbapi-dev.hhq.hud.dev.pem')
-// console.log(`*** cert path: ${certPath} ***`)
-// const cert = fs.readFileSync(certPath)
-// console.log(`*** cert:\n ${cert} \n***`)
+const path = require('path')
+const fs = require('fs')
+const certPath = path.join(__dirname,'..','..','certs','HUD-CA.pem')
+console.log(`*** cert path: ${certPath} ***`)
+const ca = fs.readFileSync(certPath)
+console.log(`*** ca:\n ${ca} \n***`)
 
 let cookieReqOptions = {
   url: cookieUrl,
@@ -24,9 +24,10 @@ let cookieReqOptions = {
     'X-OpenAM-Username': oamUserId,
     'X-OpenAM-Password': oamPassword
   },
-  strictSSL: false,
+  strictSSL: true,
   simple: true,
-  json: true
+  json: true,
+  ca
 }
 
 module.exports = {
@@ -45,7 +46,8 @@ module.exports = {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Cookie': `iPlanetDirectoryPro=${results.tokenId}`
           },
-          strictSSL: false
+          strictSSL: true,
+          ca
         }
         request.post(tokenReqOptions).then(res => {
           reject(res)
