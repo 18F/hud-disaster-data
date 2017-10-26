@@ -36,7 +36,7 @@ describe('middleware/oauth2', () => {
       oauth2.getOAuth2TokenParam('DRGR')
       .then(
         success => {
-          should(success.DRGR).be.equal('MyAccess')
+          should(success.param).be.equal('MyAccess')
           done()
           requestStub.restore()
         })
