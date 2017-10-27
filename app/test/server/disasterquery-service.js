@@ -3,9 +3,24 @@ const request = require('supertest')
 const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
 const moment = require('moment')
+const sinon = require('sinon')
 
 describe('/api/disasterquery/:qry', function () {
   this.timeout(10000)
+
+  it('should return an empty array when the user has no disasters and is not Hud HQ', (done) => {
+    const getUserStub = sinon.stub(require('../../lib/middleware/hudApi'), 'getUser').resolves({'login': 'T071GXX', 'disasterids': [], 'type': 'Grantee', 'hq': false})
+    request(app).get('/api/disasterquery/DR')
+    .set('dr-userid', 'T071GXX')
+    .expect(function (res) {
+      const body = res.body
+      body.should.be.an.Array()
+      body.length.should.be.equal(0)
+      getUserStub.restore()
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
 
   it('should return disasters with a disaster type matching the first two characters in the qry path parameter', (done) => {
     request(app).get('/api/disasterquery/DR')
