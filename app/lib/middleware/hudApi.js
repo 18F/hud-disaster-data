@@ -118,8 +118,8 @@ const getDisastersByLocale = function (state, localeType, locales) {
         if (err) return reject(err)
         resolve(disasters)
       })
-      .catch(reject)
     })
+    .catch(reject)
   })
 }
 
