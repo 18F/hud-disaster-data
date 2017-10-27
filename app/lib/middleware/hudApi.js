@@ -5,8 +5,12 @@ const uuid = require('uuid/v4')
 const URL = require('url')
 const fema = require('./fema')
 const oauth2 = require('./oauth2')
-const DRDP_API_BASE = `${process.env.HUD_API_BASE_URL}/drdp/api/v1.0`
+const DRDP_API_BASE = `${process.env.HUD_API_BASE_URL}/drddp/api/v1.0`
 const DRGR_API_BASE = `${process.env.HUD_API_BASE_URL}/drgr/api/v1.0`
+const path = require('path')
+const fs = require('fs')
+const certPath = path.join(__dirname,'..','..','certs','HUD-CA.pem')
+const ca = fs.readFileSync(certPath)
 let oauthTokens = {}
 
 const getTokens = () => {
@@ -57,7 +61,9 @@ const hudGet = function (url, scope) {
         return getTokens().then(result => {
           oauthTokens = result
           opts = requestOptions(url, scope)
-          resolve(request.get(opts))
+          resolve(request.get(opts).catch(error => {
+            reject(error)
+          }))
         })
       }
       reject(err)
@@ -78,8 +84,9 @@ const requestOptions = function (url, scope) {
     headers: {
       serviceConsumerData: JSON.stringify(consumerData)
     },
-    strictSSL: false,
-    json: true
+    strictSSL: true,
+    json: true,
+    ca
   }
   return options
 }

@@ -12,9 +12,9 @@ const redirectUri = 'http://localhost:8000'
 const path = require('path')
 const fs = require('fs')
 const certPath = path.join(__dirname,'..','..','certs','HUD-CA.pem')
-console.log(`*** cert path: ${certPath} ***`)
+// console.log(`*** cert path: ${certPath} ***`)
 const ca = fs.readFileSync(certPath)
-console.log(`*** ca:\n ${ca} \n***`)
+// console.log(`*** ca:\n ${ca} \n***`)
 
 let cookieReqOptions = {
   url: cookieUrl,
