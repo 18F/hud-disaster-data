@@ -50,7 +50,7 @@ describe('middleware/auth', () => {
       })
     })
     it(`should set the session user and user in req`, (done) => {
-      const grantee = { "type": "Grantee" }
+      const grantee = { 'type': 'Grantee' }
       var req = { headers: { 'dr-userid': 'T071GA' },
         session: {}
       }
@@ -69,13 +69,17 @@ describe('middleware/auth', () => {
         session: {}
       }
       const getUserStub = sinon.stub(hudApi, 'getUser').resolves(grantee)
-      const sendStatus = sinon.stub().callsFake((status) => {
-        should(status).be.equal(401)
-        getUserStub.restore()
-        done()
+      const status = sinon.stub().callsFake((statusNbr) => {
+        should(statusNbr).be.equal(401)
+        return { send: function (str) {
+          should(str).startWith('You are not authorized to access the Disaster Recovery Data Portal')
+          getUserStub.restore()
+          done()
+        }
+        }
       })
       const next = sinon.spy()
-      const res = { sendStatus }
+      const res = { status }
       auth.authenticate(req, res, next)
     })
   })
