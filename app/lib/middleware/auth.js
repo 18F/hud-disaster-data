@@ -23,7 +23,13 @@ module.exports = {
     }
     hudApi.getUser(userId)
       .then(user => {
-        if (!user || user.type === 'Unauthorized') return res.sendStatus(401)
+        if (!user || user.type === 'Unauthorized') {
+          let unAuthString = `You are not authorized to access the Disaster Recovery Data Portal export page.<br><br>`
+          unAuthString += `If you believe you should have access, please contact HUD's Office of Community Planning and Development, Disaster Recovery and Special Issues Division.<br><br>`
+          unAuthString += `For more information: <a href='https://www.hudexchange.info/contact-us/#'>https://www.hudexchange.info/contact-us/#</a>`
+          return res.status(401)
+          .send(unAuthString)
+        }
         req.session.user = user
         req.user = user
         next()
