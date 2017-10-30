@@ -22,9 +22,24 @@ describe('/api/disasterquery/:qry', function () {
     .expect('Content-Type', /json/, done)
   })
 
+  it('should return results when the user has disasters and is Hud HQ', (done) => {
+    const getUserStub = sinon.stub(require('../../lib/middleware/hudApi'), 'getUser').resolves({'login': 'T071GXX', 'disasterids': [4272], 'type': 'HUD', 'hq': true})
+    request(app).get('/api/disasterquery/DR')
+    .set('dr-userid', 'T071GXX')
+    .expect(function (res) {
+      const body = res.body
+      body.should.be.an.Array()
+      body.length.should.be.aboveOrEqual(1)
+      getUserStub.restore()
+    })
+    .expect(200)
+    .expect('Content-Type', /json/, done)
+  })
+
   it('should return disasters with a disaster type matching the first two characters in the qry path parameter', (done) => {
     request(app).get('/api/disasterquery/DR')
     .expect(function (res) {
+      debugger
       const body = res.body
       body.should.be.an.Array()
       body[0].should.be.an.Object().and.have.property('disasterType').which.is.equal('DR')
