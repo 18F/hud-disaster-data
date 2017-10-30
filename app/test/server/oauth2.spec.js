@@ -20,7 +20,7 @@ describe('middleware/oauth2', () => {
           done()
         })
     })
-    it(`should get token for authentication and use it get an access token`, (done) => {
+    it(`should get a DRGR token for authentication and use it get an access token`, (done) => {
       let requestStub = sinon.stub(requestpromise, 'post').callsFake(opts => {
         should(opts.url).exist
         const parsedUrl = url.parse(opts.url, true)
@@ -34,6 +34,31 @@ describe('middleware/oauth2', () => {
         }
       })
       oauth2.getOAuth2TokenParam('DRGR')
+      .then(
+        success => {
+          should(success.param).be.equal('MyAccess')
+          done()
+          requestStub.restore()
+        })
+      .catch(
+        failure => {
+          console.log('should not make it here!!')
+        })
+    })
+    it(`should get a DRDP token for authentication and use it get an access token`, (done) => {
+      let requestStub = sinon.stub(requestpromise, 'post').callsFake(opts => {
+        should(opts.url).exist
+        const parsedUrl = url.parse(opts.url, true)
+        const path = parsedUrl.path
+        if (path === '/openam/json/authenticate?realm=/') {
+          const tokenId = 'MyToken'
+          return new Promise(resolve => resolve({tokenId}))
+        } else {
+          const err = {response: {headers: {location: 'somthing#MyAccess&otherParms'}, statusCode: 302}}
+          return new Promise((resolve, reject) => reject(err))
+        }
+      })
+      oauth2.getOAuth2TokenParam('DRDP')
       .then(
         success => {
           should(success.param).be.equal('MyAccess')
