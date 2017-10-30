@@ -215,7 +215,7 @@ describe('hudApi', () => {
   })
 
   describe('getExport', () => {
-    it('should set the headers required for authentication', () => {
+    it('should set the headers required for authentication', (done) => {
       const getSpy = sinon.spy(require('request-promise'), 'get')
       const ids = ['123','456']
       hudApi.getExport(ids)
@@ -223,6 +223,13 @@ describe('hudApi', () => {
       const consumerData = _.get(getSpy.getCall(0).args[0], 'headers.serviceConsumerData')
       should(consumerData).not.be.null
       getSpy.restore()
+      done()
+    })
+
+    it('should return error if no disasters passed in', (done) => {
+      const emptyDisasterArray = []
+      hudApi.getExport(emptyDisasterArray).should.be.rejectedWith(Error, { message: 'disasterIds is required' })
+      done()
     })
   })
 })
