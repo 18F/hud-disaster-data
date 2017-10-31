@@ -1,10 +1,10 @@
 const hudApi = require('./hudApi')
 const _ = require('lodash')
 const USERS = {
-  GRANTEE: {"login":"T071GA","disasterids": [ "1606", "1791", "1999", "4029", "4223", "4245", "4266", "4269", "4272"], "type":"Grantee","hq":false},
-  GRANTEE2: {"login":"T071GA","disasterids": [ "1606", "1791"], "type":"Grantee","hq":false},
-  GRANTEE_NO_DISASTERS: {"login":"T071GA","disasterids": [], "type":"Grantee","hq":false},
-  HUD_HQ: {"login":"T071GA","disasterids": [], "type":"HUD","hq":true}
+  GRANTEE: {'login': 'T071GA', 'disasterids': ['1606', '1791', '1999', '4029', '4223', '4245', '4266', '4269', '4272'], 'type': 'Grantee', 'hq': false},
+  GRANTEE2: {'login': 'T071GA', 'disasterids': ['1606', '1791'], 'type': 'Grantee', 'hq': false},
+  GRANTEE_NO_DISASTERS: {'login': 'T071GA', 'disasterids': [], 'type': 'Grantee', 'hq': false},
+  HUD_HQ: {'login': 'T071GA', 'disasterids': [], 'type': 'HUD', 'hq': true}
 }
 
 module.exports = {
@@ -34,9 +34,21 @@ module.exports = {
         req.user = user
         next()
       })
-      .catch(next)
+      .catch(err => {
+        if (err.statusMessage === 'Access Token not valid') {
+          let errString = `You access to the Disaster Recovery Data Portal export page is using an invalid token.<br><br>`
+          errString += `This is probably due to your session timing out.  Please refresh and log in again.`
+          return res.status(err.statusCode)
+          .send(errString)
+        } else {
+          let errString = `When performing authorization against DRGR, you received the following error: ${err.statusMessage}<br><br>`
+          errString += `Please contact HUD's help desk.`
+          return res.status(err.statusCode)
+          .send(errString)
+        }
+      })
   },
-  isHUDHQUser: function(req) {
+  isHUDHQUser: function (req) {
     return (req.user.type === 'HUD' && req.user.hq === true)
   },
   filterAuthorizedDisasterIds: function (req, disasterids) {
