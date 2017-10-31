@@ -9,13 +9,14 @@ const USERS = {
 
 module.exports = {
   authenticate: function (req, res, next) {
-    if (_.get(req, 'session.user')) {
+    // TODO: store the user in the session and expire after 1 min
+    let userId = req.headers['dr-userid']
+    const sessionUser = _.get(req, 'session.user')
+    if (sessionUser && sessionUser.login === userId) {
       req.user = req.session.user
       // console.log('user:', req.user)
       return next()
     }
-    // TODO: store the user in the session and expire after 1 min
-    let userId = req.headers['dr-userid']
     if (!userId && process.env.DRDP_LOCAL) {
       req.session.user = req.user
       req.user = USERS.GRANTEE
@@ -34,19 +35,7 @@ module.exports = {
         req.user = user
         next()
       })
-      .catch(err => {
-        if (err.statusMessage === 'Access Token not valid') {
-          let errString = `You access to the Disaster Recovery Data Portal export page is using an invalid token.<br><br>`
-          errString += `This is probably due to your session timing out.  Please refresh and log in again.`
-          return res.status(err.statusCode)
-          .send(errString)
-        } else {
-          let errString = `When performing authorization against DRGR, you received the following error: ${err.statusMessage}<br><br>`
-          errString += `Please contact HUD's help desk.`
-          return res.status(err.statusCode)
-          .send(errString)
-        }
-      })
+      .catch(next)
   },
   isHUDHQUser: function (req) {
     return (req.user.type === 'HUD' && req.user.hq === true)

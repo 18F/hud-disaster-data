@@ -40,12 +40,13 @@ describe('middleware/auth', () => {
   describe('authenticate', () => {
     it(`should set the user to the session user in req and return`, (done) => {
       var req = {
-        session: {user: 'Somebody'},
-        user: 'nobody'
+        session: {user: {login: 'Somebody'}},
+        user: 'nobody',
+        headers: {'dr-userid': 'Somebody'}
       }
       auth.authenticate(req, null, function () {
-        should(req.session.user).be.equal('Somebody')
-        should(req.user).be.equal('Somebody')
+        should(req.session.user.login).be.equal('Somebody')
+        should(req.user.login).be.equal('Somebody')
         done()
       })
     })
