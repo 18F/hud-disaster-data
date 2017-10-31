@@ -109,7 +109,7 @@ const getDisastersByLocale = function (state, localeType, locales) {
   return new Promise((resolve, reject) => {
     if (!state) reject(new Error('state is a required parameter'))
     let hudAPIURL = URL.parse(`${DRDP_API_BASE}/states/${state}/disasters`)
-    if (_.isString(localeType) && _.isArray(locales) && !_.isEmpty(locales)) hudAPIURL.query = {localeType, locales: locales.join(',')}
+    if (_.isString(localeType) && _.isString(locales) && !_.isEmpty(locales)) hudAPIURL.query = {localeType, locales}
     return hudGet(URL.format(hudAPIURL), 'DRDP').then(disasterIds => {
       if (!_.isArray(disasterIds) || _.isEmpty(disasterIds)) return resolve([])
       console.log('***** Got disasterIds:', disasterIds)
