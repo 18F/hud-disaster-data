@@ -50,14 +50,14 @@ describe('hudApi', () => {
       const disasters = []
       const state = 'CO'
       const type = 'city'
-      const locales = ['Nowhere', 'Boondocks', 'Ghosttown']
+      const locales = 'Nowhere,Boondocks,Ghosttown'
 
       const getStub = sinon.stub(requestpromise, 'get').callsFake(opts => {
         should.exist(opts.url)
         const parsedUrl = url.parse(opts.url, true)
         should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/states/${state}/disasters`)
         should(parsedUrl.query.localeType).equal(type)
-        should(parsedUrl.query.locales).equal(locales.join(','))
+        should(parsedUrl.query.locales).equal(locales)
         const disasterObjects = _.map(disasters, disaster => { return {id: disaster} })
         return new Promise(resolve => resolve(disasterObjects))
       })
@@ -73,7 +73,7 @@ describe('hudApi', () => {
       const disasters = ['12345', '23456']
       const state = 'CO'
       const type = 'city'
-      const locales = ['Boulder', 'Fort Collins', 'Denver']
+      const locales = 'Boulder,Fort Collins,Denver'
 
       const getDisastersStub = sinon.stub(fema, 'getDisasters').callsFake(function ({filter, orderBy, top}, cb) {
         should(/CO/.test(filter)).be.true()
@@ -86,7 +86,7 @@ describe('hudApi', () => {
         const parsedUrl = url.parse(opts.url, true)
         should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/states/${state}/disasters`)
         should(parsedUrl.query.localeType).equal(type)
-        should(parsedUrl.query.locales).equal(locales.join(','))
+        should(parsedUrl.query.locales).equal(locales)
         const disasterObjects = _.map(disasters, disaster => {return {id:disaster}})
         return new Promise(resolve => resolve(disasterObjects))
       })
@@ -104,7 +104,7 @@ describe('hudApi', () => {
       const disasters = ['12345', '23456']
       const state = 'CO'
       const type = 'city'
-      const locales = ['Boulder', 'Fort Collins', 'Denver']
+      const locales = 'Boulder,Fort Collins,Denver'
 
       const getDisastersStub = sinon.stub(fema, 'getDisasters').callsFake(function ({filter, orderBy, top}, cb) {
         should(/CO/.test(filter)).be.true()
@@ -117,7 +117,7 @@ describe('hudApi', () => {
         const parsedUrl = url.parse(opts.url, true)
         should(parsedUrl.pathname).equal(`/hud-esb/drdp/api/v1.0/states/${state}/disasters`)
         should(parsedUrl.query.localeType).equal(type)
-        should(parsedUrl.query.locales).equal(locales.join(','))
+        should(parsedUrl.query.locales).equal(locales)
         const disasterObjects = _.map(disasters, disaster => {return {id:disaster}})
         return new Promise(resolve => resolve(disasterObjects))
       })
