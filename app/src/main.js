@@ -32,8 +32,10 @@ Axios.interceptors.response.use(function (response) {
   console.log('returning : ' + JSON.stringify(response))
   return response
 }, function (error) {
-  if (error.response && error.response.data && error.response.data.location){
+  debugger
+  if (error.response && error.response.data && error.response.data.location) {
     window.location = error.response.data.location
+    return Promise.reject(error)
   } else {
     console.log('returning : ' + JSON.stringify(error))
     return Promise.reject(error)

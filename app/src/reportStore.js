@@ -175,6 +175,7 @@ export const actions = {
         commit('resetStatus')
         resolve('completed successfully')
       }).catch(err => {
+        debugger
         console.log(`Error fetching disaster list: ${err}`)
         commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
         reject(err)
