@@ -39,7 +39,6 @@ describe('/api/disasterquery/:qry', function () {
   it('should return disasters with a disaster type matching the first two characters in the qry path parameter', (done) => {
     request(app).get('/api/disasterquery/DR')
     .expect(function (res) {
-      debugger
       const body = res.body
       body.should.be.an.Array()
       body[0].should.be.an.Object().and.have.property('disasterType').which.is.equal('DR')

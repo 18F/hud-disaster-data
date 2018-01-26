@@ -158,7 +158,6 @@ These are the vuex actions
 export const actions = {
   loadFilteredDisasters: function ({ commit, state }) {
     return new Promise((resolve, reject) => {
-      debugger
       let stateCode = state.stateFilter ? state.stateFilter.code : null
       if (!stateCode) return commit('setStatus', {type: 'error', scope: 'app', msg: 'State not specified!'})
       let localeType = state.geographicLevel ? state.geographicLevel.code.toLowerCase() : null
@@ -168,7 +167,6 @@ export const actions = {
       let querystring = `/api/states/${stateCode}/disasters${query}`
 
       axios.get(querystring).then(response => {
-        debugger
         console.log(`calling updateReportDisasterList with ${JSON.stringify(_.map(response.data, d => d.disasterNumber))}`)
         commit('updateReportDisasterList', response.data)
         if (response.data && response.data.length === 0) {
@@ -177,7 +175,6 @@ export const actions = {
         commit('resetStatus')
         resolve('completed successfully')
       }).catch(err => {
-        debugger
         console.log(`Error fetching disaster list: ${err}`)
         commit('setStatus', {type: 'error', scope: 'app', msg: 'HUD disaster data is unavailable at this time.  Try again later or contact your administrator.'})
         reject(err)
