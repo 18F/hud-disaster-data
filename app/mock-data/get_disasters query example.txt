@@ -39,7 +39,7 @@ results for get_disasters: stateid => 'TX', localetype => 'township', localevalu
 4223
 
 
-results for get_disasters: stateid => 'TX', localetype => 'tract', localevalues => 'Texas City-League City,Corpus Christi', results => returnVal
+results for get_disasters: stateid => 'TX', localetype => 'tract', localevalues => '724500', '542700', results => returnVal
 
 1791
 4223

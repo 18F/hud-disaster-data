@@ -1,4 +1,4 @@
-results for fema_data.get_locales(): 'TX','county','ALL',returnVal
+results for fema_data.get_locales(): 'TX','county', NULL,returnVal
 
 Galveston (County)
 Harris (County)
@@ -35,12 +35,12 @@ results for fema_data.get_locales(): 'IA', 'congrdist', '4187,4289', returnVal
 1903115
 
 
-results for fema_data.get_locales(): stateid => 'WI', localetype => 'congrdist', disasterid => 'ALL', results => returnVal
+results for fema_data.get_locales(): stateid => 'WI', localetype => 'congrdist', disasterid => NULL, results => returnVal
 
 5502115
 
 
-results for fema_data.get_locales(): 'TX', 'zipcode', '77550,77546', returnVal
+results for fema_data.get_locales(): 'TX', 'zipcode', '1791,4223', returnVal
 
 77002
 77493
@@ -49,12 +49,12 @@ results for fema_data.get_locales(): 'TX', 'zipcode', '77550,77546', returnVal
 78401
 
 
-results for fema_data.get_locales(): stateid => 'WI', localetype => 'zipcode', disasterid => 'ALL', results => returnVal
+results for fema_data.get_locales(): stateid => 'WI', localetype => 'zipcode', disasterid => NULL, results => returnVal
 
 77550
 
 
-results for fema_data.get_locales(): 'TX', 'township', '77550,77546', returnVal
+results for fema_data.get_locales(): 'TX', 'township', '1791,4223', returnVal
 
 Corpus Christi
 Galveston
@@ -62,12 +62,12 @@ Houston
 Texas City-League City
 
 
-results for fema_data.get_locales(): stateid => 'WI', localetype => 'township', disasterid => 'ALL', results => returnVal
+results for fema_data.get_locales(): stateid => 'WI', localetype => 'township', disasterid => NULL, results => returnVal
 
 Madison
 
 
-results for fema_data.get_locales(): 'TX', 'tract', '77550,77546', returnVal
+results for fema_data.get_locales(): 'TX', 'tract', '1791,4223', returnVal
 
 100000
 1100  
@@ -76,7 +76,7 @@ results for fema_data.get_locales(): 'TX', 'tract', '77550,77546', returnVal
 724500
 
 
-results for fema_data.get_locales(): stateid => 'WI', localetype => 'tract', disasterid => 'ALL', results => returnVal
+results for fema_data.get_locales(): stateid => 'WI', localetype => 'tract', disasterid => NULL, results => returnVal
 
 724500
 
