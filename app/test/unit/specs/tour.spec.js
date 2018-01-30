@@ -193,7 +193,7 @@ describe('tour', () => {
   })
   describe('enter-search', () => {
     describe('show', () => {
-      it(`should give focus to #search-text and select it's contents`, () => {
+      it(`should give focus to #search-text and select its contents`, () => {
         let focus = sinon.stub()
         let select = sinon.stub()
         let stub = sinon.stub(document, 'getElementById').callsFake(() => { return {focus, select} })
