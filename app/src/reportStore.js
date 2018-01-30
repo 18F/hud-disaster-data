@@ -207,6 +207,12 @@ export const actions = {
 
   loadReportData: function ({ commit }, allFilters) {
     return new Promise((resolve, reject) => {
+      if (!allFilters.states) {
+        commit('updateReportData', {})
+        commit('setShowReport', false)
+        commit('setShowReportSpinner', false)
+        return
+      }
       let formattedQuery = 'cols=' + _.map(conversionList, c => c.column).join(',')
       commit('setShowReportSpinner', true)
       _.forIn(allFilters, (value, key) => {

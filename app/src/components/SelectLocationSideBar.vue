@@ -84,7 +84,7 @@
                       button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                         icon(name='fa-times')
           div.rp-action-buttons
-            button.usa-button.alt-button(type="button" @click="clearAll" title="Clear all report parameters button")
+            button.usa-button.alt-button(type="button" @click="clearAll"  :disabled="disableClear" title="Clear all report parameters button")
               | Clear
             button.usa-button.green(type="button" @click="pushReportUrl" :disabled="disableCreate" title="Create report button")
               | Create Report
@@ -127,6 +127,7 @@ export default {
       disableLocales: true,
       disableDisasters: true,
       disableCreate: true,
+      disableClear: true,
       states: [
         { name: 'Alabama', code: 'AL' }, { name: 'Alaska', code: 'AK' }, { name: 'American Samoa', code: 'AS' },
         { name: 'Arizona', code: 'AZ' }, { name: 'Arkansas', code: 'AR' }, { name: 'California', code: 'CA' }, { name: 'Colorado', code: 'CO' },
@@ -253,7 +254,7 @@ export default {
         level: ''
       }
       this.$emit('updateSummaryDisplay', summaryDisplayData)
-      this.$store.dispatch('loadReportData', { allFilters: {states: 'NOMATCH'} })
+      this.$store.dispatch('loadReportData', {})
       // if (this.openDialogue()) {
       //   this.reset()
       // }
@@ -269,6 +270,7 @@ export default {
     },
 
     reset () {
+      this.$store.commit('setShowReportSpinner', false)
       this.clearStateSelected()
       this.setLevel(null)
       this.clearDisaster()
@@ -281,10 +283,12 @@ export default {
         // disable all the things
         this.disableLocales = true
         this.disableCreate = true
+        this.disableClear = true
         this.disableDisasters = true
         this.disableLevels = true
       } else {
         this.disableCreate = false
+        this.disableClear = false
         this.disableDisasters = false
         this.disableLevels = false
         if (!this.geographicLevelSelected) {
