@@ -1,0 +1,40 @@
+
+
+results for get_summary_records: stateid => 'TX', results => returnVal
+
+NUMBER_OF_RECORDS    HSHD_SIZE_CNT    DPNDNT_CNT    INCM_AMNT    HZRD_INSNC_AMNT    FLOOD_INSNC_AMNT    OTHER_INSNC_AMNT    REAL_PROP_LOSS_AMNT    FLOOD_DMGE_AMNT    FNDTN_DMGE_AMNT    ROOF_DMGE_AMNT    TMP_SHLTR_RCVD_AMNT    RENT_ASSTN_AMNT    REPR_AMNT    RPMT_AMNT    SBA_RCVD_AMNT    PRSNL_PROP_ASSTN_AMNT    OTHER_ASSTN_AMNT    TOTAL_DMGE_AMNT    TOTAL_ASSTN_AMNT    HUD_UNMT_NEED_AMNT
+3962    1954    84124000    5133124.48    1976808.43    11889.66    5133124.48    251000    2150000    2150000    31944.65    868223.81    2452271    54814        884990.99    105741.19    1498232.24    1476944.61    21287.63    1004
+
+
+results for get_summary_records: having no disasterid is equiv to saying all, stateid => 'WI', localetype => 'county',   localevalues equiv to 'Dane (County),Polk (County)', results => returnVal
+
+NUMBER_OF_RECORDS    TOTAL_DMGE_AMNT    TOTAL_ASSTN_AMNT    HUD_UNMT_NEED_AMNT
+100    123123.32    120753.85    2369.47
+
+
+results for get_summary_records: disasterid equiv to '4272,1791', results => returnVal
+
+NUMBER_OF_RECORDS    TOTAL_DMGE_AMNT    TOTAL_ASSTN_AMNT    HUD_UNMT_NEED_AMNT
+620    975582.65    963528.56    12054.09
+
+
+results for get_summary_records: having no disasterid is equiv to saying all, stateid => 'TX', localetype => 'zipcode',   localevalues equiv to '77002','77493', results => returnVal
+
+NUMBER_OF_RECORDS    TOTAL_DMGE_AMNT    TOTAL_ASSTN_AMNT    HUD_UNMT_NEED_AMNT
+299    232549.49    225320.17    7229.32
+
+
+results for get_summary_records: having no disasterid is equiv to saying all, localetype => 'township',   localevalues equiv to 'Des Moines','Cedar Rapids', results => returnVal
+
+NUMBER_OF_RECORDS    TOTAL_DMGE_AMNT    TOTAL_ASSTN_AMNT    HUD_UNMT_NEED_AMNT
+85    146076.4    145850.54    225.86
+
+
+results for get_summary_records: having no disasterid is equiv to saying all, localetype => 'tract',   localevalues equiv to '1100  ', results => returnVal
+
+NUMBER_OF_RECORDS    TOTAL_DMGE_AMNT    TOTAL_ASSTN_AMNT    HUD_UNMT_NEED_AMNT
+290    542705.67    536089.17    6616.5
+
+
+PL/SQL procedure successfully completed.
+

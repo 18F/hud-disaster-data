@@ -62,14 +62,39 @@ describe('DisasterSearch.vue', () => {
       })
     })
 
+    it('should call dispatch if query passes validation', () => {
+      const Constructor = Vue.extend(DisasterSearch)
+      let dispatch = sinon.spy()
+      const vm = new Constructor({store, router}).$mount()
+      let that = {
+        $store: {dispatch, getters: {user: 'me'}},
+        query: 'TX'
+      }
+      const update = vm.$options.methods.update
+      update.call(that)
+      expect(dispatch.calledWith('loadDisasterList')).to.be.equal(true)
+    })
+
     it('should return before loading if query is shorter than 2', () => {
       const Constructor = Vue.extend(DisasterSearch)
-      let stub = sinon.stub(mutations, 'updateDisasterList')
+      let dispatch = sinon.spy()
       const vm = new Constructor({store, router}).$mount()
       expect(vm.query).to.be.equal('')
       vm.query = 'A'
+      vm.dispatch = dispatch
       vm.update()
-      expect(stub.called).to.be.equal(false)
+      expect(dispatch.called).to.be.equal(false)
+    })
+
+    it('should return before loading if query is shorter than 4 and it is numeric', () => {
+      const Constructor = Vue.extend(DisasterSearch)
+      let dispatch = sinon.spy()
+      const vm = new Constructor({store, router}).$mount()
+      expect(vm.query).to.be.equal('')
+      vm.query = 123
+      vm.dispatch = dispatch
+      vm.update()
+      expect(dispatch.called).to.be.equal(false)
     })
 
     it('should call loadDisasterList if query is >= 2 in length and is not all numeric', () => {
@@ -78,7 +103,7 @@ describe('DisasterSearch.vue', () => {
       const Constructor = Vue.extend(DisasterSearch)
       const vm = new Constructor({store: myStore, router}).$mount()
       expect(vm.query).to.be.equal('')
-      vm.query = 'DR1'
+      vm.query = 'DRX'
       vm.update()
       Vue.nextTick(() => {
         expect(loadDisasterListStub.called).to.be.equal(true)

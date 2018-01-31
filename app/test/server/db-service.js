@@ -2,7 +2,7 @@
 const request = require('supertest')
 const should = require('should') // eslint-disable-line
 const app = require('../../app.js')
-const hudApi = require('../../lib/middleware/hudApi')
+const localAPI = require('../../lib/middleware/localAPI')
 const thrownErrMsg = 'Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.'
 
 describe('/api/applicants/export', function () {
@@ -13,21 +13,21 @@ describe('/api/applicants/export', function () {
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.be.an.Object().and.have.property('dster_id').which.is.equal('4187')
-      body[0].should.be.an.Object().and.have.property('dmge_state_cd').which.is.equal('IA')
+      body[0].should.be.an.Object().and.have.property('DSTER_ID').which.is.equal('4187')
+      body[0].should.be.an.Object().and.have.property('DMGE_STATE_CD').which.is.equal('IA')
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
   })
 
   it('should return only columns that are specified as cols', (done) => {
-    request(app).get('/api/applicants/export?states=Tx&cols=dmge_city_name,dmge_state_cd')
+    request(app).get('/api/applicants/export?states=TX&cols=DMGE_CITY_NAME,DMGE_STATE_CD')
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.be.an.Object().and.have.property('dmge_state_cd').and.should.not.be.empty()
-      body[0].should.be.an.Object().and.have.property('dmge_city_name').and.should.not.be.empty()
-      body[0].should.be.an.Object().and.not.have.property('dster_id')
+      body[0].should.be.an.Object().and.have.property('DMGE_STATE_CD').and.should.not.be.empty()
+      body[0].should.be.an.Object().and.have.property('DMGE_CITY_NAME').and.should.not.be.empty()
+      body[0].should.be.an.Object().and.not.have.property('DSTER_ID')
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
@@ -39,7 +39,7 @@ describe('/api/applicants/export', function () {
       const message = res.text
       message.should.be.equal(thrownErrMsg)
     })
-    .expect(406)
+    .expect(400)
     .expect('Content-Type', /text/, done)
   })
 
@@ -49,7 +49,7 @@ describe('/api/applicants/export', function () {
       const message = res.text
       message.should.be.equal(thrownErrMsg)
     })
-    .expect(406)
+    .expect(400)
     .expect('Content-Type', /text/, done)
   })
 })
@@ -80,15 +80,15 @@ describe('/api/applicants/export summarizeCols', function () {
       hud_unmet_need: 270.65
     }]
     let summaryCols = ['total_damages', 'hud_unmet_need']
-    let summarizedCols = hudApi.summarizeCols(data, summaryCols)
-    summarizedCols.total_damages.should.be.equal(3789.92 + 3930.31 + 270.65)
-    summarizedCols.hud_unmet_need.should.be.equal(1624.76 + 0 + 270.65)
+    let summarizedCols = localAPI.summarizeCols(data, summaryCols)
+    summarizedCols.TOTAL_DAMAGES.should.be.equal(3789.92 + 3930.31 + 270.65)
+    summarizedCols.HUD_UNMET_NEED.should.be.equal(1624.76 + 0 + 270.65)
     done()
   })
   it('should return false no data is passed in', (done) => {
     let data = null
     let summaryCols = ['total_damages', 'hud_unmet_need']
-    let summarizedCols = hudApi.summarizeCols(data, summaryCols)
+    let summarizedCols = localAPI.summarizeCols(data, summaryCols)
     summarizedCols.should.be.equal(false)
     done()
   })

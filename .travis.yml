@@ -17,26 +17,26 @@ addons:
     - master
     - sprint-*
     - sonar-*
-before_deploy: "git config --global http.postBuffer 157286400"
-deploy:
-- manifest: ./cg-deploy/manifests/manifest-dev.yml
-  edge: true
-  provider: cloudfoundry
-  api: https://api.fr.cloud.gov
-  username: $DEV_CF_USERNAME
-  password: $DEV_CF_PASSWORD
-  organization: hud-disaster-data
-  space: dev
-  on:
-    branch: sprint-*
-- manifest: ./cg-deploy/manifests/manifest-staging.yml
-  edge: true
-  provider: cloudfoundry
-  api: https://api.fr.cloud.gov
-  username: $STAGING_CF_USERNAME
-  password: $STAGING_CF_PASSWORD
-  organization: hud-disaster-data
-  space: staging
-  on:
-    branch: master
-    condition: "$TRAVIS_REPO_SLUG = 'flexion/hud-disaster-data'"
+# before_deploy: "git config --global http.postBuffer 157286400"
+# deploy:
+# - manifest: ./cg-deploy/manifests/manifest-dev.yml
+#   edge: true
+#   provider: cloudfoundry
+#   api: https://api.fr.cloud.gov
+#   username: $DEV_CF_USERNAME
+#   password: $DEV_CF_PASSWORD
+#   organization: hud-disaster-data
+#   space: dev
+#   on:
+#     branch: sprint-*
+# - manifest: ./cg-deploy/manifests/manifest-staging.yml
+#   edge: true
+#   provider: cloudfoundry
+#   api: https://api.fr.cloud.gov
+#   username: $STAGING_CF_USERNAME
+#   password: $STAGING_CF_PASSWORD
+#   organization: hud-disaster-data
+#   space: staging
+#   on:
+#     branch: master
+#     condition: "$TRAVIS_REPO_SLUG = 'flexion/hud-disaster-data'"

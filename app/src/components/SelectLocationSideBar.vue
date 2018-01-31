@@ -33,7 +33,7 @@
                 :on-change="setLevel"
                 style="background:#fff;"
                 :hassubList="true"
-                v-on:clear="clearLevel"
+                v-on:clear="setLevel"
                 ref="geographicLevelSelector"
                 :disabled="disableLevels"
               )
@@ -84,9 +84,9 @@
                       button.clear-text(@click='removeDisaster(disaster)' :title='`Remove ${disaster.name}`')
                         icon(name='fa-times')
           div.rp-action-buttons
-            button.usa-button.alt-button(type="button" @click="clearAll" title="Clear all report parameters button")
+            button.usa-button.alt-button(type="button" @click="clearAll"  :disabled="disableClear" title="Clear all report parameters button")
               | Clear
-            button.usa-button.green(type="button" @click="createReport" :disabled="disableCreate" title="Create report button")
+            button.usa-button.green(type="button" @click="pushReportUrl" :disabled="disableCreate" title="Create report button")
               | Create Report
               icon(name='fa-bar-chart')
 </template>
@@ -95,18 +95,27 @@
 // input(type="text" placeholder="search ..." style="position:absolute; padding-left:35px;")
 // icon(name='fa-search' style="position:relative; fill:#ccc; position:relative; top:15px; left:10px;")
 import inputselect from '@/components/InputSelect'
-import magic from '@/bus'
+// import magic from '@/bus'
 import _ from 'lodash'
 
 export default {
   name: 'selectLocationSideBar',
   components: {inputselect},
   mounted () {
+    console.log('firing initializeValuesFromURL from mounted()')
     this.initializeValuesFromURL()
+  },
+  watch: {
+    '$route' (to, from) {
+      if (to !== from) {
+        console.log('firing initializeValuesFromURL from watch of $route')
+        this.initializeValuesFromURL()
+      }
+    }
   },
   beforeDestroy () {
     this.reset()
-    this.$store.commit('clearStore', null)
+    this.$store.commit('initStore', null)
   },
   data () {
     return {
@@ -118,6 +127,7 @@ export default {
       disableLocales: true,
       disableDisasters: true,
       disableCreate: true,
+      disableClear: true,
       states: [
         { name: 'Alabama', code: 'AL' }, { name: 'Alaska', code: 'AK' }, { name: 'American Samoa', code: 'AS' },
         { name: 'Arizona', code: 'AZ' }, { name: 'Arkansas', code: 'AR' }, { name: 'California', code: 'CA' }, { name: 'Colorado', code: 'CO' },
@@ -137,7 +147,14 @@ export default {
         { name: 'Virgin Islands', code: 'VI' }, { name: 'Virginia', code: 'VA' }, { name: 'Washington', code: 'WA' }, { name: 'West Virginia', code: 'WV' },
         { name: 'Wisconsin', code: 'WI' }, { name: 'Wyoming', code: 'WY' }
       ],
-      geographicLevels: [{name: 'City', code: 'City'}, {name: 'County', code: 'County'}, {name: 'Congressional District', code: 'CongrDist'}],
+      geographicLevels: [
+        {name: 'City', code: 'city'},
+        {name: 'County', code: 'county'},
+        {name: 'Congressional District', code: 'congrdist'},
+        {name: 'Zip Code', code: 'zipcode'},
+        {name: 'Township', code: 'township'},
+        {name: 'Tract', code: 'tract'}
+      ],
       queryValue: ''
     }
   },
@@ -154,15 +171,19 @@ export default {
 
   methods: {
     changeState (val) {
+      console.log(`inside changeState(${JSON.stringify(val)})`)
       if (val && val.code && val.code.length > 1) {
         if (!this.stateSelected || val.code !== this.stateSelected.code) {
           this.stateSelected = val
           this.localeSelected = null
           this.disasterSelected = null
-          this.clearLevel()
+          this.setLevel(null)
           this.clearDisaster()
-          this.$store.dispatch('setSelectedState', val)
-          this.$store.dispatch('loadReportDisasterList', val.code)
+          this.$store.commit('initStore', val)
+          console.log('calling loadFilteredDisasters')
+          this.$store.dispatch('loadFilteredDisasters').then(result => {
+            console.log(`returned from loadFilteredDisasters promise with result: ${result}`)
+          })
         }
       }
       this.checkDisabled()
@@ -175,26 +196,16 @@ export default {
     },
 
     setLevel (val) {
-      if (!val) {
-        this.clearLevel()
-      } else {
-        this.geographicLevelSelected = val
-        this.$store.commit('setSelectedGeographicLevel', val)
-        this.$store.dispatch('loadLocales', this.stateSelected.code)
-        this.checkDisabled()
-      }
+      console.log(`inside setLevel(${JSON.stringify(val)}) with this.stateSelected: ${JSON.stringify(this.stateSelected)}`)
+      this.geographicLevelSelected = val
+      this.$store.commit('setSelectedGeographicLevel', val)
+      if (!val) this.$refs.geographicLevelSelector.clearValue()
       this.clearLocales()
-    },
-
-    clearLevel () {
-      this.geographicLevelSelected = null
-      this.$store.commit('setSelectedGeographicLevel', null)
-      this.$refs.geographicLevelSelector.clearValue()
-      this.clearLocales()
-      this.checkDisabled()
-      if (this.stateSelected) {
+      if (this.$store.getters.stateFilter) {
         this.filterDisasters()
+        if (val) this.$store.dispatch('loadLocales').then(result => console.log(`finished loadLocales from setLevel() with result: ${result}`))
       }
+      this.checkDisabled()
     },
 
     clearLocales () {
@@ -204,6 +215,7 @@ export default {
     },
 
     addLocale () {
+      console.log('inside addLocale')
       if (!this.localeSelected) return
       // DOING: Make a dry run of loading new disasters
       this.$store.commit('addLocaleFilter', this.localeSelected)
@@ -212,11 +224,10 @@ export default {
     },
 
     filterDisasters () {
-      if (this.$store.getters.localeFilter && this.$store.getters.localeFilter.length > 0) {
-        this.$store.dispatch('loadFilteredDisasters')
-      } else {
-        this.$store.dispatch('loadReportDisasterList', this.stateSelected.code)
-      }
+      console.log('calling loadFilteredDisasters')
+      this.$store.dispatch('loadFilteredDisasters').then(result => {
+        console.log('finished loadFilteredDisasters, inside filterDisasters() with result: ' + result)
+      })
     },
 
     addDisaster () {
@@ -226,15 +237,27 @@ export default {
     },
 
     clearDisaster () {
+      console.log('inside clearDisaster')
       this.disasterSelected = null
       this.$store.commit('updateReportDisasterList', [])
       this.$refs.disasterSelect.clearValue()
     },
 
     clearAll () {
-      if (this.openDialogue()) {
-        this.reset()
+      this.$router.push({name: 'reports'})
+      this.reset()
+      this.$store.commit('initStore')
+      let summaryDisplayData = {
+        stateName: '',
+        disasters: [],
+        locales: [],
+        level: ''
       }
+      this.$emit('updateSummaryDisplay', summaryDisplayData)
+      this.$store.dispatch('loadReportData', {})
+      // if (this.openDialogue()) {
+      //   this.reset()
+      // }
     },
 
     openDialogue () {
@@ -247,8 +270,9 @@ export default {
     },
 
     reset () {
+      this.$store.commit('setShowReportSpinner', false)
       this.clearStateSelected()
-      this.clearLevel()
+      this.setLevel(null)
       this.clearDisaster()
       this.checkDisabled()
     },
@@ -259,10 +283,12 @@ export default {
         // disable all the things
         this.disableLocales = true
         this.disableCreate = true
+        this.disableClear = true
         this.disableDisasters = true
         this.disableLevels = true
       } else {
         this.disableCreate = false
+        this.disableClear = false
         this.disableDisasters = false
         this.disableLevels = false
         if (!this.geographicLevelSelected) {
@@ -273,7 +299,20 @@ export default {
       }
     },
 
+    pushReportUrl () {
+      if (!this.$store.getters.stateFilter) return
+      let query = {}
+      query.stateFilter = this.$store.getters.stateFilter.code
+      if (this.$store.getters.geographicLevel) query.geographicLevel = this.$store.getters.geographicLevel.code
+      if (this.$store.getters.localeFilter.length > 0) query.localeFilter = _.map(this.$store.getters.localeFilter, l => l.code).join(',')
+      if (this.$store.getters.disasterFilter.length > 0) query.disasterFilter = _.map(this.$store.getters.disasterFilter, d => d.code).join(',')
+      if (this.$store.getters.selectedSummaryColumns.length > 0) query.summaryColumns = this.$store.getters.selectedSummaryColumns.join(',')
+      this.$router.push({name: 'reports', query})
+    },
+
     createReport () {
+      if (this.$store.getters.selectedSummaryColumns.length === 0) return
+      console.log(`inside createReport with selectedSummaryColumns: ${this.$store.getters.selectedSummaryColumns.join(',')}`)
       let allFilters = {}
       let summaryDisplayData = {
         stateName: this.$store.getters.stateFilter.name,
@@ -288,12 +327,9 @@ export default {
         allFilters.localeType = this.$store.getters.geographicLevel.code.toLowerCase()
         allFilters.locales = _.flatMap(this.$store.getters.localeFilter, loc => loc.code)
       }
+      if (this.$store.getters.selectedSummaryColumns) allFilters.cols = this.$store.getters.selectedSummaryColumns
       this.$emit('updateSummaryDisplay', summaryDisplayData)
-      this.$store.dispatch('loadReportData',
-        { summaryCols: 'total_dmge_amnt,hud_unmt_need_amnt',
-          allFilters
-        })
-      // window.history.replaceState(null, '', `${location.pathname}${this.$store.getters.stateUrlParameters}`)
+      this.$store.dispatch('loadReportData', allFilters)
     },
 
     removeDisaster (disaster) {
@@ -306,38 +342,57 @@ export default {
     },
 
     initializeValuesFromURL () {
-      if (this.$route && this.$route.query && this.$route.query.stateFilter) {
-        let params = this.$route.query
-        if (params.stateFilter) {
-          let stateObj = _.find(this.states, ['code', params.stateFilter])
-          this.changeState(stateObj)
-          this.$refs.stateSelector.select(stateObj)
-        }
+      console.log('inside initializeValuesFromURL')
+      this.clearStateSelected()
+      const vm = this
+      const query = _.get(this.$route, 'query')
+      if (!query) return
+      let queryParams = this.$route.query
+      let stateParam
+      if (queryParams && queryParams.stateFilter) stateParam = queryParams.stateFilter
+      else return
+      let geographicLevelParam
+      let localeParam = []
+      let disasterParam = []
+      let summaryColumns = []
+      if (queryParams && queryParams.geographicLevel !== undefined) geographicLevelParam = queryParams.geographicLevel
+      if (queryParams && queryParams.localeFilter !== undefined) localeParam = queryParams.localeFilter.split(',')
+      if (queryParams && queryParams.disasterFilter !== undefined) disasterParam = queryParams.disasterFilter.split(',')
+      if (queryParams && queryParams.summaryColumns !== undefined) summaryColumns = queryParams.summaryColumns.split(',')
 
-        if (params.geographicLevel) {
-          let level = _.find(this.geographicLevels, ['code', params.geographicLevel])
-          this.$refs.geographicLevelSelector.select(level)
-        }
+      _.map(this.$store.getters.summaryColumns, c => { c.selected = false })
+      _.map(summaryColumns, c => {
+        let thisColumn = _.find(this.$store.getters.summaryColumns, ['column', c])
+        thisColumn.selected = true
+        this.$store.commit('setSummaryColumn', thisColumn)
+      })
+      let stateObj = _.find(this.states, ['code', stateParam])
+      console.log('setting stateSelector from initializeValuesFromURL')
+      this.$refs.stateSelector.select(stateObj)
 
-        if (params.localeFilter) {
-          magic.$once('localesLoaded', () => {
-            let localeResults = this.$store.getters.localeResults
-            const vm = this
-            _.map(params.localeFilter.split(','), function (loc) {
-              vm.$store.commit('addLocaleFilter', _.find(localeResults, ['code', loc]))
-            })
+      if (geographicLevelParam) {
+        let level = _.find(this.geographicLevels, ['code', geographicLevelParam])
+        console.log('setting geographicLevelSelector from initializeValuesFromURL')
+        this.geographicLevelSelected = level
+        this.$refs.geographicLevelSelector.queryValue = level.name
+        vm.$store.commit('setSelectedGeographicLevel', level)
+        this.checkDisabled()
+        vm.$store.dispatch('loadLocales').then(locResult => {
+          vm.$store.commit('setLocalesFilter', localeParam)
+          vm.$store.dispatch('loadFilteredDisasters').then(result => {
+            console.log('finished loadFilteredDisasters, inside disasterParam with result: ' + result)
+            vm.$store.commit('setDisastersFilter', disasterParam)
+            vm.createReport()
           })
-        }
-
-        if (params.disasterFilter) {
-          magic.$once('disastersLoaded', () => {
-            let disasterNumberResults = this.$store.getters.disasterNumberResults
-            const vm = this
-            _.map(params.disasterFilter.split(','), function (dstr) {
-              vm.$store.commit('addDisasterFilter', _.find(disasterNumberResults, ['code', dstr]))
-            })
-          })
-        }
+        })
+      } else if (disasterParam.length > 0) {
+        vm.$store.dispatch('loadFilteredDisasters').then(result => {
+          console.log('finished loadFilteredDisasters, inside disasterParam with result: ' + result)
+          vm.$store.commit('setDisastersFilter', disasterParam)
+          vm.createReport()
+        })
+      } else {
+        vm.createReport()
       }
     }
   }

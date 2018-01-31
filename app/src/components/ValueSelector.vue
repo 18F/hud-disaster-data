@@ -1,67 +1,74 @@
 <template lang="pug">
-  .value-selector
+  .value-selector(id="value-selector" @click="nothing")
     div.report-actions
       div.btn-group
         label.sr-only(for='SummariesSelector') Show summary values selector
-        button(type="button" @click="toggleSummarySelection" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded")
+        button(type="button" @click="toggleSummarySelection" name="SummariesSelector" title="Select summary values" :class="selectionListExpanded" ref="toggleSummarySelectionButton")
           icon(name='fa-columns' classes="columns")
           icon(name="fa-caret-up" v-show="showSelectionList")
           icon(name="fa-caret-down" v-show="!showSelectionList")
-      div.summary-selection-list(v-show="showSelectionList")
+      div.summary-selection-list(v-show="showSelectionList" tabindex="0" ref="summarySelectionList"  @focusout="hideSummarySelection")
         span
           |Summary Values
         table
           tr.table-header
             td
               label.sr-only(for='SelectAllSummaryValues') Select all summary values
-              button(type="button" name="SelectAllSummaryValues" title="Select all summary values")
-                icon.ico-md(name="fa-square-o")
-            td
-              |All
+              button(type="button" name="SelectAllSummaryValues" title="Select/Unselect all summary values" @click='toggleSelectAll' style="padding-right:20px;")
+                icon.ico-md(name="fa-check-square-o" v-if="allSelected")
+                icon.ico-md(name="fa-square-o" v-if="!allSelected")
+              | All
         .summary-values
           ul
-            li
-              label.sr-only(for='UnmetNeeds') Select unmet needs summary
-              button(type="button" name="UnmetNeeds" title="Unmet needs summary")
-                icon.ico-md(name="fa-check-square-o")
+            li(v-for='(column, index) in summaryColumns')
+              label.sr-only(for=`column.name-select`) Select {{ column.name }}
+              button(type="button" name=`column.name-select` title=`column.name summary` @click="toggleColumnSelection(column)")
+                icon.ico-md(name="fa-check-square-o" v-if="column.selected")
+                icon.ico-md(name="fa-square-o" v-if="!column.selected")
               span
-                |Unmet Need
-            li
-              label.sr-only(for='TotalDamages') Select total damages summary
-              button(type="button" name="TotalDamages" title="Total damages summary")
-                icon.ico-md(name="fa-check-square-o")
-              span
-                |Total Damages
-            li
-              label.sr-only(for='FEMACityFundingAverage') Select FEMA city funding average summary
-              button(type="button" name="FEMACityFundingAverage" title="FEMA city funding average summary")
-                icon.ico-md(name="fa-square-o")
-              span
-                |FEMA City Funding Average
-            li
-              label.sr-only(for='FEMAAverageLoss') Select FEMA average loss summary
-              button(type="button" name="FEMAAverageLoss" title="FEMA average loss summary")
-                icon.ico-md(name="fa-square-o")
-              span
-                |FEMA Average Loss
+                | {{ column.name }}
 </template>
 <script>
 export default {
   name: 'value-selector',
   data () {
     return {
-      showSelectionList: false
+      showSelectionList: false,
+      allSelected: false
     }
   },
-  props: ['showSummarySelections'],
   methods: {
+    nothing () {
+      // alert('doing nothing')
+    },
+    hideSummarySelection (e) {
+      if (e.relatedTarget === this.$refs.toggleSummarySelectionButton) return
+      if (!this.$refs.summarySelectionList.contains(e.relatedTarget)) this.showSelectionList = false
+    },
     toggleSummarySelection () {
       this.showSelectionList = !this.showSelectionList
+      this.$nextTick(() => {
+        if (this.showSelectionList) this.$refs.summarySelectionList.focus()
+      })
+    },
+    toggleColumnSelection (column) {
+      column.selected = !column.selected
+      this.$store.commit('setSummaryColumn', column)
+    },
+    toggleSelectAll () {
+      this.allSelected = !this.allSelected
+      this.$store.getters.summaryColumns.forEach(col => {
+        col.selected = this.allSelected
+        this.$store.commit('setSummaryColumn', col)
+      })
     }
   },
   computed: {
     selectionListExpanded () {
       return this.showSelectionList ? 'expanded' : false
+    },
+    summaryColumns () {
+      return this.$store.getters.summaryColumns
     }
   }
 }

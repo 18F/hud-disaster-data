@@ -7,6 +7,7 @@ import Axios from 'axios'
 import store from './store' // This is our Vuex store.  It helps us manage state.
 import Sprites from './components/Sprites'
 import DisasterSearch from './components/DisasterSearch'
+import Report from './components/Report'
 import AppHeader from './components/Header'
 import AppFooter from './components/Footer'
 import ValueSelector from './components/ValueSelector'
@@ -21,9 +22,23 @@ Vue.prototype.$http = Axios
 const contextRoot = window.location.pathname.replace(/\/$/, '')
 Axios.interceptors.request.use(function (config) {
   config.url = `${contextRoot}${config.url}`
+  console.log('returning : ' + JSON.stringify(config))
   return config
 }, function (error) {
+  console.log('returning : ' + JSON.stringify(error))
   return Promise.reject(error)
+})
+Axios.interceptors.response.use(function (response) {
+  console.log('returning : ' + JSON.stringify(response))
+  return response
+}, function (error) {
+  if (error.response && error.response.data && error.response.data.location) {
+    window.location = error.response.data.location
+    return Promise.reject(error)
+  } else {
+    console.log('returning : ' + JSON.stringify(error))
+    return Promise.reject(error)
+  }
 })
 
 /**
@@ -39,6 +54,7 @@ new Vue({
     Sprites,
     AppHeader,
     DisasterSearch,
+    Report,
     ValueSelector,
     AppFooter,
     InputSelect

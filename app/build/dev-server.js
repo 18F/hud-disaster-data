@@ -5,6 +5,7 @@ require('./check-versions')()
 * @module build/dev-server
 */
 
+process.env.DRDP_LOCAL = true
 var config = require('../config')
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
@@ -17,6 +18,8 @@ var morgan = require('morgan')
 var bodyParser = require('body-parser')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
+const auth = require('../lib/middleware/auth')
+const cookieSession = require('cookie-session')
 var webpackConfig = process.env.NODE_ENV === 'testing'
   ? require('./webpack.prod.conf')
   : require('./webpack.dev.conf')
@@ -31,6 +34,10 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 app.use(morgan('dev'))
+app.use(cookieSession({
+  secret: process.env.COOKIE_SECRET || 'secret!@#',
+  maxAge: 60000
+}))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
@@ -62,6 +69,8 @@ Object.keys(proxyTable).forEach(function (context) {
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
+app.use(auth.authenticate)
+
 // serve webpack bundle output
 app.use(devMiddleware)
 
@@ -73,9 +82,6 @@ app.use('/api', require('../lib/controllers/api'))
 
 // serve pure static assets
 app.use(express.static('./static'))
-
-// handle fallback for HTML5 history API
-// app.use(require('connect-history-api-fallback')())
 
 var uri = `http://localhost:${port}/`
 
