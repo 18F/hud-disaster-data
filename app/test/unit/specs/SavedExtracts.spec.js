@@ -205,7 +205,7 @@ describe('SavedExtracts component', function () {
       const vm = new Constructor({store}).$mount()
       vm.selectedExtractName = 'MyTEST'
       let downloadURL = vm.download()
-      expect(downloadURL).to.contain('/api/export/MyTEST')
+      expect(downloadURL).to.contain('api/export/MyTEST')
     })
 
     it('should return API endpoint when called without a selectedExtractName', function () {

@@ -1,6 +1,6 @@
 
 
-results for get_disasters: stateid => 'WI', localetype => 'something', results => returnVal
+results for get_disasters: stateid => 'WI', localetype => 'something', localevalues => localeList, results => returnVal
 
 
 
@@ -22,6 +22,24 @@ results for get_disasters: stateid => 'TX', localetype => 'county', localevalues
 
 
 results for get_disasters: stateid => 'TX', localetype => 'congrdist', localevalues => '4814115,4818115', results => returnVal
+
+1791
+4223
+4272
+
+
+results for get_disasters: stateid => 'TX', localetype => 'zipcode', localevalues => '77550,77546', results => returnVal
+
+1791
+
+
+results for get_disasters: stateid => 'TX', localetype => 'township', localevalues => 'Texas City-League City,Corpus Christi', results => returnVal
+
+1791
+4223
+
+
+results for get_disasters: stateid => 'TX', localetype => 'tract', localevalues => '724500', '542700', results => returnVal
 
 1791
 4223

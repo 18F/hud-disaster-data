@@ -1,90 +1,178 @@
 SET SERVEROUTPUT ON
 
 DECLARE
-  returnVal fema_data.localeArray;
-  disasterId fema_data.nbrParameterArray;
+  returnVal SYS_REFCURSOR;
+  charOutput VARCHAR2(80);
+
 
 BEGIN
-
-  disasterid.DELETE;
-  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['TX','county','ALL',returnVal]');
+  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['TX','county', NULL,returnVal]');
   DBMS_OUTPUT.NEW_LINE();
-  fema_data.get_locales('TX','county', disasterId, returnVal);
+  fema_data.get_locales('TX','county', NULL, returnVal);
 
-  for i in returnVal.first .. returnVal.last loop
-   dbms_output.put_line(returnVal(i));
-  end loop;
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
 
-  disasterId(1) := 4187;
-  disasterId(2) := 4289;
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'[stateid => 'IA', localetype => 'county', disasterid =>'4187,4289', results => returnVal]');
   DBMS_OUTPUT.NEW_LINE();
-  fema_data.get_locales(stateid => 'IA', localetype => 'county', disasterid => disasterId, results => returnVal);
+  fema_data.get_locales(stateid => 'IA', localetype => 'county', disasterid => '4187,4289', results => returnVal);
 
-  for i in 1 .. returnVal.count loop
-   dbms_output.put_line(returnVal(i));
-  end loop;
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
 
-  disasterId(1) := 4187;
-  disasterId(2) := 4289;
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'[stateid => 'IA', localetype => 'city', disasterid =>'4187,4289', results => returnVal]');
   DBMS_OUTPUT.NEW_LINE();
-  fema_data.get_locales(stateid => 'IA', localetype => 'city', disasterid => disasterid, results => returnVal);
+  fema_data.get_locales(stateid => 'IA', localetype => 'city', disasterid => '4187,4289', results => returnVal);
 
-  for i in 1 .. returnVal.count loop
-   dbms_output.put_line(returnVal(i));
-  end loop;
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
 
-  disasterId(1) := 4272;
-  disasterId(2) := 1791;
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['IA', 'city', '4272,1791', returnVal]');
   DBMS_OUTPUT.NEW_LINE();
-  fema_data.get_locales('IA', 'city', disasterid, returnVal);
+  fema_data.get_locales('IA', 'city', '4272,1791', returnVal);
 
-  for i in 1 .. returnVal.count loop
-   dbms_output.put_line(returnVal(i));
-  end loop;
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
 
-  disasterId(1) := 4272;
-  disasterId(2) := 1791;
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['TX', 'city', '4272,1791', returnVal]');
   DBMS_OUTPUT.NEW_LINE();
-  fema_data.get_locales('TX', 'city', disasterid, returnVal);
+  fema_data.get_locales('TX', 'city', '4272,1791', returnVal);
 
-  for i in 1 .. returnVal.count loop
-   dbms_output.put_line(returnVal(i));
-  end loop;
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
 
-  disasterId(1) := 4187;
-  disasterId(2) := 4289;
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['IA', 'congrdist', '4187,4289', returnVal]');
   DBMS_OUTPUT.NEW_LINE();
-  fema_data.get_locales('IA', 'congrdist', disasterid, returnVal);
+  fema_data.get_locales('IA', 'congrdist', '4187,4289', returnVal);
 
-  for i in 1 .. returnVal.count loop
-   dbms_output.put_line(returnVal(i));
-  end loop;
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
 
-  disasterid.DELETE;
   DBMS_OUTPUT.NEW_LINE();
   DBMS_OUTPUT.NEW_LINE();
-  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'[stateid => 'WI', localetype => 'congrdist', disasterid => 'ALL', results => returnVal]');
+  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'[stateid => 'WI', localetype => 'congrdist', disasterid => NULL, results => returnVal]');
   DBMS_OUTPUT.NEW_LINE();
-  fema_data.get_locales(stateid => 'WI', localetype => 'congrdist', disasterid => disasterid, results => returnVal);
+  fema_data.get_locales(stateid => 'WI', localetype => 'congrdist', disasterid => NULL, results => returnVal);
 
-  for i in 1 .. returnVal.count loop
-   dbms_output.put_line(returnVal(i));
-  end loop;
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
+
+
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['TX', 'zipcode', '1791,4223', returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_locales('TX', 'zipcode', '1791,4223', returnVal);
+
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
+
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'[stateid => 'WI', localetype => 'zipcode', disasterid => NULL, results => returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_locales(stateid => 'WI', localetype => 'zipcode', disasterid => NULL, results => returnVal);
+
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
+
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['TX', 'township', '1791,4223', returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_locales('TX', 'township', '1791,4223', returnVal);
+
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
+
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'[stateid => 'WI', localetype => 'township', disasterid => NULL, results => returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_locales(stateid => 'WI', localetype => 'township', disasterid => NULL, results => returnVal);
+
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
+
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'['TX', 'tract', '1791,4223', returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_locales('TX', 'tract', '1791,4223', returnVal);
+
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
+
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.NEW_LINE();
+  DBMS_OUTPUT.PUT_LINE('results for fema_data.get_locales(): ' || q'[stateid => 'WI', localetype => 'tract', disasterid => NULL, results => returnVal]');
+  DBMS_OUTPUT.NEW_LINE();
+  fema_data.get_locales(stateid => 'WI', localetype => 'tract', disasterid => NULL, results => returnVal);
+
+  LOOP
+   FETCH returnVal
+   INTO charOutput;
+   EXIT WHEN returnVal%NOTFOUND;
+   dbms_output.put_line(charOutput);
+  END LOOP;
 
 END;
 /

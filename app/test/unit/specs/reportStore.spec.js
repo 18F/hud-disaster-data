@@ -6,11 +6,11 @@ import { mutations, actions, getters } from '@/reportStore' // eslint-disable-li
 import sinon from 'sinon'
 import should from 'should'
 import magic from '@/bus'
-const { updateReportDisasterList, updateLocaleList, clearStore,
-  setState, addDisasterFilter, addLocaleFilter, removeDisasterFilter, removeLocaleFilter,
-  setShowReportSpinner, setSelectedGeographicLevel, updateReportData, setShowReport } = mutations
-const { loadReportDisasterList, loadLocales, setSelectedState, loadReportData, loadFilteredDisasters } = actions
-const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords, stateUrlParameters, showReport } = getters
+const { updateReportDisasterList, updateLocaleList,
+  setState, addDisasterFilter, addLocaleFilter, removeDisasterFilter, removeLocaleFilter, setLocalesFilter, setDisastersFilter,
+  setShowReportSpinner, setSelectedGeographicLevel, updateReportData, setShowReport, initStore, setSummaryColumn } = mutations
+const { loadLocales, loadReportData, loadFilteredDisasters } = actions
+const { localeFilter, disasterFilter, showReportSpinner, geographicLevel, stateFilter, summaryRecords, showReport, summaryColumns, selectedSummaryColumns } = getters
 
 const TWO_RECORDS = [
   {'disasterNumber': 4289,
@@ -62,49 +62,6 @@ describe('reportStore', function () {
     })
   })
 
-  describe('loadReportDisasterList', function () {
-    it('should call commit for updateReportDisasterList when the data is loaded', function (done) {
-      moxios.stubRequest(/WI/, {
-        status: 200,
-        response: _.clone(TWO_RECORDS)
-      })
-      const commit = sinon.spy()
-      loadReportDisasterList({commit}, 'WI')
-      moxios.wait(() => {
-        should(commit.calledWith('updateReportDisasterList')).be.true()
-        should(commit.calledWith('resetStatus')).be.true()
-        done()
-      })
-    })
-    it('should set status to "no results found" if result is empty', function (done) {
-      moxios.stubRequest(/WI/, {
-        status: 200,
-        response: []
-      })
-      const commit = sinon.spy()
-      loadReportDisasterList({commit}, 'WI')
-      moxios.wait(() => {
-        should(commit.calledWith('updateReportDisasterList')).be.true()
-        should(commit.calledWith('resetStatus')).be.false()
-        should(commit.calledWith('setStatus')).be.true()
-        done()
-      })
-    })
-    it('should set status to error if server responds with error', function (done) {
-      moxios.stubRequest(/WI/, {
-        status: 500
-      })
-      const commit = sinon.spy()
-      loadReportDisasterList({commit}, 'WI')
-      moxios.wait(() => {
-        should(commit.calledWith('updateReportDisasterList')).be.false()
-        should(commit.calledWith('resetStatus')).be.false()
-        should(commit.calledWith('setStatus')).be.true()
-        done()
-      })
-    })
-  })
-
   describe('loadFilteredDisasters', function () {
     let emit
     beforeEach(function () {
@@ -124,10 +81,51 @@ describe('reportStore', function () {
       loadFilteredDisasters({commit, state}, 'IA')
       moxios.wait(() => {
         should(commit.calledWith('updateReportDisasterList')).be.true()
-        should(emit.calledWith('disastersLoaded')).be.true()
         should(commit.calledWith('resetStatus')).be.true()
         done()
       })
+    })
+
+    it('should call commit for updateReportDisasterList when the data is loaded and a locale is selected', function (done) {
+      moxios.stubRequest(/IA/, {
+        status: 200,
+        response: _.clone(TWO_RECORDS)
+      })
+      const commit = sinon.spy()
+      let state = {geographicLevel: {code: 'city'}, stateFilter: {code: 'IA'}, localeList: [{name: 'Cedar Rapids', selected: true}]}
+      loadFilteredDisasters({commit, state}, 'IA')
+      moxios.wait(() => {
+        should(commit.calledWith('updateReportDisasterList')).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
+
+    it('should call commit for updateReportDisasterList when the data is loaded, when no localeList or geographicLevel is set', function (done) {
+      moxios.stubRequest(/IA/, {
+        status: 200,
+        response: _.clone(TWO_RECORDS)
+      })
+      const commit = sinon.spy()
+      let state = {geographicLevel: null, stateFilter: {code: 'IA'}, localeList: []}
+      loadFilteredDisasters({commit, state}, 'IA')
+      moxios.wait(() => {
+        should(commit.calledWith('updateReportDisasterList')).be.true()
+        should(commit.calledWith('resetStatus')).be.true()
+        done()
+      })
+    })
+
+    it('should call commit for setStatus when no stateFilter parameter is passed in', function (done) {
+      const commit = sinon.stub().callsFake((mutn, msg) => {
+        expect(mutn).to.be.equal('setStatus')
+        expect(msg.type).to.be.equal('error')
+        expect(msg.scope).to.be.equal('app')
+        expect(msg.msg).to.be.equal('State not specified!')
+        done()
+      })
+      let state = {stateFilter: null}
+      loadFilteredDisasters({commit, state})
     })
 
     it('should call commit for setStatus when no data is found', function (done) {
@@ -140,7 +138,7 @@ describe('reportStore', function () {
       loadFilteredDisasters({commit, state}, 'IA')
       moxios.wait(() => {
         should(commit.calledWith('updateReportDisasterList')).be.true()
-        should(emit.calledWith('disastersLoaded')).be.false()
+        should(emit.calledWith('filteredDisastersLoaded')).be.false()
         should(commit.calledWith('setStatus'), {type: 'info', scope: 'app', msg: 'No results found!'}).be.true()
         done()
       })
@@ -177,7 +175,7 @@ describe('reportStore', function () {
         done()
       })
     })
-    it('should set status to error if server responds with error', function (done) {
+    it('should set status to error if server responds with error for loadLocales', function (done) {
       moxios.stubRequest(/WI/, {
         status: 500
       })
@@ -208,14 +206,25 @@ describe('reportStore', function () {
     })
   })
 
-  describe('clearStore', function () {
-    it('should reset state to defaults', function () {
-      let state = {disasterList: ['one', 'two'], localeList: ['one', 'two'], stateFilter: 'ZZ', geographicLevel: 'TOP'}
-      clearStore(state)
-      should(state.disasterList).be.an.Array().and.have.length(0)
-      should(state.localeList).be.an.Array().and.have.length(0)
-      should(state.stateFilter).be.null()
-      should(state.geographicLevel).be.null()
+  describe('initStore', function () {
+    it('should set values of store', function () {
+      let state = {
+        disasterList: ['something'],
+        localeList: ['somewhere'],
+        geographicLevel: 'nothing else',
+        summaryRecords: ['sum thing'],
+        showReport: 'not',
+        showReportSpinner: 'not',
+        stateFilter: 'no state'
+      }
+      initStore(state, 'Wisconsin')
+      should(state.disasterList.length).be.equal(0)
+      should(state.localeList.length).be.equal(0)
+      should(state.geographicLevel).be.equal(null)
+      should(state.summaryRecords.length).be.equal(0)
+      should(state.showReport).be.equal(false)
+      should(state.showReportSpinner).be.equal(false)
+      should(state.stateFilter).be.equal('Wisconsin')
     })
   })
 
@@ -257,31 +266,40 @@ describe('reportStore', function () {
     })
   })
 
+  describe('setLocalesFilter', function () {
+    it('should set values of locales', function () {
+      let state = {geographicLevel: {code: 'city', name: 'City'}, localeList: []}
+      setLocalesFilter(state, ['mylocale'])
+      should(state.localeList[0].code).be.equal('mylocale')
+      should(localeFilter(state)[0].name).be.equal('mylocale')
+    })
+  })
+
+  describe('setDisastersFilter', function () {
+    it('should set values of disasters', function () {
+      let state = {disasterList: []}
+      setDisastersFilter(state, ['mydisaster'])
+      should(state.disasterList[0].code).be.equal('mydisaster')
+      should(disasterFilter(state)[0].name).be.equal('mydisaster')
+    })
+  })
+
   describe('updateReportData', function () {
     it('should set value of summaryRecords to proper value', function () {
       let state = {summaryRecords: null}
-      let newSummaryRecord = {someField: 1000, someOtherField: 9000}
+      let getters = {selectedSummaryColumns: ['NUMBER_OF_RECORDS', 'TOTAL_DMGE_AMNT']}
+      let newSummaryRecord = {NUMBER_OF_RECORDS: 1000, TOTAL_DMGE_AMNT: 9000}
       updateReportData(state, newSummaryRecord)
       should(state.summaryRecords.someField).be.equal(newSummaryRecord.someField)
-      should(summaryRecords(state).someOtherField).be.equal(newSummaryRecord.someOtherField)
+      should(summaryRecords(state, getters).someOtherField).be.equal(newSummaryRecord.someOtherField)
     })
 
     it('should set value of summaryRecords to proper formatted value', function () {
       let state = {summaryRecords: null}
-      let newSummaryRecord = {numberOfRecords: 1000, total_dmge_amnt: 2000, hud_unmt_need_amnt: 3000}
+      let getters = {selectedSummaryColumns: ['NUMBER_OF_RECORDS', 'TOTAL_DMGE_AMNT']}
+      let newSummaryRecord = {NUMBER_OF_RECORDS: 1000, TOTAL_DMGE_AMNT: 2000, HUD_UNMT_NEED_AMNT: 3000}
       updateReportData(state, newSummaryRecord)
-      should(state.summaryRecords.total_dmge_amnt).be.equal(newSummaryRecord.total_dmge_amnt)
-      should(summaryRecords(state)['Total FEMA verified real property loss']).be.equal('$2,000.00')
-    })
-  })
-
-  describe('setSelectedState', function () {
-    it('should set the selected state', function () {
-      const commit = sinon.spy()
-      const qry = 'Some query'
-      setSelectedState({commit}, qry)
-      should(commit.calledWith('clearStore')).be.true()
-      should(commit.calledWith('setState', qry)).be.true()
+      should(summaryRecords(state, getters)['Total FEMA verified real property loss']).be.equal('$2,000.00')
     })
   })
 
@@ -371,65 +389,9 @@ describe('reportStore', function () {
     })
   })
 
-  describe('stateUrlParameters', () => {
-    it('should return an empty string if stateFilter doesn\'t exist', () => {
-      let state = {}
-      let result = stateUrlParameters(state, {})
-      should(result).equal('')
-    })
-    it('should add geographicLevel to the querystring if geographicLevel exist\'s', () => {
-      let state = {
-        stateFilter: {
-          code: 'TX'
-        }
-      }
-      let getters = {
-        geographicLevel: {
-          code: 'City'
-        },
-        localeFilter: [],
-        disasterFilter: []
-      }
-      let result = stateUrlParameters(state, getters)
-      should(result).equal('?stateFilter=TX&geographicLevel=City')
-    })
-    it('should add localeFilter to the querystring if is at least one localeFilter', () => {
-      let state = {
-        stateFilter: {
-          code: 'TX'
-        }
-      }
-      let getters = {
-        geographicLevel: {
-          code: 'City'
-        },
-        localeFilter: [{code: 'Far Far'}, {code: 'Away'}],
-        disasterFilter: []
-      }
-      let result = stateUrlParameters(state, getters)
-      should(result).equal('?stateFilter=TX&geographicLevel=City&localeFilter=Far Far,Away')
-    })
-    it('should add disasterFilter to the querystring if is at least one disasterFilter', () => {
-      let state = {
-        stateFilter: {
-          code: 'TX'
-        }
-      }
-      let getters = {
-        geographicLevel: {
-          code: 'City'
-        },
-        localeFilter: [{code: 'Far Far'}, {code: 'Away'}],
-        disasterFilter: [{code: '1234'}, {code: '5678'}]
-      }
-      let result = stateUrlParameters(state, getters)
-      should(result).equal('?stateFilter=TX&geographicLevel=City&localeFilter=Far Far,Away&disasterFilter=1234,5678')
-    })
-  })
-
   describe('loadReportData', function () {
     const REPORT_SUMMARY = {numberOfRecords: 200, total_damages: 22000.50, hud_unmet_need: 10000.50}
-    const filterParameter = {'summaryCols': 'total_damages,hud_unmet_need', 'allFilters': {'stateId': 'TX'}}
+    const filterParameter = {'states': 'TX', 'cols': 'total_damages,hud_unmet_need'}
 
     it('should call commit for updateReportData when the data is loaded', function (done) {
       moxios.stubRequest(/applicants/, {
@@ -458,8 +420,8 @@ describe('reportStore', function () {
         done()
       })
     })
-    it('should set status to error if server responds with error', function (done) {
-      moxios.stubRequest(/TX/, {
+    it('should set status to error if server responds with error for loadReportData', function (done) {
+      moxios.stubRequest(/summary/, {
         status: 500
       })
       const commit = sinon.spy()
@@ -470,6 +432,24 @@ describe('reportStore', function () {
         should(commit.calledWith('setStatus')).be.true()
         done()
       })
+    })
+  })
+  describe('setSummaryColumn', function () {
+    it('should set summaryColumns to proper values', function () {
+      const selectedCol = {column: 'col1', name: 'column 1', selected: true}
+      const state = {
+        summaryColumns: [
+          {column: 'col1', name: 'column 1', selected: false},
+          {column: 'col1', name: 'column 1', selected: false},
+          {column: 'col1', name: 'column 1', selected: false}
+        ]
+      }
+      should(selectedSummaryColumns(state)).be.an.Array().and.have.length(0)
+      setSummaryColumn(state, selectedCol)
+      const summaryColumnsVal = summaryColumns(state)
+      const selectedSummaryColumnsVal = selectedSummaryColumns(state)
+      should(summaryColumnsVal).be.an.Array().and.have.length(3)
+      should(selectedSummaryColumnsVal).be.an.Array().and.have.length(1)
     })
   })
 })

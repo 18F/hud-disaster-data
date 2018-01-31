@@ -1,14 +1,11 @@
-const request = require('request')
+var request = require('request') // Using var to make this mockable with rewire
 const moment = require('moment')
 const _ = require('lodash')
 const querystring = require('querystring')
 
-const getDisasters = function ({filter, authorizedDisasters, orderBy, top}, cb) {
-  var allowedDisasters
-  if (authorizedDisasters) allowedDisasters = authorizedDisasters.split(',')
+const getDisasters = function ({filter, orderBy}, cb) {
   const qry = {$filter: filter}
   if (orderBy) qry.$orderby = orderBy
-  if (top) qry.$top = top
 
   const qs = querystring.stringify(qry)
   const validCols = ['id', 'disasterNumber', 'state', 'declarationDate', 'disasterType', 'placeCode', 'incidentType', 'declaredCountyArea', 'title']
@@ -26,7 +23,6 @@ const getDisasters = function ({filter, authorizedDisasters, orderBy, top}, cb) 
       return cb(e)
     }
     var rolledUpData = rollUpData(data)
-    if (allowedDisasters) rolledUpData = _.filter(rolledUpData, d => _.indexOf(allowedDisasters, d.disasterNumber.toString()) !== -1)
     cb(null, rolledUpData)
   })
 }

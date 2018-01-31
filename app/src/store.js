@@ -11,19 +11,6 @@ const store = new Vuex.Store({
   modules: {
     searchStore,
     reportStore
-  },
-  state: {
-    user: null
-  },
-  mutations: {
-    setUser: (state, user) => {
-      state.user = user
-    }
-  },
-  getters: {
-    user: state => {
-      return state.user
-    }
   }
 })
 
