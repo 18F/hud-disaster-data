@@ -31,9 +31,9 @@ Install [git](https://git-scm.com/)
 - Using the 18F repository
   - Run `git clone https://github.com/18F/hud-disaster-data`
 
-#### Navigate to cloned directory
+#### Navigate to cloned directory's app subdirectory
 
-`cd hud-disaster-data`
+`cd hud-disaster-data/app`
 
 #### Install dependencies
 Run `npm install`
