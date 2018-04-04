@@ -4,7 +4,7 @@
   "description": "FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.",
   "main": "index.js",
   "scripts": {
-    "dev": "echo 'Run the client side hot reloading dev server' && node build/dev-server.js",
+    "dev": "echo 'Run the client side hot reloading dev server' && export DRDP_LOCAL=true && node build/dev-server.js",
     "start": "echo 'Start the server' && node index",
     "start-cluster": "echo 'Start the server with pm2 cluster' && pm2 kill && pm2 start index.js --name=\"DRDP\" -i max --no-daemon",
     "build": "echo 'Run the tests, build the webpack bundle, and test for 508 compliance.' && npm test && node build/build.js && npm run 508-test",
