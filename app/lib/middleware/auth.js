@@ -19,7 +19,8 @@ module.exports = {
     }
     if (!userId && process.env.DRDP_LOCAL) {
       req.session.user = req.user
-      req.user = USERS.GRANTEE
+      // req.user = USERS.GRANTEE
+      req.user = USERS.HUD_HQ
       return next()
     }
     hudApi.getUser(userId)
