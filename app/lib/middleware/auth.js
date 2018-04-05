@@ -4,7 +4,7 @@ const USERS = {
   GRANTEE: {'login': 'T071GA', 'disasterids': ['1606', '1791', '1999', '4029', '4223', '4245', '4266', '4269', '4272'], 'type': 'Grantee', 'hq': false},
   GRANTEE2: {'login': 'T071GA', 'disasterids': ['1606', '1791'], 'type': 'Grantee', 'hq': false},
   GRANTEE_NO_DISASTERS: {'login': 'T071GA', 'disasterids': [], 'type': 'Grantee', 'hq': false},
-  HUD_HQ: {'login': 'T071GA', 'disasterids': [], 'type': 'HUD', 'hq': true}
+  HUD_HQ: {'login': 'HUD_HQ', 'disasterids': ['4187', '4289', '4223', '1791', '4272', '1966'], 'type': 'HUD', 'hq': true}
 }
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
       // console.log('user:', req.user)
       return next()
     }
-    if (!userId && process.env.DRDP_LOCAL) {
+    if (!userId && process.env.DRGR_LOCAL) {
       req.session.user = req.user
       // req.user = USERS.GRANTEE
       req.user = USERS.HUD_HQ
