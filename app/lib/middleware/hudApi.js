@@ -54,6 +54,7 @@ const SERVICE_CONSUMER_DATA = {
 const hudGet = function (url, scope) {
   return new Promise((resolve, reject) => {
     let opts = requestOptions(url, scope)
+    console.log(`about to request.get: ${JSON.stringify(opts)}`)
     request.get(opts)
     .then(resolve)
     .catch(err => {
