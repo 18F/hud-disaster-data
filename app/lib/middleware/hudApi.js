@@ -62,6 +62,7 @@ const hudGet = function (url, scope) {
         return getTokens().then(result => {
           oauthTokens = result
           opts = requestOptions(url, scope)
+          console.log(`After 400, about to request.get: ${JSON.stringify(opts)}`)
           resolve(request.get(opts).catch(error => {
             console.log(`Caught error: \n${JSON.stringify(error)} \n\nafter attempting to get new tokens`)
             reject(error)
