@@ -13,27 +13,27 @@ Vue.use(Vuex)
 * @module reportStore
 */
 const conversionList = [
-  {apiName: 'numberOfRecords', column: 'NUMBER_OF_RECORDS', text: 'Number of households affected', format: '0,0', selected: true},
-  {apiName: 'totalDamageSum', column: 'TOTAL_DMGE_AMNT', text: 'Total FEMA verified real property loss', format: '$0,0.00', selected: true},
-  {apiName: 'hudUnmetNeedSum', column: 'HUD_UNMT_NEED_AMNT', text: 'HUD estimated unmet need', format: '$0,0.00', selected: true},
-  {apiName: 'householdSizeSum', column: 'HSHD_SIZE_CNT', text: 'Household size', format: '0,0', selected: false},
-  {apiName: 'dependentSum', column: 'DPNDNT_CNT', text: 'Dependents', format: '0,0', selected: false},
-  {apiName: 'incomeSum', column: 'INCM_AMNT', text: 'Income', format: '$0,0.00', selected: false},
-  {apiName: 'hazardInsuranceSum', column: 'HZRD_INSNC_AMNT', text: 'Hazard insurance', format: '$0,0.00', selected: false},
-  {apiName: 'flowInsuranceSum', column: 'FLOOD_INSNC_AMNT', text: 'Flood insurance', format: '$0,0.00', selected: false},
-  {apiName: 'otherInsuranceSum', column: 'OTHER_INSNC_AMNT', text: 'Other insurance', format: '$0,0.00', selected: false},
-  {apiName: 'realPropertyLossSum', column: 'REAL_PROP_LOSS_AMNT', text: 'Real property loss', format: '$0,0.00', selected: false},
-  {apiName: 'floodDamageSum', column: 'FLOOD_DMGE_AMNT', text: 'Flood damage', format: '$0,0.00', selected: false},
-  {apiName: 'foundationDamageSum', column: 'FNDTN_DMGE_AMNT', text: 'Foundation damage', format: '$0,0.00', selected: false},
-  {apiName: 'roofDamageSum', column: 'ROOF_DMGE_AMNT', text: 'Roof damage', format: '$0,0.00', selected: false},
-  {apiName: 'temporaryShelterReceivedSum', column: 'TMP_SHLTR_RCVD_AMNT', text: 'Temp shelter received', format: '$0,0.00', selected: false},
-  {apiName: 'rentAssistanceSum', column: 'RENT_ASSTN_AMNT', text: 'Rent assistance', format: '$0,0.00', selected: false},
-  {apiName: 'repairSum', column: 'REPR_AMNT', text: 'Repair', format: '$0,0.00', selected: false},
-  {apiName: 'replacementSum', column: 'RPMT_AMNT', text: 'Replacement', format: '$0,0.00', selected: false},
-  {apiName: 'sbaReceivedSum', column: 'SBA_RCVD_AMNT', text: 'SBA received', format: '$0,0.00', selected: false},
-  {apiName: 'personalPropertyAssistanceSum', column: 'PRSNL_PROP_ASSTN_AMNT', text: 'Personal property assistance', format: '$0,0.00', selected: false},
-  {apiName: 'otherAssistanceSum', column: 'OTHER_ASSTN_AMNT', text: 'Other assistance', format: '$0,0.00', selected: false},
-  {apiName: 'totalAssistanceSum', column: 'TOTAL_ASSTN_AMNT', text: 'Total assistance', format: '$0,0.00', selected: false}
+  {column: 'numberOfRecords', text: 'Number of households affected', format: '0,0', selected: true},
+  {column: 'totalDamageSum', text: 'Total FEMA verified real property loss', format: '$0,0.00', selected: true},
+  {column: 'hudUnmetNeedSum', text: 'HUD estimated unmet need', format: '$0,0.00', selected: true},
+  {column: 'householdSizeSum', text: 'Household size', format: '0,0', selected: false},
+  {column: 'dependentSum', text: 'Dependents', format: '0,0', selected: false},
+  {column: 'incomeSum', text: 'Income', format: '$0,0.00', selected: false},
+  {column: 'hazardInsuranceSum', text: 'Hazard insurance', format: '$0,0.00', selected: false},
+  {column: 'flowInsuranceSum', text: 'Flood insurance', format: '$0,0.00', selected: false},
+  {column: 'otherInsuranceSum', text: 'Other insurance', format: '$0,0.00', selected: false},
+  {column: 'realPropertyLossSum', text: 'Real property loss', format: '$0,0.00', selected: false},
+  {column: 'floodDamageSum', text: 'Flood damage', format: '$0,0.00', selected: false},
+  {column: 'foundationDamageSum', text: 'Foundation damage', format: '$0,0.00', selected: false},
+  {column: 'roofDamageSum', text: 'Roof damage', format: '$0,0.00', selected: false},
+  {column: 'temporaryShelterReceivedSum', text: 'Temp shelter received', format: '$0,0.00', selected: false},
+  {column: 'rentAssistanceSum', text: 'Rent assistance', format: '$0,0.00', selected: false},
+  {column: 'repairSum', text: 'Repair', format: '$0,0.00', selected: false},
+  {column: 'replacementSum', text: 'Replacement', format: '$0,0.00', selected: false},
+  {column: 'sbaReceivedSum', text: 'SBA received', format: '$0,0.00', selected: false},
+  {column: 'personalPropertyAssistanceSum', text: 'Personal property assistance', format: '$0,0.00', selected: false},
+  {column: 'otherAssistanceSum', text: 'Other assistance', format: '$0,0.00', selected: false},
+  {column: 'totalAssistanceSum', text: 'Total assistance', format: '$0,0.00', selected: false}
 ]
 
 export const mutations = {
@@ -132,7 +132,7 @@ export const mutations = {
     for (var key in data) {
       let newObj = {}
       let value = data[key]
-      let matchingColumn = _.find(conversionList, ['apiName', key])
+      let matchingColumn = _.find(conversionList, ['column', key])
       if (matchingColumn) {
         newObj.name = matchingColumn.text
         newObj.column = key
@@ -213,7 +213,7 @@ export const actions = {
         commit('setShowReportSpinner', false)
         return
       }
-      let formattedQuery = 'cols=' + _.map(conversionList, c => c.apiName).join(',')
+      let formattedQuery = 'cols=' + _.map(conversionList, c => c.column).join(',')
       commit('setShowReportSpinner', true)
       _.forIn(allFilters, (value, key) => {
         if (key !== 'cols') formattedQuery += `&${key}=${value.toString()}`
@@ -286,7 +286,7 @@ const reportStore = {
     showReport: false,
     showReportSpinner: false,
     summaryColumns: _.map(_.filter(conversionList, c => !c.notInList), sc => {
-      return {apiName: sc.apiName, column: sc.column, name: sc.text, selected: sc.selected}
+      return {column: sc.column, name: sc.text, selected: sc.selected}
     })
   },
   actions,

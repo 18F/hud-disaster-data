@@ -43,7 +43,7 @@ describe('/api/applicants/:queryType', function () {
     .expect('Content-Type', /json/)
     .end((err, res) => {
       res.body.should.be.an.Array()
-      res.body[0].DMGE_CITY_NAME.should.be.equal('Houston')
+      res.body[0].dmge_city_name.should.be.equal('Houston')
       done()
     })
   })
