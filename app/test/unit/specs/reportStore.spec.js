@@ -287,17 +287,17 @@ describe('reportStore', function () {
   describe('updateReportData', function () {
     it('should set value of summaryRecords to proper value', function () {
       let state = {summaryRecords: null}
-      let getters = {selectedSummaryColumns: ['NUMBER_OF_RECORDS', 'TOTAL_DMGE_AMNT']}
-      let newSummaryRecord = {NUMBER_OF_RECORDS: 1000, TOTAL_DMGE_AMNT: 9000}
+      let getters = {selectedSummaryColumns: ['numberOfRecords', 'totalDamageSum']}
+      let newSummaryRecord = {numberOfRecords: 1000, totalDamageSum: 9000}
       updateReportData(state, newSummaryRecord)
       should(state.summaryRecords.someField).be.equal(newSummaryRecord.someField)
       should(summaryRecords(state, getters).someOtherField).be.equal(newSummaryRecord.someOtherField)
     })
 
-    it('should set value of summaryRecords to proper formatted value', function () {
+    it('should set displayed text value of summaryRecords to proper formatted value', function () {
       let state = {summaryRecords: null}
-      let getters = {selectedSummaryColumns: ['NUMBER_OF_RECORDS', 'TOTAL_DMGE_AMNT']}
-      let newSummaryRecord = {NUMBER_OF_RECORDS: 1000, TOTAL_DMGE_AMNT: 2000, HUD_UNMT_NEED_AMNT: 3000}
+      let getters = {selectedSummaryColumns: ['numberOfRecords', 'totalDamageSum']}
+      let newSummaryRecord = {numberOfRecords: 1000, totalDamageSum: 2000, hudUnmetNeedSum: 3000}
       updateReportData(state, newSummaryRecord)
       should(summaryRecords(state, getters)['Total FEMA verified real property loss']).be.equal('$2,000.00')
     })
