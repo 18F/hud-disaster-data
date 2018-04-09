@@ -54,7 +54,7 @@ const SERVICE_CONSUMER_DATA = {
 const hudGet = function (url, scope) {
   return new Promise((resolve, reject) => {
     let opts = requestOptions(url, scope)
-    console.log(`about to request.get: ${JSON.stringify(opts)}`)
+    console.log(`about to request.get: ${opts.url}`)
     request.get(opts)
     .then(resolve)
     .catch(err => {
@@ -62,7 +62,7 @@ const hudGet = function (url, scope) {
         return getTokens().then(result => {
           oauthTokens = result
           opts = requestOptions(url, scope)
-          console.log(`After 400, about to request.get: ${JSON.stringify(opts)}`)
+          console.log(`After 400, about to request.get: ${opts.url}`)
           resolve(request.get(opts).catch(error => {
             console.log(`Caught error: \n${JSON.stringify(error)} \n\nafter attempting to get new tokens`)
             reject(error)
