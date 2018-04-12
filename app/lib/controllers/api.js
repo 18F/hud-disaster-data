@@ -15,7 +15,11 @@ const isHUDHQUser = auth.isHUDHQUser
 
 const validLocaleTypes = ['city', 'county', 'congrdist', 'zipcode', 'township', 'tract']
 
-const DRDP_LOCAL =  (process.env.DRDP_LOCAL == true || process.env.DRDP_LOCAL === 'true') ? true : false
+if (process.env.DRDP_LOCAL === true || process.env.DRDP_LOCAL === 'true') {
+  process.env.DRDP_LOCAL = true
+} else {
+  process.env.DRDP_LOCAL = false
+}
 
 
 /**
@@ -59,7 +63,8 @@ router.get('/states/:state/disasters', function (req, res, next) {
     if (_.isEmpty(locales)) return res.status(400).send(errMessage)
   }
 
-  const api = (DRDP_LOCAL) ? localAPI : hudApi
+  console.log(`process.env.DRDP_LOCAL: ${process.env.DRDP_LOCAL}`)
+  const api = (process.env.DRDP_LOCAL) ? localAPI : hudApi
   api.getDisastersByLocale(req.params.state, localeType, locales)
       .then(disasters => res.json(disasters))
       .catch(next)
@@ -79,7 +84,8 @@ router.get('/states/:stateId/:localeType', (req, res, next) => {
   var stateId = req.params.stateId.toUpperCase()
   let localeType = req.params.localeType
 
-  if (DRDP_LOCAL) {
+  console.log(`process.env.DRDP_LOCAL: ${process.env.DRDP_LOCAL}`)
+  if (process.env.DRDP_LOCAL) {
     res.json(localAPI.getLocales(stateId, localeType))
   } else {
     hudApi.getLocales(req.user, stateId, localeType)
@@ -182,7 +188,8 @@ router.get('/export/:fileNamePart', function (req, res, next) {
 
   if (_.isEmpty(numbers)) return noDataFound()
 
-  const promise = (DRDP_LOCAL) ? localAPI.getExport(req.headers.host, numbers) : hudApi.getExport(numbers)
+  console.log(`process.env.DRDP_LOCAL: ${process.env.DRDP_LOCAL}`)
+  const promise = (process.env.DRDP_LOCAL) ? localAPI.getExport(req.headers.host, numbers) : hudApi.getExport(numbers)
 
   promise.then(function (results) {
     if (!results || results.length === 0) return noDataFound()
@@ -245,7 +252,8 @@ router.get('/applicants/:queryType', (req, res, next) => {
     return res.status(400).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
   }
 
-  if (DRDP_LOCAL) {
+  console.log(`process.env.DRDP_LOCAL: ${process.env.DRDP_LOCAL}`)
+  if (process.env.DRDP_LOCAL) {
     return res.json(localAPI.getSummaryRecords({state, localeType, locales, disasters, cols, queryType}))
   }
 

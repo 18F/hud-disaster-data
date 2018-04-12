@@ -17,7 +17,7 @@ module.exports = {
       // console.log('user:', req.user)
       return next()
     }
-    if (!userId && process.env.DRGR_LOCAL) {
+    if (!userId && (process.env.DRGR_LOCAL === true || process.env.DRGR_LOCAL === 'true')) {
       req.session.user = req.user
       // req.user = USERS.GRANTEE
       req.user = USERS.HUD_HQ
