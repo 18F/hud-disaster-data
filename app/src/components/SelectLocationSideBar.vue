@@ -217,7 +217,7 @@ export default {
     addLocale () {
       console.log('inside addLocale')
       if (!this.localeSelected) return
-      // DOING: Make a dry run of loading new disasters
+      // DOING: Make a dry run of loading new disasters id:10
       this.$store.commit('addLocaleFilter', this.localeSelected)
       this.$refs.localeSelect.clearValue()
       this.filterDisasters()
