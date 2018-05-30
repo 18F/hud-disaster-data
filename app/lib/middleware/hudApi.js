@@ -31,14 +31,14 @@ const LOCALE_TYPES = {
 }
 
 const DATABASEFIELDREFERENCE = {
-  disaster: 'DSTER_ID',
-  state: 'DMGE_STATE_CD',
-  city: 'DMGE_CITY_NAME',
-  county: 'CNTY_NAME',
-  congrdist: 'FCD_FIPS_91_CD',
-  zipcode: 'STD_BASC_ZIP_CD',
-  township: 'CNTY_SUB_DIVN_CURR_NAME',
-  tract: 'TRACT_CENSUS_2010_CD'
+  disaster: 'dster_id',
+  state: 'dmge_state_cd',
+  city: 'dmge_city_name',
+  county: 'cnty_name',
+  congrdist: 'fcd_fips_91_cd',
+  zipcode: 'std_basc_zip_cd',
+  township: 'cnty_sub_divn_curr_name',
+  tract: 'tract_census_2010_cd'
 }
 
 const SERVICE_CONSUMER_DATA = {
@@ -54,6 +54,7 @@ const SERVICE_CONSUMER_DATA = {
 const hudGet = function (url, scope) {
   return new Promise((resolve, reject) => {
     let opts = requestOptions(url, scope)
+    console.log(`about to request.get: ${opts.url}`)
     request.get(opts)
     .then(resolve)
     .catch(err => {
@@ -61,6 +62,7 @@ const hudGet = function (url, scope) {
         return getTokens().then(result => {
           oauthTokens = result
           opts = requestOptions(url, scope)
+          console.log(`After 400, about to request.get: ${opts.url}`)
           resolve(request.get(opts).catch(error => {
             console.log(`Caught error: \n${JSON.stringify(error)} \n\nafter attempting to get new tokens`)
             reject(error)

@@ -161,7 +161,7 @@ let next = {
 let disasterLink = `
     <p>
     Don’t know the disaster ID?
-    Look it up in <a target="_blank" href="https://www.fema.gov/disasters" class="tabbable">FEMA’s disaster database</a>.
+    Look it up in <a target='_blank' rel='noopener' href="https://www.fema.gov/disasters" class="tabbable">FEMA’s disaster database</a>.
     </p>`
 disasterSearchTour.addStep('enter-search', {
   title: 'Search for a disaster',
@@ -438,7 +438,7 @@ disasterSearchTour.addStep('enter-search', {
       text: 'Next',
       action: () => {
         let step = disasterSearchTour.getCurrentStep()
-        if ($store.getters.status.type !== 'normal') {
+        if ($store.getters.status.type !== 'success') {
           step.hide()
           TourObject.showError()
           step.error = true

@@ -1,19 +1,19 @@
 {
   "name": "hud-disaster-data",
-  "version": "1.0.16",
+  "version": "1.3.0",
   "description": "FEMA needs to share post-disaster aid data with HUD and its grantees. This is a website that will facilitate that transfer of data.",
   "main": "index.js",
   "scripts": {
-    "dev": "echo 'Run the client side hot reloading dev server' && node build/dev-server.js",
+    "dev": "echo 'Run the client side hot reloading dev server' && export DRDP_LOCAL=true && export DRGR_LOCAL=true && node build/dev-server.js",
     "start": "echo 'Start the server' && node index",
     "start-cluster": "echo 'Start the server with pm2 cluster' && pm2 kill && pm2 start index.js --name=\"DRDP\" -i max --no-daemon",
     "build": "echo 'Run the tests, build the webpack bundle, and test for 508 compliance.' && npm test && node build/build.js && npm run 508-test",
     "unit": "echo 'Run the client side tests' && cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "server-unit": "echo 'Run the server side tests' && export DRDP_LOCAL=true && mocha test/server && mocha test",
+    "server-unit": "echo 'Run the server side tests' && export DRDP_LOCAL=true && export DRGR_LOCAL=true && mocha test/server && mocha test",
     "server-coverage": "echo 'Run the server side tests and report coverage' && nyc --reporter=lcov --reporter=text --reporter=html npm run server-unit",
     "test": "echo 'Run all tests' && npm run unit && npm run server-coverage",
     "lint": "echo 'Run the linter' && eslint --ext .js,.vue src test/unit/specs",
-    "508-test": "echo 'Run the 508 compliance tests' && export DRDP_LOCAL=true && bash ./508_Test.sh",
+    "508-test": "echo 'Run the 508 compliance tests' && export DRDP_LOCAL=true && export DRGR_LOCAL=true && bash ./508_Test.sh",
     "doc": "echo 'Run jsdoc and produce documentation' && jsdoc src build package.json -r -c jsdoc.conf.json -d docs"
   },
   "repository": {

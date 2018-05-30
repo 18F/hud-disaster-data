@@ -11,7 +11,7 @@ const getLocales = function (stateId, localeType) {
   localeType = hudApi.decodeField(localeType)
   var selectCols = [localeType]
   var queryObj = []
-  queryObj.push({'DMGE_STATE_CD': [stateId]})
+  queryObj.push({'dmge_state_cd': [stateId]})
   var data = getData(queryObj, null, selectCols)
   return _.map(_.uniqBy(data, l => JSON.stringify(l)), localeType)
 }
@@ -21,18 +21,6 @@ const getLocales = function (stateId, localeType) {
 const db = low('mock-data/REAC Modified Database.json', {
   storage: fileAsync
 })
-
-const keysToUpper = function (records) {
-  var newData = []
-  _.forEach(records, rec => {
-    var upperRec = {}
-    _.forEach(rec, (val, key) => {
-      upperRec[key.toUpperCase()] = val
-    })
-    newData.push(upperRec)
-  })
-  return newData
-}
 
 const getSummaryRecords = function ({state, localeType, locales, disasters, cols, queryType}) {
   var queryObj = []
@@ -65,7 +53,7 @@ const getData = function (queryObj, summaryCols, selectCols) {
   console.log(JSON.stringify(queryObj))
   console.log(JSON.stringify(summaryCols))
   console.log(JSON.stringify(selectCols))
-  var result = keysToUpper(db.get('disasterRecs').value())
+  var result = db.get('disasterRecs').value()
   for (var phrase in queryObj) {
     var query = queryObj[phrase]
     var column = _.keys(query)[0]
@@ -101,9 +89,10 @@ const summarizeCols = function (data, summaryCols) {
   var numberOfRecords = data.length
   var summary = {}
   _.forEach(summaryCols, (col) => {
-    summary[col.toUpperCase()] = _.sumBy(data, rec => rec[col])
+    summary[col] = _.sumBy(data, rec => rec[col])
   })
-  if (_.indexOf(summaryCols, 'NUMBER_OF_RECORDS') > -1) summary['NUMBER_OF_RECORDS'] = numberOfRecords
+  if (_.indexOf(summaryCols, 'numberOfRecords') > -1) summary['numberOfRecords'] = numberOfRecords
+  console.log(`returning summary: ${JSON.stringify(summary)}`)
   return summary
 }
 
