@@ -33,7 +33,7 @@ Install [git](https://git-scm.com/)
 
 #### Navigate to cloned directory's app subdirectory
 
-`cd hud-disaster-data/app`
+`cd hud-disaster-data/app/`
 
 #### Install dependencies
 Run `npm install`
