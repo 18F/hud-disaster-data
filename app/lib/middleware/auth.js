@@ -9,7 +9,7 @@ const USERS = {
 
 module.exports = {
   authenticate: function (req, res, next) {
-    // TODO: store the user in the session and expire after 1 min
+    // TODO: store the user in the session and expire after 1 min id:9
     let userId = req.headers['dr-userid']
     const sessionUser = _.get(req, 'session.user')
     if (sessionUser && sessionUser.login === userId) {
