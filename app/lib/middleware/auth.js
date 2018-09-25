@@ -23,6 +23,7 @@ module.exports = {
       req.user = USERS.HUD_HQ
       return next()
     }
+    console.log(`inside authenticate() with userId: ${userId}`)
     hudApi.getUser(userId)
       .then(user => {
         if (!user || user.type === 'Unauthorized') {
