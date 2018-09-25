@@ -24,6 +24,7 @@ module.exports = {
       return next()
     }
     console.log(`inside authenticate() with userId: ${userId}`)
+    if (!userId) userId = 'NO_USER_PASSED_IN'
     hudApi.getUser(userId)
       .then(user => {
         if (!user || user.type === 'Unauthorized') {
