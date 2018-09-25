@@ -24,13 +24,16 @@ module.exports = {
       return next()
     }
     console.log(`inside authenticate() with userId: ${userId}`)
-    if (!userId) userId = 'NO_USER_PASSED_IN'
+    let unAuthString = `You are not authorized to access the Disaster Recovery Data Portal export page.<br><br>`
+    unAuthString += `If you believe you should have access, please contact HUD's Office of Community Planning and Development, Disaster Recovery and Special Issues Division.<br><br>`
+    unAuthString += `For more information: <a href='https://www.hudexchange.info/contact-us/#'>https://www.hudexchange.info/contact-us/#</a>`
+    if (!userId) {
+      return res.status(401)
+      .send(unAuthString)
+    }
     hudApi.getUser(userId)
       .then(user => {
         if (!user || user.type === 'Unauthorized') {
-          let unAuthString = `You are not authorized to access the Disaster Recovery Data Portal export page.<br><br>`
-          unAuthString += `If you believe you should have access, please contact HUD's Office of Community Planning and Development, Disaster Recovery and Special Issues Division.<br><br>`
-          unAuthString += `For more information: <a href='https://www.hudexchange.info/contact-us/#'>https://www.hudexchange.info/contact-us/#</a>`
           return res.status(401)
           .send(unAuthString)
         }
