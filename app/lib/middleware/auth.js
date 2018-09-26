@@ -28,7 +28,7 @@ module.exports = {
     unAuthString += `If you believe you should have access, please contact HUD's Office of Community Planning and Development, Disaster Recovery and Special Issues Division.<br><br>`
     unAuthString += `For more information: <a href='https://www.hudexchange.info/contact-us/#'>https://www.hudexchange.info/contact-us/#</a>`
     if (!userId) {
-      if (req.url.search('map-background2.png') > -1) { // if getting background image, return normal
+      if (req.url.search('map-background2') > -1) { // if getting background image, return normal
         next()
         return res.status(200)
       } else {
