@@ -11,7 +11,7 @@ const oAuth2ClientId = process.env.oAuth2ClientId
 const redirectUri = 'http://localhost:8000'
 const path = require('path')
 const fs = require('fs')
-const certPath = path.join(__dirname,'..','..','certs','HUD-CA.pem')
+const certPath = path.join(__dirname,'..','..','certs', process.env.HUD_CA)
 // console.log(`*** cert path: ${certPath} ***`)
 const ca = fs.readFileSync(certPath)
 // console.log(`*** ca:\n ${ca} \n***`)
