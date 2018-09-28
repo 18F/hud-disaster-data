@@ -14,7 +14,7 @@
           div.col-sm-12.col-md-4.col-lg-2
             a(href='#') Web Policies
           div.col-sm-12.col-md-4.col-lg-2
-            a(href='#') Feedback
+            a(href='api/dataDictionary/HUD_FEMA_Data_Dictionary.xlsx' download='') Data Dictionary
       .container-block.signature
         div.row
             div.col-lg-2
