@@ -9,7 +9,7 @@ const DRDP_API_BASE = `${process.env.HUD_API_BASE_URL}/drdp/api/v1.0`
 const DRGR_API_BASE = `${process.env.HUD_API_BASE_URL}/drgr/api/v1.0`
 const path = require('path')
 const fs = require('fs')
-const certPath = path.join(__dirname,'..','..','certs','HUD-CA.pem')
+const certPath = path.join(__dirname,'..','..','certs', process.env.HUD_CA)
 const ca = fs.readFileSync(certPath)
 let oauthTokens = {}
 

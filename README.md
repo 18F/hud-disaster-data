@@ -1,6 +1,4 @@
-[![Build Status Staging](https://img.shields.io/travis/flexion/hud-disaster-data/master.svg?label=build-staging)](https://travis-ci.org/flexion/hud-disaster-data)
-[![Build Status Prod](https://img.shields.io/travis/18F/hud-disaster-data/master.svg?label=build-prod)](https://travis-ci.org/18F/hud-disaster-data)
-
+[![Build Status Flexion master](https://api.travis-ci.org/flexion/hud-disaster-data.svg?branch=master)](https://travis-ci.org/flexion/hud-disaster-data)
 # HUD Disaster Data Pilot
 
 A pilot of a website that collects and displays disaster data for use by Community Development Block Grant-Disaster Recovery (CDBG-DR) grantees.

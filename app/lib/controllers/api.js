@@ -12,6 +12,7 @@ const version = require('../../package.json').version
 const requestPromise = require('request-promise')
 const auth = require('../middleware/auth')
 const isHUDHQUser = auth.isHUDHQUser
+const path = require('path')
 
 const validLocaleTypes = ['city', 'county', 'congrdist', 'zipcode', 'township', 'tract']
 
@@ -202,6 +203,44 @@ router.get('/export/:fileNamePart', function (req, res, next) {
     res.setHeader('Content-disposition', `attachment; filename="${fileName}.csv"`)
     res.csv(resultSet)
   }).catch(next)
+})
+
+/**
+* router.get('/exportReport/:fileNamePart') <br/>
+*  Generates a CSV file with the data that is passed in<br/>
+* @function /exportReport/:fileName
+* @param {string} values - a JSON string list of values to be returned
+* @example // returns CSV for "Type","Amount"
+*   "Number of households affected","85"
+*   "Total FEMA verified real property loss","$146,076.40"
+*   "HUD estimated unmet need","$225.86"
+*  get /exportReport/myfilename
+*/
+router.get('/exportReport/:fileName', function (req, res, next) {
+  var fileName = _.get(req, 'params.fileName')
+  var data = _.get(req, 'query.data')
+  var csvData = []
+  csvData.push(['Type', 'Amount'])
+  if (!data || data.length === 0) return res.status(406).send('No data sent. Not Acceptable.')
+  _.forIn(JSON.parse(data), (value, key) => { csvData.push([key, value]) })
+  res.setHeader('Content-disposition', `attachment; filename="${fileName}"`)
+  res.csv(csvData)
+})
+
+/**
+* router.get('/dataDictionary/:fileNamePart') <br/>
+*  Returns download of Data Dictionary file <br/>
+* @function /dataDictionary/:fileName
+* @example // returns spreadsheet of Data Dictionary
+*
+*  get /dataDictionary/datadict.xls
+*/
+router.get('/dataDictionary/:fileName', function (req, res, next) {
+  var fileName = _.get(req, 'params.fileName')
+  var dataDictFile = path.join(__dirname, '../..', 'OPTIMAL_DRDP_DDF_SEPT2018.xlsx')
+  debugger
+  res.setHeader('Content-disposition', `attachment; filename="${fileName}"`)
+  res.sendFile(dataDictFile)
 })
 
 /**
