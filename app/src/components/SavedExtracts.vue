@@ -28,8 +28,6 @@
         li(v-for='(item, $item) in items')
           disaster(:prefix="'saved'", :item='item')
     #action-buttons
-      a(:href='downloadDataDict()' tabindex='-1' download='')
-        button#data-dict-button.usa-button.alt-button(title='Download Data Dictionary button') Download Data Dictionary
       button#clear-button.usa-button.alt-button(@click='clear' title='Clear button') Clear
       a(:href='download()' tabindex='-1' download='')
         button#export-button.usa-button.green(:disabled='items.length === 0' title='Export button')
@@ -79,9 +77,6 @@ export default {
     }
   },
   methods: {
-    downloadDataDict () {
-      return 'api/dataDictionary/HUD_FEMA_Data_Dictionary.xlsx'
-    },
     download () {
       if (!this.items || this.items.length === 0) return
       const timeStamp = moment().format('YYYY-MM-DD-kk:mm:ss')
