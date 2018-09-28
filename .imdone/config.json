@@ -17,10 +17,15 @@
       "XXX",
       "IDEA",
       "NOTE",
-      "REVIEW"
+      "REVIEW",
+      "HELP"
     ]
   },
   "lists": [
+    {
+      "name": "HELP",
+      "hidden": false
+    },
     {
       "name": "TODO",
       "hidden": false
@@ -46,5 +51,6 @@
     "id": "59ee0cabe09cf806173a9ee3",
     "name": "flexion/hud-disaster-data",
     "useImdoneioForPriority": true
-  }
+  },
+  "noHelp": true
 }

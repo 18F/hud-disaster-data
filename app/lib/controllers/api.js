@@ -12,8 +12,16 @@ const version = require('../../package.json').version
 const requestPromise = require('request-promise')
 const auth = require('../middleware/auth')
 const isHUDHQUser = auth.isHUDHQUser
+const path = require('path')
 
 const validLocaleTypes = ['city', 'county', 'congrdist', 'zipcode', 'township', 'tract']
+
+if (process.env.DRDP_LOCAL === true || process.env.DRDP_LOCAL === 'true') {
+  process.env.DRDP_LOCAL = true
+} else {
+  process.env.DRDP_LOCAL = false
+}
+
 
 /**
 * Creates the routes for the backend functionality. <br/>
@@ -56,7 +64,8 @@ router.get('/states/:state/disasters', function (req, res, next) {
     if (_.isEmpty(locales)) return res.status(400).send(errMessage)
   }
 
-  const api = (process.env.DRDP_LOCAL) ? localAPI : hudApi
+  console.log(`process.env.DRDP_LOCAL: ${process.env.DRDP_LOCAL === 'true'}`)
+  const api = (process.env.DRDP_LOCAL === 'true') ? localAPI : hudApi
   api.getDisastersByLocale(req.params.state, localeType, locales)
       .then(disasters => res.json(disasters))
       .catch(next)
@@ -76,11 +85,12 @@ router.get('/states/:stateId/:localeType', (req, res, next) => {
   var stateId = req.params.stateId.toUpperCase()
   let localeType = req.params.localeType
 
-  if (process.env.DRDP_LOCAL) {
+  console.log(`process.env.DRDP_LOCAL: ${process.env.DRDP_LOCAL === 'true'}`)
+  if (process.env.DRDP_LOCAL === 'true') {
     res.json(localAPI.getLocales(stateId, localeType))
   } else {
     hudApi.getLocales(req.user, stateId, localeType)
-      .then(locales => res.json(_.map(locales, 'name')))
+      .then(locales => res.json(_.map(locales, 'localeValue')))
       .catch(err => {
         console.log('Error calling getLocales:', err)
         next(err)
@@ -179,7 +189,8 @@ router.get('/export/:fileNamePart', function (req, res, next) {
 
   if (_.isEmpty(numbers)) return noDataFound()
 
-  const promise = (process.env.DRDP_LOCAL) ? localAPI.getExport(req.headers.host, numbers) : hudApi.getExport(numbers)
+  console.log(`process.env.DRDP_LOCAL: ${process.env.DRDP_LOCAL === 'true'}`)
+  const promise = (process.env.DRDP_LOCAL === 'true') ? localAPI.getExport(req.headers.host, numbers) : hudApi.getExport(numbers)
 
   promise.then(function (results) {
     if (!results || results.length === 0) return noDataFound()
@@ -192,6 +203,44 @@ router.get('/export/:fileNamePart', function (req, res, next) {
     res.setHeader('Content-disposition', `attachment; filename="${fileName}.csv"`)
     res.csv(resultSet)
   }).catch(next)
+})
+
+/**
+* router.get('/exportReport/:fileNamePart') <br/>
+*  Generates a CSV file with the data that is passed in<br/>
+* @function /exportReport/:fileName
+* @param {string} values - a JSON string list of values to be returned
+* @example // returns CSV for "Type","Amount"
+*   "Number of households affected","85"
+*   "Total FEMA verified real property loss","$146,076.40"
+*   "HUD estimated unmet need","$225.86"
+*  get /exportReport/myfilename
+*/
+router.get('/exportReport/:fileName', function (req, res, next) {
+  var fileName = _.get(req, 'params.fileName')
+  var data = _.get(req, 'query.data')
+  var csvData = []
+  csvData.push(['Type', 'Amount'])
+  if (!data || data.length === 0) return res.status(406).send('No data sent. Not Acceptable.')
+  _.forIn(JSON.parse(data), (value, key) => { csvData.push([key, value]) })
+  res.setHeader('Content-disposition', `attachment; filename="${fileName}"`)
+  res.csv(csvData)
+})
+
+/**
+* router.get('/dataDictionary/:fileNamePart') <br/>
+*  Returns download of Data Dictionary file <br/>
+* @function /dataDictionary/:fileName
+* @example // returns spreadsheet of Data Dictionary
+*
+*  get /dataDictionary/datadict.xls
+*/
+router.get('/dataDictionary/:fileName', function (req, res, next) {
+  var fileName = _.get(req, 'params.fileName')
+  var dataDictFile = path.join(__dirname, '../..', 'OPTIMAL_DRDP_DDF_SEPT2018.xlsx')
+  debugger
+  res.setHeader('Content-disposition', `attachment; filename="${fileName}"`)
+  res.sendFile(dataDictFile)
 })
 
 /**
@@ -226,7 +275,7 @@ router.get('/applicants/:queryType', (req, res, next) => {
   })
 
   var cols = queryString.cols
-  if (cols) cols = cols.toUpperCase().split(',')
+  if (cols) cols = cols.split(',')
 
   var disasters = queryString.disasters
   if (disasters) disasters = disasters.split(',')
@@ -242,7 +291,8 @@ router.get('/applicants/:queryType', (req, res, next) => {
     return res.status(400).send('Improper query parameters sent. You must provide both localeType and values, or neither. Not Acceptable.')
   }
 
-  if (process.env.DRDP_LOCAL) {
+  console.log(`process.env.DRDP_LOCAL: ${process.env.DRDP_LOCAL === 'true'}`)
+  if (process.env.DRDP_LOCAL === 'true') {
     return res.json(localAPI.getSummaryRecords({state, localeType, locales, disasters, cols, queryType}))
   }
 

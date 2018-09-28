@@ -13,21 +13,21 @@ describe('/api/applicants/export', function () {
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.be.an.Object().and.have.property('DSTER_ID').which.is.equal('4187')
-      body[0].should.be.an.Object().and.have.property('DMGE_STATE_CD').which.is.equal('IA')
+      body[0].should.be.an.Object().and.have.property('dster_id').which.is.equal('4187')
+      body[0].should.be.an.Object().and.have.property('dmge_state_cd').which.is.equal('IA')
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
   })
 
   it('should return only columns that are specified as cols', (done) => {
-    request(app).get('/api/applicants/export?states=TX&cols=DMGE_CITY_NAME,DMGE_STATE_CD')
+    request(app).get('/api/applicants/export?states=TX&cols=dmge_city_name,dmge_state_cd')
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.be.an.Object().and.have.property('DMGE_STATE_CD').and.should.not.be.empty()
-      body[0].should.be.an.Object().and.have.property('DMGE_CITY_NAME').and.should.not.be.empty()
-      body[0].should.be.an.Object().and.not.have.property('DSTER_ID')
+      body[0].should.be.an.Object().and.have.property('dmge_state_cd').and.should.not.be.empty()
+      body[0].should.be.an.Object().and.have.property('dmge_city_name').and.should.not.be.empty()
+      body[0].should.be.an.Object().and.not.have.property('dster_id')
     })
     .expect(200)
     .expect('Content-Type', /json/, done)
@@ -62,32 +62,32 @@ describe('/api/applicants/export summarizeCols', function () {
       dster_id: '4269',
       damaged_city: 'HOUSTON',
       dmge_state_cd: 'TX',
-      total_damages: 3789.92,
-      hud_unmet_need: 1624.76
+      totalDamageSum: 3789.92,
+      hudUnmetNeedSum: 1624.76
     },
     {
       dster_id: '4269',
       damaged_city: 'HOUSTON',
       dmge_state_cd: 'TX',
-      total_damages: 3930.31,
-      hud_unmet_need: 0
+      totalDamageSum: 3930.31,
+      hudUnmetNeedSum: 0
     },
     {
       dster_id: '4269',
       damaged_city: 'HOUSTON',
       dmge_state_cd: 'TX',
-      total_damages: 270.65,
-      hud_unmet_need: 270.65
+      totalDamageSum: 270.65,
+      hudUnmetNeedSum: 270.65
     }]
-    let summaryCols = ['total_damages', 'hud_unmet_need']
+    let summaryCols = ['totalDamageSum', 'hudUnmetNeedSum']
     let summarizedCols = localAPI.summarizeCols(data, summaryCols)
-    summarizedCols.TOTAL_DAMAGES.should.be.equal(3789.92 + 3930.31 + 270.65)
-    summarizedCols.HUD_UNMET_NEED.should.be.equal(1624.76 + 0 + 270.65)
+    summarizedCols.totalDamageSum.should.be.equal(3789.92 + 3930.31 + 270.65)
+    summarizedCols.hudUnmetNeedSum.should.be.equal(1624.76 + 0 + 270.65)
     done()
   })
   it('should return false no data is passed in', (done) => {
     let data = null
-    let summaryCols = ['total_damages', 'hud_unmet_need']
+    let summaryCols = ['totalDamageSum', 'hudUnmetNeedSum']
     let summarizedCols = localAPI.summarizeCols(data, summaryCols)
     summarizedCols.should.be.equal(false)
     done()

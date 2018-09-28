@@ -4,17 +4,17 @@
       .links.container-fluid
         div.row
           div.col-sm-12.col-md-4.col-lg-2
-            a(href='https://www.disasterassistance.gov/' target='_blank') Disaster Assistance
+            a(href='https://www.disasterassistance.gov/' target='_blank' rel='noopener') Disaster Assistance
           div.col-sm-12.col-md-4.col-lg-2
-            a(href='https://portal.hud.gov/hudportal/HUD' target='_blank') HUD.gov
+            a(href='https://portal.hud.gov/hudportal/HUD' target='_blank' rel='noopener') HUD.gov
           div.col-sm-12.col-md-4.col-lg-2
-            a(href='https://www.hudexchange.info/programs/cdbg-dr/' target='_blank') CDBG-DR Program Resources
+            a(href='https://www.hudexchange.info/programs/cdbg-dr/' target='_blank' rel='noopener') CDBG-DR Program Resources
           div.col-sm-12.col-md-4.col-lg-2
-            a(href='https://www.huduser.gov/portal/home.html' target='_blank') HUDUser.gov
+            a(href='https://www.huduser.gov/portal/home.html' target='_blank' rel='noopener') HUDUser.gov
           div.col-sm-12.col-md-4.col-lg-2
             a(href='#') Web Policies
           div.col-sm-12.col-md-4.col-lg-2
-            a(href='#') Feedback
+            a(href='api/dataDictionary/HUD_FEMA_Data_Dictionary.xlsx' download='') Data Dictionary
       .container-block.signature
         div.row
             div.col-lg-2

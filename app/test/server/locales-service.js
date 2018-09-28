@@ -31,9 +31,9 @@ describe('/states/:stateId/:localeType', function () {
     .expect('Content-Type', /json/, done)
   })
 
-  it('should call hudApi.getLocales if DRDP_LOCAL is not set', (done) => {
-    delete process.env.DRDP_LOCAL
-    const locales = [{name:'a'}, {name:'b'}]
+  it('should call hudApi.getLocales if DRDP_LOCAL is not set to true', (done) => {
+    process.env.DRDP_LOCAL = false
+    const locales = [{localeValue:'a'}, {localeValue:'b'}]
     const stub = sinon.stub(requestpromise, 'get').callsFake(opts => {
       should.exist(opts.url)
       if (/users/.test(opts.url)) return new Promise(resolve => resolve(USERS.GRANTEE))
@@ -43,7 +43,7 @@ describe('/states/:stateId/:localeType', function () {
     .expect(function (res) {
       const body = res.body
       body.should.be.an.Array()
-      body[0].should.equal(_.map(locales,'name')[0])
+      body[0].should.equal(_.map(locales,'localeValue')[0])
       stub.restore()
       process.env.DRDP_LOCAL = true
     })

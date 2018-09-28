@@ -1,6 +1,6 @@
-[![Build Status Staging](https://img.shields.io/travis/flexion/hud-disaster-data/master.svg?label=build-staging)](https://travis-ci.org/flexion/hud-disaster-data)
-[![Build Status Prod](https://img.shields.io/travis/18F/hud-disaster-data/master.svg?label=build-prod)](https://travis-ci.org/18F/hud-disaster-data)
+[![TODO board](https://imdone.io/api/1.0/projects/59ee0cabe09cf806173a9ee3/badge)](https://imdone.io/app#/board/flexion/hud-disaster-data)
 
+[![Build Status Flexion master](https://api.travis-ci.org/flexion/hud-disaster-data.svg?branch=master)](https://travis-ci.org/flexion/hud-disaster-data)
 # HUD Disaster Data Pilot
 
 A pilot of a website that collects and displays disaster data for use by Community Development Block Grant-Disaster Recovery (CDBG-DR) grantees.
@@ -31,7 +31,7 @@ Install [git](https://git-scm.com/)
 - Using the 18F repository
   - Run `git clone https://github.com/18F/hud-disaster-data`
 
-#### Navigate to cloned directory
+#### Navigate to cloned directory's app subdirectory
 
 `cd hud-disaster-data/app/`
 
