@@ -205,6 +205,29 @@ router.get('/export/:fileNamePart', function (req, res, next) {
 })
 
 /**
+* router.get('/exportReport/:fileNamePart') <br/>
+*  Generates a CSV file with the data that is passed in<br/>
+* @function /exportReport/:fileName
+* @param {string} values - a comma separated list of values to be returned
+* @example // returns CSV for "Type","Amount"
+*   "Number of households affected","85"
+*   "Total FEMA verified real property loss","$146,076.40"
+*   "HUD estimated unmet need","$225.86"
+*  get /exportReport
+*/
+router.get('/exportReport/:fileName', function (req, res, next) {
+  var fileName = _.get(req, 'params.fileName')
+  var data = _.get(req, 'query.data')
+  var csvData = []
+  csvData.push(['Type', 'Amount'])
+  if (!data || data.length === 0) return res.status(406).send('No data sent. Not Acceptable.')
+  _.forIn(JSON.parse(data), (value, key) => { csvData.push([key, value]) })
+  res.setHeader('Content-disposition', `attachment; filename="${fileName}"`)
+  res.csv(csvData)
+  next()
+})
+
+/**
 * router.get('/applicants/:queryType') <br/>
 *
 * @function /applicants/:queryType

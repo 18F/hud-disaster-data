@@ -8,7 +8,7 @@
       div.col-lg-12.report-summary
         value-selector
         label.sr-only(for='Export') Export report
-        a(:href="exportURI()" download='HUD_FEMA_Report_download.csv' tabindex='-1')
+        a(:href="exportURI()" download='' tabindex='-1')
           button.usa-button.green(type="button" name="Export" title="Export report" id="exportReportButton" :disabled="!showReport")
             | Export
             icon(name='fa-sign-out')
@@ -104,10 +104,9 @@ export default {
   },
   methods: {
     exportURI () {
-      var csv = ''
-      csv += `"Type","Amount"\n`
-      _.forIn(this.$store.getters.summaryRecords, (value, key) => { csv += `"${key}","${value}"\n` })
-      return 'data:application/csv;charset=utf-8,' + encodeURI(csv)
+      var fileName = `HUD_FEMA_Report_download.csv`
+      var url = `api/exportReport/${fileName}?data=${JSON.stringify(this.$store.getters.summaryRecords)}`
+      return url
     },
     updateSummaryDisplay (data) {
       this.displaylevel = data.level
