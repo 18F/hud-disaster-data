@@ -10,7 +10,6 @@ describe('/api/dataDictionary/:fileName', function () {
     request(app).get(`/api/dataDictionary/My_Document_Name.xlsx`)
     .expect(function (res) {
       const headers = res.headers
-      debugger
       headers['content-type'].should.be.equal('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
       headers['content-length'].should.be.greaterThan(0)
       headers['content-disposition'].should.be.equal('attachment; filename="My_Document_Name.xlsx"')
