@@ -14,7 +14,9 @@
     "test": "echo 'Run all tests' && npm run unit && npm run server-coverage",
     "lint": "echo 'Run the linter' && eslint --ext .js,.vue src test/unit/specs",
     "508-test": "echo 'Run the 508 compliance tests' && export DRDP_LOCAL=true && export DRGR_LOCAL=true && bash ./508_Test.sh",
-    "doc": "echo 'Run jsdoc and produce documentation' && jsdoc src build package.json -r -c jsdoc.conf.json -d docs"
+    "doc": "echo 'Run jsdoc and produce documentation' && jsdoc src build package.json -r -c jsdoc.conf.json -d docs",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -69,7 +71,8 @@
     "url": "^0.11.0",
     "uuid": "^3.1.0",
     "webpack-merge": "^4.1.0",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
@@ -165,5 +168,6 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "snyk": true
 }
